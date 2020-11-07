@@ -1,11 +1,24 @@
 #include <Windows.h>
+#include "WindowsMessageMap.h"
+#include <string>
+
+constexpr auto pWindowName = "Ironware Engine";
 
 LRESULT CALLBACK WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
+	static WindowsMessageMap wmm;
+	OutputDebugString( wmm( msg, lParam, wParam ).c_str() );
+
 	switch( msg )
 	{
 	case WM_CLOSE:
 		PostQuitMessage( 1 );
+		break;
+	case WM_KEYDOWN:		
+		SetWindowText( hWnd, std::to_string(wParam).c_str() );
+		break;
+	case WM_KEYUP:
+		SetWindowText( hWnd, pWindowName );
 		break;
 	default:
 		break;
@@ -20,8 +33,7 @@ int CALLBACK WinMain(
 	_In_ int nShowCmd 
 )
 {
-	constexpr auto pClassName = "CNIronware";
-	constexpr auto pWindowName = "Ironware Engine";
+	constexpr auto pClassName = "CNIronware";	
 
 	//////////////////////////////////////////////////////////////////////////
 	// Register Windows Class
