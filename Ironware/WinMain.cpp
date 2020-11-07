@@ -43,5 +43,6 @@ int CALLBACK WinMain(
 	// Show the Window
 	// -----------------------------------------------------------------------
 	ShowWindow( hWnd, SW_SHOW );
+	while( true );
 	return 0;
 }
