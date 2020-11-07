@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "WindowsMessageMap.h"
 #include <string>
+#include <sstream>
 
 constexpr auto pWindowName = "Ironware Engine";
 
@@ -18,7 +19,29 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 		SetWindowText( hWnd, std::to_string(wParam).c_str() );
 		break;
 	case WM_KEYUP:
-		SetWindowText( hWnd, pWindowName );
+		if( wParam == '\r' )
+		{
+			SetWindowText( hWnd, pWindowName );
+		}		
+		break;
+	case WM_CHAR:
+		{
+			static std::string title;
+			title.push_back( (char)wParam );
+			if( wParam == 8 )
+			{
+				title.clear();
+			}
+			SetWindowText( hWnd, title.c_str() );
+		}
+		break;
+	case WM_LBUTTONDOWN:
+		{
+			const POINTS pt = MAKEPOINTS(lParam);
+			static std::ostringstream oss;
+			oss << "(" << pt.x << ", " << pt.y << ")";
+			SetWindowText( hWnd, oss.str().c_str() );
+		}
 		break;
 	default:
 		break;
