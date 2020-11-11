@@ -9,7 +9,8 @@
  *
  * 
  *
- * \note try to include this header before other headers as it contains pragma once and could be not imported
+ * \note try to include this header before other headers as it contains pragma once and could be not imported if the previous
+ * * header includes Windows.h
 */
 
 #pragma once
