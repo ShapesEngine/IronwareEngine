@@ -54,7 +54,7 @@ Window::~Window()
 	DestroyWindow( hWnd );
 }
 
-LRESULT Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
+LRESULT CALLBACK Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
 {
 	// use create parameter passed in from CreateWindow() to store window class pointer at WinAPI side
 	if( msg == WM_NCCREATE )
@@ -77,7 +77,7 @@ LRESULT Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	return DefWindowProc( hWnd, msg, wParam, lParam );
 }
 
-LRESULT Window::HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
+LRESULT CALLBACK Window::HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
 {
 	// retrieve ptr to window class
 	Window* const pWnd = reinterpret_cast<Window*>( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
@@ -93,7 +93,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	case WM_CLOSE:
 		PostQuitMessage( 0 );
 
-		// we will call destructor by ourselves preventing double deletion of the window object
+		// we don't want the DefProc to handle this message because
+		// we want our destructor to destroy the window, so return 0 instead of break
 		return 0;
 	}
 
