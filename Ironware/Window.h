@@ -14,9 +14,40 @@
 #pragma once
 
 #include "IronWin.h"
+#include "IronException.h"
 
 class Window
 {
+public:
+	/*!
+	 * \class Exception
+	 *
+	 * \brief class to handle window exceptions
+	 *
+	 * \author Magic
+	 * \date November 2020
+	 */
+	class Exception : public IronException
+	{
+	public:
+		Exception( int line, const char* file, HRESULT hr ) noexcept;
+		
+		/**
+		 * 	overridden function that will return type, error code, description and formatted string.
+		 *
+		 * \return const char* buffer
+		 */
+		const char* what() const noexcept override;		
+		static std::string TranslateErrorCode( HRESULT hr ) noexcept;
+
+		inline virtual const char* GetType() const noexcept { return "Iron Window Exception"; }
+		inline HRESULT GetErrorCode() const noexcept { return hr; }
+		inline std::string GetErrorString() const noexcept { return TranslateErrorCode( hr ); }
+
+	private:
+		HRESULT hr;
+	};
+
 private:
 	/*!
 	 * \class singleton WindowClass
@@ -59,3 +90,5 @@ private:
 	HWND hWnd;	
 };
 
+// error exception helper macro
+#define IRWND_EXCEPT( hr ) Window::Exception( __LINE__, __FILE__, hr )

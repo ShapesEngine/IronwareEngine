@@ -1,5 +1,11 @@
 #include "Window.h"
 
+#include <sstream>
+
+// =======================================================================
+// Window Class start
+// -----------------------------------------------------------------------
+
 Window::WindowClass Window::WindowClass::wndClass;
 
 Window::WindowClass::WindowClass() noexcept :
@@ -25,6 +31,14 @@ Window::WindowClass::~WindowClass()
 {
 	UnregisterClass( wndClassName, GetInstance() );
 }
+
+// -----------------------------------------------------------------------
+// Window Class end
+// =======================================================================
+
+// =======================================================================
+// Window start
+// -----------------------------------------------------------------------
 
 Window::Window( int width, int height, const char* name ) noexcept
 {
@@ -100,3 +114,52 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 
 	return DefWindowProc( hWnd, msg, wParam, lParam );
 }
+
+// -----------------------------------------------------------------------
+// Window end
+// =======================================================================
+
+// =======================================================================
+// Window Exception start
+// -----------------------------------------------------------------------
+
+Window::Exception::Exception( int line, const char* file, HRESULT hr ) noexcept :
+	IronException( line, file ),
+	hr( hr )
+{}
+
+const char* Window::Exception::what() const noexcept
+{
+	std::ostringstream oss;
+	oss << GetType() << std::endl
+		<< "[Error Code] " << GetErrorCode() << std::endl
+		<< "[Description] " << GetErrorString() << std::endl
+		<< GetOriginString();
+	whatBuffer = oss.str();
+	return whatBuffer.c_str();
+}
+
+std::string Window::Exception::TranslateErrorCode( HRESULT hr ) noexcept
+{
+	char* pMsgBuf = nullptr;
+
+	// returns description string for the [hr] error code
+	DWORD nMsgLen = FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER |
+		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		nullptr, hr, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),
+		reinterpret_cast<LPSTR>( &pMsgBuf ), 0, nullptr
+	);
+
+	if( nMsgLen == 0 )
+	{
+		return "Unidentified error code";
+	}
+	std::string errorString = pMsgBuf;
+	LocalFree( pMsgBuf );
+	return errorString;
+}
+
+// -----------------------------------------------------------------------
+// Window Exception end
+// =======================================================================
