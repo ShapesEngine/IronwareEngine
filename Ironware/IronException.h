@@ -20,32 +20,32 @@
 class IronException : public std::exception
 {
 public:
-	IronException( int line, const char* file ) noexcept;
+	IronException( int line, const wchar_t* file ) noexcept;
 
 	/**
 	 * 	overridden function that will return type and formatted string.
 	 * 
-	 * \return const char* buffer
+	 * \return const char_t* buffer
 	 */
 	const char* what() const noexcept override;
 
 	/**
 	 * 	 *.
 	 * 
-	 * \return formatted origin std::string 
+	 * \return formatted origin std::wstring 
 	 */
-	std::string GetOriginString() const noexcept;
+	std::wstring GetOriginString() const noexcept;
 
 public:
-	inline const char* GetType() const noexcept { return "Iron Exception"; }
+	inline virtual const wchar_t* GetType() const noexcept { return L"Iron Base Exception"; }
 	inline int GetLine() const noexcept { return line; }
-	inline const std::string& GetFile() const noexcept { return file; }
+	inline const std::wstring& GetFile() const noexcept { return file; }
 
 private:
 	int line;
-	std::string file;
+	std::wstring file;
 
 protected:
-	mutable std::string whatBuffer;
+	mutable std::wstring whatBuffer;
 };
 

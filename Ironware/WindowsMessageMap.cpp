@@ -19,7 +19,7 @@
 #define WM_UAHMEASUREMENUITEM 0x0094
 #define WM_UAHNCPAINTMENUPOPUP 0x0095
 
-#define REGISTER_MESSAGE(msg){msg,#msg}
+#define REGISTER_MESSAGE( msg ) { msg, L#msg }
 
 WindowsMessageMap::WindowsMessageMap() noexcept
 	:
@@ -198,24 +198,24 @@ WindowsMessageMap::WindowsMessageMap() noexcept
 		 } )
 {}
 
-std::string WindowsMessageMap::operator()( DWORD msg, LPARAM lp, WPARAM wp ) const noexcept
+std::wstring WindowsMessageMap::operator()( DWORD msg, LPARAM lp, WPARAM wp ) const noexcept
 {
 	constexpr int firstColWidth = 25;
 	const auto i = map.find( msg );
 
-	std::ostringstream oss;
+	std::wostringstream oss;
 	if( i != map.end() )
 	{
 		oss << std::left << std::setw( firstColWidth ) << i->second << std::right;
 	}
 	else
 	{
-		std::ostringstream padss;
+		std::wostringstream padss;
 		padss << "Unknown message: 0x" << std::hex << msg;
 		oss << std::left << std::setw( firstColWidth ) << padss.str() << std::right;
 	}
-	oss << "   LP: 0x" << std::hex << std::setfill( '0' ) << std::setw( 8 ) << lp;
-	oss << "   WP: 0x" << std::hex << std::setfill( '0' ) << std::setw( 8 ) << wp << std::endl;
+	oss << L"   LP: 0x" << std::hex << std::setfill( L'0' ) << std::setw( 8 ) << lp;
+	oss << L"   WP: 0x" << std::hex << std::setfill( L'0' ) << std::setw( 8 ) << wp << std::endl;
 
 	return oss.str();
 }

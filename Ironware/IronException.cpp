@@ -11,7 +11,7 @@
 
 #include <sstream>
 
-IronException::IronException( int line, const char* file ) noexcept
+IronException::IronException( int line, const wchar_t* file ) noexcept
 	:
 	line( line ),
 	file( file )
@@ -19,17 +19,17 @@ IronException::IronException( int line, const char* file ) noexcept
 
 const char* IronException::what() const noexcept
 {
-	std::ostringstream oss;
+	std::wostringstream oss;
 	oss << GetType() << std::endl
 		<< GetOriginString();
 
 	whatBuffer = oss.str();
-	return whatBuffer.c_str();
+	return reinterpret_cast<const char*>( whatBuffer.c_str() );
 }
 
-std::string IronException::GetOriginString() const noexcept
+std::wstring IronException::GetOriginString() const noexcept
 {
-	std::ostringstream oss;
+	std::wostringstream oss;
 	oss << "[File] " << file << std::endl
 		<< "[Line] " << line;
 

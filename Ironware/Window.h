@@ -30,19 +30,19 @@ public:
 	class Exception : public IronException
 	{
 	public:
-		Exception( int line, const char* file, HRESULT hr ) noexcept;
+		Exception( int line, const wchar_t* file, HRESULT hr ) noexcept;
 		
 		/**
 		 * 	overridden function that will return type, error code, description and formatted string.
 		 *
-		 * \return const char* buffer
+		 * \return const char_t* buffer
 		 */
 		const char* what() const noexcept override;		
-		static std::string TranslateErrorCode( HRESULT hr ) noexcept;
+		static std::wstring TranslateErrorCode( HRESULT hr ) noexcept;
 
-		inline virtual const char* GetType() const noexcept { return "Iron Window Exception"; }
+		inline const wchar_t* GetType() const noexcept override { return L"Iron Window Exception"; }
 		inline HRESULT GetErrorCode() const noexcept { return hr; }
-		inline std::string GetErrorString() const noexcept { return TranslateErrorCode( hr ); }
+		inline std::wstring GetErrorString() const noexcept { return TranslateErrorCode( hr ); }
 
 	private:
 		HRESULT hr;
@@ -60,7 +60,7 @@ private:
 	class WindowClass
 	{
 	public:
-		inline static const char* GetName() noexcept { return wndClassName; }
+		inline static const wchar_t* GetName() noexcept { return wndClassName; }
 		inline static HINSTANCE GetInstance() noexcept { return wndClass.hInst; }
 
 	private:
@@ -68,13 +68,13 @@ private:
 		~WindowClass();
 		WindowClass( const WindowClass& ) = delete;
 		WindowClass& operator=( const WindowClass& ) = delete;
-		static constexpr const char* wndClassName = "Ironware Window";
+		static constexpr const wchar_t* wndClassName = L"Ironware Window";
 		static WindowClass wndClass;
 		HINSTANCE hInst;
 	};
 
 public:
-	Window( int width, int height, const char* name ) noexcept;
+	Window( int width, int height, const wchar_t* name ) noexcept;
 	~Window();
 	Window( const Window& ) = delete;
 	Window& operator=( const Window& ) = delete;
@@ -91,4 +91,4 @@ private:
 };
 
 // error exception helper macro
-#define IRWND_EXCEPT( hr ) Window::Exception( __LINE__, __FILE__, hr )
+#define IRWND_EXCEPT( hr ) Window::Exception( __LINE__, WFILE, hr )

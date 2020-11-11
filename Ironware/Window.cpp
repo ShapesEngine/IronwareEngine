@@ -40,7 +40,7 @@ Window::WindowClass::~WindowClass()
 // Window start
 // -----------------------------------------------------------------------
 
-Window::Window( int width, int height, const char* name ) noexcept
+Window::Window( int width, int height, const wchar_t* name ) noexcept
 {
 	// =======================================================================
 	// calculate window size based on desired client region size
@@ -123,39 +123,39 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 // Window Exception start
 // -----------------------------------------------------------------------
 
-Window::Exception::Exception( int line, const char* file, HRESULT hr ) noexcept :
+Window::Exception::Exception( int line, const wchar_t* file, HRESULT hr ) noexcept :
 	IronException( line, file ),
 	hr( hr )
 {}
 
 const char* Window::Exception::what() const noexcept
 {
-	std::ostringstream oss;
+	std::wostringstream oss;
 	oss << GetType() << std::endl
 		<< "[Error Code] " << GetErrorCode() << std::endl
 		<< "[Description] " << GetErrorString() << std::endl
 		<< GetOriginString();
 	whatBuffer = oss.str();
-	return whatBuffer.c_str();
+	return reinterpret_cast<const char*>( whatBuffer.c_str() );
 }
 
-std::string Window::Exception::TranslateErrorCode( HRESULT hr ) noexcept
+std::wstring Window::Exception::TranslateErrorCode( HRESULT hr ) noexcept
 {
-	char* pMsgBuf = nullptr;
+	wchar_t* pMsgBuf = nullptr;
 
 	// returns description string for the [hr] error code
 	DWORD nMsgLen = FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 		nullptr, hr, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),
-		reinterpret_cast<LPSTR>( &pMsgBuf ), 0, nullptr
+		reinterpret_cast<LPWSTR>( &pMsgBuf ), 0, nullptr
 	);
 
 	if( nMsgLen == 0 )
 	{
-		return "Unidentified error code";
+		return L"Unidentified error code";
 	}
-	std::string errorString = pMsgBuf;
+	std::wstring errorString = pMsgBuf;
 	LocalFree( pMsgBuf );
 	return errorString;
 }

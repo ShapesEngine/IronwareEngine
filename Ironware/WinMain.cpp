@@ -8,7 +8,7 @@ int CALLBACK WinMain(
 {
 	try
 	{
-		Window wnd( 640, 480, "Ironware" );
+		Window wnd( 640, 480, L"Ironware" );
 	
 		MSG msg;
 		BOOL gResult;
@@ -30,15 +30,15 @@ int CALLBACK WinMain(
 	}
 	catch( const IronException& e )
 	{
-		MessageBox( nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION );
+		MessageBox( nullptr, WCCHREINT_CAST( e.what() ), WCCHREINT_CAST( e.GetType() ), MB_OK | MB_ICONEXCLAMATION );
 	}
 	catch( const std::exception& e )
 	{
-		MessageBox( nullptr, e.what(), "Standard Exception", MB_OK | MB_ICONEXCLAMATION );
+		MessageBox( nullptr, WCCHREINT_CAST( e.what() ), L"Standard Exception", MB_OK | MB_ICONEXCLAMATION );
 	}
 	catch( ... )
 	{
-		MessageBox( nullptr, "No details available", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION );
+		MessageBox( nullptr, L"No details available", L"Unknown Exception", MB_OK | MB_ICONEXCLAMATION );
 	}
 	return -1;
 }
