@@ -74,7 +74,7 @@ private:
 	};
 
 public:
-	Window( int width, int height, const wchar_t* name ) noexcept;
+	Window( int width, int height, const wchar_t* name );
 	~Window();
 	Window( const Window& ) = delete;
 	Window& operator=( const Window& ) = delete;
@@ -90,5 +90,8 @@ private:
 	HWND hWnd;	
 };
 
-// error exception helper macro
+// =======================================================================
+// error exception helper macros
+// -----------------------------------------------------------------------
 #define IRWND_EXCEPT( hr ) Window::Exception( __LINE__, WFILE, hr )
+#define IRWND_LAST_EXCEPT() Window::Exception( __LINE__, WFILE, GetLastError() )

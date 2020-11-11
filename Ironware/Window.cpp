@@ -40,7 +40,7 @@ Window::WindowClass::~WindowClass()
 // Window start
 // -----------------------------------------------------------------------
 
-Window::Window( int width, int height, const wchar_t* name ) noexcept
+Window::Window( int width, int height, const wchar_t* name )
 {
 	// =======================================================================
 	// calculate window size based on desired client region size
@@ -50,7 +50,10 @@ Window::Window( int width, int height, const wchar_t* name ) noexcept
 	wr.right = width + wr.left;
 	wr.top = 100;
 	wr.bottom = height + wr.top;
-	AdjustWindowRect( &wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE );
+	if( FAILED( AdjustWindowRect( &wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE ) ) )
+	{
+		throw IRWND_LAST_EXCEPT();
+	};
 
 	// create window & get hWnd
 	hWnd = CreateWindow( 
@@ -59,6 +62,12 @@ Window::Window( int width, int height, const wchar_t* name ) noexcept
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this
 	);
+
+	// check for error
+	if( hWnd == nullptr )
+	{
+		throw IRWND_LAST_EXCEPT();
+	}
 
 	ShowWindow( hWnd, SW_SHOWDEFAULT );
 }
@@ -143,7 +152,8 @@ std::wstring Window::Exception::TranslateErrorCode( HRESULT hr ) noexcept
 {
 	wchar_t* pMsgBuf = nullptr;
 
-	// returns description string for the [hr] error code
+	// returns description string for the [hr] error code.
+	// windows will allocate memory for err string and make our pointer point to it.
 	DWORD nMsgLen = FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -151,11 +161,14 @@ std::wstring Window::Exception::TranslateErrorCode( HRESULT hr ) noexcept
 		reinterpret_cast<LPWSTR>( &pMsgBuf ), 0, nullptr
 	);
 
+	// 0 string length returned indicates a failure
 	if( nMsgLen == 0 )
 	{
 		return L"Unidentified error code";
 	}
+	// copy error string from windows-allocated buffer to std::string
 	std::wstring errorString = pMsgBuf;
+	// free windows buffer
 	LocalFree( pMsgBuf );
 	return errorString;
 }
