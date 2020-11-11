@@ -167,8 +167,15 @@
   <ItemGroup>
     <ClInclude Include="IronException.h" />
     <ClInclude Include="IronWin.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowsMessageMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Ironware.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ironware_WaA_icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
