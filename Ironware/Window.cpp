@@ -3,10 +3,7 @@
 
 #include <sstream>
 
-// =======================================================================
-// Window Class start
-// -----------------------------------------------------------------------
-
+/******************************* WINDOW CLASS START ******************************/
 Window::WindowClass Window::WindowClass::wndClass;
 
 Window::WindowClass::WindowClass() noexcept :
@@ -35,16 +32,12 @@ Window::WindowClass::~WindowClass()
 {
 	UnregisterClass( wndClassName, GetInstance() );
 }
+/******************************* WINDOW CLASS END ******************************/
 
-// -----------------------------------------------------------------------
-// Window Class end
-// =======================================================================
-
-// =======================================================================
-// Window start
-// -----------------------------------------------------------------------
-
-Window::Window( int width, int height, const wchar_t* name )
+/******************************* WINDOW START ******************************/
+Window::Window( int width_in, int height_in, const wchar_t* name ) :
+	width(width_in),
+	height(height_in)
 {
 	// =======================================================================
 	// calculate window size based on desired client region size
@@ -127,15 +120,9 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 
 	return DefWindowProc( hWnd, msg, wParam, lParam );
 }
+/******************************* WINDOW END ******************************/
 
-// -----------------------------------------------------------------------
-// Window end
-// =======================================================================
-
-// =======================================================================
-// Window Exception start
-// -----------------------------------------------------------------------
-
+/******************************* WINDOW EXCEPTION START ******************************/
 Window::Exception::Exception( int line, const wchar_t* file, HRESULT hr ) noexcept :
 	IronException( line, file ),
 	hr( hr )
@@ -176,7 +163,4 @@ std::wstring Window::Exception::TranslateErrorCode( HRESULT hr ) noexcept
 	LocalFree( pMsgBuf );
 	return errorString;
 }
-
-// -----------------------------------------------------------------------
-// Window Exception end
-// =======================================================================
+/******************************* WINDOW EXCEPTION END ******************************/
