@@ -112,11 +112,24 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	{
 	case WM_CLOSE:
 		PostQuitMessage( 0 );
-
 		// we don't want the DefProc to handle this message because
 		// we want our destructor to destroy the window, so return 0 instead of break
 		return 0;
+
+	// =======================================================================
+	// Keyboard Messages Handling
+	// -----------------------------------------------------------------------	
+	case WM_KEYDOWN:
+		kbd.OnKeyPressed( static_cast<unsigned char>( wParam ) );
+		break;
+	case WM_KEYUP:
+		kbd.OnKeyReleased( static_cast<unsigned char>( wParam ) );
+		break;
+	case WM_CHAR:
+		kbd.OnChar( static_cast<wchar_t>( wParam ) );
+		break;
 	}
+	// =======================================================================
 
 	return DefWindowProc( hWnd, msg, wParam, lParam );
 }
