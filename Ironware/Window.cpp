@@ -115,7 +115,11 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		// we don't want the DefProc to handle this message because
 		// we want our destructor to destroy the window, so return 0 instead of break
 		return 0;
-
+	
+	// clear keystate when window loses focus to prevent input getting "stuck"
+	case WM_KILLFOCUS:
+		kbd.ClearState();
+		break;
 	// =======================================================================
 	// Keyboard Messages Handling
 	// -----------------------------------------------------------------------	
