@@ -124,7 +124,10 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	// Keyboard Messages Handling
 	// -----------------------------------------------------------------------	
 	case WM_KEYDOWN:
-		kbd.OnKeyPressed( static_cast<unsigned char>( wParam ) );
+		if( !( lParam & 0x40000000 ) || kbd.AutorepeatIsEnabled() ) // filter autorepeat
+		{
+			kbd.OnKeyPressed( static_cast<unsigned char>( wParam ) );
+		}
 		break;
 	case WM_KEYUP:
 		kbd.OnKeyReleased( static_cast<unsigned char>( wParam ) );
