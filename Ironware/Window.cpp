@@ -127,7 +127,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	// SYSKEY messages need to be handled to track system keys such as ALT, F10, etc.
 	// Basic KEYDOWN messages applies also to system keys
 	case WM_SYSKEYDOWN:
-		if( !( lParam & 0x40000000 ) || kbd.AutorepeatIsEnabled() ) // filter autorepeat
+		// filter autorepeat		
+		if( !( lParam & 0x40000000 ) || kbd.AutorepeatIsEnabled() ) // 30 bits hold the KEYDOWN message for repeating keys
 		{
 			kbd.OnKeyPressed( static_cast<unsigned char>( wParam ) );
 		}

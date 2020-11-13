@@ -53,6 +53,9 @@ public:
 	Keyboard( const Keyboard& ) = delete;
 	Keyboard& operator=( const Keyboard& ) = delete;
 
+	// clears key and char events
+	void Clear() noexcept;
+
 	/******************************* KEY EVENTS START ******************************/
 	bool KeyIsPressed( unsigned char keycode ) const noexcept;
 	Event ReadKey() noexcept;
@@ -63,8 +66,7 @@ public:
 	/******************************* CHAR EVENT START ******************************/
 	wchar_t ReadChar() noexcept;
 	bool CharIsEmpty() const noexcept;
-	void ClearChar() noexcept;
-	void Clear() noexcept;
+	void ClearChar() noexcept;	
 	/******************************* CHAR EVENT END ******************************/
 
 	/******************************* AUTOREPEAT START ******************************/
