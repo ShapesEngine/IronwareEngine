@@ -3,7 +3,7 @@
  *
  * \ingroup DEV
  *
- * \brief A basic application class that is responsible for application specifig code managing
+ * \brief A basic application class that is responsible for application specific code managing
  *
  * TODO:
  *
@@ -20,8 +20,7 @@
  */
 #include "App.h"
 
-App::App()
-	:
+App::App() :
 	wnd( 640, 480, L"Ironware Engine" )
 {}
 
@@ -29,16 +28,18 @@ int App::Begin()
 {
 	MSG msg;
 	BOOL gResult;
-	while( ( gResult = GetMessage( &msg, nullptr, 0, 0 ) ) > 0 )
+	while( true )
 	{
-		// TranslateMessage will post auxilliary WM_CHAR messages from key msgs
-		TranslateMessage( &msg );
-		DispatchMessage( &msg );
-
+		// process all messages pending, but to not block for new messages
+		if( const auto ecode = Window::ProcessMessages() )
+		{
+			// if return optional has value, means we're quitting so return exit code
+			return *ecode;
+		}
 		Tick();
 	}
 
-	// check if GetMessage call itself borked
+	// check if GetMessage call itself worked
 	if( gResult == -1 )
 	{
 		throw IRWND_LAST_EXCEPT();
@@ -49,6 +50,4 @@ int App::Begin()
 }
 
 void App::Tick()
-{
-
-}
+{}
