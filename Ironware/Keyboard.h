@@ -70,9 +70,9 @@ public:
 	/******************************* CHAR EVENT END ******************************/
 
 	/******************************* AUTOREPEAT START ******************************/
-	void EnableAutorepeat() noexcept;
-	void DisableAutorepeat() noexcept;
-	bool AutorepeatIsEnabled() const noexcept;
+	inline void EnableAutorepeat() noexcept { autorepeatEnabled = true; }
+	inline void DisableAutorepeat() noexcept { autorepeatEnabled = false; }
+	inline bool AutorepeatIsEnabled() const noexcept { return autorepeatEnabled; }
 	/******************************* AUTOREPEAT END ******************************/
 
 private:

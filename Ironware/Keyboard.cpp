@@ -77,21 +77,6 @@ void Keyboard::Clear() noexcept
 	ClearChar();
 }
 
-void Keyboard::EnableAutorepeat() noexcept
-{
-	autorepeatEnabled = true;
-}
-
-void Keyboard::DisableAutorepeat() noexcept
-{
-	autorepeatEnabled = false;
-}
-
-bool Keyboard::AutorepeatIsEnabled() const noexcept
-{
-	return autorepeatEnabled;
-}
-
 void Keyboard::OnKeyPressed( unsigned char keycode ) noexcept
 {
 	keystates[keycode] = true;
