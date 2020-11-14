@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="IronTimer.cpp" />
     <ClCompile Include="IronException.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="IronTimer.h" />
     <ClInclude Include="IronException.h" />
     <ClInclude Include="IronWin.h" />
     <ClInclude Include="Keyboard.h" />
