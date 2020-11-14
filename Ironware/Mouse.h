@@ -30,6 +30,8 @@ public:
 			WHEELUP,
 			WHEELDOWN,
 			MOVE,
+			ENTER,
+			LEAVE,
 			INVALID
 		};
 
@@ -66,6 +68,7 @@ public:
 
 	Mouse::Event Read() noexcept;
 
+	inline bool IsInWindow() const noexcept { return isInWindow; }
 	inline std::pair<int, int> GetPos() const noexcept { return { x, y }; }
 	inline int GetPosX() const noexcept { return x; }
 	inline int GetPosY() const noexcept { return y; }
@@ -75,6 +78,8 @@ public:
 	inline void Clear() noexcept { buffer = std::queue<Event>(); }
 
 private:
+	void OnMouseLeave() noexcept;
+	void OnMouseEnter() noexcept;
 	void OnMouseMove( int x, int y ) noexcept;
 	void OnLeftPressed( int x, int y ) noexcept;
 	void OnLeftReleased( int x, int y ) noexcept;
@@ -90,6 +95,7 @@ private:
 	int y;
 	bool leftIsPressed = false;
 	bool rightIsPressed = false;
+	bool isInWindow = false;
 	std::queue<Event> buffer;
 };
 

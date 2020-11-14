@@ -35,6 +35,20 @@ Mouse::Event Mouse::Read() noexcept
 	}
 }
 
+void Mouse::OnMouseLeave() noexcept
+{
+	isInWindow = false;
+	buffer.push( Mouse::Event( Mouse::Event::Type::LEAVE, *this ) );
+	TrimBuffer();
+}
+
+void Mouse::OnMouseEnter() noexcept
+{
+	isInWindow = true;
+	buffer.push( Mouse::Event( Mouse::Event::Type::ENTER, *this ) );
+	TrimBuffer();
+}
+
 void Mouse::OnMouseMove( int newx, int newy ) noexcept
 {
 	x = newx;
