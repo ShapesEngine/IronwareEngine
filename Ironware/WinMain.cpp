@@ -12,11 +12,11 @@ int CALLBACK WinMain(
 	}
 	catch( const IronException& e )
 	{
-		MessageBox( nullptr, WCCHREINT_CAST( e.what() ), WCCHREINT_CAST( e.GetType() ), MB_OK | MB_ICONEXCLAMATION );
+		MessageBox( nullptr, WCON_CHREINT_CAST( e.what() ), WCON_CHREINT_CAST( e.GetType() ), MB_OK | MB_ICONEXCLAMATION );
 	}
 	catch( const std::exception& e )
 	{
-		MessageBox( nullptr, WCCHREINT_CAST( e.what() ), L"Standard Exception", MB_OK | MB_ICONEXCLAMATION );
+		MessageBox( nullptr, WCON_CHREINT_CAST( e.what() ), L"Standard Exception", MB_OK | MB_ICONEXCLAMATION );
 	}
 	catch( ... )
 	{
