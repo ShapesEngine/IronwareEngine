@@ -20,6 +20,7 @@
  */
 
 #include "Mouse.h"
+#include "IronWin.h"
 
 Mouse::Event Mouse::Read() noexcept
 {
@@ -100,6 +101,22 @@ void Mouse::OnWheelDown( int x, int y ) noexcept
 {
 	buffer.push( Mouse::Event( Mouse::Event::Type::WHEELDOWN, *this ) );
 	TrimBuffer();
+}
+
+void Mouse::OnWheelDelta( int x, int y, int delta ) noexcept
+{
+	wheelDeltaCarry += delta;
+	// generate events for every 120 
+	while( wheelDeltaCarry >= WHEEL_DELTA )
+	{
+		wheelDeltaCarry -= WHEEL_DELTA;
+		OnWheelUp( x, y );
+	}
+	while( wheelDeltaCarry <= -WHEEL_DELTA )
+	{
+		wheelDeltaCarry += WHEEL_DELTA;
+		OnWheelDown( x, y );
+	}
 }
 
 void Mouse::TrimBuffer() noexcept

@@ -12,6 +12,7 @@
  * \note
 */
 #pragma once
+
 #include <queue>
 
 class Mouse
@@ -87,12 +88,14 @@ private:
 	void OnRightReleased( int x, int y ) noexcept;
 	void OnWheelUp( int x, int y ) noexcept;
 	void OnWheelDown( int x, int y ) noexcept;
+	void OnWheelDelta( int x,int y,int delta ) noexcept;
 	void TrimBuffer() noexcept;
 
 private:
 	static constexpr uint32_t MAXBUFFERSIZE = 16u;
 	int x;
 	int y;
+	int wheelDeltaCarry = 0;
 	bool leftIsPressed = false;
 	bool rightIsPressed = false;
 	bool isInWindow = false;
