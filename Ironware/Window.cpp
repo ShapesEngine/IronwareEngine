@@ -74,6 +74,14 @@ Window::~Window()
 	DestroyWindow( hWnd );
 }
 
+void Window::SetTitle( const std::wstring& title )
+{
+	if( SetWindowText( hWnd, title.c_str() ) == 0 )
+	{
+		throw IRWND_LAST_EXCEPT();
+	}
+}
+
 LRESULT CALLBACK Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
 {
 	// use create parameter passed in from CreateWindow() to store window class pointer at WinAPI side
