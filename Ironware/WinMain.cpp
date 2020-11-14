@@ -8,7 +8,7 @@ int CALLBACK WinMain(
 {
 	try
 	{
-		return App{}.Go();
+		return App{}.Begin();
 	}
 	catch( const IronException& e )
 	{

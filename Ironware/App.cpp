@@ -25,7 +25,7 @@ App::App()
 	wnd( 640, 480, L"Ironware Engine" )
 {}
 
-int App::Go()
+int App::Begin()
 {
 	MSG msg;
 	BOOL gResult;
@@ -35,7 +35,7 @@ int App::Go()
 		TranslateMessage( &msg );
 		DispatchMessage( &msg );
 
-		DoFrame();
+		Tick();
 	}
 
 	// check if GetMessage call itself borked
@@ -48,7 +48,7 @@ int App::Go()
 	return msg.wParam;
 }
 
-void App::DoFrame()
+void App::Tick()
 {
 
 }

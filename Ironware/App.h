@@ -5,7 +5,7 @@
  * \author Magic
  * Contact: yernar.aa@gmail.com
  *
- * \brief A basic application class that is responsible for application specifig code managing
+ * \brief A basic application class that is responsible for application specific code managing
  *
  * TODO:
  *
@@ -14,19 +14,21 @@
 #pragma once
 
 #include "Window.h"
+#include "IronTimer.h"
 
 class App
 {
 public:
 	App();
 	// master frame / message loop
-	int Go();
+	int Begin();
 
 private:
-	void DoFrame();
+	void Tick();
 
 private:
 	Window wnd;
+	IronTimer timer;
 };
 
 

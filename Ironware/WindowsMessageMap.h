@@ -10,7 +10,7 @@
 #pragma once
 
 #include <unordered_map>
-#include <Windows.h>
+#include "IronWin.h"
 
 class WindowsMessageMap
 {
