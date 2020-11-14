@@ -99,3 +99,4 @@ private:
 // -----------------------------------------------------------------------
 #define IRWND_EXCEPT( hr ) Window::Exception( __LINE__, WFILE, hr )
 #define IRWND_LAST_EXCEPT() Window::Exception( __LINE__, WFILE, GetLastError() )
+// =======================================================================
