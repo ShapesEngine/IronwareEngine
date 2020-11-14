@@ -1,4 +1,4 @@
-﻿#include "Window.h"
+﻿#include "App.h"
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -8,25 +8,7 @@ int CALLBACK WinMain(
 {
 	try
 	{
-		Window wnd( 640, 480, L"Ironware" );
-	
-		MSG msg;
-		BOOL gResult;
-		while( ( gResult = GetMessage( &msg, nullptr, 0, 0 ) ) > 0 )
-		{
-			// TranslateMessage will post auxiliary WM_CHAR messages from key msgs
-			TranslateMessage( &msg );
-			DispatchMessage( &msg );
-		}
-	
-		// check if GetMessage call itself worked
-		if( gResult == -1 )
-		{
-			return -1;
-		}
-	
-		// wParam here is the value passed to PostQuitMessage
-		return msg.wParam;
+		return App{}.Go();
 	}
 	catch( const IronException& e )
 	{
