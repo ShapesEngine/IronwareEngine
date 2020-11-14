@@ -141,6 +141,54 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	case WM_CHAR:
 		kbd.OnChar( static_cast<wchar_t>( wParam ) );
 		break;
+	// =======================================================================
+
+	// =======================================================================
+	// Mouse Messages Handling
+	// -----------------------------------------------------------------------
+	case WM_MOUSEMOVE:
+	{
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnMouseMove( pt.x, pt.y );
+		break;
+	}
+	case WM_LBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnLeftPressed( pt.x, pt.y );
+		break;
+	}
+	case WM_RBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnRightPressed( pt.x, pt.y );
+		break;
+	}
+	case WM_LBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnLeftReleased( pt.x, pt.y );
+		break;
+	}
+	case WM_RBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnRightReleased( pt.x, pt.y );
+		break;
+	}
+	case WM_MOUSEWHEEL:
+	{
+		const POINTS pt = MAKEPOINTS( lParam );
+		if( GET_WHEEL_DELTA_WPARAM( wParam ) > 0 )
+		{
+			mouse.OnWheelUp( pt.x, pt.y );
+		}
+		else if( GET_WHEEL_DELTA_WPARAM( wParam ) < 0 )
+		{
+			mouse.OnWheelDown( pt.x, pt.y );
+		}
+		break;
+	}
 	}
 	// =======================================================================
 
