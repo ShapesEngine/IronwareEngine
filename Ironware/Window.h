@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief The class that controls windows and messages
+ * \brief A class that controls windows and messages
  *
  *
  * \note
@@ -17,8 +17,10 @@
 #include "IronException.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Graphics.h"
 
 #include <optional>
+#include <memory>
 
 class Window
 {
@@ -56,7 +58,7 @@ private:
 	/*!
 	 * \class singleton WindowClass
 	 *
-	 * \brief the class that's needed for WINAPI classes(Registering and Unregistering)
+	 * \brief A class that's needed for WINAPI classes(Registering and Unregistering)
 	 *
 	 * \author Yernar Aldabergenov
 	 * \date November 2020
@@ -85,6 +87,7 @@ public:
 
 	void SetTitle( const std::wstring& title );
 	static std::optional<int> ProcessMessages();
+	inline Graphics& Gfx() const { return *pGfx; }
 
 private:
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
@@ -99,6 +102,7 @@ private:
 	int width;
 	int height;
 	HWND hWnd;	
+	std::unique_ptr<Graphics> pGfx;
 };
 
 // =======================================================================

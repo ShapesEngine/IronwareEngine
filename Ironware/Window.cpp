@@ -3,7 +3,7 @@
  *
  * \ingroup DEV
  *
- * \brief The class that controls windows and messages
+ * \brief A class that controls windows and messages
  *
  * TODO:
  *
@@ -86,7 +86,10 @@ Window::Window( int width_in, int height_in, const wchar_t* name ) :
 		throw IRWND_LAST_EXCEPT();
 	}
 
+	// newly created windows start off as hidden
 	ShowWindow( hWnd, SW_SHOWDEFAULT );
+	// create graphics object
+	pGfx = std::make_unique<Graphics>( hWnd );
 }
 
 Window::~Window()

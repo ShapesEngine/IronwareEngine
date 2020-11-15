@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A class that's responsible for the graphical output
  *
  * TODO:
  *
@@ -13,6 +13,20 @@
 */
 #pragma once
 
+#include "IronWin.h"
+#include <d3d11.h>
+
 class Graphics
-{};
+{
+public:
+	Graphics( HWND hWnd );
+	Graphics( const Graphics& ) = delete;
+	Graphics& operator=( const Graphics& ) = delete;
+	~Graphics();
+
+private:
+	ID3D11Device* pDevice = nullptr;
+	IDXGISwapChain* pSwapChain = nullptr;	
+	ID3D11DeviceContext* pImmediateContext = nullptr;
+};
 
