@@ -1,5 +1,5 @@
 /*!
- * \class Graphics
+ * \class Graphics, HrException
  *
  * \ingroup DEV
  *
@@ -20,7 +20,12 @@
  */
 #include "Graphics.h"
 
+#include <sstream>
+
 #pragma comment(lib, "d3d11.lib")
+
+#define GFX_THROW_FAILED(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HrException( __LINE__, WFILE, hr )
+#define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__, WFILE, (hr) )
 
 Graphics::Graphics( HWND hWnd )
 {
@@ -44,8 +49,11 @@ Graphics::Graphics( HWND hWnd )
 	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	scd.Flags = 0;
 
+	// for checking results of d3d functions
+	HRESULT hr;
+
 	// create device and front/back buffers, and swap chain and rendering context
-	D3D11CreateDeviceAndSwapChain(
+	GFX_THROW_FAILED( D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
@@ -58,12 +66,12 @@ Graphics::Graphics( HWND hWnd )
 		&pDevice,
 		nullptr,
 		&pImmediateContext 
-	);
+	) );
 
 	// gain access to texture subresource in swap chain (back buffer)
 	ID3D11Resource* pBackBuffer = nullptr;
-	pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), reinterpret_cast<void**>( &pBackBuffer ) );
-	pDevice->CreateRenderTargetView( pBackBuffer, nullptr, &pRenderTargetView );
+	GFX_THROW_FAILED( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), reinterpret_cast<void**>( &pBackBuffer ) ) );
+	GFX_THROW_FAILED( pDevice->CreateRenderTargetView( pBackBuffer, nullptr, &pRenderTargetView ) );
 	pBackBuffer->Release();
 }
 
@@ -89,8 +97,19 @@ Graphics::~Graphics()
 
 void Graphics::EndFrame()
 {
+	HRESULT hr;
 	// sync interval = 60; expected to consistently present at this rate
-	pSwapChain->Present( 1u, 0u );
+	if( FAILED( hr = pSwapChain->Present( 1u, 0u ) ) )
+	{
+		if( hr == DXGI_ERROR_DEVICE_REMOVED )
+		{
+			throw GFX_DEVICE_REMOVED_EXCEPT( pDevice->GetDeviceRemovedReason() );
+		}
+		else
+		{
+			GFX_THROW_FAILED( hr );
+		}
+	}
 }
 
 void Graphics::ClearBuffer( float red, float green, float blue ) noexcept
@@ -98,3 +117,30 @@ void Graphics::ClearBuffer( float red, float green, float blue ) noexcept
 	const float color[] = { red, green, blue, 1.f };
 	pImmediateContext->ClearRenderTargetView( pRenderTargetView, color );
 }
+
+/******************************* Graphics Exception Start ******************************/
+Graphics::HrException::HrException( int line, const wchar_t* file, HRESULT hr ) noexcept :
+	Exception( line, file ),
+	hr( hr )
+{}
+
+const char* Graphics::HrException::what() const noexcept
+{
+	std::wostringstream oss;
+	oss << GetType() << std::endl
+		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
+		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+		<< "[Error String] " << GetErrorString() << std::endl
+		<< "[Description] " << GetErrorDescription() << std::endl
+		<< GetOriginString();
+	whatBuffer = oss.str();
+	return reinterpret_cast<const char*>( whatBuffer.c_str() );
+}
+
+std::wstring Graphics::HrException::GetErrorDescription() const noexcept
+{
+	wchar_t buf[512];
+	DXGetErrorDescription( hr, buf, sizeof( buf ) );
+	return buf;
+}
+/******************************* Graphics Exception End ******************************/
