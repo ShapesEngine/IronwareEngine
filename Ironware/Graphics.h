@@ -16,7 +16,9 @@
 #include "IronWin.h"
 #include "IronException.h"
 #include "dxerr.h"
+#include "DxgiInfoManager.h"
 
+#include <vector>
 #include <d3d11.h>
 
 class Graphics
@@ -30,7 +32,7 @@ public:
 	class HrException : public Exception
 	{
 	public:
-		HrException( int line, const wchar_t* file, HRESULT hr ) noexcept;
+		HrException( int line, const wchar_t* file, HRESULT hr, std::vector<std::wstring> infoMsgs = {} ) noexcept;
 
 		/**
 		 * 	overridden function that will return type, error code, description and formatted string.
@@ -42,10 +44,12 @@ public:
 		inline const wchar_t* GetType() const noexcept override { return L"Iron Graphics Exception"; }
 		inline HRESULT GetErrorCode() const noexcept { return hr; }
 		inline std::wstring GetErrorString() const noexcept { return DXGetErrorString( hr ); }
+		inline std::wstring GetErrorInfo() const noexcept { return info; }
 		std::wstring GetErrorDescription() const noexcept;
 
 	private:
 		HRESULT hr;
+		std::wstring info;
 	};
 
 	class DeviceRemovedException : public HrException
@@ -66,6 +70,9 @@ public:
 	void ClearBuffer( float red, float green, float blue ) noexcept;
 
 private:
+#ifndef NDEBUG
+	DxgiInfoManager infoManager;
+#endif
 	ID3D11Device* pDevice = nullptr;
 	IDXGISwapChain* pSwapChain = nullptr;	
 	ID3D11DeviceContext* pImmediateContext = nullptr;
