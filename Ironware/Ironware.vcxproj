@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IronTimer.cpp" />
     <ClCompile Include="IronException.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="dxerr.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IronTimer.h" />
     <ClInclude Include="IronException.h" />
@@ -186,6 +188,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="ironware_WaA_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DXGetErrorDescription.inl" />
+    <None Include="DXGetErrorString.inl" />
+    <None Include="DXTrace.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
