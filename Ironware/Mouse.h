@@ -93,8 +93,8 @@ private:
 
 private:
 	static constexpr uint32_t MAXBUFFERSIZE = 16u;
-	int x;
-	int y;
+	int x = 0;
+	int y = 0;
 	int wheelDeltaCarry = 0;
 	bool leftIsPressed = false;
 	bool rightIsPressed = false;
