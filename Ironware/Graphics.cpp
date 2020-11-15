@@ -1,5 +1,5 @@
 /*!
- * \class Graphics, HrException
+ * \class Graphics, HrException(Exception)
  *
  * \ingroup DEV
  *

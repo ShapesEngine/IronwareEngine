@@ -1,5 +1,5 @@
 /*!
- * \class WindowClass, Window, WindowException
+ * \class WindowClass, Window, Exception, HrException
  *
  * \ingroup DEV
  *
