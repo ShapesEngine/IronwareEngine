@@ -2,7 +2,7 @@
  * \file App.h
  * \date 2020/11/14 13:02
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
  * \brief A basic application class that is responsible for application specific code managing

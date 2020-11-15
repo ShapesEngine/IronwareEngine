@@ -2,10 +2,10 @@
  * \file Window.h
  * \date 2020/11/11 16:30
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief class that controls windows and messages
+ * \brief The class that controls windows and messages
  *
  *
  * \note
@@ -28,7 +28,7 @@ public:
 	 *
 	 * \brief class to handle window exceptions
 	 *
-	 * \author Magic
+	 * \author Yernar Aldabergenov
 	 * \date November 2020
 	 */
 	class Exception : public IronException
@@ -58,7 +58,7 @@ private:
 	 *
 	 * \brief the class that's needed for WINAPI classes(Registering and Unregistering)
 	 *
-	 * \author Magic
+	 * \author Yernar Aldabergenov
 	 * \date November 2020
 	 */
 	class WindowClass

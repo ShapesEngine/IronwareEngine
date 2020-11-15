@@ -3,7 +3,7 @@
  *
  * \brief class for handling different kinds of exceptions
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  * \date November 2020
  */
 

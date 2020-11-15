@@ -1,3 +1,23 @@
+/*!
+ * \class WindowClass, Window, WindowException
+ *
+ * \ingroup DEV
+ *
+ * \brief The class that controls windows and messages
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \version 1.0
+ *
+ * \date November 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 #include "Window.h"
 #include "resource.h"
 

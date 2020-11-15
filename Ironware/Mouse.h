@@ -2,7 +2,7 @@
  * \file Mouse.h
  * \date 2020/11/14 7:35
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
  * \brief A class that is responsible for controlling mouse input

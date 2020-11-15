@@ -2,7 +2,7 @@
  * \file Keyboard.h
  * \date 2020/11/12 18:30
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
  * \brief A class that is responsible for controlling keyboard input

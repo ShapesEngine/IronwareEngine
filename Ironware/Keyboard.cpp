@@ -9,7 +9,7 @@
  *
  * \note 
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  *
  * \version 1.0
  *

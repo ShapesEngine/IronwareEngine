@@ -2,7 +2,7 @@
  * \file IronWin.h
  * \date 2020/11/11 16:22
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
  * \brief The header is used to define all the macros that (not) needed/used

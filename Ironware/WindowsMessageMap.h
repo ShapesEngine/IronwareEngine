@@ -1,7 +1,7 @@
 /*!
  * \file WindowsMessageMap.h
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  * \date November 2020
  *
  * 

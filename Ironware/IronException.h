@@ -2,7 +2,7 @@
  * \file IronException.h
  * \date 2020/11/11 21:27
  *
- * \author Magic
+ * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
  * \brief class for handling different kinds of exceptions
