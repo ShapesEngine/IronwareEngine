@@ -105,7 +105,7 @@ void Window::SetTitle( const std::wstring& title )
 	}
 }
 
-std::optional<int> Window::ProcessMessages()
+std::optional<int> Window::ProcessMessages() noexcept
 {
 	MSG msg;
 	// while queue has messages, remove and dispatch them (but do not block on empty queue)
@@ -125,6 +125,15 @@ std::optional<int> Window::ProcessMessages()
 
 	// return empty optional when not quitting app
 	return {};
+}
+
+Graphics& Window::Gfx() const
+{
+	if( !pGfx )
+	{
+		throw IRWND_NOGFX_EXCEPT();
+	}
+	return *pGfx;
 }
 
 LRESULT CALLBACK Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
@@ -267,17 +276,18 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 /******************************* WINDOW END ******************************/
 
 /******************************* WINDOW EXCEPTION START ******************************/
-Window::Exception::Exception( int line, const wchar_t* file, HRESULT hr ) noexcept :
-	IronException( line, file ),
+Window::HrException::HrException( int line, const wchar_t* file, HRESULT hr ) noexcept :
+	Exception( line, file ),
 	hr( hr )
 {}
 
-const char* Window::Exception::what() const noexcept
+const char* Window::HrException::what() const noexcept
 {
 	std::wostringstream oss;
 	oss << GetType() << std::endl
-		<< "[Error Code] " << GetErrorCode() << std::endl
-		<< "[Description] " << GetErrorString() << std::endl
+		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
+		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+		<< "[Description] " << GetErrorDescription() << std::endl
 		<< GetOriginString();
 	whatBuffer = oss.str();
 	return reinterpret_cast<const char*>( whatBuffer.c_str() );
@@ -289,7 +299,7 @@ std::wstring Window::Exception::TranslateErrorCode( HRESULT hr ) noexcept
 
 	// returns description string for the [hr] error code.
 	// windows will allocate memory for err string and make our pointer point to it.
-	DWORD nMsgLen = FormatMessage(
+	const DWORD nMsgLen = FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 		nullptr, hr, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),

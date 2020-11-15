@@ -35,8 +35,16 @@ public:
 	 */
 	class Exception : public IronException
 	{
+		using IronException::IronException;
+
 	public:
-		Exception( int line, const wchar_t* file, HRESULT hr ) noexcept;
+		static std::wstring TranslateErrorCode( HRESULT hr ) noexcept;
+	};
+
+	class HrException : public Exception
+	{
+	public:
+		HrException( int line, const wchar_t* file, HRESULT hr ) noexcept;
 		
 		/**
 		 * 	overridden function that will return type, error code, description and formatted string.
@@ -44,14 +52,29 @@ public:
 		 * \return const char_t* buffer
 		 */
 		const char* what() const noexcept override;		
-		static std::wstring TranslateErrorCode( HRESULT hr ) noexcept;
 
 		inline const wchar_t* GetType() const noexcept override { return L"Iron Window Exception"; }
 		inline HRESULT GetErrorCode() const noexcept { return hr; }
-		inline std::wstring GetErrorString() const noexcept { return TranslateErrorCode( hr ); }
+		inline std::wstring GetErrorDescription() const noexcept { return Exception::TranslateErrorCode( hr ); }
 
 	private:
 		HRESULT hr;
+	};
+
+	/*!
+	 * \class Window
+	 *
+	 * \brief Use this class exception to throw no graphix exceptions, as there is no HRESULT associated with no graphics exceptions
+	 *
+	 *
+	 * \author Yernar Aldabergenov
+	 * \date November 2020
+	 */
+	class NoGfxException : public Exception
+	{
+	public:
+		using Exception::Exception;
+		inline const wchar_t* GetType() const noexcept override { return L"Iron Window [No Graphics] Exception"; }
 	};
 
 private:
@@ -86,8 +109,8 @@ public:
 	Window& operator=( const Window& ) = delete;
 
 	void SetTitle( const std::wstring& title );
-	static std::optional<int> ProcessMessages();
-	inline Graphics& Gfx() const { return *pGfx; }
+	static std::optional<int> ProcessMessages() noexcept;
+	Graphics& Gfx() const;
 
 private:
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
@@ -108,6 +131,7 @@ private:
 // =======================================================================
 // error exception helper macros
 // -----------------------------------------------------------------------
-#define IRWND_EXCEPT( hr ) Window::Exception( __LINE__, WFILE, hr )
-#define IRWND_LAST_EXCEPT() Window::Exception( __LINE__, WFILE, GetLastError() )
+#define IRWND_EXCEPT( hr ) Window::HrException( __LINE__, WFILE, hr )
+#define IRWND_LAST_EXCEPT() Window::HrException( __LINE__, WFILE, GetLastError() )
+#define IRWND_NOGFX_EXCEPT() Window::NoGfxException( __LINE__, WFILE )
 // =======================================================================
