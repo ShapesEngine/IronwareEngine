@@ -76,3 +76,9 @@ Graphics::~Graphics()
 		pDevice->Release();
 	}
 }
+
+void Graphics::EndFrame()
+{
+	// sync interval = 60; expected to consistently present at this rate
+	pSwapChain->Present( 1u, 0u );
+}

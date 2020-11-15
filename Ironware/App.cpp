@@ -50,4 +50,6 @@ int App::Begin()
 }
 
 void App::Tick()
-{}
+{
+	wnd.Gfx().EndFrame();
+}
