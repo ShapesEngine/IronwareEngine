@@ -59,10 +59,20 @@ Graphics::Graphics( HWND hWnd )
 		nullptr,
 		&pImmediateContext 
 	);
+
+	// gain access to texture subresource in swap chain (back buffer)
+	ID3D11Resource* pBackBuffer = nullptr;
+	pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), reinterpret_cast<void**>( &pBackBuffer ) );
+	pDevice->CreateRenderTargetView( pBackBuffer, nullptr, &pRenderTargetView );
+	pBackBuffer->Release();
 }
 
 Graphics::~Graphics()
 {
+	if( pRenderTargetView )
+	{
+		pRenderTargetView->Release();
+	}
 	if( pImmediateContext )
 	{
 		pImmediateContext->Release();
@@ -81,4 +91,10 @@ void Graphics::EndFrame()
 {
 	// sync interval = 60; expected to consistently present at this rate
 	pSwapChain->Present( 1u, 0u );
+}
+
+void Graphics::ClearBuffer( float red, float green, float blue ) noexcept
+{
+	const float color[] = { red, green, blue, 1.f };
+	pImmediateContext->ClearRenderTargetView( pRenderTargetView, color );
 }

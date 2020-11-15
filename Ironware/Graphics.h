@@ -25,10 +25,12 @@ public:
 	~Graphics();
 
 	void EndFrame();
+	void ClearBuffer( float red, float green, float blue ) noexcept;
 
 private:
 	ID3D11Device* pDevice = nullptr;
 	IDXGISwapChain* pSwapChain = nullptr;	
 	ID3D11DeviceContext* pImmediateContext = nullptr;
+	ID3D11RenderTargetView* pRenderTargetView = nullptr;
 };
 

@@ -15,6 +15,7 @@
 #pragma once
 
 #include "Window.h"
+#include "IronTimer.h"
 
 class App
 {
@@ -28,6 +29,7 @@ private:
 
 private:
 	Window wnd;
+	IronTimer timer;
 };
 
 
