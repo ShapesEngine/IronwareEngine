@@ -58,9 +58,6 @@
 
 #define STRICT
 
-#define WCHREINT_CAST( x ) reinterpret_cast<wchar_t*>( x )
-#define WCON_CHREINT_CAST( x ) reinterpret_cast<const wchar_t*>( x )
-
 #define WIDE2( x ) L##x
 #define WIDE1( x ) WIDE2( x )
 #define WFILE WIDE1( __FILE__ )
