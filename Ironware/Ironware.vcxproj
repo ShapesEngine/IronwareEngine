@@ -165,6 +165,7 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IronTimer.cpp" />
     <ClCompile Include="IronException.cpp" />
+    <ClCompile Include="IronUtils.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IronTimer.h" />
     <ClInclude Include="IronException.h" />
+    <ClInclude Include="IronUtils.h" />
     <ClInclude Include="IronWin.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />

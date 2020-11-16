@@ -196,8 +196,11 @@ const char* Graphics::HrException::what() const noexcept
 
 std::wstring Graphics::HrException::GetErrorDescription() const noexcept
 {
-	wchar_t buf[512];	
-	DXGetErrorDescription( hr, buf, sizeof( buf ) );
+	wchar_t buf[512];
+	// use _countof, because this may cause buffer overrun
+	// the writeable size is 1024 bytes
+	// but 2048 bytes might be written
+	DXGetErrorDescription( hr, buf, _countof( buf ) );
 	return buf;
 }
 /******************************* GRAPHICS EXCEPTION END ******************************/

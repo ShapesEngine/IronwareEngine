@@ -21,6 +21,7 @@
 #include "DxgiInfoManager.h"
 #include "Window.h"
 #include "Graphics.h"
+#include "IronUtils.h"
 
 #include <dxgidebug.h>
 #include <memory>
@@ -84,7 +85,7 @@ std::vector<std::wstring> DxgiInfoManager::GetMessages() const
 		auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>( bytes.get() );
 		// get the message and push its description into the vector
 		GFX_THROW_NOINFO( pDxgiInfoQueue->GetMessage( DXGI_DEBUG_ALL, i, pMessage, &messageLength ) );
-		messages.emplace_back( WCON_CHREINT_CAST( pMessage->pDescription ) );
+		messages.emplace_back( ToWide( pMessage->pDescription ) );
 	}
 	return messages;
 }
