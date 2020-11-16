@@ -64,7 +64,6 @@ Graphics::Graphics( HWND hWnd )
 	scd.Windowed = TRUE;
 	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	scd.Flags = 0;
-
 	UINT swapCreateFlags = 0u;
 #ifndef NDEBUG
 	swapCreateFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -88,22 +87,6 @@ Graphics::Graphics( HWND hWnd )
 		nullptr,
 		&pImmediateContext 
 	) );
-
-	// create device and front/back buffers, and swap chain and rendering context
-	/*GFX_THROW_INFO( D3D11CreateDeviceAndSwapChain(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		swapCreateFlags,
-		nullptr,
-		0,
-		D3D11_SDK_VERSION,
-		&sd,
-		&pSwap,
-		&pDevice,
-		nullptr,
-		&pContext
-	) );*/
 
 	// gain access to texture subresource in swap chain (back buffer)
 	ID3D11Resource* pBackBuffer = nullptr;

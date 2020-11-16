@@ -1,9 +1,10 @@
 ﻿#include "App.h"
+#include "IronUtils.h"
 
-int CALLBACK WinMain(
+int CALLBACK wWinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
-	LPSTR     lpCmdLine,
+	LPWSTR     lpCmdLine,
 	int       nCmdShow )
 {
 	try
@@ -12,18 +13,15 @@ int CALLBACK WinMain(
 	}
 	catch( const IronException& e )
 	{
-		SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) );
-		MessageBox( nullptr, WCON_CHREINT_CAST( e.what() ), WCON_CHREINT_CAST( e.GetType() ), MB_OK | MB_ICONEXCLAMATION );
+		SAFE_MESSAGEBOX( nullptr, WCON_CHREINT_CAST( e.what() ), e.GetType(), MB_OK | MB_ICONEXCLAMATION );
 	}
 	catch( const std::exception& e )
 	{
-		SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) );
-		MessageBox( nullptr, WCON_CHREINT_CAST( e.what() ), L"Standard Exception", MB_OK | MB_ICONEXCLAMATION );
+		SAFE_MESSAGEBOX( nullptr, ToWide( e.what() ).c_str(), L"Standard Exception", MB_OK | MB_ICONEXCLAMATION );
 	}
 	catch( ... )
 	{
-		SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) );
-		MessageBox( nullptr, L"No details available", L"Unknown Exception", MB_OK | MB_ICONEXCLAMATION );
+		SAFE_MESSAGEBOX( nullptr, L"No details available", L"Unknown Exception", MB_OK | MB_ICONEXCLAMATION );
 	}
 	return -1;
 }

@@ -58,11 +58,12 @@
 
 #define STRICT
 
-#define WCHREINT_CAST( x ) reinterpret_cast<wchar_t*>( x )
-#define WCON_CHREINT_CAST( x ) reinterpret_cast<const wchar_t*>( x )
-
 #define WIDE2( x ) L##x
 #define WIDE1( x ) WIDE2( x )
 #define WFILE WIDE1( __FILE__ )
+
+// to deal with various read access violation errors, mouse, keyboard, etc.
+#define SAFE_MESSAGEBOX(hWnd, lpText, lpCaption, uType)	SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); \
+														MessageBox( hWnd, lpText, lpCaption, uType );
 
 #include <Windows.h>
