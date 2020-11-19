@@ -41,6 +41,7 @@
 #endif
 // =======================================================================
 
+namespace wrl = Microsoft::WRL;
 
 /******************************* GRAPHICS START ******************************/
 Graphics::Graphics( HWND hWnd )
@@ -51,7 +52,8 @@ Graphics::Graphics( HWND hWnd )
 	scd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	scd.BufferDesc.RefreshRate.Numerator = 0;
 	scd.BufferDesc.RefreshRate.Denominator = 0;
-	// dont set if you havent set width and height
+	// don't set if you haven't set width and height, as they should be equal to the 
+	// output width and height of the window
 	scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	// disable anti aliasing
@@ -89,30 +91,10 @@ Graphics::Graphics( HWND hWnd )
 	) );
 
 	// gain access to texture subresource in swap chain (back buffer)
-	ID3D11Resource* pBackBuffer = nullptr;
-	GFX_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), reinterpret_cast<void**>( &pBackBuffer ) ) );
-	GFX_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer, nullptr, &pRenderTargetView ) );
-	pBackBuffer->Release();
-}
-
-Graphics::~Graphics()
-{
-	if( pRenderTargetView )
-	{
-		pRenderTargetView->Release();
-	}
-	if( pImmediateContext )
-	{
-		pImmediateContext->Release();
-	}
-	if( pSwapChain )
-	{
-		pSwapChain->Release();
-	}
-	if( pDevice )
-	{
-		pDevice->Release();
-	}
+	wrl::ComPtr<ID3D11Resource> pBackBuffer;
+	// 0 is back buffer's index
+	GFX_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), &pBackBuffer ) );
+	GFX_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer.Get(), nullptr, &pRenderTargetView ) );
 }
 
 void Graphics::EndFrame()
@@ -138,7 +120,7 @@ void Graphics::EndFrame()
 void Graphics::ClearBuffer( float red, float green, float blue ) noexcept
 {
 	const float color[] = { red, green, blue, 1.f };
-	pImmediateContext->ClearRenderTargetView( pRenderTargetView, color );
+	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
 }
 /******************************* GRAPHICS END ******************************/
 

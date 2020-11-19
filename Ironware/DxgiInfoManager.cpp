@@ -67,6 +67,7 @@ void DxgiInfoManager::Set() noexcept
 {
 	// set the index (next) so that the next all to GetMessages()
 	// will only get errors generated after this call
+	// for other DXGI Debug message types, see DXGI_DEBUG_ID
 	next = pDxgiInfoQueue->GetNumStoredMessages( DXGI_DEBUG_ALL );
 }
 
@@ -77,7 +78,7 @@ std::vector<std::wstring> DxgiInfoManager::GetMessages() const
 	for( auto i = next; i < end; i++ )
 	{
 		HRESULT hr;
-		SIZE_T messageLength;
+		SIZE_T messageLength = 0;
 		// get the size of message i in bytes
 		GFX_THROW_NOINFO( pDxgiInfoQueue->GetMessage( DXGI_DEBUG_ALL, i, nullptr, &messageLength ) );
 		// allocate memory for message
