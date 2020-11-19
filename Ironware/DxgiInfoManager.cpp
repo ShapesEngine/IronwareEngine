@@ -23,7 +23,6 @@
 #include "Graphics.h"
 #include "IronUtils.h"
 
-#include <dxgidebug.h>
 #include <memory>
 
 #pragma comment(lib, "dxguid.lib")
@@ -36,7 +35,7 @@ DxgiInfoManager::DxgiInfoManager()
 	typedef HRESULT (WINAPI* DXGIGetDebugInterface)(REFIID,void **);
 
 	// load the dll that contains the function DXGIGetDebugInterface
-	const auto hModDxgiDebug = LoadLibraryEx( L"dxgidebug.dll",nullptr,LOAD_LIBRARY_SEARCH_SYSTEM32 );
+	const auto hModDxgiDebug = LoadLibraryEx( L"dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32 );
 	if( hModDxgiDebug == nullptr )
 	{
 		throw IRWND_LAST_EXCEPT();
@@ -52,15 +51,7 @@ DxgiInfoManager::DxgiInfoManager()
 	}
 
 	HRESULT hr;
-	GFX_THROW_NOINFO( DxgiGetDebugInterface( __uuidof(IDXGIInfoQueue),reinterpret_cast<void**>(&pDxgiInfoQueue) ) );
-}
-
-DxgiInfoManager::~DxgiInfoManager()
-{
-	if( pDxgiInfoQueue != nullptr )
-	{
-		pDxgiInfoQueue->Release();
-	}
+	GFX_THROW_NOINFO( DxgiGetDebugInterface( __uuidof( IDXGIInfoQueue ), &pDxgiInfoQueue ) );
 }
 
 void DxgiInfoManager::Set() noexcept
