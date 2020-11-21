@@ -122,6 +122,43 @@ void Graphics::ClearBuffer( float red, float green, float blue ) noexcept
 	const float color[] = { red, green, blue, 1.f };
 	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
 }
+
+void Graphics::DrawTriangle()
+{
+	HRESULT hr;
+
+	struct Vertex
+	{
+		float x;
+		float y;
+	};
+
+	const Vertex vertices[] = {
+		{ 0.f, 0.5f },
+		{ 0.5f, 0.f },
+		{ -0.5f, 0.f }
+	};
+
+	D3D11_BUFFER_DESC bufferDesc = {};
+	bufferDesc.ByteWidth = sizeof( vertices );
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0u;
+	bufferDesc.MiscFlags = 0u;
+	bufferDesc.StructureByteStride = sizeof( Vertex );
+
+	D3D11_SUBRESOURCE_DATA subresData = {};
+	subresData.pSysMem = vertices;
+
+	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
+	( pDevice->CreateBuffer( &bufferDesc, &subresData, &pVertexBuffer ) );
+
+	const UINT stride = (UINT)sizeof( Vertex );
+	const UINT offset = 0u;
+	pImmediateContext->IASetVertexBuffers( 0u, 1u, &pVertexBuffer, &stride, &offset );
+
+	pImmediateContext->Draw( 3u, 0u );
+}
 /******************************* GRAPHICS END ******************************/
 
 /******************************* GRAPHICS EXCEPTION START ******************************/
