@@ -165,6 +165,15 @@ void Graphics::DrawTriangle()
 	const UINT offset = 0u;
 	pImmediateContext->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset );
 
+	// setting shader input layout
+	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
+	const D3D11_INPUT_ELEMENT_DESC inputDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	
+
 	// =======================================================================
 	// create vertex shader
 	// -----------------------------------------------------------------------
@@ -176,18 +185,20 @@ void Graphics::DrawTriangle()
 	// bind vertex shader
 	pImmediateContext->VSSetShader( pVertexShader.Get(), nullptr, 0u );
 
+	pDevice->CreateInputLayout( inputDesc, std::size( inputDesc ), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout );
+	pImmediateContext->IASetInputLayout( pInputLayout.Get() );
+
 	// =======================================================================
 	// create pixel shader
 	// -----------------------------------------------------------------------
 	wrl::ComPtr<ID3D11PixelShader> pPixelShader;
 	GFX_THROW_INFO( D3DReadFileToBlob( L"PixelShader.cso", &pBlob ) );
-	GFX_THROW_INFO( pDevice->CreatePixelShader( pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader ) );
+	GFX_THROW_INFO( pDevice->CreatePixelShader( pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader ) );	
 
 	// bind pixel shader
 	pImmediateContext->PSSetShader( pPixelShader.Get(), nullptr, 0u );
 	
 	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), nullptr );
-
 	
 	pImmediateContext->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); // Triangle list is group of 3 vertices
 
