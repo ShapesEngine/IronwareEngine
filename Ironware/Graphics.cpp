@@ -22,8 +22,10 @@
 #include "IronUtils.h"
 
 #include <sstream>
+#include <d3dcompiler.h>
 
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
  // =======================================================================
  // graphics exception checking/throwing macros (some with dxgi infos)
@@ -32,10 +34,12 @@
 #define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HrException( __LINE__, WFILE, hr )
 
 #ifndef NDEBUG
-#define GFX_EXCEPT(hr) Graphics::HrException( __LINE__, WFILE, (hr), infoManager.GetMessages() )
-#define GFX_THROW_INFO(hrcall) infoManager.Set(); if( FAILED( hr = (hrcall) ) ) throw GFX_EXCEPT(hr)
+#define GFX_THROW_INFO(hrcall) infoManager.Set(); if( FAILED( hr = (hrcall) ) ) throw GFX_GET_EXCEPT_ERROR_TYPE(hr)
+#define GFX_GET_EXCEPT_ERROR_TYPE(hr) (hr == DXGI_ERROR_DEVICE_REMOVED ? GFX_DEVICE_REMOVED_EXCEPT(hr) : GFX_EXCEPT(hr))
 #define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__, WFILE, (hr), infoManager.GetMessages() )
-#define GFX_THROW_INFO_ONLY(call) infoManager.Set(); (call); {auto v = infoManager.GetMessages(); if(!v.empty()) {throw Graphics::InfoException( __LINE__,WFILE,v);}}
+#define GFX_EXCEPT(hr) Graphics::HrException( __LINE__, WFILE, (hr), infoManager.GetMessages() )
+#define GFX_THROW_INFO_ONLY(call) infoManager.Set(); (call); GFX_THROW_UNHANDLED_EXCEPTION
+#define GFX_THROW_UNHANDLED_EXCEPTION {auto v = infoManager.GetMessages(); if(!v.empty()) {throw Graphics::InfoException( __LINE__,WFILE,v);}}
 #else
 #define GFX_EXCEPT(hr) Graphics::HrException( __LINE__, WFILE, (hr) )
 #define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
@@ -104,6 +108,7 @@ void Graphics::EndFrame()
 {
 	HRESULT hr;
 #ifndef NDEBUG
+	GFX_THROW_UNHANDLED_EXCEPTION
 	infoManager.Set();
 #endif
 	// sync interval = 60; expected to consistently present at this rate
@@ -138,17 +143,17 @@ void Graphics::DrawTriangle()
 
 	const Vertex vertices[] = {
 		{ 0.f, 0.5f },
-		{ 0.5f, 0.f },
-		{ -0.5f, 0.f }
+		{ 0.5f, -0.5f },
+		{ -0.5f, -0.5f }
 	};
 
-	D3D11_BUFFER_DESC bufferDesc = {};
-	bufferDesc.ByteWidth = sizeof( vertices );
+	D3D11_BUFFER_DESC bufferDesc = {};	
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDesc.CPUAccessFlags = 0u;
-	bufferDesc.MiscFlags = 0u;
+	bufferDesc.ByteWidth = sizeof( vertices );
 	bufferDesc.StructureByteStride = sizeof( Vertex );
+	bufferDesc.CPUAccessFlags = 0u;
+	bufferDesc.MiscFlags = 0u;	
 
 	D3D11_SUBRESOURCE_DATA subresData = {};
 	subresData.pSysMem = vertices;
@@ -160,7 +165,18 @@ void Graphics::DrawTriangle()
 	const UINT offset = 0u;
 	pImmediateContext->IASetVertexBuffers( 0u, 1u, &pVertexBuffer, &stride, &offset );
 
-	GFX_THROW_INFO_ONLY( pImmediateContext->Draw( 3u, 0u ) );
+	// =======================================================================
+	// create vertex shader
+	// -----------------------------------------------------------------------
+	wrl::ComPtr<ID3D11VertexShader> pVertexShader;
+	wrl::ComPtr<ID3DBlob> pBlob;
+	GFX_THROW_INFO( D3DReadFileToBlob( L"VertexShader.cso", &pBlob ) );
+	GFX_THROW_INFO( pDevice->CreateVertexShader( pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader ) );
+
+	// bind vertex shader
+	pImmediateContext->VSSetShader( pVertexShader.Get(), nullptr, 0u );
+
+	GFX_THROW_INFO_ONLY( pImmediateContext->Draw( (UINT)std::size(vertices), 0u ) );
 }
 /******************************* GRAPHICS END ******************************/
 
