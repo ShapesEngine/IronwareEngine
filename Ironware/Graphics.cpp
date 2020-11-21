@@ -163,7 +163,7 @@ void Graphics::DrawTriangle()
 
 	const UINT stride = (UINT)sizeof( Vertex );
 	const UINT offset = 0u;
-	pImmediateContext->IASetVertexBuffers( 0u, 1u, &pVertexBuffer, &stride, &offset );
+	pImmediateContext->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset );
 
 	// =======================================================================
 	// create vertex shader
@@ -175,6 +175,34 @@ void Graphics::DrawTriangle()
 
 	// bind vertex shader
 	pImmediateContext->VSSetShader( pVertexShader.Get(), nullptr, 0u );
+
+	// =======================================================================
+	// create pixel shader
+	// -----------------------------------------------------------------------
+	wrl::ComPtr<ID3D11PixelShader> pPixelShader;
+	GFX_THROW_INFO( D3DReadFileToBlob( L"PixelShader.cso", &pBlob ) );
+	GFX_THROW_INFO( pDevice->CreatePixelShader( pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader ) );
+
+	// bind pixel shader
+	pImmediateContext->PSSetShader( pPixelShader.Get(), nullptr, 0u );
+	
+	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), nullptr );
+
+	
+	pImmediateContext->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); // Triangle list is group of 3 vertices
+
+	// =======================================================================
+	// configure viewport
+	// -----------------------------------------------------------------------
+	D3D11_VIEWPORT viewport;
+	viewport.Width = 640.f;
+	viewport.Height = 480.f;
+	viewport.MinDepth = 0.f;
+	viewport.MaxDepth = 1.f;
+	viewport.TopLeftX = 0.f;
+	viewport.TopLeftY = 0.f;
+
+	pImmediateContext->RSSetViewports( 1u, &viewport );
 
 	GFX_THROW_INFO_ONLY( pImmediateContext->Draw( (UINT)std::size(vertices), 0u ) );
 }

@@ -16,6 +16,9 @@
     <Filter Include="Shader Files">
       <UniqueIdentifier>{822b995d-55a6-4233-80ab-767d66602145}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DXErr">
+      <UniqueIdentifier>{457b5629-02a4-404d-acf1-7494b2d7de07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -86,14 +89,14 @@
     <ClInclude Include="Graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dxerr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DxgiInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IronUtils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dxerr.h">
+      <Filter>DXErr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,18 +110,21 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <None Include="DXGetErrorDescription.inl">
+      <Filter>DXErr</Filter>
+    </None>
     <None Include="DXGetErrorString.inl">
-      <Filter>Header Files</Filter>
+      <Filter>DXErr</Filter>
     </None>
     <None Include="DXTrace.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="DXGetErrorDescription.inl">
-      <Filter>Header Files</Filter>
+      <Filter>DXErr</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>
