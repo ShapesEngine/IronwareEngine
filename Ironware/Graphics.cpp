@@ -35,10 +35,12 @@
 #define GFX_EXCEPT(hr) Graphics::HrException( __LINE__, WFILE, (hr), infoManager.GetMessages() )
 #define GFX_THROW_INFO(hrcall) infoManager.Set(); if( FAILED( hr = (hrcall) ) ) throw GFX_EXCEPT(hr)
 #define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__, WFILE, (hr), infoManager.GetMessages() )
+#define GFX_THROW_INFO_ONLY(call) infoManager.Set(); (call); {auto v = infoManager.GetMessages(); if(!v.empty()) {throw Graphics::InfoException( __LINE__,WFILE,v);}}
 #else
 #define GFX_EXCEPT(hr) Graphics::HrException( __LINE__, WFILE, (hr) )
 #define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
 #define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__, WFILE, (hr) )
+#define GFX_THROW_INFO_ONLY(call) (call)
 #endif
 // =======================================================================
 
@@ -152,13 +154,13 @@ void Graphics::DrawTriangle()
 	subresData.pSysMem = vertices;
 
 	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
-	( pDevice->CreateBuffer( &bufferDesc, &subresData, &pVertexBuffer ) );
+	GFX_THROW_INFO( pDevice->CreateBuffer( &bufferDesc, &subresData, &pVertexBuffer ) );
 
 	const UINT stride = (UINT)sizeof( Vertex );
 	const UINT offset = 0u;
 	pImmediateContext->IASetVertexBuffers( 0u, 1u, &pVertexBuffer, &stride, &offset );
 
-	pImmediateContext->Draw( 3u, 0u );
+	GFX_THROW_INFO_ONLY( pImmediateContext->Draw( 3u, 0u ) );
 }
 /******************************* GRAPHICS END ******************************/
 
