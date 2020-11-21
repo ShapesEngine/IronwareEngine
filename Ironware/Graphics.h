@@ -61,6 +61,18 @@ public:
 		inline const wchar_t* GetType() const noexcept override { return L"Iron Graphics [DeviceRemoved] Exception"; }
 	};
 
+	class InfoException : public Exception
+	{
+	public:
+		InfoException( int line, const wchar_t* file, std::vector<std::wstring> infoMsgs = {} ) noexcept;
+
+		const char* what() const noexcept override;
+		inline const wchar_t* GetType() const noexcept override { return L"Iron Graphics [Info] Exception"; }
+		inline std::wstring GetErrorInfo() const noexcept { return info; }
+	private:
+		std::wstring info;
+	};
+
 public:
 	Graphics( HWND hWnd );
 	Graphics( const Graphics& ) = delete;

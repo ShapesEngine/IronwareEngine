@@ -19,6 +19,7 @@
  *
  */
 #include "Graphics.h"
+#include "IronUtils.h"
 
 #include <sstream>
 
@@ -193,7 +194,7 @@ const char* Graphics::HrException::what() const noexcept
 	}
 	woss << GetOriginString();
 	whatBuffer = woss.str();
-	return reinterpret_cast<const char*>( whatBuffer.c_str() );
+	return CON_CHREINT_CAST( whatBuffer.c_str() );
 }
 
 std::wstring Graphics::HrException::GetErrorDescription() const noexcept
@@ -204,5 +205,32 @@ std::wstring Graphics::HrException::GetErrorDescription() const noexcept
 	// but 2048 bytes might be written
 	DXGetErrorDescription( hr, buf, _countof( buf ) );
 	return buf;
+}
+
+Graphics::InfoException::InfoException( int line, const wchar_t* file, std::vector<std::wstring> infoMsgs ) noexcept :
+	Exception( line, file )
+{
+	// join all info messages with newlines into single string
+	for( const auto& m : infoMsgs )
+	{
+		info += m;
+		info.push_back( '\n' );
+	}
+	// remove final newline if exists
+	if( !info.empty() )
+	{
+		info.pop_back();
+	}
+}
+
+const char* Graphics::InfoException::what() const noexcept
+{
+	std::wostringstream woss;
+	woss << GetType() << std::endl
+		<< "\n[Error Info]\n" << GetErrorInfo() << std::endl << std::endl;
+	woss << GetOriginString();
+	whatBuffer = woss.str();
+
+	return CON_CHREINT_CAST( whatBuffer.c_str() );
 }
 /******************************* GRAPHICS EXCEPTION END ******************************/

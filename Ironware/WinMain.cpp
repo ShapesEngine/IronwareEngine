@@ -13,7 +13,7 @@ int CALLBACK wWinMain(
 	}
 	catch( const IronException& e )
 	{
-		SAFE_MESSAGEBOX( nullptr, WCON_CHREINT_CAST( e.what() ), e.GetType(), MB_OK | MB_ICONEXCLAMATION );
+		SAFE_MESSAGEBOX( nullptr, CON_WCHREINT_CAST( e.what() ), e.GetType(), MB_OK | MB_ICONEXCLAMATION );
 	}
 	catch( const std::exception& e )
 	{
