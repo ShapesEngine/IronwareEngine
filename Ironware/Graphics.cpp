@@ -151,25 +151,54 @@ void Graphics::DrawTriangle()
 		} color;
 	};
 
-	const Vertex vertices[] = {
-		{ 0.f, 0.5f, 255, 0, 0 },
-		{ 0.5f, -0.5f, 0, 255, 0 },
-		{ -0.5f, -0.5f, 0, 0, 255 }
+	const Vertex vertices[] =
+	{
+		{ 0.0f, 0.5f, 255, 0, 0, 0 },
+		{ 0.5f, -0.5f, 0, 255, 0, 0 },
+		{ -0.5f, -0.5f, 0, 0, 255, 0 },
+		{ -0.3f, 0.3f, 0, 255, 0, 0 },
+		{ 0.3f, 0.3f, 0, 0, 255, 0 },
+		{ 0.0f, -0.8f, 255, 0, 0, 0 },
 	};
 
-	D3D11_BUFFER_DESC bufferDesc = {};	
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDesc.ByteWidth = sizeof( vertices );
-	bufferDesc.StructureByteStride = sizeof( Vertex );
-	bufferDesc.CPUAccessFlags = 0u;
-	bufferDesc.MiscFlags = 0u;	
+	// create index buffer
+	const uint16_t indices[] =
+	{
+		0, 1, 2,
+		0, 2, 3,
+		0, 4, 1,
+		2, 1, 5,
+	};
+
+	D3D11_BUFFER_DESC indexBufferDesc = {};
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.ByteWidth = sizeof( indices );
+	indexBufferDesc.StructureByteStride = sizeof( uint16_t );
+	indexBufferDesc.CPUAccessFlags = 0u;
+	indexBufferDesc.MiscFlags = 0u;
+
+	D3D11_SUBRESOURCE_DATA indexSubresData = {};
+	indexSubresData.pSysMem = indices;
+
+	wrl::ComPtr<ID3D11Buffer> pIndexBuffer;
+	GFX_THROW_INFO( pDevice->CreateBuffer( &indexBufferDesc, &indexSubresData, &pIndexBuffer ) );
+
+	pImmediateContext->IASetIndexBuffer( pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u );
+
+	D3D11_BUFFER_DESC vertBufferDesc = {};	
+	vertBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertBufferDesc.ByteWidth = sizeof( vertices );
+	vertBufferDesc.StructureByteStride = sizeof( Vertex );
+	vertBufferDesc.CPUAccessFlags = 0u;
+	vertBufferDesc.MiscFlags = 0u;	
 
 	D3D11_SUBRESOURCE_DATA subresData = {};
 	subresData.pSysMem = vertices;
 
 	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
-	GFX_THROW_INFO( pDevice->CreateBuffer( &bufferDesc, &subresData, &pVertexBuffer ) );
+	GFX_THROW_INFO( pDevice->CreateBuffer( &vertBufferDesc, &subresData, &pVertexBuffer ) );
 
 	const UINT stride = (UINT)sizeof( Vertex );
 	const UINT offset = 0u;
@@ -224,7 +253,7 @@ void Graphics::DrawTriangle()
 
 	pImmediateContext->RSSetViewports( 1u, &viewport );
 
-	GFX_THROW_INFO_ONLY( pImmediateContext->Draw( (UINT)std::size(vertices), 0u ) );
+	GFX_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( (UINT)std::size(indices), 0u, 0u ) );
 }
 /******************************* GRAPHICS END ******************************/
 

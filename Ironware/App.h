@@ -25,7 +25,7 @@ public:
 	int Begin();
 
 private:
-	void Tick();
+	void SetupFrame();
 
 private:
 	Window wnd;

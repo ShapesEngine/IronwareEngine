@@ -36,7 +36,7 @@ int App::Begin()
 			// if return optional has value, means we're quitting so return exit code
 			return *ecode;
 		}
-		Tick();
+		SetupFrame();
 	}
 
 	// check if GetMessage call itself worked
@@ -49,7 +49,7 @@ int App::Begin()
 	return msg.wParam;
 }
 
-void App::Tick()
+void App::SetupFrame()
 {
 	const float c = sin( timer.Peek() ) / 2.f + 0.5f;
 	wnd.Gfx().ClearBuffer( c, c, c );
