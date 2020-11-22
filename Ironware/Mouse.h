@@ -66,7 +66,7 @@ public:
 	Mouse( const Mouse& ) = delete;
 	Mouse& operator=( const Mouse& ) = delete;
 
-	std::optional<Mouse::Event> Read() noexcept;
+	std::optional<Event> Read() noexcept;
 
 	inline bool IsInWindow() const noexcept { return isInWindow; }
 	inline std::pair<int, int> GetPos() const noexcept { return { x, y }; }

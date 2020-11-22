@@ -16,6 +16,7 @@
 
 #include <queue>
 #include <bitset>
+#include <optional>
 
 class Keyboard
 {
@@ -28,15 +29,13 @@ public:
 		{
 			PRESS,
 			RELEASE,
-			INVALID
 		};
 
 	private:
-		Type type = Type::INVALID;
+		Type type;
 		unsigned char code = 0u;
 
 	public:
-		Event() noexcept = default;
 		Event( Type type, unsigned char code ) noexcept :
 			type( type ),
 			code( code )
@@ -44,7 +43,6 @@ public:
 
 		inline bool IsPress() const noexcept { return type == Type::PRESS; }
 		inline bool IsRelease() const noexcept { return type == Type::RELEASE; }
-		inline bool IsValid() const noexcept { return type != Type::INVALID; }
 		inline unsigned char GetCode() const noexcept { return code; }
 	};
 
@@ -58,13 +56,13 @@ public:
 
 	/******************************* KEY EVENTS START ******************************/
 	bool KeyIsPressed( unsigned char keycode ) const noexcept;
-	Event ReadKey() noexcept;
+	std::optional<Event> ReadKey() noexcept;
 	bool KeyIsEmpty() const noexcept;
 	void ClearKey() noexcept;
 	/******************************* KEY EVENTS END ******************************/
 	
 	/******************************* CHAR EVENT START ******************************/
-	wchar_t ReadChar() noexcept;
+	std::optional<wchar_t> ReadChar() noexcept;
 	bool CharIsEmpty() const noexcept;
 	void ClearChar() noexcept;	
 	/******************************* CHAR EVENT END ******************************/

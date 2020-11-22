@@ -22,7 +22,7 @@ class App
 public:
 	App();
 	// master frame / message loop
-	int Begin();
+	int32_t Begin();
 
 private:
 	void SetupFrame();

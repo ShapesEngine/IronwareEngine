@@ -24,7 +24,7 @@ App::App() :
 	wnd( 640, 480, L"Ironware Engine" )
 {}
 
-int App::Begin()
+int32_t App::Begin()
 {
 	MSG msg;
 	BOOL gResult;
@@ -46,7 +46,7 @@ int App::Begin()
 	}
 
 	// wParam here is the value passed to PostQuitMessage
-	return msg.wParam;
+	return (int32_t)msg.wParam;
 }
 
 void App::SetupFrame()
