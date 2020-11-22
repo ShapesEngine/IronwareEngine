@@ -14,6 +14,7 @@
 #pragma once
 
 #include <queue>
+#include <optional>
 
 class Mouse
 {
@@ -33,11 +34,10 @@ public:
 			MOVE,
 			ENTER,
 			LEAVE,
-			INVALID
 		};
 
 	private:
-		Type type = Type::INVALID;
+		Type type;
 		bool leftIsPressed = false;
 		bool rightIsPressed = false;
 		int x = 0;
@@ -53,7 +53,6 @@ public:
 			y( parent.y )
 		{}
 
-		inline bool IsValid() const noexcept { return type != Type::INVALID; }
 		inline Type GetType() const noexcept { return type; }
 		inline std::pair<int, int> GetPos() const noexcept { return{ x, y }; }
 		inline int GetPosX() const noexcept { return x; }
@@ -67,7 +66,7 @@ public:
 	Mouse( const Mouse& ) = delete;
 	Mouse& operator=( const Mouse& ) = delete;
 
-	Mouse::Event Read() noexcept;
+	std::optional<Mouse::Event> Read() noexcept;
 
 	inline bool IsInWindow() const noexcept { return isInWindow; }
 	inline std::pair<int, int> GetPos() const noexcept { return { x, y }; }

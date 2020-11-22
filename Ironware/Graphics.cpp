@@ -151,7 +151,7 @@ void Graphics::DrawTriangle()
 		} color;
 	};
 
-	const Vertex vertices[] =
+	constexpr Vertex vertices[] =
 	{
 		{ 0.0f, 0.5f, 255, 0, 0, 0 },
 		{ 0.5f, -0.5f, 0, 255, 0, 0 },
@@ -162,7 +162,7 @@ void Graphics::DrawTriangle()
 	};
 
 	// create index buffer
-	const uint16_t indices[] =
+	constexpr uint16_t indices[] =
 	{
 		0, 1, 2,
 		0, 2, 3,
