@@ -23,6 +23,7 @@
 
 #include <sstream>
 #include <d3dcompiler.h>
+#include <DirectXMath.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
@@ -49,6 +50,7 @@
 // =======================================================================
 
 namespace wrl = Microsoft::WRL;
+namespace dx = DirectX;
 
 /******************************* GRAPHICS START ******************************/
 Graphics::Graphics( HWND hWnd )
@@ -207,21 +209,15 @@ void Graphics::DrawTriangle( float angle )
 	// create const buffers
 	struct ConstantBuffer  
 	{
-		struct  
-		{
-			float element[4][4];
-		} transformation;
+		dx::XMMATRIX transform;
 	};
 
 	const ConstantBuffer rotMat =
 	{
-		// x * height/width						y					z		w
 		{
-			(3.0f / 4.0f) * std::cos( angle ),	std::sin( angle ),	0.0f,	0.0f,
-			(3.0f / 4.0f) * -std::sin( angle ),	std::cos( angle ),	0.0f,	0.0f,
-			0.0f,								0.0f,				1.0f,	0.0f,
-			0.0f,								0.0f,				0.0f,	1.0f,
-		}
+
+			dx::XMMatrixTranspose( dx::XMMatrixRotationZ( angle ) * dx::XMMatrixScaling( 3.f / 4.f, 1.f, 1.f ) )
+		}		
 	};
 
 	D3D11_BUFFER_DESC constBufferDesc = {};
