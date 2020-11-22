@@ -20,6 +20,7 @@
  */
 #include "Window.h"
 #include "resource.h"
+#include "WindowExceptionMacros.h"
 
 #include <sstream>
 

@@ -177,6 +177,7 @@
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GraphicsExceptionMacros.h" />
     <ClInclude Include="IronTimer.h" />
     <ClInclude Include="IronException.h" />
     <ClInclude Include="IronUtils.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="WindowExceptionMacros.h" />
     <ClInclude Include="WindowsMessageMap.h" />
   </ItemGroup>
   <ItemGroup>

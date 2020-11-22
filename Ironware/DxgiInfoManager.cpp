@@ -22,6 +22,7 @@
 #include "Window.h"
 #include "Graphics.h"
 #include "IronUtils.h"
+#include "WindowExceptionMacros.h"
 
 #include <memory>
 

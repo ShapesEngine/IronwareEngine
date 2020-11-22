@@ -130,11 +130,3 @@ private:
 	HWND hWnd;	
 	std::unique_ptr<Graphics> pGfx;
 };
-
-// =======================================================================
-// error exception helper macros
-// -----------------------------------------------------------------------
-#define IRWND_EXCEPT( hr ) Window::HrException( __LINE__, WFILE, hr )
-#define IRWND_LAST_EXCEPT() Window::HrException( __LINE__, WFILE, GetLastError() )
-#define IRWND_NOGFX_EXCEPT() Window::NoGfxException( __LINE__, WFILE )
-// =======================================================================

@@ -19,6 +19,7 @@
  *
  */
 #include "App.h"
+#include "WindowExceptionMacros.h"
 
 App::App() :
 	wnd( 640, 480, L"Ironware Engine" )
