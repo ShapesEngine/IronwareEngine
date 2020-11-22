@@ -215,7 +215,6 @@ void Graphics::DrawTriangle( float angle, float x, float y )
 	const ConstantBuffer rotMat =
 	{
 		{
-
 			dx::XMMatrixTranspose(
 				dx::XMMatrixRotationZ( angle ) *
 				dx::XMMatrixScaling( 3.f / 4.f, 1.f, 1.f ) *
