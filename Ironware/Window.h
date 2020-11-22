@@ -112,6 +112,9 @@ public:
 	static std::optional<int> ProcessMessages() noexcept;
 	Graphics& Gfx() const;
 
+	inline int GetWidth() const { return width; }
+	inline int GetHeight() const { return height; }
+
 private:
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
