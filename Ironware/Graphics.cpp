@@ -145,25 +145,18 @@ void Graphics::DrawTriangle( float angle, float x, float y )
 			float y;
 			float z;
 		} pos;
-		struct
-		{
-			uint8_t r;
-			uint8_t g;
-			uint8_t b;
-			uint8_t a;
-		} color;
 	};
 
 	constexpr Vertex vertices[] =
 	{
-		{ -1.0f, -1.0f, -1.0f, 255, 0, 0 },
-		{ 1.0f, -1.0f, -1.0f, 0, 255, 0 },
-		{ -1.0f, 1.0f, -1.0f, 0, 0, 255 },
-		{ 1.0f, 1.0f, -1.0f, 255, 255, 0 },
-		{ -1.0f, -1.0f, 1.0f, 255, 0, 255 },
-		{ 1.0f, -1.0f, 1.0f, 0, 255, 255 },
-		{ -1.0f, 1.0f, 1.0f, 0, 0, 0 },
-		{ 1.0f, 1.0f, 1.0f, 255, 255, 255 },
+		{ -1.0f, -1.0f, -1.0f },
+		{ 1.0f, -1.0f, -1.0f },
+		{ -1.0f, 1.0f, -1.0f },
+		{ 1.0f, 1.0f, -1.0f },
+		{ -1.0f, -1.0f, 1.0f },
+		{ 1.0f, -1.0f, 1.0f },
+		{ -1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
 	};
 
 	// create index buffer
@@ -245,13 +238,53 @@ void Graphics::DrawTriangle( float angle, float x, float y )
 
 	pImmediateContext->VSSetConstantBuffers( 0u, 1u, pConstBuffer.GetAddressOf() );
 
+	// const buffer 2 for color id(for triangles)
+	// create const buffers
+	struct ConstantBuffer2
+	{
+		struct
+		{
+			float r;
+			float g;
+			float b;
+			float a;
+		} face_colors[6];
+	};
+
+	const ConstantBuffer2 colorConstBuffer =
+	{
+		{
+			{ 1.0f, 0.0f, 1.0f },
+			{ 1.0f, 0.0f, 0.0f },
+			{ 0.0f, 1.0f, 0.0f },
+			{ 0.0f, 0.0f, 1.0f },
+			{ 1.0f, 1.0f, 0.0f },
+			{ 0.0f, 1.0f, 1.0f },
+		}
+	};
+
+	D3D11_BUFFER_DESC constBufferDesc2 = {};
+	constBufferDesc2.Usage = D3D11_USAGE_DEFAULT;
+	constBufferDesc2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufferDesc2.ByteWidth = sizeof( colorConstBuffer );
+	constBufferDesc2.StructureByteStride = 0u;
+	constBufferDesc2.CPUAccessFlags = 0u;
+	constBufferDesc2.MiscFlags = 0u;
+
+	D3D11_SUBRESOURCE_DATA constsubresData2 = {};
+	constsubresData2.pSysMem = &colorConstBuffer;
+
+	wrl::ComPtr<ID3D11Buffer> pConstBuffer2;
+	GFX_THROW_INFO( pDevice->CreateBuffer( &constBufferDesc2, &constsubresData2, &pConstBuffer2 ) );
+
+	pImmediateContext->PSSetConstantBuffers( 0u, 1u, pConstBuffer2.GetAddressOf() );
+
 	// setting shader input layout
 	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
 	const D3D11_INPUT_ELEMENT_DESC inputDesc[] =
 	{
 		// for position rgb32 means nothing but here we just set data type
 		{ "POSITION", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
-		{ "COLOR", 0u, DXGI_FORMAT_R8G8B8A8_UNORM, 0u, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0u },
 	};	
 
 	// =======================================================================
