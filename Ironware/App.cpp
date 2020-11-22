@@ -54,7 +54,7 @@ void App::SetupFrame()
 	const float c = sin( timer.Peek() ) / 2.f + 0.5f;
 	wnd.Gfx().ClearBuffer( c, c, c );
 	wnd.Gfx().DrawTriangle(
-		timer.Peek(),
+		-timer.Peek(),
 		0.f,
 		0.f
 	);

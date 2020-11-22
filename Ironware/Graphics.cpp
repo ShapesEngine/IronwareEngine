@@ -104,7 +104,7 @@ Graphics::Graphics( HWND hWnd )
 	GFX_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), &pBackBuffer ) );
 	GFX_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer.Get(), nullptr, &pRenderTargetView ) );
 
-	// create depth stensil state
+	// create depth stencil state
 	D3D11_DEPTH_STENCIL_DESC descDepthStencil = {};
 	descDepthStencil.DepthEnable = TRUE;
 	descDepthStencil.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
@@ -120,7 +120,7 @@ Graphics::Graphics( HWND hWnd )
 	D3D11_TEXTURE2D_DESC descDepth;
 	descDepth.Width = 640;
 	descDepth.Height = 480;
-	descDepth.MipLevels = 1u;
+	descDepth.MipLevels = 0u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
 	descDepth.SampleDesc.Count = 1u;
@@ -140,7 +140,7 @@ Graphics::Graphics( HWND hWnd )
 		pDepth.Get(), &descDSV, &pDepthStencilView
 	) );
 
-	// bind depth stensil view to OM
+	// bind depth stencil view to OM
 	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), pDepthStencilView.Get() );
 }
 
