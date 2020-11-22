@@ -81,7 +81,7 @@ public:
 
 	void EndFrame();
 	void ClearBuffer( float red, float green, float blue ) noexcept;
-	void DrawTriangle();
+	void DrawTriangle( float angle );
 
 private:
 #ifndef NDEBUG

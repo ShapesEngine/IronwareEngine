@@ -131,7 +131,7 @@ void Graphics::ClearBuffer( float red, float green, float blue ) noexcept
 	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
 }
 
-void Graphics::DrawTriangle()
+void Graphics::DrawTriangle( float angle )
 {
 	HRESULT hr;
 
@@ -204,6 +204,41 @@ void Graphics::DrawTriangle()
 	const UINT offset = 0u;
 	pImmediateContext->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset );
 
+	// create const buffers
+	struct ConstantBuffer  
+	{
+		struct  
+		{
+			float element[4][4];
+		} transformation;
+	};
+
+	const ConstantBuffer rotMat =
+	{
+		{
+			std::cos( angle ), std::sin( angle ), 0.0f, 0.0f,
+			-std::sin( angle ), std::cos( angle ), 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f,
+		}
+	};
+
+	D3D11_BUFFER_DESC constBufferDesc = {};
+	constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufferDesc.ByteWidth = sizeof( rotMat );
+	constBufferDesc.StructureByteStride = 0u;
+	constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	constBufferDesc.MiscFlags = 0u;
+
+	D3D11_SUBRESOURCE_DATA constsubresData = {};
+	constsubresData.pSysMem = &rotMat;
+
+	wrl::ComPtr<ID3D11Buffer> pConstBuffer;
+	GFX_THROW_INFO( pDevice->CreateBuffer( &constBufferDesc, &constsubresData, &pConstBuffer ) );
+
+	pImmediateContext->VSSetConstantBuffers( 0u, 1u, pConstBuffer.GetAddressOf() );
+
 	// setting shader input layout
 	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
 	const D3D11_INPUT_ELEMENT_DESC inputDesc[] =
@@ -238,7 +273,7 @@ void Graphics::DrawTriangle()
 	
 	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), nullptr );
 	
-	pImmediateContext->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); // Triangle list is group of 3 vertices
+	pImmediateContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); // Triangle list is group of 3 vertices
 
 	// =======================================================================
 	// configure viewport
