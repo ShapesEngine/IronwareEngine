@@ -112,8 +112,8 @@ public:
 	static std::optional<int> ProcessMessages() noexcept;
 	Graphics& Gfx() const;
 
-	inline int GetWidth() const { return width; }
-	inline int GetHeight() const { return height; }
+	inline uint32_t GetWidth() const { return width; }
+	inline uint32_t GetHeight() const { return height; }
 
 private:
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
@@ -125,8 +125,8 @@ public:
 	Mouse mouse;
 
 private:
-	int width;
-	int height;
+	uint32_t width;
+	uint32_t height;
 	HWND hWnd;	
 	std::unique_ptr<Graphics> pGfx;
 };
