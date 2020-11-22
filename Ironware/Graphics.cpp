@@ -158,7 +158,7 @@ void Graphics::DrawTriangle( float angle )
 		{ -0.5f, -0.5f, 0, 0, 255, 0 },
 		{ -0.3f, 0.3f, 0, 255, 0, 0 },
 		{ 0.3f, 0.3f, 0, 0, 255, 0 },
-		{ 0.0f, -0.8f, 255, 0, 0, 0 },
+		{ 0.0f, -1.f, 255, 0, 0, 0 },
 	};
 
 	// create index buffer
@@ -215,11 +215,12 @@ void Graphics::DrawTriangle( float angle )
 
 	const ConstantBuffer rotMat =
 	{
+		// x * height/width						y					z		w
 		{
-			std::cos( angle ), std::sin( angle ), 0.0f, 0.0f,
-			-std::sin( angle ), std::cos( angle ), 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f,
+			(3.0f / 4.0f) * std::cos( angle ),	std::sin( angle ),	0.0f,	0.0f,
+			(3.0f / 4.0f) * -std::sin( angle ),	std::cos( angle ),	0.0f,	0.0f,
+			0.0f,								0.0f,				1.0f,	0.0f,
+			0.0f,								0.0f,				0.0f,	1.0f,
 		}
 	};
 
