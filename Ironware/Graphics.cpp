@@ -137,14 +137,24 @@ void Graphics::DrawTriangle()
 
 	struct Vertex
 	{
-		float x;
-		float y;
+		struct
+		{
+			float x;
+			float y;
+		} pos;
+		struct
+		{
+			uint8_t r;
+			uint8_t g;
+			uint8_t b;
+			uint8_t a;
+		} color;
 	};
 
 	const Vertex vertices[] = {
-		{ 0.f, 0.5f },
-		{ 0.5f, -0.5f },
-		{ -0.5f, -0.5f }
+		{ 0.f, 0.5f, 255, 0, 0 },
+		{ 0.5f, -0.5f, 0, 255, 0 },
+		{ -0.5f, -0.5f, 0, 0, 255 }
 	};
 
 	D3D11_BUFFER_DESC bufferDesc = {};	
@@ -169,10 +179,9 @@ void Graphics::DrawTriangle()
 	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
 	const D3D11_INPUT_ELEMENT_DESC inputDesc[] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	
+		{ "POSITION", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
+		{ "COLOR", 0u, DXGI_FORMAT_R8G8B8A8_UNORM, 0u, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0u },
+	};	
 
 	// =======================================================================
 	// create vertex shader
