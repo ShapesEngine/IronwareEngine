@@ -16,11 +16,15 @@
 
 #include "Window.h"
 #include "IronTimer.h"
+#include "Box.h"
+
+class Box;
 
 class App
 {
 public:
 	App();
+
 	// master frame / message loop
 	int32_t Begin();
 
@@ -30,6 +34,7 @@ private:
 private:
 	Window wnd;
 	IronTimer timer;
+	std::vector<std::unique_ptr<class Box>> boxes;
 };
 
 
