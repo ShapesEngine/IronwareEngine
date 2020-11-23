@@ -21,9 +21,14 @@
 #include <vector>
 #include <d3d11.h>
 #include <wrl.h>
+#include <d3dcompiler.h>
+#include <DirectXMath.h>
+#include <memory>
+#include <random>
 
 class Graphics
 {
+	friend class Bindable;
 public:
 	class Exception : public IronException
 	{
@@ -81,9 +86,13 @@ public:
 
 	void EndFrame();
 	void ClearBuffer( float red, float green, float blue ) noexcept;
-	void DrawTriangle( float angle, float x, float y );
+	void DrawIndexed( UINT count ) noexcept( !IS_DEBUG );
+
+	inline void SetProjection( DirectX::FXMMATRIX proj ) noexcept	{ projection = proj; }
+	inline DirectX::XMMATRIX GetProjection() const noexcept	{ return projection; }
 
 private:
+	DirectX::XMMATRIX projection;
 #ifndef NDEBUG
 	DxgiInfoManager infoManager;
 #endif

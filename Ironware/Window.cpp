@@ -213,7 +213,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	{
 		const POINTS pt = MAKEPOINTS( lParam );
 		// in client region -> log move, and log enter + capture mouse (if not previously in window)
-		if( pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height )
+		if( pt.x >= 0 && pt.x < (SHORT)width && pt.y >= 0 && pt.y < (SHORT)height )
 		{
 			mouse.OnMouseMove( pt.x, pt.y );
 			if( !mouse.IsInWindow() )

@@ -54,7 +54,7 @@ void App::SetupFrame()
 {
 	const float c = sin( timer.Peek() ) / 2.f + 0.5f;
 	wnd.Gfx().ClearBuffer( c, c, c );
-	wnd.Gfx().DrawTriangle(
+	/*wnd.Gfx().DrawTriangle(
 		-timer.Peek(),
 		0.f,
 		0.f
@@ -63,6 +63,6 @@ void App::SetupFrame()
 		timer.Peek(), 
 		float(wnd.mouse.GetPosX() ) / float( wnd.GetWidth() / 2) - 1.f, 
 		-float(wnd.mouse.GetPosY() ) / float(wnd.GetHeight() / 2) + 1.f 
-	);
+	);*/
 	wnd.Gfx().EndFrame();
 }
