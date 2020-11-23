@@ -218,6 +218,7 @@
     <Image Include="ironware_WaA_icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ConstantBuffers.tpp" />
     <None Include="DXGetErrorDescription.inl" />
     <None Include="DXGetErrorString.inl" />
     <None Include="DXTrace.inl" />

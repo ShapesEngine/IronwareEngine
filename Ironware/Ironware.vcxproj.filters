@@ -209,6 +209,9 @@
     <None Include="DXTrace.inl">
       <Filter>DXErr</Filter>
     </None>
+    <None Include="ConstantBuffers.tpp">
+      <Filter>Source Files\Bindable</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
