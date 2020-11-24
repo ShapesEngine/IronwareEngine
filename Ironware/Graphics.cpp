@@ -61,7 +61,7 @@ Graphics::Graphics( HWND hWnd )
 
 	// for checking results of d3d functions
 	HRESULT hr;
-
+	
 	// create device and front/back buffers, and swap chain and rendering context
 	GFX_THROW_INFO( D3D11CreateDeviceAndSwapChain(
 		nullptr,

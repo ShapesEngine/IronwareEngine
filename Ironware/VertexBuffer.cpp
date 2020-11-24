@@ -1,7 +1,7 @@
 /*!
  * \class VertexBuffer
  *
- * \brief 
+ * \brief A vertex buffer class that controls buffers(binds, etc)
  *
  * \author Yernar Aldabergenov
  * \date November 2020

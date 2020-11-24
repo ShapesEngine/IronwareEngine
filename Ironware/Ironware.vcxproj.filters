@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Drawable">
       <UniqueIdentifier>{2cd8c430-7635-41ed-bb2d-3e7c789e78ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils\Macros">
+      <UniqueIdentifier>{d76812b4-d128-4bc6-b30e-2253efce1484}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -146,12 +149,6 @@
     <ClInclude Include="IronWin.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsExceptionMacros.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowExceptionMacros.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Bindable.h">
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
@@ -188,6 +185,15 @@
     <ClInclude Include="VertexBuffer.h">
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="WindowExceptionMacros.h">
+      <Filter>Header Files\Utils\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsExceptionMacros.h">
+      <Filter>Header Files\Utils\Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffers.tpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ironware.rc">
@@ -208,9 +214,6 @@
     </None>
     <None Include="DXTrace.inl">
       <Filter>DXErr</Filter>
-    </None>
-    <None Include="ConstantBuffers.tpp">
-      <Filter>Source Files\Bindable</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

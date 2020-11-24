@@ -1,7 +1,7 @@
 /*!
  * \class VertexShader
  *
- * \brief 
+ * \brief A VertexShader wrapper class that will be bound in process of graphics pipeline.
  *
  * \author Yernar Aldabergenov
  * \date November 2020

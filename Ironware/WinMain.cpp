@@ -4,7 +4,7 @@
 int CALLBACK wWinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
-	LPWSTR     lpCmdLine,
+	LPWSTR    lpCmdLine,
 	int       nCmdShow )
 {
 	try

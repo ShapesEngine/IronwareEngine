@@ -18,8 +18,6 @@
 #include "IronTimer.h"
 #include "Box.h"
 
-class Box;
-
 class App
 {
 public:

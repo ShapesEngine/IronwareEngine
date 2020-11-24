@@ -116,7 +116,7 @@ std::optional<int> Window::ProcessMessages() noexcept
 		if( msg.message == WM_QUIT )
 		{
 			// return optional wrapping int (arg to PostQuitMessage is in wparam) signals quit
-			return msg.wParam;
+			return (int)msg.wParam;
 		}
 
 		// TranslateMessage will post auxilliary WM_CHAR messages from key msgs
@@ -286,13 +286,13 @@ Window::HrException::HrException( int line, const wchar_t* file, HRESULT hr ) no
 
 const char* Window::HrException::what() const noexcept
 {
-	std::wostringstream oss;
-	oss << GetType() << std::endl
+	std::wostringstream woss;
+	woss << GetType() << std::endl
 		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
 		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
 		<< "[Description] " << GetErrorDescription() << std::endl
 		<< GetOriginString();
-	whatBuffer = oss.str();
+	whatBuffer = woss.str();
 	return reinterpret_cast<const char*>( whatBuffer.c_str() );
 }
 

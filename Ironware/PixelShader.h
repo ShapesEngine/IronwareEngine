@@ -5,11 +5,12 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A PixelShader wrapper class that will be bound in process of graphics pipeline.
+ *
  *
  * TODO:
  *
- * \note
+ * \note It stores created pixel shader data
 */
 #pragma once
 

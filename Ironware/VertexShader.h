@@ -5,15 +5,17 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A VertexShader wrapper class that will be bound in process of graphics pipeline.
  *
  * TODO:
  *
- * \note
+ * \note It stores: bytecode, as its bufferpointer and buffer size are needed in creation process
+ * *				vertexShader is created vertexshader data
 */
 #pragma once
 
 #include "Bindable.h"
+#include <d3dcompiler.h>
 
 class VertexShader : public Bindable
 {

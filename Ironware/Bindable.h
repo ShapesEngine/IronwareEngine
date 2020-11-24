@@ -5,13 +5,14 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief An abstract class that will be inherited from other bindable types
+ * \brief An abstract class that will be inherited from other bindable types.
+ * * All the child classes will get bound with the Bind function.
  *
  *
  * TODO:
  *
  * \note The reason that static functions exists is because Bindable is friend of Graphics class and we would
- * * like to give access to child classes only to these members
+ * * like to give access only to these members for child classes
 */
 #pragma once
 

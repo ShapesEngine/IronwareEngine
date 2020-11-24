@@ -203,19 +203,19 @@ std::wstring WindowsMessageMap::operator()( DWORD msg, LPARAM lp, WPARAM wp ) co
 	constexpr int firstColWidth = 25;
 	const auto i = map.find( msg );
 
-	std::wostringstream oss;
+	std::wostringstream woss;
 	if( i != map.end() )
 	{
-		oss << std::left << std::setw( firstColWidth ) << i->second << std::right;
+		woss << std::left << std::setw( firstColWidth ) << i->second << std::right;
 	}
 	else
 	{
 		std::wostringstream padss;
 		padss << "Unknown message: 0x" << std::hex << msg;
-		oss << std::left << std::setw( firstColWidth ) << padss.str() << std::right;
+		woss << std::left << std::setw( firstColWidth ) << padss.str() << std::right;
 	}
-	oss << "   LP: 0x" << std::hex << std::setfill( L'0' ) << std::setw( 8 ) << lp;
-	oss << "   WP: 0x" << std::hex << std::setfill( L'0' ) << std::setw( 8 ) << wp << std::endl;
+	woss << "   LP: 0x" << std::hex << std::setfill( L'0' ) << std::setw( 8 ) << lp;
+	woss << "   WP: 0x" << std::hex << std::setfill( L'0' ) << std::setw( 8 ) << wp << std::endl;
 
-	return oss.str();
+	return woss.str();
 }

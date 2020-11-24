@@ -1,3 +1,25 @@
+/*!
+ * \class Drawable
+ *
+ * \ingroup DEV
+ *
+ * \brief A drawable abstract class that controls(partly) the graphics pipeline and provides
+ * * an interface for the other geometry object types
+ *
+ * TODO:
+ *
+ * \note It contains: pIndexBuffer, as it's needed to get its count.
+ * *				  binds collection that stores various bindable types in it.
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \version 1.0
+ *
+ * \date November 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 #include "Drawable.h"
 #include "GraphicsExceptionMacros.h"
 #include "IndexBuffer.h"

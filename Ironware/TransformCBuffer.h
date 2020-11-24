@@ -5,11 +5,12 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A Transform Constant Buffer wrapper child class that will be bound in process of graphics pipeline.
  *
  * TODO:
  *
- * \note
+ * \note It stores parent and vertexConstBuffer. parent is needed to get transform matrix and
+ * vertConstBuffer is needed to update and bind the buffer.
 */
 #pragma once
 
@@ -26,7 +27,7 @@ public:
 	inline void Bind( Graphics& gfx ) noexcept override;
 
 private:
-	VertexConstantBuffer<DirectX::XMMATRIX> vcbuf;
+	VertexConstantBuffer<DirectX::XMMATRIX> vertConstBuffer;
 	const Drawable& parent;
 };
 

@@ -21,7 +21,6 @@
 #include <vector>
 #include <d3d11.h>
 #include <wrl.h>
-#include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <memory>
 #include <random>
@@ -88,11 +87,12 @@ public:
 	void ClearBuffer( float red, float green, float blue ) noexcept;
 	void DrawIndexed( UINT count ) noexcept( !IS_DEBUG );
 
-	inline void SetProjection( DirectX::FXMMATRIX proj ) noexcept	{ projection = proj; }
+	inline void SetProjection( DirectX::FXMMATRIX proj ) noexcept { projection = proj; }
 	inline DirectX::XMMATRIX GetProjection() const noexcept	{ return projection; }
 
 private:
 	DirectX::XMMATRIX projection;
+
 #ifndef NDEBUG
 	DxgiInfoManager infoManager;
 #endif

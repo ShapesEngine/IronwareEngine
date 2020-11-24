@@ -1,13 +1,15 @@
 /*!
  * \class PixelShader
  *
- * \brief 
+ * \brief A PixelShader wrapper class that will be bound in process of graphics pipeline.
  *
  * \author Yernar Aldabergenov
  * \date November 2020
  */
 #include "PixelShader.h"
 #include "GraphicsExceptionMacros.h"
+
+#include <d3dcompiler.h>
 
 PixelShader::PixelShader( Graphics& gfx, const std::wstring& path )
 {

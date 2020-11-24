@@ -5,11 +5,13 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A drawable abstract class that controls(partly) the graphics pipeline and provides
+ * * an interface for the other geometry object types 
  *
  * TODO:
  *
- * \note
+ * \note It contains: pIndexBuffer, as it's needed to get its count.
+ * *				  binds collection that stores various bindable types in it.
 */
 #pragma once
 
@@ -26,12 +28,13 @@ class Drawable
 public:
 	Drawable() = default;
 	Drawable( const Drawable& ) = delete;
+	virtual ~Drawable() = default;
+
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void Draw( Graphics & gfx ) const noexcept( !IS_DEBUG );
 	virtual void Update( float dt ) noexcept = 0;
 	void AddBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG );
 	void AddIndexBuffer( std::unique_ptr<class IndexBuffer> ibuf ) noexcept;
-	virtual ~Drawable() = default;
 
 private:
 	const IndexBuffer* pIndexBuffer = nullptr;

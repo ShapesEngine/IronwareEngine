@@ -5,11 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A Topology wrapper child class that will be bound in process of graphics pipeline.
  *
  * TODO:
  *
- * \note
+ * \note It stores topology type
 */
 #pragma once
 

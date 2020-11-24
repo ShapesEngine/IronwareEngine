@@ -5,7 +5,8 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief An InputLayout wrapper class that will be needed and bound in process of graphics pipeline
+ * * and store vertex indices in it.
  *
  * TODO:
  *
@@ -19,7 +20,7 @@ class InputLayout : public Bindable
 {
 public:
 	InputLayout( Graphics& gfx,
-				 const std::vector<D3D11_INPUT_ELEMENT_DESC>& layout,
+				 const std::vector<D3D11_INPUT_ELEMENT_DESC>& layouts,
 				 ID3DBlob* pVertexShaderBytecode );
 
 	inline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }

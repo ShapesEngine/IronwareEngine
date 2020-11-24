@@ -5,7 +5,8 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief An IndexBuffer wrapper class that will be bound in process of graphics pipeline
+ * * and store vertex indices in it.
  *
  * TODO:
  *
