@@ -24,7 +24,7 @@ public:
 	App();
 
 	// master frame / message loop
-	int32_t Begin();
+	int Begin();
 
 private:
 	void SetupFrame();

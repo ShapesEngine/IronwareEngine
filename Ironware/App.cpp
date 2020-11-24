@@ -41,7 +41,7 @@ App::App() :
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.0f, 3.0f / 4.0f, 0.5f, 40.0f ) );
 }
 
-int32_t App::Begin()
+int App::Begin()
 {
 	MSG msg;
 	BOOL gResult;
@@ -63,7 +63,7 @@ int32_t App::Begin()
 	}
 
 	// wParam here is the value passed to PostQuitMessage
-	return (int32_t)msg.wParam;
+	return (int)msg.wParam;
 }
 
 void App::SetupFrame()
