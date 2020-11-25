@@ -12,7 +12,7 @@
 #include <stdexcept>
 #endif
 
-DxgiInfoManager& Bindable::GetInfoManager( Graphics& gfx ) noexcept( !IS_DEBUG )
+DxgiInfoManager& Bindable::GetInfoManager( Graphics& gfx ) noexcept( IS_DEBUG )
 {
 #ifndef NDEBUG
 	return gfx.infoManager;

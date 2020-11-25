@@ -196,6 +196,7 @@
     <ClInclude Include="GraphicsExceptionMacros.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="InputLayout.h" />
+    <ClInclude Include="IronMath.h" />
     <ClInclude Include="IronTimer.h" />
     <ClInclude Include="IronException.h" />
     <ClInclude Include="IronUtils.h" />
