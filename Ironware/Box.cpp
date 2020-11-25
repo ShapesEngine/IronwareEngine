@@ -9,7 +9,7 @@
 #include "Box.h"
 #include "BindableBase.h"
 #include "GraphicsExceptionMacros.h"
-#include "Cube.h"
+#include "Sphere.h"
 
 Box::Box( Graphics& gfx, std::mt19937& rng, 
           std::uniform_real_distribution<float>& adist, 
@@ -35,7 +35,7 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 		{
 			dx::XMFLOAT3 pos;
 		};
-		auto model = Cube::Make<Vertex>();
+		auto model = Sphere::Make<Vertex>();
 		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
 
 		auto pVertShader = std::make_unique<VertexShader>( gfx, L"VertexShader.cso" );

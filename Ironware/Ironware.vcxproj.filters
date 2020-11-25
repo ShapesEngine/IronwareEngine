@@ -212,6 +212,9 @@
     <ClInclude Include="DrawableBase.tpp">
       <Filter>Source Files\Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Header Files\Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ironware.rc">
