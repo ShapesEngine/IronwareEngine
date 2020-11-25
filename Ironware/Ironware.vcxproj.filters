@@ -218,6 +218,9 @@
     <None Include="DXTrace.inl">
       <Filter>DXErr</Filter>
     </None>
+    <None Include="DrawableBase.tpp">
+      <Filter>Source Files\Drawable</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
