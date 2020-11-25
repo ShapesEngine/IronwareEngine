@@ -40,6 +40,9 @@
     <Filter Include="Header Files\Utils\Macros">
       <UniqueIdentifier>{d76812b4-d128-4bc6-b30e-2253efce1484}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Geometry">
+      <UniqueIdentifier>{34ae4322-f156-46f8-9fea-c5df9764c08e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -200,6 +203,15 @@
     <ClInclude Include="IronMath.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="IndexedTriangleList.h">
+      <Filter>Header Files\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableBase.tpp">
+      <Filter>Source Files\Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ironware.rc">
@@ -220,9 +232,6 @@
     </None>
     <None Include="DXTrace.inl">
       <Filter>DXErr</Filter>
-    </None>
-    <None Include="DrawableBase.tpp">
-      <Filter>Source Files\Drawable</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

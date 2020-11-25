@@ -188,6 +188,7 @@
     <ClInclude Include="BindableBase.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="ConstantBuffers.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="dxerr.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GraphicsExceptionMacros.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="InputLayout.h" />
     <ClInclude Include="IronMath.h" />
     <ClInclude Include="IronTimer.h" />

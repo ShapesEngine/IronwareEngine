@@ -9,6 +9,7 @@
 #include "Box.h"
 #include "BindableBase.h"
 #include "GraphicsExceptionMacros.h"
+#include "Cube.h"
 
 Box::Box( Graphics& gfx, std::mt19937& rng, 
           std::uniform_real_distribution<float>& adist, 
@@ -26,29 +27,16 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 	theta( adist( rng ) ),
 	phi( adist( rng ) )
 {
+	namespace dx = DirectX;
+
 	if( !IsStaticInitialized() )
 	{
 		struct Vertex
 		{
-			struct
-			{
-				float x;
-				float y;
-				float z;
-			} pos;
+			dx::XMFLOAT3 pos;
 		};
-		const std::vector<Vertex> vertices =
-		{
-			{ -1.0f, -1.0f, -1.0f },
-			{ 1.0f, -1.0f, -1.0f },
-			{ -1.0f, 1.0f, -1.0f },
-			{ 1.0f, 1.0f, -1.0f },
-			{ -1.0f, -1.0f, 1.0f },
-			{ 1.0f, -1.0f, 1.0f },
-			{ -1.0f, 1.0f, 1.0f },
-			{ 1.0f, 1.0f, 1.0f },
-		};
-		AddStaticBind( std::make_unique<VertexBuffer>( gfx, vertices ) );
+		auto model = Cube::Make<Vertex>();
+		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
 
 		auto pVertShader = std::make_unique<VertexShader>( gfx, L"VertexShader.cso" );
 		// save bytecode, as it will be needed in input layout
@@ -57,16 +45,7 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 
 		AddStaticBind( std::make_unique<PixelShader>( gfx, L"PixelShader.cso" ) );
 
-		const std::vector<uint16_t> indices =
-		{
-			0, 2, 1, 2, 3, 1,
-			1, 3, 5, 3, 7, 5,
-			2, 6, 3, 3, 6, 7,
-			4, 5, 7, 4, 7, 6,
-			0, 4, 2, 2, 4, 6,
-			0, 1, 4, 1, 5, 4
-		};
-		AddStaticIndexBuffer( std::make_unique<IndexBuffer>( gfx, indices ) );
+		AddStaticIndexBuffer( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
 		struct ConstantBuffer2
 		{
@@ -81,12 +60,12 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 		const ConstantBuffer2 cb2 =
 		{
 			{
-				{ 1.0f, 0.0f, 1.0f },
-			{ 1.0f, 0.0f, 0.0f },
-			{ 0.0f, 1.0f, 0.0f },
-			{ 0.0f, 0.0f, 1.0f },
-			{ 1.0f, 1.0f, 0.0f },
-			{ 0.0f, 1.0f, 1.0f },
+				{ 1.f, 0.f, 1.f },
+				{ 1.f, 0.f, 0.f },
+				{ 0.f, 1.f, 0.f },
+				{ 0.f, 0.f, 1.f },
+				{ 1.f, 1.f, 0.f },
+				{ 0.f, 1.f, 1.f },
 			}
 		};
 		AddStaticBind( std::make_unique<PixelConstantBuffer<ConstantBuffer2>>( gfx, cb2 ) );
@@ -120,8 +99,8 @@ void Box::Update( float dt ) noexcept
 DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 {
 	return	DirectX::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-		DirectX::XMMatrixTranslation( r, 0.0f, 0.0f ) *
+		DirectX::XMMatrixTranslation( r, 0.f, 0.f ) *
 		DirectX::XMMatrixRotationRollPitchYaw( theta, phi, chi ) *
 		// translate away from the camera
-		DirectX::XMMatrixTranslation( 0.0f, 0.0f, 20.0f );
+		DirectX::XMMatrixTranslation( 0.f, 0.f, 20.f );
 }
