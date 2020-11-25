@@ -99,8 +99,12 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 
 		AddStaticBind( std::make_unique<Topology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 	}
+	else
+	{
+		SetIndexFromStatic();
+	}
 
-	AddStaticBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
+	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
 }
 
 void Box::Update( float dt ) noexcept
