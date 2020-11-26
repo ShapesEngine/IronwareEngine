@@ -35,8 +35,7 @@ App::App() :
 	class Factory
 	{
 	public:
-		Factory( Graphics& gfx )
-			:
+		Factory( Graphics& gfx ) :
 			gfx( gfx )
 		{}
 		std::unique_ptr<Drawable> operator()()
@@ -77,8 +76,8 @@ App::App() :
 	};
 
 	Factory f( wnd.Gfx() );
-	drawables.reserve( nDrawables );
-	std::generate_n( std::back_inserter( drawables ), nDrawables, f );
+	drawables.reserve( MAX_NDRAWABLES );
+	std::generate_n( std::back_inserter( drawables ), MAX_NDRAWABLES, f );
 
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
 }
