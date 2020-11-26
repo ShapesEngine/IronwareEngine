@@ -20,7 +20,7 @@
  */
 #include "Keyboard.h"
 
-bool Keyboard::KeyIsPressed( unsigned char keycode ) const noexcept
+bool Keyboard::KeyIsPressed( uint8_t keycode ) const noexcept
 {
 	return keystates[keycode];
 }
@@ -74,14 +74,14 @@ void Keyboard::Clear() noexcept
 	ClearChar();
 }
 
-void Keyboard::OnKeyPressed( unsigned char keycode ) noexcept
+void Keyboard::OnKeyPressed( uint8_t keycode ) noexcept
 {
 	keystates[keycode] = true;
 	keybuffer.push( Keyboard::Event( Keyboard::Event::Type::PRESS, keycode ) );
 	TrimBuffer( keybuffer );
 }
 
-void Keyboard::OnKeyReleased( unsigned char keycode ) noexcept
+void Keyboard::OnKeyReleased( uint8_t keycode ) noexcept
 {
 	keystates[keycode] = false;
 	keybuffer.push( Keyboard::Event( Keyboard::Event::Type::RELEASE, keycode ) );

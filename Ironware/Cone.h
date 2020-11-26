@@ -27,8 +27,8 @@ public:
 
 		assert( longDiv >= 3 );
 
-		const auto base = dx::XMVectorSet( 1.0f, 0.0f, -1.0f, 0.0f );
-		const float longitudeAngle = 2.0f * PI / longDiv;
+		const auto base = dx::XMVectorSet( 1.f, 0.f, -1.f, 0.f );
+		const float longitudeAngle = 2.f * PI / longDiv;
 
 		// base vertices
 		std::vector<V> vertices;
@@ -43,16 +43,16 @@ public:
 		}
 		/******************************* Center *****************************/
 		vertices.emplace_back();
-		vertices.back().pos = { 0.0f, 0.0f, -1.0f };
-		const auto iCenter = (unsigned short)( vertices.size() - 1 );
+		vertices.back().pos = { 0.f, 0.f, -1.f };
+		const auto iCenter = (uint16_t)( vertices.size() - 1 );
 		/******************************* Tip ******************************/
 		vertices.emplace_back();
-		vertices.back().pos = { 0.0f, 0.0f, 1.0f };
-		const auto iTip = (unsigned short)( vertices.size() - 1 );
+		vertices.back().pos = { 0.f, 0.f, 1.f };
+		const auto iTip = (uint16_t)( vertices.size() - 1 );
 
 		// base indices
-		std::vector<unsigned short> indices;
-		for( unsigned short iLong = 0; iLong < longDiv; iLong++ )
+		std::vector<uint16_t> indices;
+		for( uint16_t iLong = 0; iLong < longDiv; iLong++ )
 		{
 			indices.push_back( iCenter );
 			indices.push_back( ( iLong + 1 ) % longDiv );
@@ -60,7 +60,7 @@ public:
 		}
 
 		// cone indices
-		for( unsigned short iLong = 0; iLong < longDiv; iLong++ )
+		for( uint16_t iLong = 0; iLong < longDiv; iLong++ )
 		{
 			indices.push_back( iLong );
 			indices.push_back( ( iLong + 1 ) % longDiv );

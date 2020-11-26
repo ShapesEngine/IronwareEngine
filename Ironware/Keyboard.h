@@ -33,17 +33,17 @@ public:
 
 	private:
 		Type type;
-		unsigned char code = 0u;
+		uint8_t code = 0u;
 
 	public:
-		Event( Type type, unsigned char code ) noexcept :
+		Event( Type type, uint8_t code ) noexcept :
 			type( type ),
 			code( code )
 		{}
 
 		inline bool IsPress() const noexcept { return type == Type::PRESS; }
 		inline bool IsRelease() const noexcept { return type == Type::RELEASE; }
-		inline unsigned char GetCode() const noexcept { return code; }
+		inline uint8_t GetCode() const noexcept { return code; }
 	};
 
 public:
@@ -55,7 +55,7 @@ public:
 	void Clear() noexcept;
 
 	/******************************* KEY EVENTS START ******************************/
-	bool KeyIsPressed( unsigned char keycode ) const noexcept;
+	bool KeyIsPressed( uint8_t keycode ) const noexcept;
 	std::optional<Event> ReadKey() noexcept;
 	bool KeyIsEmpty() const noexcept;
 	void ClearKey() noexcept;
@@ -74,8 +74,8 @@ public:
 	/******************************* AUTOREPEAT END ******************************/
 
 private:
-	void OnKeyPressed( unsigned char keycode ) noexcept;
-	void OnKeyReleased( unsigned char keycode ) noexcept;
+	void OnKeyPressed( uint8_t keycode ) noexcept;
+	void OnKeyReleased( uint8_t keycode ) noexcept;
 	void OnChar( wchar_t character ) noexcept;
 	void ClearState() noexcept;
 	template<typename T>

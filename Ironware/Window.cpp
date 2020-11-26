@@ -193,13 +193,13 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		// filter autorepeat		
 		if( !( lParam & 0x40000000 ) || kbd.AutorepeatIsEnabled() ) // 30 bits hold the KEYDOWN message for repeating keys
 		{
-			kbd.OnKeyPressed( static_cast<unsigned char>( wParam ) );
+			kbd.OnKeyPressed( static_cast<uint8_t>( wParam ) );
 		}
 		break;
 	case WM_KEYUP:
 	// Basic KEYUP messages applies also to system keys
 	case WM_SYSKEYUP:
-		kbd.OnKeyReleased( static_cast<unsigned char>( wParam ) );
+		kbd.OnKeyReleased( static_cast<uint8_t>( wParam ) );
 		break;
 	case WM_CHAR:
 		kbd.OnChar( static_cast<wchar_t>( wParam ) );
