@@ -8,6 +8,7 @@
  */
 #define FULL_WIN
 #include "Surface.h"
+#include "IronUtils.h"
 
 #include <sstream>
 #include <algorithm>
@@ -23,7 +24,7 @@ namespace Gdiplus
 
 /******************************* SURFACE START ******************************/
 Surface::Surface( uint32_t width, uint32_t height, uint32_t pitch ) noexcept :
-	pBuffer( std::make_unique<Color[]>( pitch* height ) ),
+	pBuffer( std::make_unique<Color[]>( (size_t)pitch* height ) ),
 	width( width ),
 	height( height )
 {}
@@ -52,7 +53,7 @@ void Surface::PutPixel( uint32_t x, uint32_t y, Color c ) noexcept( !IS_DEBUG )
 	assert( y >= 0 );
 	assert( x < width );
 	assert( y < height );
-	pBuffer[y * width + x] = c;
+	pBuffer[(size_t)y * width + x] = c;
 }
 
 Surface::Color Surface::GetPixel( uint32_t x, uint32_t y ) const noexcept( !IS_DEBUG )
@@ -61,7 +62,7 @@ Surface::Color Surface::GetPixel( uint32_t x, uint32_t y ) const noexcept( !IS_D
 	assert( y >= 0 );
 	assert( x < width );
 	assert( y < height );
-	return pBuffer[y * width + x];
+	return pBuffer[(size_t)y * width + x];
 }
 
 Surface Surface::FromFile( const std::wstring& name )
@@ -81,7 +82,7 @@ Surface Surface::FromFile( const std::wstring& name )
 		}
 
 		height = bitmap.GetHeight();
-		pBuffer = std::make_unique<Color[]>( width * height );
+		pBuffer = std::make_unique<Color[]>( (size_t)width * height );
 
 		for( uint32_t y = 0; y < height; y++ )
 		{
@@ -89,7 +90,7 @@ Surface Surface::FromFile( const std::wstring& name )
 			{
 				Gdiplus::Color c;
 				bitmap.GetPixel( x, y, &c );
-				pBuffer[y * pitch + x] = c.GetValue();
+				pBuffer[(size_t)y * pitch + x] = c.GetValue();
 			}
 		}
 	}
@@ -157,7 +158,7 @@ void Surface::Copy( const Surface & src ) noexcept( !IS_DEBUG )
 {
 	assert( width == src.width );
 	assert( height == src.height );
-	memcpy( pBuffer.get(), src.pBuffer.get(), width * height * sizeof( Color ) );
+	memcpy( pBuffer.get(), src.pBuffer.get(), (size_t)width * height * sizeof( Color ) );
 }
 
 Surface::Surface( uint32_t width, uint32_t height, std::unique_ptr<Color[]> pBufferParam ) noexcept :
@@ -176,7 +177,7 @@ Surface::Exception::Exception( int line, const wchar_t* file, std::wstring note 
 const char* Surface::Exception::what() const noexcept
 {
 	std::wostringstream woss;
-	woss << IronException::what() << std::endl
+	woss << CON_WCHREINT_CAST( IronException::what() ) << std::endl
 		<< "[Note] " << GetNote();
 	whatBuffer = woss.str();
 	return reinterpret_cast<const char*>( whatBuffer.c_str() );

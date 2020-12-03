@@ -24,10 +24,14 @@
 #include "Melon.h"
 #include "Pyramid.h"
 #include "IronMath.h"
+#include "GDIPlusManager.h"
+#include "Surface.h"
 
 #include <memory>
 #include <algorithm>
 #include <iterator>
+
+GDIPlusManager gdiplm;
 
 App::App() :
 	wnd( 640, 480, L"Ironware Engine" )
@@ -78,7 +82,7 @@ App::App() :
 	Factory f( wnd.Gfx() );
 	drawables.reserve( MAX_NDRAWABLES );
 	std::generate_n( std::back_inserter( drawables ), MAX_NDRAWABLES, f );
-
+	Surface surf = Surface::FromFile( L"Images/metroo.png" );
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
 }
 
