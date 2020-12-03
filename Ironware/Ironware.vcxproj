@@ -165,6 +165,7 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
+    <ClCompile Include="GDIPlusManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputLayout.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="Pyramid.cpp" />
+    <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Topology.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -196,6 +198,7 @@
     <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="DxgiInfoManager.h" />
+    <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GraphicsExceptionMacros.h" />
     <ClInclude Include="IndexBuffer.h" />
@@ -215,6 +218,7 @@
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Surface.h" />
     <ClInclude Include="Topology.h" />
     <ClInclude Include="TransformCBuffer.h" />
     <ClInclude Include="VertexBuffer.h" />

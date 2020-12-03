@@ -30,7 +30,7 @@ public:
 	const char* what() const noexcept override;
 
 	/**
-	 * 	 *.
+	 *
 	 * 
 	 * \return formatted origin std::wstring 
 	 */
