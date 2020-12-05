@@ -82,16 +82,19 @@ App::App() :
 	Factory f( wnd.Gfx() );
 	drawables.reserve( MAX_NDRAWABLES );
 	std::generate_n( std::back_inserter( drawables ), MAX_NDRAWABLES, f );
-	Surface surf = Surface::FromFile( L"Images/metroo.png" );
+	Surface surf = Surface::FromFile( L"Images/metro.jpg" );
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
 }
 
 int App::Begin()
 {
-	MSG msg;
-	BOOL gResult;
+	MSG msg{};
+	BOOL gResult{};
 	while( true )
 	{
+		if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
+			PostQuitMessage( 0 );
+
 		// process all messages pending, but to not block for new messages
 		if( const auto ecode = Window::ProcessMessages() )
 		{
