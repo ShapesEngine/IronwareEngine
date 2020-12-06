@@ -5,7 +5,8 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A class for generating indices and vertices.
+ * * Also can translate the vertices
  *
  * TODO:
  *

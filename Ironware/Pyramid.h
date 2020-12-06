@@ -5,11 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A Pyramid child class will control(partly) the graphics pipeline and draw the pyramid
  *
  * TODO:
  *
- * \note
+ * \note It contains variables that are needed for translation, rotation, etc.
 */
 #pragma once
 

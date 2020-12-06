@@ -5,11 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A CRTP class for managing static binds in the graph pipeline
  *
  * TODO:
  *
- * \note
+ * \note Index Buffer needs to be set separately for every geometry object type
 */
 #pragma once
 

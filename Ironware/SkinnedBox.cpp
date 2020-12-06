@@ -1,34 +1,33 @@
 /*!
- * \class Sheet
+ * \class SkinnedBox
  *
- * \brief A Sheet child class will control(partly) the graphics pipeline and draw the sheet
+ * \brief A SkinnedBox child class will control(partly) the graphics pipeline and draw the skinned box
  *
  * \author Yernar Aldabergenov
  * \date December 2020
  */
-#include "Sheet.h"
-#include "Plane.h"
+#include "SkinnedBox.h"
 #include "BindableBase.h"
+#include "GraphicsExceptionMacros.h"
+#include "Cube.h"
 #include "Surface.h"
 #include "Texture.h"
-#include "TransformCBuffer.h"
-#include "Sampler.h"
 
-Sheet::Sheet( Graphics& gfx, std::mt19937& rng, 
-              std::uniform_real_distribution<float>& adist, 
-              std::uniform_real_distribution<float>& ddist, 
-              std::uniform_real_distribution<float>& odist, 
-              std::uniform_real_distribution<float>& rdist ) :
-			r( rdist( rng ) ),
-			droll( ddist( rng ) ),
-			dpitch( ddist( rng ) ),
-			dyaw( ddist( rng ) ),
-			dphi( odist( rng ) ),
-			dtheta( odist( rng ) ),
-			dchi( odist( rng ) ),
-			chi( adist( rng ) ),
-			theta( adist( rng ) ),
-			phi( adist( rng ) )
+SkinnedBox::SkinnedBox( Graphics& gfx, std::mt19937& rng, 
+						std::uniform_real_distribution<float>& adist, 
+						std::uniform_real_distribution<float>& ddist, 
+						std::uniform_real_distribution<float>& odist, 
+						std::uniform_real_distribution<float>& rdist ) :
+	r( rdist( rng ) ),
+	droll( ddist( rng ) ),
+	dpitch( ddist( rng ) ),
+	dyaw( ddist( rng ) ),
+	dphi( odist( rng ) ),
+	dtheta( odist( rng ) ),
+	dchi( odist( rng ) ),
+	chi( adist( rng ) ),
+	theta( adist( rng ) ),
+	phi( adist( rng ) )
 {
 	namespace dx = DirectX;
 
@@ -43,17 +42,11 @@ Sheet::Sheet( Graphics& gfx, std::mt19937& rng,
 				float v;
 			} tex;
 		};
-		auto model = Plane::Make<Vertex>();
-		model.vertices[0].tex = { 0.0f, 0.0f };
-		model.vertices[1].tex = { 1.0f, 0.0f };
-		model.vertices[2].tex = { 0.0f, 1.0f };
-		model.vertices[3].tex = { 1.0f, 1.0f };
-
-		AddStaticBind( std::make_unique<Texture>( gfx, Surface::FromFile( L"Images\\metro.jpg" ) ) );
+		const auto model = Cube::MakeSkinned<Vertex>();
 
 		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
 
-		AddStaticBind( std::make_unique<Sampler>( gfx ) );
+		AddStaticBind( std::make_unique<Texture>( gfx, Surface::FromFile( L"Images\\cube_skin.png" ) ) );
 
 		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"TextureVS.cso" );
 		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
@@ -80,7 +73,7 @@ Sheet::Sheet( Graphics& gfx, std::mt19937& rng,
 	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
 }
 
-void Sheet::Update( float dt ) noexcept
+void SkinnedBox::Update( float dt ) noexcept
 {
 	roll += droll * dt;
 	pitch += dpitch * dt;
@@ -90,7 +83,7 @@ void Sheet::Update( float dt ) noexcept
 	chi += dchi * dt;
 }
 
-DirectX::XMMATRIX Sheet::GetTransformXM() const noexcept
+DirectX::XMMATRIX SkinnedBox::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
 	return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *

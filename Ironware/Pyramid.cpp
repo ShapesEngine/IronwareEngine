@@ -3,11 +3,11 @@
  *
  * \ingroup DEV
  *
- * \brief 
+ * \brief A Pyramid child class will control(partly) the graphics pipeline and draw the box
  *
  * TODO:
  *
- * \note 
+ * \note The class contains variables that are needed for translation, rotation, etc.
  *
  * \author Yernar Aldabergenov
  *
