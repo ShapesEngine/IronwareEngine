@@ -15,10 +15,10 @@
 
 #pragma once
 
-// target Windows 7 or later
+// target Windows 8 or later
 // you can remove/change it if 
 // you'd like to target other platforms or only win10
-#define _WIN32_WINNT 0x0601
+#define _WIN32_WINNT 0x0602
 #include <sdkddkver.h>
 
 // Needed for the cases when other libraries(gdi+) use these defines
