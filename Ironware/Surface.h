@@ -35,6 +35,7 @@ public:
 	{
 	public:
 		uint32_t dword = 0;
+
 	public:
 		constexpr Color() noexcept = default;
 		constexpr Color( const Color& col ) noexcept
@@ -85,8 +86,8 @@ public:
 	private:
 		std::wstring note;
 	};
+
 public:
-	Surface( uint32_t width, uint32_t height, uint32_t pitch ) noexcept;
 	Surface( uint32_t width, uint32_t height ) noexcept;
 	Surface( Surface&& source ) noexcept;
 	Surface( Surface& ) = delete;
@@ -100,7 +101,7 @@ public:
 	void Save( const std::wstring& filename ) const;
 	void Copy( const Surface& src ) noexcept( !IS_DEBUG );
 
-	inline void Clear( Color fillValue ) noexcept { memset( pBuffer.get(), fillValue.dword, width * height * sizeof( Color ) ); }
+	inline void Clear( Color fillValue ) noexcept { memset( pBuffer.get(), fillValue.dword, (size_t)width * height * sizeof( Color ) ); }
 	inline uint32_t GetWidth() const noexcept { return width; }
 	inline uint32_t GetHeight() const noexcept { return height; }
 	inline Color* GetBufferPtr() noexcept { return pBuffer.get(); }

@@ -45,10 +45,12 @@ public:
 		vertices.emplace_back();
 		vertices.back().pos = { 0.f, 0.f, -1.f };
 		const auto iCenter = (uint16_t)( vertices.size() - 1 );
+		// -----------------------------------------------------------------------
 		/******************************* Tip ******************************/
 		vertices.emplace_back();
 		vertices.back().pos = { 0.f, 0.f, 1.f };
 		const auto iTip = (uint16_t)( vertices.size() - 1 );
+		// -----------------------------------------------------------------------
 
 		// base indices
 		std::vector<uint16_t> indices;
