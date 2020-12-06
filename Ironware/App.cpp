@@ -125,7 +125,7 @@ void App::SetupFrame()
 	wnd.Gfx().ClearBuffer( 0.07f, 0.f, 0.12f );
 	for( auto& d : drawables )
 	{
-		d->Update( dt );
+		d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.f : dt );
 		d->Draw( wnd.Gfx() );
 	}
 	wnd.Gfx().EndFrame();
