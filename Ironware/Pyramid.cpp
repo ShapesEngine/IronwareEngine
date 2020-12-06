@@ -68,20 +68,20 @@ Pyramid::Pyramid( Graphics& gfx,
 
 		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
 
-		auto pvs = std::make_unique<VertexShader>( gfx, L"ColorBlendVS.cso" );
-		auto pvsbc = pvs->GetBytecode();
-		AddStaticBind( std::move( pvs ) );
+		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"ColorBlendVS.cso" );
+		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+		AddStaticBind( std::move( pVertexShader ) );
 
 		AddStaticBind( std::make_unique<PixelShader>( gfx, L"ColorBlendPS.cso" ) );
 
 		AddStaticIndexBuffer( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
+		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElement =
 		{
 			{ "Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "Color", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "Color", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		AddStaticBind( std::make_unique<InputLayout>( gfx, ied, pvsbc ) );
+		AddStaticBind( std::make_unique<InputLayout>( gfx, descInputElement, pVertexShaderBytecode ) );
 
 		AddStaticBind( std::make_unique<Topology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 	}

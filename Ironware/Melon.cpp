@@ -47,9 +47,9 @@ Melon::Melon( Graphics& gfx,
 
 	if( !IsStaticInitialized() )
 	{
-		auto pvs = std::make_unique<VertexShader>( gfx, L"ColorIndexVS.cso" );
-		auto pvsbc = pvs->GetBytecode();
-		AddStaticBind( std::move( pvs ) );
+		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"ColorIndexVS.cso" );
+		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+		AddStaticBind( std::move( pVertexShader ) );
 
 		AddStaticBind( std::make_unique<PixelShader>( gfx, L"ColorIndexPS.cso" ) );
 
@@ -63,7 +63,7 @@ Melon::Melon( Graphics& gfx,
 				float a;
 			} face_colors[8];
 		};
-		const PixelShaderConstants cb2 =
+		const PixelShaderConstants constBuff =
 		{
 			{
 				{ 1.f, 1.f, 1.f },
@@ -76,13 +76,13 @@ Melon::Melon( Graphics& gfx,
 				{ 0.f, 0.f, 0.f },
 			}
 		};
-		AddStaticBind( std::make_unique<PixelConstantBuffer<PixelShaderConstants>>( gfx, cb2 ) );
+		AddStaticBind( std::make_unique<PixelConstantBuffer<PixelShaderConstants>>( gfx, constBuff ) );
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		AddStaticBind( std::make_unique<InputLayout>( gfx, ied, pvsbc ) );
+		AddStaticBind( std::make_unique<InputLayout>( gfx, ied, pVertexShaderBytecode ) );
 
 		AddStaticBind( std::make_unique<Topology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 	}

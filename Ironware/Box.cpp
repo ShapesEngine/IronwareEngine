@@ -58,7 +58,7 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 				float a;
 			} face_colors[8];
 		};
-		const PixelShaderConstantBuffer cb2 =
+		const PixelShaderConstantBuffer constBuff =
 		{
 			{
 				{ 1.f, 1.f, 1.f },
@@ -71,7 +71,7 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 				{ 0.f, 0.f, 0.f },
 			}
 		};
-		AddStaticBind( std::make_unique<PixelConstantBuffer<PixelShaderConstantBuffer>>( gfx, cb2 ) );
+		AddStaticBind( std::make_unique<PixelConstantBuffer<PixelShaderConstantBuffer>>( gfx, constBuff ) );
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElem =
 		{
