@@ -5,11 +5,13 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A class that is responsible for managing GDIplus
  *
  * TODO:
  *
- * \note
+ * \note GDIPlusManager should be initialized to use GDI+ functions
+ * * Remember to create at least 1 instance of this class and
+ * * keep in mind that destructor uninitializes so you need to have ref to the class
 */
 #pragma once
 

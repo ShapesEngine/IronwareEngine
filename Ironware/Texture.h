@@ -5,7 +5,9 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief This file contains Texture class.
+ * * Texture class is responsible for creating & loading the
+ * * texture to the GPU
  *
  * TODO:
  *

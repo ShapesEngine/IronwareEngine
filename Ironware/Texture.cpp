@@ -1,7 +1,8 @@
 /*!
  * \class Texture
  *
- * \brief 
+ * \brief Texture class is responsible for creating & loading the
+ * * texture to the GPU
  *
  * \author Yernar Aldabergenov
  * \date December 2020
@@ -35,6 +36,7 @@ Texture::Texture( Graphics& gfx, const Surface& sur )
 	descTexture.MiscFlags = 0u;
 	D3D11_SUBRESOURCE_DATA subresTextureData = {};
 	subresTextureData.pSysMem = sur.GetBufferPtrConst();
+	// row byte size === ( for ex. pixel[0][0] + width * sizeof( Surface::Color ) = pixel[1][0] )
 	subresTextureData.SysMemPitch = width * sizeof( Surface::Color );
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
 	GFX_THROW_INFO( GetDevice( gfx )->CreateTexture2D( &descTexture, &subresTextureData, &pTexture ) );

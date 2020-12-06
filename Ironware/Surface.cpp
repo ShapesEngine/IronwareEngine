@@ -1,10 +1,10 @@
 /*!
- * \class Surface
- *
- * \brief 
+ * \file Surface.cpp
  *
  * \author Yernar Aldabergenov
  * \date December 2020
+ *
+ * 
  */
 #define FULL_WIN
 #include "Surface.h"

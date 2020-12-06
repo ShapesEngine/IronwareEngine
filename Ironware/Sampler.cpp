@@ -1,3 +1,12 @@
+/*!
+ * \class Sampler
+ *
+ * \brief Sampler is responsible for performing lookups in a texture,
+ * * such as setting filtering, wrapping mode etc.
+ *
+ * \author Yernar Aldabergenov
+ * \date December 2020
+ */
 #include "Sampler.h"
 #include "GraphicsExceptionMacros.h"
 

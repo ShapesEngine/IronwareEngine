@@ -5,7 +5,10 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief In this file we have Surface, Color, Exception classes.
+ * * Surface needs Color class to represent color of a pixel.
+ * * Surface could be used for setting/getting pixel data,
+ * * saving & loading a texture from a file.  
  *
  * TODO:
  *
@@ -26,7 +29,7 @@ public:
 	/*!
 	 * \class Surface
 	 *
-	 * \brief 
+	 * \brief A class to represent the color data
 	 *
 	 * \author Yernar Aldabergenov
 	 * \date December 2020
