@@ -35,25 +35,25 @@ namespace dx = DirectX;
 /******************************* GRAPHICS START ******************************/
 Graphics::Graphics( HWND hWnd )
 {
-	DXGI_SWAP_CHAIN_DESC scd = {};
-	scd.BufferDesc.Width = 0;
-	scd.BufferDesc.Height = 0;
-	scd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	scd.BufferDesc.RefreshRate.Numerator = 0;
-	scd.BufferDesc.RefreshRate.Denominator = 0;
+	DXGI_SWAP_CHAIN_DESC descSwapChain = {};
+	descSwapChain.BufferDesc.Width = 0;
+	descSwapChain.BufferDesc.Height = 0;
+	descSwapChain.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	descSwapChain.BufferDesc.RefreshRate.Numerator = 0;
+	descSwapChain.BufferDesc.RefreshRate.Denominator = 0;
 	// setting as unspecified as we didn't set width and height
-	scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	descSwapChain.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	descSwapChain.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	// disable anti aliasing
-	scd.SampleDesc.Count = 1;
-	scd.SampleDesc.Quality = 0;
-	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	descSwapChain.SampleDesc.Count = 1;
+	descSwapChain.SampleDesc.Quality = 0;
+	descSwapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	// back buffer count
-	scd.BufferCount = 1;
-	scd.OutputWindow = hWnd;
-	scd.Windowed = TRUE;
-	scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	scd.Flags = 0;
+	descSwapChain.BufferCount = 1;
+	descSwapChain.OutputWindow = hWnd;
+	descSwapChain.Windowed = TRUE;
+	descSwapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	descSwapChain.Flags = 0;
 	UINT swapCreateFlags = 0u;
 #ifndef NDEBUG
 	swapCreateFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -71,7 +71,7 @@ Graphics::Graphics( HWND hWnd )
 		nullptr,
 		0,
 		D3D11_SDK_VERSION,
-		&scd,
+		&descSwapChain,
 		&pSwapChain,
 		&pDevice,
 		nullptr,

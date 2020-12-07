@@ -91,7 +91,7 @@ public:
 	inline DirectX::XMMATRIX GetProjection() const noexcept	{ return projection; }
 
 private:
-	DirectX::XMMATRIX projection;
+	DirectX::XMMATRIX projection = {};
 
 #ifndef NDEBUG
 	DxgiInfoManager infoManager;
