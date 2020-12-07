@@ -11,7 +11,7 @@
  *
  * TODO:
  *
- * \note They contain appropriate constant buffers
+ * \note Each class in this file contains appropriate constant buffers
 */
 #pragma once
 

@@ -186,7 +186,7 @@
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="Sheet.cpp" />
     <ClCompile Include="SkinnedBox.cpp" />
-    <ClCompile Include="SkinnedBox.h" />
+    <ClInclude Include="SkinnedBox.h" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Topology.cpp" />
