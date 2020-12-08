@@ -5,6 +5,9 @@ Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
 
+#### ImGui
+Ironware/imgui.ini
+
 # Dump file
 *.stackdump
 
