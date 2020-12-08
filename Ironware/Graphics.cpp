@@ -21,6 +21,7 @@
 #include "Graphics.h"
 #include "IronUtils.h"
 #include "GraphicsExceptionMacros.h"
+#include "imgui/imgui_impl_dx11.h"
 
 #include <sstream>
 
@@ -132,6 +133,8 @@ Graphics::Graphics( HWND hWnd )
 	vp.TopLeftX = 0.f;
 	vp.TopLeftY = 0.f;
 	pImmediateContext->RSSetViewports( 1u, &vp );
+
+	ImGui_ImplDX11_Init( pDevice.Get(), pImmediateContext.Get() );
 }
 
 void Graphics::EndFrame()

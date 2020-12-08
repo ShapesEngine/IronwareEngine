@@ -28,6 +28,9 @@
 #include "Surface.h"
 #include "Sheet.h"
 #include "SkinnedBox.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_dx11.h"
 
 #include <memory>
 #include <algorithm>
@@ -36,7 +39,7 @@
 GDIPlusManager gdiplm;
 
 App::App() :
-	wnd( 640, 480, L"Ironware Engine" )
+	wnd( 640, 480, L"Ironware" )
 {
 	class Factory
 	{
@@ -133,5 +136,22 @@ void App::SetupFrame()
 		d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.f : dt );
 		d->Draw( wnd.Gfx() );
 	}
+
+	// =======================================================================
+	// imgui stuff
+	// -----------------------------------------------------------------------
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	static bool show_demo_window = true;
+	if( show_demo_window )
+	{
+		ImGui::ShowDemoWindow( &show_demo_window );
+	}
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
+
+	// present frame
 	wnd.Gfx().EndFrame();
 }

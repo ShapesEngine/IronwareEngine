@@ -17,6 +17,7 @@
 #include "Window.h"
 #include "IronTimer.h"
 #include "Box.h"
+#include "ImGuiManager.h"
 
 class App
 {
@@ -30,7 +31,9 @@ private:
 	void SetupFrame();
 
 private:
-	Window wnd;
+
+	ImguiManager imgui;
+	Window wnd;	
 	IronTimer timer;
 	std::vector<std::unique_ptr<class Drawable>> drawables;
 	static constexpr size_t MAX_NDRAWABLES = 180;
