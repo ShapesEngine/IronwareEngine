@@ -99,8 +99,6 @@ App::App() :
 
 int App::Begin()
 {
-	MSG msg{};
-	BOOL gResult{};
 	while( true )
 	{
 		if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
@@ -114,15 +112,6 @@ int App::Begin()
 		}
 		SetupFrame();
 	}
-
-	// check if GetMessage call itself worked
-	if( gResult == -1 )
-	{
-		throw IRWND_LAST_EXCEPT();
-	}
-
-	// wParam here is the value passed to PostQuitMessage
-	return (int)msg.wParam;
 }
 
 void App::SetupFrame()
@@ -134,11 +123,6 @@ void App::SetupFrame()
 	{
 		d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.f : dt );
 		d->Draw( wnd.Gfx() );
-	}	
-
-	if( show_demo_window )
-	{
-		ImGui::ShowDemoWindow( &show_demo_window );
 	}
 
 	// present frame
