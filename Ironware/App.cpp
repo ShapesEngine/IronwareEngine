@@ -133,6 +133,14 @@ void App::SetupFrame()
 		ImGui::SliderFloat( "Speed Factor", &simulation_speed_factor, 0.f, 5.f );
 		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
 		ImGui::InputText( "Text IR", buffer, sizeof( buffer ) );
+		if( ImGui::Button( "Apply speed factor from text input" ) )
+		{
+			simulation_speed_factor = atof( buffer );
+			simulation_speed_factor = ( simulation_speed_factor > 5.f ? 5.f : 
+										simulation_speed_factor < 0.f ? 0.f : 
+										simulation_speed_factor );
+		}
+
 	}
 	ImGui::End();
 

@@ -182,7 +182,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		return true;
 	}
 
-	switch( msg )
+	switch( bool imGuiKbdCapture = ImGui::GetIO().WantCaptureKeyboard; msg )
 	{
 	case WM_CLOSE:
 		PostQuitMessage( 0 );
@@ -201,6 +201,11 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	// SYSKEY messages need to be handled to track system keys such as ALT, F10, etc.
 	// Basic KEYDOWN messages applies also to system keys
 	case WM_SYSKEYDOWN:
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		// filter autorepeat		
 		if( !( lParam & 0x40000000 ) || kbd.AutorepeatIsEnabled() ) // 30 bits hold the KEYDOWN message for repeating keys
 		{
@@ -210,9 +215,19 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	case WM_KEYUP:
 	// Basic KEYUP messages applies also to system keys
 	case WM_SYSKEYUP:
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		kbd.OnKeyReleased( static_cast<uint8_t>( wParam ) );
 		break;
 	case WM_CHAR:
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		kbd.OnChar( static_cast<wchar_t>( wParam ) );
 		break;
 	// =======================================================================
@@ -222,6 +237,11 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	// -----------------------------------------------------------------------
 	case WM_MOUSEMOVE:
 	{
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS( lParam );
 		// in client region -> log move, and log enter + capture mouse (if not previously in window)
 		if( pt.x >= 0 && pt.x < (SHORT)width && pt.y >= 0 && pt.y < (SHORT)height )
@@ -251,32 +271,55 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_LBUTTONDOWN:
 	{
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS( lParam );
 		mouse.OnLeftPressed( pt.x, pt.y );
-		// bring window to foreground on lclick client region
-		SetForegroundWindow( hWnd );
 		break;
 	}
 	case WM_RBUTTONDOWN:
 	{
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS( lParam );
 		mouse.OnRightPressed( pt.x, pt.y );
 		break;
 	}
 	case WM_LBUTTONUP:
 	{
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS( lParam );
 		mouse.OnLeftReleased( pt.x, pt.y );
 		break;
 	}
 	case WM_RBUTTONUP:
 	{
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS( lParam );
 		mouse.OnRightReleased( pt.x, pt.y );
 		break;
 	}
 	case WM_MOUSEWHEEL:
 	{
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS( lParam );
 		const int delta = GET_WHEEL_DELTA_WPARAM( wParam );
 		mouse.OnWheelDelta( pt.x, pt.y, delta );
