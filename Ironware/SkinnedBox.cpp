@@ -87,7 +87,7 @@ DirectX::XMMATRIX SkinnedBox::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
 	return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-		dx::XMMatrixTranslation( r, 0.0f, 0.0f ) *
+		dx::XMMatrixTranslation( r, 0.f, 0.f ) *
 		dx::XMMatrixRotationRollPitchYaw( theta, phi, chi ) *
-		dx::XMMatrixTranslation( 0.0f, 0.0f, 20.0f );
+		dx::XMMatrixTranslation( 0.f, 0.f, 20.f );
 }

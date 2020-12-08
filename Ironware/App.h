@@ -35,6 +35,7 @@ private:
 	Window wnd;	
 	IronTimer timer;
 	std::vector<std::unique_ptr<class Drawable>> drawables;
+	float simulation_speed_factor = 1.f;
 	static constexpr size_t MAX_NDRAWABLES = 180;
 };
 

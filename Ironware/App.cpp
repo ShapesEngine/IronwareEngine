@@ -116,14 +116,25 @@ int App::Begin()
 
 void App::SetupFrame()
 {
-	const auto dt = timer.Mark();
-	wnd.Gfx().BeginFrame( 0.07f, 0.0f, 0.12f );
+	const auto dt = timer.Mark() * simulation_speed_factor;
+	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 
 	for( auto& d : drawables )
 	{
 		d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.f : dt );
 		d->Draw( wnd.Gfx() );
 	}
+
+	static char buffer[1024];
+	// imgui window to control simulation speed
+	if( ImGui::Begin( "Simulation Speed" ) )
+	{
+		const float frame_rate = ImGui::GetIO().Framerate;
+		ImGui::SliderFloat( "Speed Factor", &simulation_speed_factor, 0.f, 5.f );
+		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
+		ImGui::InputText( "Text IR", buffer, sizeof( buffer ) );
+	}
+	ImGui::End();
 
 	// present frame
 	wnd.Gfx().EndFrame();

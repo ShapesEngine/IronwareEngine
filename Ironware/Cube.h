@@ -55,38 +55,38 @@ public:
 	{
 		namespace dx = DirectX;
 
-		constexpr float side = 1.0f / 2.0f;
+		constexpr float side = 1.f / 2.f;
 
 		std::vector<V> vertices( 14 );
 
 		vertices[0].pos = { -side, -side, -side };
-		vertices[0].tex = { 2.0f / 3.0f, 0.0f / 4.0f };
+		vertices[0].tex = { 2.f / 3.f, 0.f / 4.f };
 		vertices[1].pos = { side, -side, -side };
-		vertices[1].tex = { 1.0f / 3.0f, 0.0f / 4.0f };
+		vertices[1].tex = { 1.f / 3.f, 0.f / 4.f };
 		vertices[2].pos = { -side, side, -side };
-		vertices[2].tex = { 2.0f / 3.0f, 1.0f / 4.0f };
+		vertices[2].tex = { 2.f / 3.f, 1.f / 4.f };
 		vertices[3].pos = { side, side, -side };
-		vertices[3].tex = { 1.0f / 3.0f, 1.0f / 4.0f };
+		vertices[3].tex = { 1.f / 3.f, 1.f / 4.f };
 		vertices[4].pos = { -side, -side, side };
-		vertices[4].tex = { 2.0f / 3.0f, 3.0f / 4.0f };
+		vertices[4].tex = { 2.f / 3.f, 3.f / 4.f };
 		vertices[5].pos = { side, -side, side };
-		vertices[5].tex = { 1.0f / 3.0f, 3.0f / 4.0f };
+		vertices[5].tex = { 1.f / 3.f, 3.f / 4.f };
 		vertices[6].pos = { -side, side, side };
-		vertices[6].tex = { 2.0f / 3.0f, 2.0f / 4.0f };
+		vertices[6].tex = { 2.f / 3.f, 2.f / 4.f };
 		vertices[7].pos = { side, side, side };
-		vertices[7].tex = { 1.0f / 3.0f, 2.0f / 4.0f };
+		vertices[7].tex = { 1.f / 3.f, 2.f / 4.f };
 		vertices[8].pos = { -side, -side, -side };
-		vertices[8].tex = { 2.0f / 3.0f, 4.0f / 4.0f };
+		vertices[8].tex = { 2.f / 3.f, 4.f / 4.f };
 		vertices[9].pos = { side, -side, -side };
-		vertices[9].tex = { 1.0f / 3.0f, 4.0f / 4.0f };
+		vertices[9].tex = { 1.f / 3.f, 4.f / 4.f };
 		vertices[10].pos = { -side, -side, -side };
-		vertices[10].tex = { 3.0f / 3.0f, 1.0f / 4.0f };
+		vertices[10].tex = { 3.f / 3.f, 1.f / 4.f };
 		vertices[11].pos = { -side, -side, side };
-		vertices[11].tex = { 3.0f / 3.0f, 2.0f / 4.0f };
+		vertices[11].tex = { 3.f / 3.f, 2.f / 4.f };
 		vertices[12].pos = { side, -side, -side };
-		vertices[12].tex = { 0.0f / 3.0f, 1.0f / 4.0f };
+		vertices[12].tex = { 0.f / 3.f, 1.f / 4.f };
 		vertices[13].pos = { side, -side, side };
-		vertices[13].tex = { 0.0f / 3.0f, 2.0f / 4.0f };
+		vertices[13].tex = { 0.f / 3.f, 2.f / 4.f };
 
 		return{
 			std::move( vertices ), {

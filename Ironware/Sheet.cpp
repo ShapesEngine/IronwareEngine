@@ -44,10 +44,10 @@ Sheet::Sheet( Graphics& gfx, std::mt19937& rng,
 			} tex;
 		};
 		auto model = Plane::Make<Vertex>();
-		model.vertices[0].tex = { 0.0f, 0.0f };
-		model.vertices[1].tex = { 1.0f, 0.0f };
-		model.vertices[2].tex = { 0.0f, 1.0f };
-		model.vertices[3].tex = { 1.0f, 1.0f };
+		model.vertices[0].tex = { 0.f, 0.f };
+		model.vertices[1].tex = { 1.f, 0.f };
+		model.vertices[2].tex = { 0.f, 1.f };
+		model.vertices[3].tex = { 1.f, 1.f };
 
 		AddStaticBind( std::make_unique<Texture>( gfx, Surface::FromFile( L"Images\\metro.jpg" ) ) );
 
@@ -94,7 +94,7 @@ DirectX::XMMATRIX Sheet::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
 	return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-		dx::XMMatrixTranslation( r, 0.0f, 0.0f ) *
+		dx::XMMatrixTranslation( r, 0.f, 0.f ) *
 		dx::XMMatrixRotationRollPitchYaw( theta, phi, chi ) *
-		dx::XMMatrixTranslation( 0.0f, 0.0f, 20.0f );
+		dx::XMMatrixTranslation( 0.f, 0.f, 20.f );
 }
