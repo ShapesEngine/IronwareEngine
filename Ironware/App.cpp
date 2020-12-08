@@ -29,8 +29,6 @@
 #include "Sheet.h"
 #include "SkinnedBox.h"
 #include "imgui/imgui.h"
-#include "imgui/imgui_impl_win32.h"
-#include "imgui/imgui_impl_dx11.h"
 
 #include <memory>
 #include <algorithm>
@@ -130,27 +128,18 @@ int App::Begin()
 void App::SetupFrame()
 {
 	const auto dt = timer.Mark();
-	wnd.Gfx().ClearBuffer( 0.07f, 0.f, 0.12f );
+	wnd.Gfx().BeginFrame( 0.07f, 0.0f, 0.12f );
+
 	for( auto& d : drawables )
 	{
 		d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.f : dt );
 		d->Draw( wnd.Gfx() );
-	}
+	}	
 
-	// =======================================================================
-	// imgui stuff
-	// -----------------------------------------------------------------------
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-
-	static bool show_demo_window = true;
 	if( show_demo_window )
 	{
 		ImGui::ShowDemoWindow( &show_demo_window );
 	}
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 
 	// present frame
 	wnd.Gfx().EndFrame();

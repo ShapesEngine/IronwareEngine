@@ -22,6 +22,7 @@
 #include "IronUtils.h"
 #include "GraphicsExceptionMacros.h"
 #include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
 
 #include <sstream>
 
@@ -137,12 +138,39 @@ Graphics::Graphics( HWND hWnd )
 	ImGui_ImplDX11_Init( pDevice.Get(), pImmediateContext.Get() );
 }
 
+void Graphics::BeginFrame( float red, float green, float blue ) noexcept
+{
+	const float color[] = { red, green, blue, 1.f };
+	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
+	// max depth 1.f
+	pImmediateContext->ClearDepthStencilView( pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.f, 0u );
+
+	// =======================================================================
+	// imgui begin frame
+	// -----------------------------------------------------------------------
+	if( imGuiEnabled )
+	{
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+	}	
+}
+
 void Graphics::EndFrame()
 {
+	// =======================================================================
+	// imgui frame end
+	// -----------------------------------------------------------------------
+	if( imGuiEnabled )
+	{
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
+	}
+
 	HRESULT hr;
 #ifndef NDEBUG
 	GFX_THROW_UNHANDLED_EXCEPTION
-	infoManager.Set();
+		infoManager.Set();
 #endif
 	// sync interval = 60; expected to consistently present at this rate
 	if( FAILED( hr = pSwapChain->Present( 1u, 0u ) ) )
@@ -158,13 +186,6 @@ void Graphics::EndFrame()
 	}
 }
 
-void Graphics::ClearBuffer( float red, float green, float blue ) noexcept
-{
-	const float color[] = { red, green, blue, 1.f };
-	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
-	// max depth 1.f
-	pImmediateContext->ClearDepthStencilView( pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.f, 0u );
-}
 void Graphics::DrawIndexed( UINT count ) noexcept( !IS_DEBUG ) 
 { 
 	GFX_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0u ) ); 

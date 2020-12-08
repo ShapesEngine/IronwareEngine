@@ -31,11 +31,11 @@ private:
 	void SetupFrame();
 
 private:
-
 	ImguiManager imgui;
 	Window wnd;	
 	IronTimer timer;
 	std::vector<std::unique_ptr<class Drawable>> drawables;
+	bool show_demo_window = true;
 	static constexpr size_t MAX_NDRAWABLES = 180;
 };
 
