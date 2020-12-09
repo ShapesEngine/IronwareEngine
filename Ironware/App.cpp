@@ -39,7 +39,7 @@ GDIPlusManager gdiplm;
 
 App::App() :
 	wnd( 640, 480, L"Ironware" )
-{
+{	
 	class Factory
 	{
 	public:
@@ -48,7 +48,7 @@ App::App() :
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
-			switch( typedist( rng ) )
+			switch( static bool sheetIsDrawn = false; typedist( rng ) )
 			{
 			case 0:
 				return std::make_unique<Pyramid>(
@@ -66,15 +66,26 @@ App::App() :
 					odist, rdist, longdist, latdist
 					);
 			case 3:
+			{
+				sheetIsDrawn = true;
 				return std::make_unique<Sheet>(
 					gfx, rng, adist, ddist,
 					odist, rdist
 					);
+			}			
 			case 4:
+				if( sheetIsDrawn )
+				{
 				return std::make_unique<SkinnedBox>(
 					gfx, rng, adist, ddist,
 					odist, rdist
 					);
+				}
+				else
+					return std::make_unique<Sheet>(
+						gfx, rng, adist, ddist,
+						odist, rdist
+						);
 			default:
 				assert( false && "bad drawable type in factory" );
 				return {};
