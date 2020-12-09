@@ -28,7 +28,7 @@ public:
 
 private:
 	// positional
-	float r;
+	float zOffset;
 	float roll = 0.f;
 	float pitch = 0.f;
 	float yaw = 0.f;

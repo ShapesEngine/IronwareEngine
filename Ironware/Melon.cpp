@@ -32,7 +32,7 @@ Melon::Melon( Graphics& gfx,
 			  std::uniform_real_distribution<float>& rdist,
 			  std::uniform_int_distribution<int>& longdist,
 			  std::uniform_int_distribution<int>& latdist ) :
-	r( rdist( rng ) ),
+	zOffset( rdist( rng ) ),
 	droll( ddist( rng ) ),
 	dpitch( ddist( rng ) ),
 	dyaw( ddist( rng ) ),
@@ -57,7 +57,7 @@ Melon::Melon( Graphics& gfx,
 		{
 			struct
 			{
-				float r;
+				float zOffset;
 				float g;
 				float b;
 				float a;
@@ -116,6 +116,6 @@ DirectX::XMMATRIX Melon::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
 	return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-		dx::XMMatrixTranslation( r, 0.f, 0.f ) *
+		dx::XMMatrixTranslation( zOffset, 0.f, 0.f ) *
 		dx::XMMatrixRotationRollPitchYaw( theta, phi, chi );
 }

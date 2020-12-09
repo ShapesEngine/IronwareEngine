@@ -19,7 +19,7 @@ Sheet::Sheet( Graphics& gfx, std::mt19937& rng,
               std::uniform_real_distribution<float>& ddist, 
               std::uniform_real_distribution<float>& odist, 
               std::uniform_real_distribution<float>& rdist ) :
-			r( rdist( rng ) ),
+			zOffset( rdist( rng ) ),
 			droll( ddist( rng ) ),
 			dpitch( ddist( rng ) ),
 			dyaw( ddist( rng ) ),
@@ -94,6 +94,6 @@ DirectX::XMMATRIX Sheet::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
 	return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-		dx::XMMatrixTranslation( r, 0.f, 0.f ) *
+		dx::XMMatrixTranslation( zOffset, 0.f, 0.f ) *
 		dx::XMMatrixRotationRollPitchYaw( theta, phi, chi );
 }

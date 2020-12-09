@@ -17,6 +17,7 @@
 #include "Window.h"
 #include "IronTimer.h"
 #include "Box.h"
+#include "Camera.h"
 #include "ImGuiManager.h"
 
 class App
@@ -32,6 +33,7 @@ private:
 
 private:
 	ImguiManager imgui;
+	Camera camera;
 	Window wnd;	
 	IronTimer timer;
 	std::vector<std::unique_ptr<class Drawable>> drawables;

@@ -17,7 +17,7 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
           std::uniform_real_distribution<float>& odist, 
           std::uniform_real_distribution<float>& rdist,
 		  std::uniform_real_distribution<float>& bdist ) :
-	r( rdist( rng ) ),
+	zOffset( rdist( rng ) ),
 	droll( ddist( rng ) ),
 	dpitch( ddist( rng ) ),
 	dyaw( ddist( rng ) ),
@@ -52,7 +52,7 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 		{
 			struct
 			{
-				float r;
+				float zOffset;
 				float g;
 				float b;
 				float a;
@@ -111,6 +111,6 @@ DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 
 	return dx::XMLoadFloat3x3( &mt ) *
 		dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-		dx::XMMatrixTranslation( r, 0.f, 0.f ) *
+		dx::XMMatrixTranslation( zOffset, 0.f, 0.f ) *
 		dx::XMMatrixRotationRollPitchYaw( theta, phi, chi );
 }
