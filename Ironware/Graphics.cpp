@@ -138,6 +138,11 @@ Graphics::Graphics( HWND hWnd )
 	ImGui_ImplDX11_Init( pDevice.Get(), pImmediateContext.Get() );
 }
 
+Graphics::~Graphics()
+{
+	ImGui_ImplDX11_Shutdown();
+}
+
 void Graphics::BeginFrame( float red, float green, float blue ) noexcept
 {
 	const float color[] = { red, green, blue, 1.f };

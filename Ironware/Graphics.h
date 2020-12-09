@@ -81,7 +81,7 @@ public:
 	Graphics( HWND hWnd );
 	Graphics( const Graphics& ) = delete;
 	Graphics& operator=( const Graphics& ) = delete;
-	~Graphics() = default;
+	~Graphics();
 
 	void BeginFrame( float red, float green, float blue ) noexcept;
 	void EndFrame();	
