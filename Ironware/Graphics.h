@@ -87,6 +87,8 @@ public:
 	void EndFrame();	
 	void DrawIndexed( UINT count ) noexcept( !IS_DEBUG );
 
+	inline void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
+	inline DirectX::XMMATRIX GetCamera() const noexcept { return camera; }
 	inline void SetProjection( DirectX::FXMMATRIX proj ) noexcept { projection = proj; }
 	inline DirectX::XMMATRIX GetProjection() const noexcept	{ return projection; }
 	inline void EnableImGui() noexcept { imGuiEnabled = true; }
@@ -95,6 +97,7 @@ public:
 
 private:
 	DirectX::XMMATRIX projection = {};
+	DirectX::XMMATRIX camera = {};
 	bool imGuiEnabled = true;
 
 #ifndef NDEBUG

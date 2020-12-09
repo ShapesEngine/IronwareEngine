@@ -109,6 +109,5 @@ DirectX::XMMATRIX Pyramid::GetTransformXM() const noexcept
 
 	return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
 		dx::XMMatrixTranslation( r, 0.f, 0.f ) *
-		dx::XMMatrixRotationRollPitchYaw( theta, phi, chi ) *
-		dx::XMMatrixTranslation( 0.f, 0.f, 20.f );
+		dx::XMMatrixRotationRollPitchYaw( theta, phi, chi );
 }

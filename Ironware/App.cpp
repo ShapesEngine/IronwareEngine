@@ -33,6 +33,7 @@
 #include <memory>
 #include <algorithm>
 #include <iterator>
+#include <sstream>
 
 GDIPlusManager gdiplm;
 
@@ -95,6 +96,8 @@ App::App() :
 	drawables.reserve( MAX_NDRAWABLES );
 	std::generate_n( std::back_inserter( drawables ), MAX_NDRAWABLES, Factory{ wnd.Gfx() } );
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
+	// move away by 20.f from origin
+	wnd.Gfx().SetCamera( DirectX::XMMatrixTranslation( 0.0f, 0.0f, 20.0f ) );
 }
 
 int App::Begin()
@@ -121,7 +124,7 @@ void App::SetupFrame()
 
 	for( auto& d : drawables )
 	{
-		d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.f : dt );
+		d->Update( isSimulationRunning ? dt : 0.f );
 		d->Draw( wnd.Gfx() );
 	}
 
@@ -129,19 +132,22 @@ void App::SetupFrame()
 	// imgui window to control simulation speed
 	if( ImGui::Begin( "Simulation Speed" ) )
 	{
+		std::ostringstream simulationStatusText;
+		simulationStatusText << "Simulation State: " << ( isSimulationRunning ? "Running." : "Stopped." ) <<  "You can press Space to Stop!";
 		const float frame_rate = ImGui::GetIO().Framerate;
 		ImGui::SliderFloat( "Speed Factor", &simulation_speed_factor, 0.f, 5.f );
 		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
-		ImGui::InputText( "Text IR", buffer, sizeof( buffer ) );
-		if( ImGui::Button( "Apply speed factor from text input" ) )
-		{
-			simulation_speed_factor = atof( buffer );
-			simulation_speed_factor = ( simulation_speed_factor > 5.f ? 5.f : 
-										simulation_speed_factor < 0.f ? 0.f : 
-										simulation_speed_factor );
-		}
-
+		ImGui::Text( simulationStatusText.str().c_str() );
 	}
+	if( wnd.kbd.KeyIsPressed( VK_SPACE ) || simulation_speed_factor == 0.f )
+	{
+		isSimulationRunning = false;
+	}
+	else
+	{
+		isSimulationRunning = true;
+	}
+		
 	ImGui::End();
 
 	// present frame
