@@ -8,20 +8,30 @@
  */
 #include "TransformCBuffer.h"
 
-std::unique_ptr<VertexConstantBuffer<DirectX::XMMATRIX>> TransformCBuffer::pVertConstBuffer;
+std::unique_ptr<VertexConstantBuffer<TransformCBuffer::Transforms>> TransformCBuffer::pVertConstBuffer;
 
 TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent ) :
 	parent( parent )
 {
 	if( !pVertConstBuffer )
 	{
-		pVertConstBuffer = std::make_unique<VertexConstantBuffer<DirectX::XMMATRIX>>( gfx );
+		pVertConstBuffer = std::make_unique<VertexConstantBuffer<Transforms>>( gfx );
 	}
 }
 
-inline void TransformCBuffer::Bind( Graphics & gfx ) noexcept
+ void TransformCBuffer::Bind( Graphics & gfx ) noexcept
 {
+	const auto model = parent.GetTransformXM();
+	const Transforms transforms =
+	{
+		DirectX::XMMatrixTranspose( model ),
+		DirectX::XMMatrixTranspose(
+			model *
+			gfx.GetCamera() *
+			gfx.GetProjection()
+		)
+	};
 	// M * V * P => model * view * projection
-	pVertConstBuffer->Update( gfx, DirectX::XMMatrixTranspose( parent.GetTransformXM() * gfx.GetCamera() * gfx.GetProjection() ) );
+	pVertConstBuffer->Update( gfx, transforms );
 	pVertConstBuffer->Bind( gfx );
 }

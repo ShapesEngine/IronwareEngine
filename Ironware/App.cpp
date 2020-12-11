@@ -21,13 +21,9 @@
 #include "App.h"
 #include "WindowExceptionMacros.h"
 #include "IronMath.h"
-#include "Melon.h"
-#include "Pyramid.h"
 #include "IronMath.h"
 #include "GDIPlusManager.h"
 #include "Surface.h"
-#include "Sheet.h"
-#include "SkinnedBox.h"
 #include "imgui/imgui.h"
 
 #include <memory>
@@ -38,7 +34,8 @@
 GDIPlusManager gdiplm;
 
 App::App() :
-	wnd( 640, 480, L"Ironware" )
+	wnd( 640, 480, L"Ironware" ),
+	pointLight( wnd.Gfx() )
 {	
 	class Factory
 	{
@@ -48,48 +45,10 @@ App::App() :
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
-			switch( static bool sheetIsDrawn = false; typedist( rng ) )
-			{
-			case 0:
-				return std::make_unique<Pyramid>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-					);
-			case 1:
-				return std::make_unique<Box>(
-					gfx, rng, adist, ddist,
-					odist, rdist, bdist
-					);
-			case 2:
-				return std::make_unique<Melon>(
-					gfx, rng, adist, ddist,
-					odist, rdist, longdist, latdist
-					);
-			case 3:
-			{
-				sheetIsDrawn = true;
-				return std::make_unique<Sheet>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-					);
-			}			
-			case 4:
-				if( sheetIsDrawn )
-				{
-				return std::make_unique<SkinnedBox>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-					);
-				}
-				else
-					return std::make_unique<Sheet>(
-						gfx, rng, adist, ddist,
-						odist, rdist
-						);
-			default:
-				assert( false && "bad drawable type in factory" );
-				return {};
-			}
+			return std::make_unique<Box>(
+				gfx, rng, adist, ddist,
+				odist, rdist, bdist
+				);
 		}
 	private:
 		Graphics& gfx;
@@ -99,9 +58,6 @@ App::App() :
 		std::uniform_real_distribution<float> odist{ 0.f, PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.f, 20.f };
 		std::uniform_real_distribution<float> bdist{ 0.4f, 3.f };
-		std::uniform_int_distribution<int> latdist{ 5, 20 };
-		std::uniform_int_distribution<int> longdist{ 10, 40 };
-		std::uniform_int_distribution<int> typedist{ 0, 4 };
 	};
 
 	drawables.reserve( MAX_NDRAWABLES );
@@ -132,12 +88,14 @@ void App::SetupFrame()
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 	// move away by 20.f from origin
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
+	pointLight.Bind( wnd.Gfx() );
 
 	for( auto& d : drawables )
 	{
 		d->Update( isSimulationRunning ? dt : 0.f );
 		d->Draw( wnd.Gfx() );
 	}
+	pointLight.Draw( wnd.Gfx() );
 
 	static char buffer[1024];
 	// imgui window to control simulation speed
@@ -160,8 +118,9 @@ void App::SetupFrame()
 	}
 		
 	ImGui::End();
-	// imgui window to control camera
+	// imgui window to control camera & light
 	camera.SpawnControlWindow();
+	pointLight.SpawnControlWindow();
 
 	// present frame
 	wnd.Gfx().EndFrame();

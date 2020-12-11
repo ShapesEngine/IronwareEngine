@@ -19,6 +19,7 @@
 #include "Box.h"
 #include "Camera.h"
 #include "ImGuiManager.h"
+#include "PointLight.h"
 
 class App
 {
@@ -35,6 +36,7 @@ private:
 	ImguiManager imgui;
 	Camera camera;
 	Window wnd;	
+	PointLight pointLight;	
 	IronTimer timer;
 	std::vector<std::unique_ptr<class Drawable>> drawables;
 	float simulation_speed_factor = 1.f;
