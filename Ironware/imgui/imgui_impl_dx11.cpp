@@ -122,10 +122,10 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data)
         float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
         float mvp[4][4] =
         {
-            { 2.0f/(R-L),   0.0f,           0.0f,       0.0f },
-            { 0.0f,         2.0f/(T-B),     0.0f,       0.0f },
-            { 0.0f,         0.0f,           0.5f,       0.0f },
-            { (R+L)/(L-R),  (T+B)/(B-T),    0.5f,       1.0f },
+            { 2.f/(R-L),   0.f,           0.f,       0.f },
+            { 0.f,         2.f/(T-B),     0.f,       0.f },
+            { 0.f,         0.f,           0.5f,       0.f },
+            { (R+L)/(L-R),  (T+B)/(B-T),    0.5f,       1.f },
         };
         memcpy(&constant_buffer->mvp, mvp, sizeof(mvp));
         ctx->Unmap(g_pVertexConstantBuffer, 0);
@@ -178,8 +178,8 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data)
     memset(&vp, 0, sizeof(D3D11_VIEWPORT));
     vp.Width =  draw_data->DisplaySize.x;
     vp.Height = draw_data->DisplaySize.y;
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
+    vp.MinDepth = 0.f;
+    vp.MaxDepth = 1.f;
     vp.TopLeftX = vp.TopLeftY = 0;
     ctx->RSSetViewports(1, &vp);
 

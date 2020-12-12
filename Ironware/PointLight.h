@@ -35,7 +35,7 @@ private:
 	};
 
 private:
-	DirectX::XMFLOAT3 pos = { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 pos = { 0.f, 0.f, 0.f };
 	mutable SolidSphere mesh;
 	mutable PixelConstantBuffer<PointLightCBuf> cbuffer;
 };

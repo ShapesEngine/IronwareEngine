@@ -729,7 +729,7 @@ static void ShowDemoWindowWidgets()
         float my_tex_w = (float)io.Fonts->TexWidth;
         float my_tex_h = (float)io.Fonts->TexHeight;
 
-        ImGui::Text("%.0fx%.f", my_tex_w, my_tex_h);
+        ImGui::Text("%.fx%.f", my_tex_w, my_tex_h);
         ImVec2 pos = ImGui::GetCursorScreenPos();
         ImGui::Image(my_tex_id, ImVec2(my_tex_w, my_tex_h), ImVec2(0,0), ImVec2(1,1), ImColor(255,255,255,255), ImColor(255,255,255,128));
         if (ImGui::IsItemHovered())

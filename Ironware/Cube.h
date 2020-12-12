@@ -103,7 +103,7 @@ public:
 	template<class V>
 	static IndexedTriangleList<V> MakeIndependent()
 	{
-		constexpr float side = 1.0f / 2.0f;
+		constexpr float side = 1.f / 2.f;
 
 		std::vector<V> vertices( 24 );
 		/******************************* near side ******************************/

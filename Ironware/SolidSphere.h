@@ -24,5 +24,5 @@ public:
 	inline DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMMatrixTranslation( position.x, position.y, position.z ); }
 
 private:
-	DirectX::XMFLOAT3 position = { 1.0f, 1.0f, 1.0f };
+	DirectX::XMFLOAT3 position = { 1.f, 1.f, 1.f };
 };
