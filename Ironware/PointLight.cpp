@@ -34,4 +34,5 @@ void PointLight::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
 {
 	mesh.SetPosition( pos );
 	mesh.Draw( gfx );
+	cbuffer.Bind( gfx );
 }
