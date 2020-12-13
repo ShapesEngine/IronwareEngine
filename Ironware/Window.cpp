@@ -58,8 +58,8 @@ Window::WindowClass::~WindowClass()
 
 /******************************* WINDOW START ******************************/
 Window::Window( int width_in, int height_in, const wchar_t* name ) :
-	width(width_in),
-	height(height_in)
+	width( width_in ),
+	height( height_in )
 {
 	// =======================================================================
 	// calculate window size based on desired client region size

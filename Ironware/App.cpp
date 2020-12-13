@@ -34,7 +34,7 @@
 GDIPlusManager gdiplm;
 
 App::App() :
-	wnd( 640, 480, L"Ironware" ),
+	wnd( 1024, 768, L"Ironware" ),
 	pointLight( wnd.Gfx() )
 {	
 	class Factory
