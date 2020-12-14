@@ -7,7 +7,8 @@
  * 
  */
 template<typename C>
-ConstantBuffer<C>::ConstantBuffer( Graphics& gfx )
+ConstantBuffer<C>::ConstantBuffer( Graphics& gfx, UINT slot ) :
+	slot( slot )
 {
 	INFOMAN( gfx );
 
@@ -22,7 +23,8 @@ ConstantBuffer<C>::ConstantBuffer( Graphics& gfx )
 }
 
 template<typename C>
-ConstantBuffer<C>::ConstantBuffer( Graphics& gfx, const C& consts )
+ConstantBuffer<C>::ConstantBuffer( Graphics& gfx, const C& consts, UINT slot ) :
+	slot( slot )
 {
 	INFOMAN( gfx );
 

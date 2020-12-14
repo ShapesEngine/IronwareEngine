@@ -10,12 +10,12 @@
 
 std::unique_ptr<VertexConstantBuffer<TransformCBuffer::Transforms>> TransformCBuffer::pVertConstBuffer;
 
-TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent ) :
+TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT slot ) :
 	parent( parent )
 {
 	if( !pVertConstBuffer )
 	{
-		pVertConstBuffer = std::make_unique<VertexConstantBuffer<Transforms>>( gfx );
+		pVertConstBuffer = std::make_unique<VertexConstantBuffer<Transforms>>( gfx, slot );
 	}
 }
 
