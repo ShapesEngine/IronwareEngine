@@ -111,12 +111,12 @@ public:
 		std::vector<V> vertices;
 
 		// near center
-		const auto iCenterNear = (unsigned short)vertices.size();
+		const auto iCenterNear = (uint16_t)vertices.size();
 		vertices.emplace_back();
 		vertices.back().pos = { 0.f, 0.f, -1.f };
 		vertices.back().n = { 0.f, 0.f, -1.f };
 		// near base vertices
-		const auto iBaseNear = (unsigned short)vertices.size();
+		const auto iBaseNear = (uint16_t)vertices.size();
 		for( int iLong = 0; iLong < longDiv; iLong++ )
 		{
 			vertices.emplace_back();
@@ -128,12 +128,12 @@ public:
 			vertices.back().n = { 0.f,0.f,-1.f };
 		}
 		// far center
-		const auto iCenterFar = (unsigned short)vertices.size();
+		const auto iCenterFar = (uint16_t)vertices.size();
 		vertices.emplace_back();
 		vertices.back().pos = { 0.f, 0.f, 1.f };
 		vertices.back().n = { 0.f, 0.f, 1.f };
 		// far base vertices
-		const auto iBaseFar = (unsigned short)vertices.size();
+		const auto iBaseFar = (uint16_t)vertices.size();
 		for( int iLong = 0; iLong < longDiv; iLong++ )
 		{
 			vertices.emplace_back();
@@ -146,7 +146,7 @@ public:
 			vertices.back().n = { 0.f,0.f,1.f };
 		}
 		// fusilage vertices
-		const auto iFusilage = (unsigned short)vertices.size();
+		const auto iFusilage = (uint16_t)vertices.size();
 		for( int iLong = 0; iLong < longDiv; iLong++ )
 		{
 			// near base
@@ -172,30 +172,30 @@ public:
 			}
 		}
 
-		std::vector<unsigned short> indices;
+		std::vector<uint16_t> indices;
 
-		// near base indices
-		for( unsigned short iLong = 0; iLong < longDiv; iLong++ )
+		/******************************* Near Base Indices ******************************/
+		for( uint16_t iLong = 0; iLong < longDiv; iLong++ )
 		{
-			const auto i = iLong * 2;
-			const auto mod = longDiv * 2;
+			const auto i = iLong;
+			const auto mod = longDiv;
 			// near
 			indices.push_back( i + iBaseNear );
 			indices.push_back( iCenterNear );
-			indices.push_back( ( i + 2 ) % mod + iBaseNear );
+			indices.push_back( ( i + 1 ) % mod + iBaseNear );
 		}
-		// far base indices
-		for( unsigned short iLong = 0; iLong < longDiv; iLong++ )
+		/******************************* Far Base Indices ******************************/
+		for( uint16_t iLong = 0; iLong < longDiv; iLong++ )
 		{
-			const auto i = iLong * 2;
-			const auto mod = longDiv * 2;
+			const auto i = iLong;
+			const auto mod = longDiv;
 			// far
 			indices.push_back( iCenterFar );
-			indices.push_back( i + 1 + iBaseFar );
-			indices.push_back( ( i + 3 ) % mod + iBaseFar );
+			indices.push_back( i + iBaseFar );
+			indices.push_back( ( i + 1 ) % mod + iBaseFar );
 		}
 		// fusilage indices
-		for( unsigned short iLong = 0; iLong < longDiv; iLong++ )
+		for( uint16_t iLong = 0; iLong < longDiv; iLong++ )
 		{
 			const auto i = iLong * 2;
 			const auto mod = longDiv * 2;
