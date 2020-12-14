@@ -163,6 +163,7 @@
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="SkinnedBox.cpp" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="PointLight.h" />
