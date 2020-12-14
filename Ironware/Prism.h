@@ -104,17 +104,17 @@ public:
 		namespace dx = DirectX;
 		assert( longDiv >= 3 );
 
-		const auto base = dx::XMVectorSet( 1.0f, 0.0f, -1.0f, 0.0f );
-		const auto offset = dx::XMVectorSet( 0.0f, 0.0f, 2.0f, 0.0f );
-		const float longitudeAngle = 2.0f * PI / longDiv;
+		const auto base = dx::XMVectorSet( 1.f, 0.f, -1.f, 0.f );
+		const auto offset = dx::XMVectorSet( 0.f, 0.f, 2.f, 0.f );
+		const float longitudeAngle = 2.f * PI / longDiv;
 
 		std::vector<V> vertices;
 
 		// near center
 		const auto iCenterNear = (unsigned short)vertices.size();
 		vertices.emplace_back();
-		vertices.back().pos = { 0.0f, 0.0f, -1.0f };
-		vertices.back().n = { 0.0f, 0.0f, -1.0f };
+		vertices.back().pos = { 0.f, 0.f, -1.f };
+		vertices.back().n = { 0.f, 0.f, -1.f };
 		// near base vertices
 		const auto iBaseNear = (unsigned short)vertices.size();
 		for( int iLong = 0; iLong < longDiv; iLong++ )
@@ -125,13 +125,13 @@ public:
 				dx::XMMatrixRotationZ( longitudeAngle * iLong )
 			);
 			dx::XMStoreFloat3( &vertices.back().pos, v );
-			vertices.back().n = { 0.0f,0.0f,-1.0f };
+			vertices.back().n = { 0.f,0.f,-1.f };
 		}
 		// far center
 		const auto iCenterFar = (unsigned short)vertices.size();
 		vertices.emplace_back();
-		vertices.back().pos = { 0.0f, 0.0f, 1.0f };
-		vertices.back().n = { 0.0f, 0.0f, 1.0f };
+		vertices.back().pos = { 0.f, 0.f, 1.f };
+		vertices.back().n = { 0.f, 0.f, 1.f };
 		// far base vertices
 		const auto iBaseFar = (unsigned short)vertices.size();
 		for( int iLong = 0; iLong < longDiv; iLong++ )
@@ -143,7 +143,7 @@ public:
 			);
 			v = dx::XMVectorAdd( v, offset );
 			dx::XMStoreFloat3( &vertices.back().pos, v );
-			vertices.back().n = { 0.0f,0.0f,1.0f };
+			vertices.back().n = { 0.f,0.f,1.f };
 		}
 		// fusilage vertices
 		const auto iFusilage = (unsigned short)vertices.size();
@@ -157,7 +157,7 @@ public:
 					dx::XMMatrixRotationZ( longitudeAngle * iLong )
 				);
 				dx::XMStoreFloat3( &vertices.back().pos, v );
-				vertices.back().n = { vertices.back().pos.x,vertices.back().pos.y,0.0f };
+				vertices.back().n = { vertices.back().pos.x,vertices.back().pos.y,0.f };
 			}
 			// far base
 			{
@@ -168,7 +168,7 @@ public:
 				);
 				v = dx::XMVectorAdd( v, offset );
 				dx::XMStoreFloat3( &vertices.back().pos, v );
-				vertices.back().n = { vertices.back().pos.x,vertices.back().pos.y,0.0f };
+				vertices.back().n = { vertices.back().pos.x,vertices.back().pos.y,0.f };
 			}
 		}
 

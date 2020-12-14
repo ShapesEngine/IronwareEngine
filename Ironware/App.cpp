@@ -24,6 +24,7 @@
 #include "IronMath.h"
 #include "GDIPlusManager.h"
 #include "Surface.h"
+#include "Cylinder.h"
 #include "imgui/imgui.h"
 
 #include <memory>
@@ -45,21 +46,34 @@ App::App() :
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
-			const DirectX::XMFLOAT3 matCol = { cdist( rng ), cdist( rng ), cdist( rng ) };
-			return std::make_unique<Box>(
-				gfx, rng, adist, ddist,
-				odist, rdist, bdist, matCol
-				);
+			switch( const DirectX::XMFLOAT3 matCol = { cdist( rng ), cdist( rng ), cdist( rng ) }; sdist( rng ) )
+			{
+			case 0:
+				return std::make_unique<Box>(
+					gfx, rng, adist, ddist,
+					odist, rdist, bdist, matCol
+					);
+			case 1:
+				return std::make_unique<Cylinder>(
+					gfx, rng, adist, ddist, 
+					odist, rdist, bdist, tdist
+					);
+			default:
+				assert( false && "impossible drawable option in factory" );
+				return {};
+			}		
 		}
 	private:
 		Graphics& gfx;
 		std::mt19937 rng{ std::random_device{}( ) };
+		std::uniform_int_distribution<> sdist{ 0, 1 };
 		std::uniform_real_distribution<float> adist{ 0.f, PI * 2.f };
 		std::uniform_real_distribution<float> ddist{ 0.f, PI * 0.5f };
 		std::uniform_real_distribution<float> odist{ 0.f, PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.f, 20.f };
 		std::uniform_real_distribution<float> bdist{ 0.4f, 3.f };
 		std::uniform_real_distribution<float> cdist{ 0.f, 1.f };
+		std::uniform_int_distribution<> tdist{ 3, 30 };
 	};
 
 	drawables.reserve( MAX_NDRAWABLES );

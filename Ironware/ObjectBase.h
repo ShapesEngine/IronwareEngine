@@ -51,16 +51,16 @@ public:
 	{
 		namespace dx = DirectX;
 		return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-			dx::XMMatrixTranslation( r, 0.0f, 0.0f ) *
+			dx::XMMatrixTranslation( r, 0.f, 0.f ) *
 			dx::XMMatrixRotationRollPitchYaw( theta, phi, chi );
 	}
 
 private:
 	// positional
 	float r;
-	float roll = 0.0f;
-	float pitch = 0.0f;
-	float yaw = 0.0f;
+	float roll = 0.f;
+	float pitch = 0.f;
+	float yaw = 0.f;
 	float theta;
 	float phi;
 	float chi;

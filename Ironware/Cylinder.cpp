@@ -37,18 +37,18 @@ Cylinder::Cylinder( Graphics& gfx, std::mt19937& rng,
 
 		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
 
-		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"PhongVS.cso" );
+		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"PhongLightVS.cso" );
 		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 		AddStaticBind( std::move( pVertexShader ) );
 
-		AddStaticBind( std::make_unique<PixelShader>( gfx, L"IndexedPhongPS.cso" ) );
+		AddStaticBind( std::make_unique<PixelShader>( gfx, L"IndexedPhongLightPS.cso" ) );
 
 		AddStaticIndexBuffer( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElem =
 		{
-			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "Normal", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 		AddStaticBind( std::make_unique<InputLayout>( gfx, descInputElem, pVertexShaderBytecode ) );
 
@@ -57,15 +57,15 @@ Cylinder::Cylinder( Graphics& gfx, std::mt19937& rng,
 		struct PSMaterialConstant
 		{
 			alignas( 16 ) dx::XMFLOAT3A colors[6] = {
-				{1.0f,0.0f,0.0f},
-				{0.0f,1.0f,0.0f},
-				{0.0f,0.0f,1.0f},
-				{1.0f,1.0f,0.0f},
-				{1.0f,0.0f,1.0f},
-				{0.0f,1.0f,1.0f},
+				{1.f,0.f,0.f},
+				{0.f,1.f,0.f},
+				{0.f,0.f,1.f},
+				{1.f,1.f,0.f},
+				{1.f,0.f,1.f},
+				{0.f,1.f,1.f},
 			};
 			float specularIntensity = 0.6f;
-			float specularPower = 30.0f;
+			float specularPower = 30.f;
 		} matConst;
 		AddStaticBind( std::make_unique<PixelConstantBuffer<PSMaterialConstant>>( gfx, matConst, 1u ) );
 	}
