@@ -57,12 +57,12 @@ Cylinder::Cylinder( Graphics& gfx, std::mt19937& rng,
 		struct PSMaterialConstant
 		{
 			alignas( 16 ) dx::XMFLOAT3A colors[6] = {
-				{1.f,0.f,0.f},
-				{0.f,1.f,0.f},
-				{0.f,0.f,1.f},
-				{1.f,1.f,0.f},
-				{1.f,0.f,1.f},
-				{0.f,1.f,1.f},
+				{1.f, 0.f, 0.f},
+				{0.f, 1.f, 0.f},
+				{0.f, 0.f, 1.f},
+				{1.f, 1.f, 0.f},
+				{1.f, 0.f, 1.f},
+				{0.f, 1.f, 1.f},
 			};
 			float specularIntensity = 0.6f;
 			float specularPower = 30.f;
