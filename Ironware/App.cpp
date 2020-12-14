@@ -97,7 +97,6 @@ void App::SetupFrame()
 	}
 	pointLight.Draw( wnd.Gfx() );
 
-	static char buffer[1024];
 	// imgui window to control simulation speed
 	if( ImGui::Begin( "Simulation Speed" ) )
 	{
