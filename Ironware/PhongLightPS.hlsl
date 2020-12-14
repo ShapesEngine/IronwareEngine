@@ -22,7 +22,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
     const float3 vToL = lightPos - worldPos;
     const float distToL = length(vToL);
     const float3 dirToL = vToL / distToL;
-	// diffuse attenuation
+	// attenuation
     const float att = 1.f / (attConst + attLin * distToL + attQuad * (distToL * distToL));
 	// diffuse intensity
     const float3 diffuse = diffuseColor * diffuseIntensity * att * max(0.f, dot(dirToL, n));
