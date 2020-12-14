@@ -29,7 +29,6 @@ void PointLight::SpawnControlWindow() noexcept
 		ImGui::SliderFloat( "Intensity", &cbufData.diffuseIntensity, 0.01f, 2.f, "%.2f", 2 );
 		ImGui::ColorEdit3( "Diffuse Color", &cbufData.diffuseColor.x );
 		ImGui::ColorEdit3( "Ambient", &cbufData.ambient.x );
-		ImGui::ColorEdit3( "Material", &cbufData.materialColor.x );
 
 		ImGui::Text( "Falloff" );
 		ImGui::SliderFloat( "Constant", &cbufData.attConst, 0.05f, 10.f, "%.2f", 4 );
@@ -53,10 +52,9 @@ void PointLight::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
 void PointLight::Reset() noexcept
 {
 	cbufData = {
-		{ 0.f,0.f,0.f },
-		{ 0.7f,0.7f,0.9f },
-		{ 0.05f,0.05f,0.05f },
-		{ 1.f,1.f,1.f },
+		{ 0.f, 0.f, 0.f },
+		{ 0.05f, 0.05f, 0.05f },
+		{ 1.f, 1.f, 1.f },
 		1.f,
 		1.f,
 		0.045f,

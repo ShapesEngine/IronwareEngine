@@ -1,7 +1,7 @@
+// for global dynamic light
 cbuffer LightCBuf
 {
-    float3 lightPos;
-    float3 materialColor;
+    float3 lightPos;    
     float3 ambient;
     float3 diffuseColor;
     float diffuseIntensity;
@@ -10,6 +10,11 @@ cbuffer LightCBuf
     float attQuad;
 };
 
+// for object color
+cbuffer ObjectCBuf
+{
+    float3 materialColor;
+};
 
 float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
 {

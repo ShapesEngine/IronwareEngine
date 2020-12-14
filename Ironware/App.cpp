@@ -45,9 +45,10 @@ App::App() :
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
+			const DirectX::XMFLOAT3 matCol = { cdist( rng ), cdist( rng ), cdist( rng ) };
 			return std::make_unique<Box>(
 				gfx, rng, adist, ddist,
-				odist, rdist, bdist
+				odist, rdist, bdist, matCol
 				);
 		}
 	private:
@@ -58,6 +59,7 @@ App::App() :
 		std::uniform_real_distribution<float> odist{ 0.f, PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.f, 20.f };
 		std::uniform_real_distribution<float> bdist{ 0.4f, 3.f };
+		std::uniform_real_distribution<float> cdist{ 0.f, 1.f };
 	};
 
 	drawables.reserve( MAX_NDRAWABLES );
