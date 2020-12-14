@@ -189,6 +189,7 @@
     <ClCompile Include="SkinnedBox.cpp" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ImGuiManager.h" />
+    <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SkinnedBox.h" />
     <ClCompile Include="SolidSphere.cpp" />
