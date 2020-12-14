@@ -90,7 +90,7 @@ void App::SetupFrame()
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 	// move away by 20.f from origin
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
-	pointLight.Bind( wnd.Gfx() );
+	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
 	for( auto& d : drawables )
 	{
@@ -105,7 +105,7 @@ void App::SetupFrame()
 		std::ostringstream simulationStatusText;
 		simulationStatusText << "Simulation State: " << ( isSimulationRunning ? "Running." : "Stopped." ) <<  "\nYou can hold Space Bar to Stop!";
 		const float frame_rate = ImGui::GetIO().Framerate;
-		ImGui::SliderFloat( "Speed Factor", &simulation_speed_factor, 0.f, 5.f );
+		ImGui::SliderFloat( "Speed Factor", &simulation_speed_factor, 0.f, 5.f, "%.4f", 3.2f );
 		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
 		ImGui::Text( simulationStatusText.str().c_str() );
 	}

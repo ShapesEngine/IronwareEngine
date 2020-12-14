@@ -24,7 +24,7 @@ public:
 	void SpawnControlWindow() noexcept;	
 	void Draw( Graphics& gfx ) const noexcept( !IS_DEBUG );
 	void Reset() noexcept;	
-	void Bind( Graphics& gfx ) const noexcept;
+	void Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept;
 
 private:
 	struct PointLightCBuf

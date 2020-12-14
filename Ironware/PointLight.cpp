@@ -62,8 +62,11 @@ void PointLight::Reset() noexcept
 	};
 }
 
-void PointLight::Bind( Graphics& gfx ) const noexcept
+void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept
 { 
-	cbuffer.Update( gfx, cbufData );
+	auto dataCopy = cbufData;
+	const auto pos = DirectX::XMLoadFloat3( &cbufData.pos );
+	DirectX::XMStoreFloat3( &dataCopy.pos, DirectX::XMVector3Transform( pos, view ) );
+	cbuffer.Update( gfx, dataCopy );
 	cbuffer.Bind( gfx );
 }
