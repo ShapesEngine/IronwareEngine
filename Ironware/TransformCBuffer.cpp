@@ -21,13 +21,12 @@ TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT 
 
  void TransformCBuffer::Bind( Graphics & gfx ) noexcept
 {
-	const auto model = parent.GetTransformXM();
+	const auto modelView = parent.GetTransformXM() * gfx.GetCamera();
 	const Transforms transforms =
 	{
-		DirectX::XMMatrixTranspose( model ),
+		DirectX::XMMatrixTranspose( modelView ),
 		DirectX::XMMatrixTranspose(
-			model *
-			gfx.GetCamera() *
+			modelView *
 			gfx.GetProjection()
 		)
 	};
