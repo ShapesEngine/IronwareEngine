@@ -84,8 +84,5 @@ public:
 	}
 
 	template<class V>
-	static IndexedTriangleList<V> Make()
-	{
-		return MakeTesselated<V>( 1, 1 );
-	}
+	inline static IndexedTriangleList<V> Make() { return MakeTesselated<V>( 1, 1 ); }
 };

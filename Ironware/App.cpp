@@ -117,19 +117,17 @@ void App::SetupFrame()
 	if( ImGui::Begin( "Simulation Speed" ) )
 	{
 		std::ostringstream simulationStatusText;
-		simulationStatusText << "Simulation State: " << ( isSimulationRunning ? "Running." : "Stopped." ) <<  "\nYou can hold Space Bar to Stop!";
+		simulationStatusText << "Simulation State: " << ( isSimulationRunning ? "Running." : "Stopped." ) <<  "\nYou can press Space Bar to Stop!";
 		const float frame_rate = ImGui::GetIO().Framerate;
 		ImGui::SliderFloat( "Speed Factor", &simulation_speed_factor, 0.f, 5.f, "%.4f", 3.2f );
 		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
 		ImGui::Text( simulationStatusText.str().c_str() );
 	}
-	if( wnd.kbd.KeyIsPressed( VK_SPACE ) || simulation_speed_factor == 0.f )
+	// toggling simulation
+	auto k = wnd.kbd.ReadKey();
+	if( simulation_speed_factor == 0.f || ( k.has_value() && k->IsPress() && k->GetCode() == VK_SPACE ) )
 	{
-		isSimulationRunning = false;
-	}
-	else
-	{
-		isSimulationRunning = true;
+		isSimulationRunning = !isSimulationRunning;
 	}
 		
 	ImGui::End();
