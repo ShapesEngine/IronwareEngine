@@ -1,7 +1,7 @@
 /*!
  * \class WindowsMessageMap
  *
- * \brief 
+ * \brief An utility class that can be helpful to represent windows message
  *
  * \author Yernar Aldabergenov
  * \date November 2020

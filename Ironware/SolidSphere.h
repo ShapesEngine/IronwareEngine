@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A class that is responsible for creating & updating the sphere 
  *
  * TODO:
  *

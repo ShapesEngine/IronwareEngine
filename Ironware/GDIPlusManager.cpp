@@ -1,7 +1,7 @@
 /*!
  * \class GDIPlusManager
  *
- * \brief 
+ * \brief A class that is responsible for managing GDIplus
  *
  * \author Yernar Aldabergenov
  * \date December 2020

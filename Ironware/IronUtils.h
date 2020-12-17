@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief Some utils
+ * \brief Collection of utility functions
  *
  * TODO:
  *

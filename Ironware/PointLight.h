@@ -5,11 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A class that represents point light that can be set into the scene
  *
  * TODO:
  *
- * \note
+ * \note It uses sphere as its mesh but you can change by changing some code
 */
 #pragma once
 
@@ -21,10 +21,10 @@ class PointLight
 {
 public:
 	PointLight( Graphics& gfx, float radius = 0.5f );
-	void SpawnControlWindow() noexcept;	
+	void SpawnControlWindow() noexcept;
 	void Draw( Graphics& gfx ) const noexcept( !IS_DEBUG );
-	void Reset() noexcept;	
 	void Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept;
+	void Reset() noexcept;
 
 private:
 	struct PointLightCBuf

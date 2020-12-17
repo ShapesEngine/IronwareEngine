@@ -1,7 +1,7 @@
 /*!
  * \class SolidSphere
  *
- * \brief 
+ * \brief A class that is responsible for creating & updating the sphere 
  *
  * \author Yernar Aldabergenov
  * \date December 2020

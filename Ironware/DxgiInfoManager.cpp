@@ -7,7 +7,9 @@
  *
  * TODO:
  *
- * \note Call Set every time you want to capture an error. Call => DirectXFunc => GetMessages
+ * \note Call Set every time you want to capture an error. Call Set => DirectXFunc => GetMessages
+ * * Set moves the message index to the present so that it will show only the messages related to the
+ * * function call
  *
  * \author Yernar Aldabergenov
  *

@@ -1,3 +1,16 @@
+/*!
+ * \file IronUtils.cpp
+ * \date 2020/11/16 6:54
+ *
+ * \author Yernar Aldabergenov
+ * Contact: yernar.aa@gmail.com
+ *
+ * \brief Collection of utility functions
+ *
+ * TODO:
+ *
+ * \note
+*/
 #include "IronUtils.h"
 
 std::wstring ToWide( const std::string& narrow )

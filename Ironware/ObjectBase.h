@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief 
+ * \brief A CRTP class for replacing boilerplate code in drawables
  *
  * TODO:
  *

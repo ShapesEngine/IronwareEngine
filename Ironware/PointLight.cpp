@@ -1,7 +1,7 @@
 /*!
  * \class PointLight
  *
- * \brief 
+ * \brief A class that represents point light that can be set into the scene
  *
  * \author Yernar Aldabergenov
  * \date December 2020
@@ -49,6 +49,15 @@ void PointLight::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
 	mesh.Draw( gfx );	
 }
 
+void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept
+{ 
+	auto dataCopy = cbufData;
+	const auto pos = DirectX::XMLoadFloat3( &cbufData.pos );
+	DirectX::XMStoreFloat3( &dataCopy.pos, DirectX::XMVector3Transform( pos, view ) );
+	cbuffer.Update( gfx, dataCopy );
+	cbuffer.Bind( gfx );
+}
+
 void PointLight::Reset() noexcept
 {
 	cbufData = {
@@ -60,13 +69,4 @@ void PointLight::Reset() noexcept
 		0.045f,
 		0.0075f,
 	};
-}
-
-void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept
-{ 
-	auto dataCopy = cbufData;
-	const auto pos = DirectX::XMLoadFloat3( &cbufData.pos );
-	DirectX::XMStoreFloat3( &dataCopy.pos, DirectX::XMVector3Transform( pos, view ) );
-	cbuffer.Update( gfx, dataCopy );
-	cbuffer.Bind( gfx );
 }

@@ -1,3 +1,11 @@
+/*!
+ * \class IronTimer
+ *
+ * \brief A timer class that is responsible for timer events
+ *
+ * \author Yernar Aldabergenov
+ * \date December 2020
+ */
 #include "IronTimer.h"
 
 using namespace std::chrono;
