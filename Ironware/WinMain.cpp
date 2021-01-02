@@ -11,13 +11,12 @@ int CALLBACK wWinMain(
 	{
 		return App{}.Begin();
 	}
-	catch( const IronException& e )
-	{
-		SAFE_MESSAGEBOX( nullptr, CON_WCHREINT_CAST( e.what() ), e.GetType(), MB_OK | MB_ICONERROR );
-	}
 	catch( const std::exception& e )
 	{
-		SAFE_MESSAGEBOX( nullptr, ToWide( e.what() ).c_str(), L"Standard Exception", MB_OK | MB_ICONERROR );
+		const IronException* pIe = dynamic_cast<const IronException*>( &e );
+		const std::wstring theErrorMSG = ( pIe ? CON_WCHREINT_CAST( pIe->what() ) : ToWide( e.what() ) );
+		const wchar_t* theErrorType = ( pIe ? pIe->GetType() : L"Standard Exception" );
+		SAFE_MESSAGEBOX( nullptr, theErrorMSG.c_str(), theErrorType, MB_OK | MB_ICONERROR );
 	}
 	catch( ... )
 	{
