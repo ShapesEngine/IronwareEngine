@@ -69,7 +69,7 @@
 #define WIDE1( x ) WIDE2( x )
 #define WFILE WIDE1( __FILE__ )
 
-// to deal with various read access violation errors, mouse, keyboard, etc.
+// macro that deals with various read access violation errors, mouse, keyboard, etc.
 #define SAFE_MESSAGEBOX(hWnd, lpText, lpCaption, uType)	SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); \
 														MessageBox( hWnd, lpText, lpCaption, uType );
 
