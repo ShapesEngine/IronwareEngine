@@ -1,7 +1,7 @@
 ﻿#include "App.h"
 #include "IronUtils.h"
 
-int CALLBACK wWinMain(
+int WINAPI wWinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPWSTR    lpCmdLine,
