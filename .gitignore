@@ -1041,5 +1041,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 *.cd
+
 # Compiled Shader files
 *.cso
