@@ -69,8 +69,8 @@
 #define WIDE1( x ) WIDE2( x )
 #define WFILE WIDE1( __FILE__ )
 
-// macro that deals with various read access violation errors, mouse, keyboard, etc.
-#define SAFE_MESSAGEBOX(hWnd, lpText, lpCaption, uType)	SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); \
-														MessageBox( hWnd, lpText, lpCaption, uType );
-
+#ifdef _WINDOWS_
+#error("Include Windows by including IronWin")
+#else
 #include <Windows.h>
+#endif // _WINDOWS_

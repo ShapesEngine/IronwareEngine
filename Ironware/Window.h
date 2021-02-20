@@ -109,6 +109,15 @@ public:
 	Window& operator=( const Window& ) = delete;
 
 	void SetTitle( const std::wstring& title );
+	/**
+	 * @brief function that deals with various read access violation errors, mouse, keyboard, etc.
+	 * and displays message box
+	 * @param hWnd Window handle
+	 * @param lpText Text to be shown in the content of the message box
+	 * @param lpCaption Title of the message box
+	 * @param uType Type of the message box, ex. error, info, etc.
+	*/
+	static void ShowMessageBox( HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType );
 	static std::optional<int> ProcessMessages() noexcept;
 	Graphics& Gfx() const;
 

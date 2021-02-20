@@ -13,14 +13,17 @@ int WINAPI wWinMain(
 	}
 	catch( const std::exception& e )
 	{
+		// check if the exception is type of IronException
 		const IronException* pIe = dynamic_cast<const IronException*>( &e );
+		/** GET THE APPROPRIATE EXCEPTION INFO */
 		const std::wstring theErrorMSG = ( pIe ? CON_WCHREINT_CAST( pIe->what() ) : ToWide( e.what() ) );
 		const wchar_t* theErrorType = ( pIe ? pIe->GetType() : L"Standard Exception" );
-		SAFE_MESSAGEBOX( nullptr, theErrorMSG.c_str(), theErrorType, MB_OK | MB_ICONERROR );
+		/*===================================*/
+		Window::ShowMessageBox( nullptr, theErrorMSG.c_str(), theErrorType, MB_OK | MB_ICONERROR );
 	}
 	catch( ... )
 	{
-		SAFE_MESSAGEBOX( nullptr, L"No details available", L"Unknown Exception", MB_OK | MB_ICONERROR );
+		Window::ShowMessageBox( nullptr, L"No details available", L"Unknown Exception", MB_OK | MB_ICONERROR );
 	}
 	return -1;
 }

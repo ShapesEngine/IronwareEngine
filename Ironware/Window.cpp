@@ -112,6 +112,12 @@ void Window::SetTitle( const std::wstring& title )
 	}
 }
 
+void Window::ShowMessageBox( HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType )
+{
+	//SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) );
+	MessageBox( hWnd, lpText, lpCaption, uType );
+}
+
 std::optional<int> Window::ProcessMessages() noexcept
 {
 	MSG msg;
