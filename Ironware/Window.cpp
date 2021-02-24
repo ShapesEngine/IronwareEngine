@@ -7,7 +7,7 @@
  *
  * TODO:
  *
- * \note 
+ * \note
  *
  * \author Yernar Aldabergenov
  *
@@ -25,11 +25,11 @@
 
 #include <sstream>
 
-/******************************* WINDOW CLASS START ******************************/
+ /******************************* WINDOW CLASS START ******************************/
 Window::WindowClass Window::WindowClass::wndClass;
 
 Window::WindowClass::WindowClass() noexcept :
-    hInst( GetModuleHandle( nullptr ) )
+	hInst( GetModuleHandle( nullptr ) )
 {
 	WNDCLASSEX wc = { 0 };
 	wc.cbSize = sizeof( wc );
@@ -64,31 +64,31 @@ Window::Window( int width_in, int height_in, const wchar_t* name ) :
 	// =======================================================================
 	// calculate window size based on desired client region size
 	// -----------------------------------------------------------------------
+	// TODO: assign 0 to the left and top sides of the rectangle
 	RECT wr;
 	wr.left = 100;
 	wr.right = width + wr.left;
 	wr.top = 100;
 	wr.bottom = height + wr.top;
-	if( AdjustWindowRect( &wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE ) == 0 )
+	const DWORD dwStyle = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
+	if( AdjustWindowRect( &wr, dwStyle, FALSE ) == 0 )
 	{
 		throw IRWND_LAST_EXCEPT();
 	}
-
 	// create window & get hWnd
-	hWnd = CreateWindow( 
-		WindowClass::GetName(), name,
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+	hWnd = CreateWindow(
+		WindowClass::GetName(), name, dwStyle,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
-		nullptr, nullptr, WindowClass::GetInstance(), this
+		nullptr, nullptr, WindowClass::GetInstance(), this // we will retrieve [this] lpParam in HandleMsgSetup 
 	);
 
-	// check for error
+	// check for the error
 	if( hWnd == nullptr )
 	{
 		throw IRWND_LAST_EXCEPT();
 	}
 
-	// newly created windows start off as hidden
+	// newly created windows start off as hidden, so we have to show it
 	ShowWindow( hWnd, SW_SHOWDEFAULT );
 
 	// Init ImGui Win32 Impl
@@ -100,6 +100,7 @@ Window::Window( int width_in, int height_in, const wchar_t* name ) :
 
 Window::~Window()
 {
+	ResetWindowProc();
 	ImGui_ImplWin32_Shutdown();
 	DestroyWindow( hWnd );
 }
@@ -113,8 +114,8 @@ void Window::SetTitle( const std::wstring& title )
 }
 
 void Window::ShowMessageBox( HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType )
-{
-	//SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) );
+{	
+	ResetWindowProc();
 	MessageBox( hWnd, lpText, lpCaption, uType );
 }
 
@@ -150,7 +151,7 @@ Graphics& Window::Gfx() const
 }
 
 LRESULT CALLBACK Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
-{	
+{
 	// use create parameter passed in from CreateWindow() to store window class pointer at WinAPI side
 	if( msg == WM_NCCREATE )
 	{
@@ -164,7 +165,7 @@ LRESULT CALLBACK Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPA
 		SetWindowLongPtr( hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>( pWnd ) );
 		// set message proc to normal (non-setup) handler now that setup is finished
 		SetWindowLongPtr( hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &Window::HandleMsgThunk ) );
-		
+
 		// forward message to window class handler
 		return pWnd->HandleMsg( hWnd, msg, wParam, lParam );
 	}
@@ -195,17 +196,17 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		// we don't want the DefProc to handle this message because
 		// we want our destructor to destroy the window, so return 0 instead of break
 		return 0;
-	
-	// clear keystate when window loses focus to prevent input getting "stuck"
+
+		// clear keystate when window loses focus to prevent input getting "stuck"
 	case WM_KILLFOCUS:
 		kbd.ClearState();
 		break;
-	// =======================================================================
-	// Keyboard Messages Handling
-	// -----------------------------------------------------------------------	
+		// =======================================================================
+		// Keyboard Messages Handling
+		// -----------------------------------------------------------------------	
 	case WM_KEYDOWN:
-	// SYSKEY messages need to be handled to track system keys such as ALT, F10, etc.
-	// Basic KEYDOWN messages applies also to system keys
+		// SYSKEY messages need to be handled to track system keys such as ALT, F10, etc.
+		// Basic KEYDOWN messages applies also to system keys
 	case WM_SYSKEYDOWN:
 		// stifle other keyboard messages if imgui wants to get full keyboard control
 		if( imGuiKbdCapture )
@@ -219,7 +220,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		}
 		break;
 	case WM_KEYUP:
-	// Basic KEYUP messages applies also to system keys
+		// Basic KEYUP messages applies also to system keys
 	case WM_SYSKEYUP:
 		// stifle other keyboard messages if imgui wants to get full keyboard control
 		if( imGuiKbdCapture )
@@ -236,11 +237,11 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		}
 		kbd.OnChar( static_cast<wchar_t>( wParam ) );
 		break;
-	// =======================================================================
+		// =======================================================================
 
-	// =======================================================================
-	// Mouse Messages Handling
-	// -----------------------------------------------------------------------
+		// =======================================================================
+		// Mouse Messages Handling
+		// -----------------------------------------------------------------------
 	case WM_MOUSEMOVE:
 	{
 		// stifle other keyboard messages if imgui wants to get full keyboard control
