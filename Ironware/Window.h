@@ -137,7 +137,7 @@ private:
 	 * @brief function that resets the window procedure. 
 	 * It's used to prevent various read access violation errors, mouse, keyboard, etc.
 	*/
-	FORCEINLINE static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
+	inline static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
 
 public:
 	Keyboard kbd;
