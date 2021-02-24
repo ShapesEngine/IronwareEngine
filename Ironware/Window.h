@@ -62,7 +62,7 @@ public:
 	};
 
 	/*!
-	 * \class Window
+	 * \class NoGfxException
 	 *
 	 * \brief Use this class exception to throw no graphix exceptions, as there is no HRESULT associated with no graphics exceptions
 	 *
@@ -79,9 +79,9 @@ public:
 
 private:
 	/*!
-	 * \class singleton WindowClass
+	 * \class WindowClass
 	 *
-	 * \brief A class that's needed for WINAPI classes(Registering and Unregistering)
+	 * \brief A singleton class that's needed for WINAPI classes(Registering and Unregistering)
 	 *
 	 * \author Yernar Aldabergenov
 	 * \date November 2020
@@ -109,15 +109,19 @@ public:
 	Window& operator=( const Window& ) = delete;
 
 	void SetTitle( const std::wstring& title );
+
 	/**
-	 * @brief function that deals with various read access violation errors, mouse, keyboard, etc.
-	 * and displays message box
+	 * @brief Function for displaying message box
 	 * @param hWnd Window handle
 	 * @param lpText Text to be shown in the content of the message box
 	 * @param lpCaption Title of the message box
 	 * @param uType Type of the message box, ex. error, info, etc.
 	*/
 	static void ShowMessageBox( HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType );
+	/**
+	 * @brief 
+	 * @return 
+	*/
 	static std::optional<int> ProcessMessages() noexcept;
 	Graphics& Gfx() const;
 
@@ -128,6 +132,12 @@ private:
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	LRESULT HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
+
+	/**
+	 * @brief function that resets the window procedure. 
+	 * It's used to prevent various read access violation errors, mouse, keyboard, etc.
+	*/
+	FORCEINLINE static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
 
 public:
 	Keyboard kbd;
