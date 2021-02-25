@@ -16,7 +16,6 @@
 */
 #pragma once
 
-#include "IronWin.h"
 #include "IronException.h"
 
 #include <string>
@@ -119,4 +118,3 @@ private:
 	uint32_t width;
 	uint32_t height;
 };
-

@@ -6,7 +6,7 @@
  * \author Yernar Aldabergenov
  * \date December 2020
  */
-#define FULL_WIN
+#define IR_FULL_WIN
 #include "IronWin.h"
 #include "GDIPlusManager.h"
 

@@ -15,8 +15,6 @@
 */
 #pragma once
 
-#include "IronWin.h"
-
 class GDIPlusManager
 {
 public:

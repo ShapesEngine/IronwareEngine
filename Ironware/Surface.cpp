@@ -6,12 +6,14 @@
  *
  * 
  */
-#define FULL_WIN
 #include "Surface.h"
+#define IR_FULL_WIN
+#include "IronWin.h"
 #include "IronUtils.h"
 
 #include <sstream>
 #include <algorithm>
+
 namespace Gdiplus
 {
 	// replacing win minmax with stdminmax

@@ -22,7 +22,7 @@
 #include <sdkddkver.h>
 
 // Needed for the cases when other libraries(gdi+) use these defines
-#ifndef FULL_WIN
+#ifndef IR_FULL_WIN
 // The following #defines disable a bunch of unused windows stuff. If you 
 // get weird errors when trying to do some windows stuff, try removing some
 // (or all) of these defines (it will increase build time though).
@@ -61,7 +61,9 @@
 #define NOTAPE
 #endif
 
-// minmax is disabled in even full_win mode
+/************************************************************************/
+/*   nominmax & strict are defined even in  ir_full_win mode            */
+/************************************************************************/
 #define NOMINMAX
 #define STRICT
 
@@ -70,7 +72,7 @@
 #define WFILE WIDE1( __FILE__ )
 
 #ifdef _WINDOWS_
-#error("Include Windows by including IronWin")
+#error("This header file already includes Windows. Please include IronWin.h rather than Windows.h")
 #else
 #include <Windows.h>
 #endif // _WINDOWS_
