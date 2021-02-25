@@ -16,8 +16,8 @@
 #pragma once
 
 // target Windows 8 or later
-// you can remove/change it if 
-// you'd like to target other platforms or only win10
+// you can remove/change it 
+// if you'd like to target other platforms or only win10
 #define _WIN32_WINNT 0x0602
 #include <sdkddkver.h>
 
@@ -62,7 +62,7 @@
 #endif
 
 /************************************************************************/
-/*   nominmax & strict are defined even in  ir_full_win mode            */
+/*   nominmax & strict are defined even in ir_full_win mode            */
 /************************************************************************/
 #define NOMINMAX
 #define STRICT

@@ -61,6 +61,7 @@ Window::Window( int width_in, int height_in, const wchar_t* name ) :
 	width( width_in ),
 	height( height_in )
 {
+	throw IRWND_EXCEPT( 0x153 );
 	// =======================================================================
 	// calculate window size based on desired client region size
 	// -----------------------------------------------------------------------
@@ -114,7 +115,7 @@ void Window::SetTitle( const std::wstring& title )
 }
 
 void Window::ShowMessageBox( HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType )
-{	
+{
 	ResetWindowProc();
 	MessageBox( hWnd, lpText, lpCaption, uType );
 }
@@ -351,7 +352,7 @@ const char* Window::HrException::what() const noexcept
 	std::wostringstream woss;
 	woss << GetType() << std::endl
 		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
-		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+		<< std::dec << " (" << (uint32_t)GetErrorCode() << ")" << std::endl
 		<< "[Description] " << GetErrorDescription() << std::endl
 		<< GetOriginString();
 	whatBuffer = woss.str();

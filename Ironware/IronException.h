@@ -27,19 +27,19 @@ public:
 	 * 
 	 * \return const char_t* buffer
 	 */
-	const char* what() const noexcept override;
+	const char* what() const noexcept override;	
 
+	inline virtual const wchar_t* GetType() const noexcept { return L"Iron Base Exception"; }
+
+protected:
+	inline int GetLine() const noexcept { return line; }
+	inline const std::wstring& GetFile() const noexcept { return file; }
 	/**
 	 *
-	 * 
+	 *
 	 * \return formatted origin std::wstring 
 	 */
 	std::wstring GetOriginString() const noexcept;
-
-public:
-	inline virtual const wchar_t* GetType() const noexcept { return L"Iron Base Exception"; }
-	inline int GetLine() const noexcept { return line; }
-	inline const std::wstring& GetFile() const noexcept { return file; }
 
 private:
 	int line;
