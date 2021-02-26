@@ -20,14 +20,14 @@ template<typename T>
 class DrawableBase : public Drawable
 {
 protected:
-	static inline bool IsStaticInitialized() { return !staticBinds.empty(); }
+	static __forceinline bool IsStaticInitialized() { return !staticBinds.empty(); }
 
 	static void AddStaticBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG );
 	void AddStaticIndexBuffer( std::unique_ptr<class IndexBuffer> ibuf ) noexcept;
 	void SetIndexFromStatic() noexcept( !IS_DEBUG );
 
 private:
-	inline const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept override { return staticBinds; }
+	__forceinline const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept override { return staticBinds; }
 
 private:
 	static std::vector<std::unique_ptr<Bindable>> staticBinds;

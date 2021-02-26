@@ -266,7 +266,7 @@
 //                      32-bit     64-bit
 //   Previous release:  8.83 s     7.68 s
 //   Pool allocations:  7.72 s     6.34 s
-//   Inline sort     :  6.54 s     5.65 s
+//   __forceinline sort     :  6.54 s     5.65 s
 //   New rasterizer  :  5.63 s     5.00 s
 
 //////////////////////////////////////////////////////////////////////////////

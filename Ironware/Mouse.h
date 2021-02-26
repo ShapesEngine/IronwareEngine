@@ -53,12 +53,12 @@ public:
 			y( parent.y )
 		{}
 
-		inline Type GetType() const noexcept { return type; }
-		inline std::pair<int, int> GetPos() const noexcept { return{ x, y }; }
-		inline int GetPosX() const noexcept { return x; }
-		inline int GetPosY() const noexcept { return y; }
-		inline bool LeftIsPressed() const noexcept { return leftIsPressed; }
-		inline bool RightIsPressed() const noexcept { return rightIsPressed; }
+		__forceinline Type GetType() const noexcept { return type; }
+		__forceinline std::pair<int, int> GetPos() const noexcept { return{ x, y }; }
+		__forceinline int GetPosX() const noexcept { return x; }
+		__forceinline int GetPosY() const noexcept { return y; }
+		__forceinline bool LeftIsPressed() const noexcept { return leftIsPressed; }
+		__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
 	};
 
 public:
@@ -68,14 +68,14 @@ public:
 
 	std::optional<Event> Read() noexcept;
 
-	inline bool IsInWindow() const noexcept { return isInWindow; }
-	inline std::pair<int, int> GetPos() const noexcept { return { x, y }; }
-	inline int GetPosX() const noexcept { return x; }
-	inline int GetPosY() const noexcept { return y; }
-	inline bool LeftIsPressed() const noexcept { return leftIsPressed; }
-	inline bool RightIsPressed() const noexcept { return rightIsPressed; }	
-	inline bool IsEmpty() const noexcept { return buffer.empty(); }
-	inline void Clear() noexcept { buffer = std::queue<Event>(); }
+	__forceinline bool IsInWindow() const noexcept { return isInWindow; }
+	__forceinline std::pair<int, int> GetPos() const noexcept { return { x, y }; }
+	__forceinline int GetPosX() const noexcept { return x; }
+	__forceinline int GetPosY() const noexcept { return y; }
+	__forceinline bool LeftIsPressed() const noexcept { return leftIsPressed; }
+	__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }	
+	__forceinline bool IsEmpty() const noexcept { return buffer.empty(); }
+	__forceinline void Clear() noexcept { buffer = std::queue<Event>(); }
 
 private:
 	void OnMouseLeave() noexcept;

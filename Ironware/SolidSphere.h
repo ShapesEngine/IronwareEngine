@@ -19,9 +19,9 @@ class SolidSphere : public DrawableBase<SolidSphere>
 public:
 	SolidSphere( Graphics& gfx, float radius );
 
-	inline void Update( float dt ) noexcept override {}
-	inline void SetPosition( DirectX::XMFLOAT3 pos ) noexcept { position = pos; }
-	inline DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMMatrixTranslation( position.x, position.y, position.z ); }
+	__forceinline void Update( float dt ) noexcept override {}
+	__forceinline void SetPosition( DirectX::XMFLOAT3 pos ) noexcept { position = pos; }
+	__forceinline DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMMatrixTranslation( position.x, position.y, position.z ); }
 
 private:
 	DirectX::XMFLOAT3 position = { 1.f, 1.f, 1.f };

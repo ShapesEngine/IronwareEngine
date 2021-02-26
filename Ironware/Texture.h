@@ -21,7 +21,7 @@ class Texture : public Bindable
 {
 public:
 	Texture( Graphics& gfx, const class Surface& sur );
-	inline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShaderResources( 0u, 1u, pTextureView.GetAddressOf() ); }
+	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShaderResources( 0u, 1u, pTextureView.GetAddressOf() ); }
 
 protected:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;

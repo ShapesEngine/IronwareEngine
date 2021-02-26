@@ -29,11 +29,11 @@ public:
 	 */
 	const char* what() const noexcept override;	
 
-	inline virtual const wchar_t* GetType() const noexcept { return L"Iron Base Exception"; }
+	__forceinline virtual const wchar_t* GetType() const noexcept { return L"Iron Base Exception"; }
 
 protected:
-	inline int GetLine() const noexcept { return line; }
-	inline const std::wstring& GetFile() const noexcept { return file; }
+	__forceinline int GetLine() const noexcept { return line; }
+	__forceinline const std::wstring& GetFile() const noexcept { return file; }
 	/**
 	 *
 	 *

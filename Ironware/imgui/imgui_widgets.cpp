@@ -105,7 +105,7 @@ static const ImU64          IM_U64_MAX = (2ULL * 9223372036854775807LL + 1);
 //-------------------------------------------------------------------------
 
 // Data Type helpers
-static inline int       DataTypeFormatString(char* buf, int buf_size, ImGuiDataType data_type, const void* data_ptr, const char* format);
+static __forceinline int       DataTypeFormatString(char* buf, int buf_size, ImGuiDataType data_type, const void* data_ptr, const char* format);
 static void             DataTypeApplyOp(ImGuiDataType data_type, int op, void* output, void* arg_1, const void* arg_2);
 static bool             DataTypeApplyOpFromText(const char* buf, const char* initial_value_buf, ImGuiDataType data_type, void* data_ptr, const char* format);
 
@@ -1545,7 +1545,7 @@ static const char* PatchFormatStringFloatToInt(const char* fmt)
     return fmt;
 }
 
-static inline int DataTypeFormatString(char* buf, int buf_size, ImGuiDataType data_type, const void* data_ptr, const char* format)
+static __forceinline int DataTypeFormatString(char* buf, int buf_size, ImGuiDataType data_type, const void* data_ptr, const char* format)
 {
     // Signedness doesn't matter when pushing integer arguments
     if (data_type == ImGuiDataType_S32 || data_type == ImGuiDataType_U32)
@@ -4158,7 +4158,7 @@ bool ImGui::ColorPicker3(const char* label, float col[3], ImGuiColorEditFlags fl
     return true;
 }
 
-static inline ImU32 ImAlphaBlendColor(ImU32 col_a, ImU32 col_b)
+static __forceinline ImU32 ImAlphaBlendColor(ImU32 col_a, ImU32 col_b)
 {
     float t = ((col_b >> IM_COL32_A_SHIFT) & 0xFF) / 255.f;
     int r = ImLerp((int)(col_a >> IM_COL32_R_SHIFT) & 0xFF, (int)(col_b >> IM_COL32_R_SHIFT) & 0xFF, t);

@@ -1109,7 +1109,7 @@ enum ImGuiColorEditFlags_
     ImGuiColorEditFlags_NoSmallPreview  = 1 << 4,   //              // ColorEdit, ColorPicker: disable colored square preview next to the inputs. (e.g. to show only the inputs)
     ImGuiColorEditFlags_NoInputs        = 1 << 5,   //              // ColorEdit, ColorPicker: disable inputs sliders/text widgets (e.g. to show only the small preview colored square).
     ImGuiColorEditFlags_NoTooltip       = 1 << 6,   //              // ColorEdit, ColorPicker, ColorButton: disable tooltip when hovering the preview.
-    ImGuiColorEditFlags_NoLabel         = 1 << 7,   //              // ColorEdit, ColorPicker: disable display of inline text label (the label is still forwarded to the tooltip and picker).
+    ImGuiColorEditFlags_NoLabel         = 1 << 7,   //              // ColorEdit, ColorPicker: disable display of __forceinline text label (the label is still forwarded to the tooltip and picker).
     ImGuiColorEditFlags_NoSidePreview   = 1 << 8,   //              // ColorPicker: disable bigger color preview on right side of the picker, use small colored square preview instead.
     ImGuiColorEditFlags_NoDragDrop      = 1 << 9,   //              // ColorEdit: disable drag and drop target. ColorButton: disable drag and drop source.
 
@@ -1198,44 +1198,44 @@ struct ImVector
     typedef const value_type*   const_iterator;
 
     // Constructors, destructor
-    inline ImVector()                                       { Size = Capacity = 0; Data = NULL; }
-    inline ImVector(const ImVector<T>& src)                 { Size = Capacity = 0; Data = NULL; operator=(src); }
-    inline ImVector<T>& operator=(const ImVector<T>& src)   { clear(); resize(src.Size); memcpy(Data, src.Data, (size_t)Size * sizeof(T)); return *this; }
-    inline ~ImVector()                                      { if (Data) ImGui::MemFree(Data); }
+    __forceinline ImVector()                                       { Size = Capacity = 0; Data = NULL; }
+    __forceinline ImVector(const ImVector<T>& src)                 { Size = Capacity = 0; Data = NULL; operator=(src); }
+    __forceinline ImVector<T>& operator=(const ImVector<T>& src)   { clear(); resize(src.Size); memcpy(Data, src.Data, (size_t)Size * sizeof(T)); return *this; }
+    __forceinline ~ImVector()                                      { if (Data) ImGui::MemFree(Data); }
 
-    inline bool         empty() const                       { return Size == 0; }
-    inline int          size() const                        { return Size; }
-    inline int          size_in_bytes() const               { return Size * (int)sizeof(T); }
-    inline int          capacity() const                    { return Capacity; }
-    inline T&           operator[](int i)                   { IM_ASSERT(i < Size); return Data[i]; }
-    inline const T&     operator[](int i) const             { IM_ASSERT(i < Size); return Data[i]; }
+    __forceinline bool         empty() const                       { return Size == 0; }
+    __forceinline int          size() const                        { return Size; }
+    __forceinline int          size_in_bytes() const               { return Size * (int)sizeof(T); }
+    __forceinline int          capacity() const                    { return Capacity; }
+    __forceinline T&           operator[](int i)                   { IM_ASSERT(i < Size); return Data[i]; }
+    __forceinline const T&     operator[](int i) const             { IM_ASSERT(i < Size); return Data[i]; }
 
-    inline void         clear()                             { if (Data) { Size = Capacity = 0; ImGui::MemFree(Data); Data = NULL; } }
-    inline T*           begin()                             { return Data; }
-    inline const T*     begin() const                       { return Data; }
-    inline T*           end()                               { return Data + Size; }
-    inline const T*     end() const                         { return Data + Size; }
-    inline T&           front()                             { IM_ASSERT(Size > 0); return Data[0]; }
-    inline const T&     front() const                       { IM_ASSERT(Size > 0); return Data[0]; }
-    inline T&           back()                              { IM_ASSERT(Size > 0); return Data[Size - 1]; }
-    inline const T&     back() const                        { IM_ASSERT(Size > 0); return Data[Size - 1]; }
-    inline void         swap(ImVector<T>& rhs)              { int rhs_size = rhs.Size; rhs.Size = Size; Size = rhs_size; int rhs_cap = rhs.Capacity; rhs.Capacity = Capacity; Capacity = rhs_cap; T* rhs_data = rhs.Data; rhs.Data = Data; Data = rhs_data; }
+    __forceinline void         clear()                             { if (Data) { Size = Capacity = 0; ImGui::MemFree(Data); Data = NULL; } }
+    __forceinline T*           begin()                             { return Data; }
+    __forceinline const T*     begin() const                       { return Data; }
+    __forceinline T*           end()                               { return Data + Size; }
+    __forceinline const T*     end() const                         { return Data + Size; }
+    __forceinline T&           front()                             { IM_ASSERT(Size > 0); return Data[0]; }
+    __forceinline const T&     front() const                       { IM_ASSERT(Size > 0); return Data[0]; }
+    __forceinline T&           back()                              { IM_ASSERT(Size > 0); return Data[Size - 1]; }
+    __forceinline const T&     back() const                        { IM_ASSERT(Size > 0); return Data[Size - 1]; }
+    __forceinline void         swap(ImVector<T>& rhs)              { int rhs_size = rhs.Size; rhs.Size = Size; Size = rhs_size; int rhs_cap = rhs.Capacity; rhs.Capacity = Capacity; Capacity = rhs_cap; T* rhs_data = rhs.Data; rhs.Data = Data; Data = rhs_data; }
 
-    inline int          _grow_capacity(int sz) const        { int new_capacity = Capacity ? (Capacity + Capacity/2) : 8; return new_capacity > sz ? new_capacity : sz; }
-    inline void         resize(int new_size)                { if (new_size > Capacity) reserve(_grow_capacity(new_size)); Size = new_size; }
-    inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
-    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)ImGui::MemAlloc((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); ImGui::MemFree(Data); } Data = new_data; Capacity = new_capacity; }
+    __forceinline int          _grow_capacity(int sz) const        { int new_capacity = Capacity ? (Capacity + Capacity/2) : 8; return new_capacity > sz ? new_capacity : sz; }
+    __forceinline void         resize(int new_size)                { if (new_size > Capacity) reserve(_grow_capacity(new_size)); Size = new_size; }
+    __forceinline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
+    __forceinline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)ImGui::MemAlloc((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); ImGui::MemFree(Data); } Data = new_data; Capacity = new_capacity; }
 
     // NB: It is illegal to call push_back/push_front/insert with a reference pointing inside the ImVector data itself! e.g. v.push_back(v[10]) is forbidden.
-    inline void         push_back(const T& v)               { if (Size == Capacity) reserve(_grow_capacity(Size + 1)); memcpy(&Data[Size], &v, sizeof(v)); Size++; }
-    inline void         pop_back()                          { IM_ASSERT(Size > 0); Size--; }
-    inline void         push_front(const T& v)              { if (Size == 0) push_back(v); else insert(Data, v); }
-    inline T*           erase(const T* it)                  { IM_ASSERT(it >= Data && it < Data+Size); const ptrdiff_t off = it - Data; memmove(Data + off, Data + off + 1, ((size_t)Size - (size_t)off - 1) * sizeof(T)); Size--; return Data + off; }
-    inline T*           erase(const T* it, const T* it_last){ IM_ASSERT(it >= Data && it < Data+Size && it_last > it && it_last <= Data+Size); const ptrdiff_t count = it_last - it; const ptrdiff_t off = it - Data; memmove(Data + off, Data + off + count, ((size_t)Size - (size_t)off - count) * sizeof(T)); Size -= (int)count; return Data + off; }
-    inline T*           erase_unsorted(const T* it)         { IM_ASSERT(it >= Data && it < Data+Size);  const ptrdiff_t off = it - Data; if (it < Data+Size-1) memcpy(Data + off, Data + Size - 1, sizeof(T)); Size--; return Data + off; }
-    inline T*           insert(const T* it, const T& v)     { IM_ASSERT(it >= Data && it <= Data+Size); const ptrdiff_t off = it - Data; if (Size == Capacity) reserve(_grow_capacity(Size + 1)); if (off < (int)Size) memmove(Data + off + 1, Data + off, ((size_t)Size - (size_t)off) * sizeof(T)); memcpy(&Data[off], &v, sizeof(v)); Size++; return Data + off; }
-    inline bool         contains(const T& v) const          { const T* data = Data;  const T* data_end = Data + Size; while (data < data_end) if (*data++ == v) return true; return false; }
-    inline int          index_from_ptr(const T* it) const   { IM_ASSERT(it >= Data && it <= Data+Size); const ptrdiff_t off = it - Data; return (int)off; }
+    __forceinline void         push_back(const T& v)               { if (Size == Capacity) reserve(_grow_capacity(Size + 1)); memcpy(&Data[Size], &v, sizeof(v)); Size++; }
+    __forceinline void         pop_back()                          { IM_ASSERT(Size > 0); Size--; }
+    __forceinline void         push_front(const T& v)              { if (Size == 0) push_back(v); else insert(Data, v); }
+    __forceinline T*           erase(const T* it)                  { IM_ASSERT(it >= Data && it < Data+Size); const ptrdiff_t off = it - Data; memmove(Data + off, Data + off + 1, ((size_t)Size - (size_t)off - 1) * sizeof(T)); Size--; return Data + off; }
+    __forceinline T*           erase(const T* it, const T* it_last){ IM_ASSERT(it >= Data && it < Data+Size && it_last > it && it_last <= Data+Size); const ptrdiff_t count = it_last - it; const ptrdiff_t off = it - Data; memmove(Data + off, Data + off + count, ((size_t)Size - (size_t)off - count) * sizeof(T)); Size -= (int)count; return Data + off; }
+    __forceinline T*           erase_unsorted(const T* it)         { IM_ASSERT(it >= Data && it < Data+Size);  const ptrdiff_t off = it - Data; if (it < Data+Size-1) memcpy(Data + off, Data + Size - 1, sizeof(T)); Size--; return Data + off; }
+    __forceinline T*           insert(const T* it, const T& v)     { IM_ASSERT(it >= Data && it <= Data+Size); const ptrdiff_t off = it - Data; if (Size == Capacity) reserve(_grow_capacity(Size + 1)); if (off < (int)Size) memmove(Data + off + 1, Data + off, ((size_t)Size - (size_t)off) * sizeof(T)); memcpy(&Data[off], &v, sizeof(v)); Size++; return Data + off; }
+    __forceinline bool         contains(const T& v) const          { const T* data = Data;  const T* data_end = Data + Size; while (data < data_end) if (*data++ == v) return true; return false; }
+    __forceinline int          index_from_ptr(const T* it) const   { IM_ASSERT(it >= Data && it <= Data+Size); const ptrdiff_t off = it - Data; return (int)off; }
 };
 
 //-----------------------------------------------------------------------------
@@ -1500,34 +1500,34 @@ struct ImGuiPayload
 namespace ImGui
 {
     // OBSOLETED in 1.66 (from Sep 2018)
-    static inline void  SetScrollHere(float center_ratio=0.5f){ SetScrollHereY(center_ratio); }
+    static __forceinline void  SetScrollHere(float center_ratio=0.5f){ SetScrollHereY(center_ratio); }
     // OBSOLETED in 1.63 (between Aug 2018 and Sept 2018)
-    static inline bool  IsItemDeactivatedAfterChange()        { return IsItemDeactivatedAfterEdit(); }
+    static __forceinline bool  IsItemDeactivatedAfterChange()        { return IsItemDeactivatedAfterEdit(); }
     // OBSOLETED in 1.61 (between Apr 2018 and Aug 2018)
     IMGUI_API bool      InputFloat(const char* label, float* v, float step, float step_fast, int decimal_precision, ImGuiInputTextFlags flags = 0); // Use the 'const char* format' version instead of 'decimal_precision'!
     IMGUI_API bool      InputFloat2(const char* label, float v[2], int decimal_precision, ImGuiInputTextFlags flags = 0);
     IMGUI_API bool      InputFloat3(const char* label, float v[3], int decimal_precision, ImGuiInputTextFlags flags = 0);
     IMGUI_API bool      InputFloat4(const char* label, float v[4], int decimal_precision, ImGuiInputTextFlags flags = 0);
     // OBSOLETED in 1.60 (between Dec 2017 and Apr 2018)
-    static inline bool  IsAnyWindowFocused()                  { return IsWindowFocused(ImGuiFocusedFlags_AnyWindow); }
-    static inline bool  IsAnyWindowHovered()                  { return IsWindowHovered(ImGuiHoveredFlags_AnyWindow); }
-    static inline ImVec2 CalcItemRectClosestPoint(const ImVec2& pos, bool on_edge = false, float outward = 0.f) { IM_UNUSED(on_edge); IM_UNUSED(outward); IM_ASSERT(0); return pos; }
+    static __forceinline bool  IsAnyWindowFocused()                  { return IsWindowFocused(ImGuiFocusedFlags_AnyWindow); }
+    static __forceinline bool  IsAnyWindowHovered()                  { return IsWindowHovered(ImGuiHoveredFlags_AnyWindow); }
+    static __forceinline ImVec2 CalcItemRectClosestPoint(const ImVec2& pos, bool on_edge = false, float outward = 0.f) { IM_UNUSED(on_edge); IM_UNUSED(outward); IM_ASSERT(0); return pos; }
     // OBSOLETED in 1.53 (between Oct 2017 and Dec 2017)
-    static inline void  ShowTestWindow()                      { return ShowDemoWindow(); }
-    static inline bool  IsRootWindowFocused()                 { return IsWindowFocused(ImGuiFocusedFlags_RootWindow); }
-    static inline bool  IsRootWindowOrAnyChildFocused()       { return IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows); }
-    static inline void  SetNextWindowContentWidth(float w)    { SetNextWindowContentSize(ImVec2(w, 0.f)); }
-    static inline float GetItemsLineHeightWithSpacing()       { return GetFrameHeightWithSpacing(); }
+    static __forceinline void  ShowTestWindow()                      { return ShowDemoWindow(); }
+    static __forceinline bool  IsRootWindowFocused()                 { return IsWindowFocused(ImGuiFocusedFlags_RootWindow); }
+    static __forceinline bool  IsRootWindowOrAnyChildFocused()       { return IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows); }
+    static __forceinline void  SetNextWindowContentWidth(float w)    { SetNextWindowContentSize(ImVec2(w, 0.f)); }
+    static __forceinline float GetItemsLineHeightWithSpacing()       { return GetFrameHeightWithSpacing(); }
     // OBSOLETED in 1.52 (between Aug 2017 and Oct 2017)
     IMGUI_API bool      Begin(const char* name, bool* p_open, const ImVec2& size_on_first_use, float bg_alpha_override = -1.f, ImGuiWindowFlags flags = 0); // Use SetNextWindowSize(size, ImGuiCond_FirstUseEver) + SetNextWindowBgAlpha() instead.
-    static inline bool  IsRootWindowOrAnyChildHovered()       { return IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows); }
-    static inline void  AlignFirstTextHeightToWidgets()       { AlignTextToFramePadding(); }
-    static inline void  SetNextWindowPosCenter(ImGuiCond c=0) { ImGuiIO& io = GetIO(); SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), c, ImVec2(0.5f, 0.5f)); }
+    static __forceinline bool  IsRootWindowOrAnyChildHovered()       { return IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows); }
+    static __forceinline void  AlignFirstTextHeightToWidgets()       { AlignTextToFramePadding(); }
+    static __forceinline void  SetNextWindowPosCenter(ImGuiCond c=0) { ImGuiIO& io = GetIO(); SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), c, ImVec2(0.5f, 0.5f)); }
     // OBSOLETED in 1.51 (between Jun 2017 and Aug 2017)
-    static inline bool  IsItemHoveredRect()                   { return IsItemHovered(ImGuiHoveredFlags_RectOnly); }
-    static inline bool  IsPosHoveringAnyWindow(const ImVec2&) { IM_ASSERT(0); return false; } // This was misleading and partly broken. You probably want to use the ImGui::GetIO().WantCaptureMouse flag instead.
-    static inline bool  IsMouseHoveringAnyWindow()            { return IsWindowHovered(ImGuiHoveredFlags_AnyWindow); }
-    static inline bool  IsMouseHoveringWindow()               { return IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem); }
+    static __forceinline bool  IsItemHoveredRect()                   { return IsItemHovered(ImGuiHoveredFlags_RectOnly); }
+    static __forceinline bool  IsPosHoveringAnyWindow(const ImVec2&) { IM_ASSERT(0); return false; } // This was misleading and partly broken. You probably want to use the ImGui::GetIO().WantCaptureMouse flag instead.
+    static __forceinline bool  IsMouseHoveringAnyWindow()            { return IsWindowHovered(ImGuiHoveredFlags_AnyWindow); }
+    static __forceinline bool  IsMouseHoveringWindow()               { return IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem); }
 }
 typedef ImGuiInputTextCallback      ImGuiTextEditCallback;    // OBSOLETE in 1.63 (from Aug 2018): made the names consistent
 typedef ImGuiInputTextCallbackData  ImGuiTextEditCallbackData;
@@ -1541,8 +1541,8 @@ typedef ImGuiInputTextCallbackData  ImGuiTextEditCallbackData;
 // We call C++ constructor on own allocated memory via the placement "new(ptr) Type()" syntax.
 // Defining a custom placement new() with a dummy parameter allows us to bypass including <new> which on some platforms complains when user has disabled exceptions.
 struct ImNewDummy {};
-inline void* operator new(size_t, ImNewDummy, void* ptr) { return ptr; }
-inline void  operator delete(void*, ImNewDummy, void*)   {} // This is only required so we can use the symetrical new()
+__forceinline void* operator new(size_t, ImNewDummy, void* ptr) { return ptr; }
+__forceinline void  operator delete(void*, ImNewDummy, void*)   {} // This is only required so we can use the symetrical new()
 #define IM_PLACEMENT_NEW(_PTR)              new(ImNewDummy(), _PTR)
 #define IM_NEW(_TYPE)                       new(ImNewDummy(), ImGui::MemAlloc(sizeof(_TYPE))) _TYPE
 template<typename T> void IM_DELETE(T* p)   { if (p) { p->~T(); ImGui::MemFree(p); } }
@@ -1597,7 +1597,7 @@ struct ImGuiTextBuffer
     static char         EmptyString[1];
 
     ImGuiTextBuffer()   { }
-    inline char         operator[](int i)       { IM_ASSERT(Buf.Data != NULL); return Buf.Data[i]; }
+    __forceinline char         operator[](int i)       { IM_ASSERT(Buf.Data != NULL); return Buf.Data[i]; }
     const char*         begin() const           { return Buf.Data ? &Buf.front() : EmptyString; }
     const char*         end() const             { return Buf.Data ? &Buf.back() : EmptyString; }   // Buf is zero-terminated, so end() will point on the zero-terminator
     int                 size() const            { return Buf.Size ? Buf.Size - 1 : 0; }
@@ -1721,11 +1721,11 @@ struct ImColor
     ImColor(ImU32 rgba)                                             { float sc = 1.f/255.f; Value.x = (float)((rgba>>IM_COL32_R_SHIFT)&0xFF) * sc; Value.y = (float)((rgba>>IM_COL32_G_SHIFT)&0xFF) * sc; Value.z = (float)((rgba>>IM_COL32_B_SHIFT)&0xFF) * sc; Value.w = (float)((rgba>>IM_COL32_A_SHIFT)&0xFF) * sc; }
     ImColor(float r, float g, float b, float a = 1.f)              { Value.x = r; Value.y = g; Value.z = b; Value.w = a; }
     ImColor(const ImVec4& col)                                      { Value = col; }
-    inline operator ImU32() const                                   { return ImGui::ColorConvertFloat4ToU32(Value); }
-    inline operator ImVec4() const                                  { return Value; }
+    __forceinline operator ImU32() const                                   { return ImGui::ColorConvertFloat4ToU32(Value); }
+    __forceinline operator ImVec4() const                                  { return Value; }
 
     // FIXME-OBSOLETE: May need to obsolete/cleanup those helpers.
-    inline void    SetHSV(float h, float s, float v, float a = 1.f){ ImGui::ColorConvertHSVtoRGB(h, s, v, Value.x, Value.y, Value.z); Value.w = a; }
+    __forceinline void    SetHSV(float h, float s, float v, float a = 1.f){ ImGui::ColorConvertHSVtoRGB(h, s, v, Value.x, Value.y, Value.z); Value.w = a; }
     static ImColor HSV(float h, float s, float v, float a = 1.f)   { float r,g,b; ImGui::ColorConvertHSVtoRGB(h, s, v, r, g, b); return ImColor(r,g,b,a); }
 };
 
@@ -1837,8 +1837,8 @@ struct ImDrawList
     IMGUI_API void  PopClipRect();
     IMGUI_API void  PushTextureID(ImTextureID texture_id);
     IMGUI_API void  PopTextureID();
-    inline ImVec2   GetClipRectMin() const { const ImVec4& cr = _ClipRectStack.back(); return ImVec2(cr.x, cr.y); }
-    inline ImVec2   GetClipRectMax() const { const ImVec4& cr = _ClipRectStack.back(); return ImVec2(cr.z, cr.w); }
+    __forceinline ImVec2   GetClipRectMin() const { const ImVec4& cr = _ClipRectStack.back(); return ImVec2(cr.x, cr.y); }
+    __forceinline ImVec2   GetClipRectMax() const { const ImVec4& cr = _ClipRectStack.back(); return ImVec2(cr.z, cr.w); }
 
     // Primitives
     IMGUI_API void  AddLine(const ImVec2& a, const ImVec2& b, ImU32 col, float thickness = 1.f);
@@ -1861,11 +1861,11 @@ struct ImDrawList
     IMGUI_API void  AddBezierCurve(const ImVec2& pos0, const ImVec2& cp0, const ImVec2& cp1, const ImVec2& pos1, ImU32 col, float thickness, int num_segments = 0);
 
     // Stateful path API, add points then finish with PathFillConvex() or PathStroke()
-    inline    void  PathClear()                                                 { _Path.Size = 0; }
-    inline    void  PathLineTo(const ImVec2& pos)                               { _Path.push_back(pos); }
-    inline    void  PathLineToMergeDuplicate(const ImVec2& pos)                 { if (_Path.Size == 0 || memcmp(&_Path.Data[_Path.Size-1], &pos, 8) != 0) _Path.push_back(pos); }
-    inline    void  PathFillConvex(ImU32 col)                                   { AddConvexPolyFilled(_Path.Data, _Path.Size, col); _Path.Size = 0; }  // Note: Anti-aliased filling requires points to be in clockwise order.
-    inline    void  PathStroke(ImU32 col, bool closed, float thickness = 1.f)  { AddPolyline(_Path.Data, _Path.Size, col, closed, thickness); _Path.Size = 0; }
+    __forceinline    void  PathClear()                                                 { _Path.Size = 0; }
+    __forceinline    void  PathLineTo(const ImVec2& pos)                               { _Path.push_back(pos); }
+    __forceinline    void  PathLineToMergeDuplicate(const ImVec2& pos)                 { if (_Path.Size == 0 || memcmp(&_Path.Data[_Path.Size-1], &pos, 8) != 0) _Path.push_back(pos); }
+    __forceinline    void  PathFillConvex(ImU32 col)                                   { AddConvexPolyFilled(_Path.Data, _Path.Size, col); _Path.Size = 0; }  // Note: Anti-aliased filling requires points to be in clockwise order.
+    __forceinline    void  PathStroke(ImU32 col, bool closed, float thickness = 1.f)  { AddPolyline(_Path.Data, _Path.Size, col, closed, thickness); _Path.Size = 0; }
     IMGUI_API void  PathArcTo(const ImVec2& centre, float radius, float a_min, float a_max, int num_segments = 10);
     IMGUI_API void  PathArcToFast(const ImVec2& centre, float radius, int a_min_of_12, int a_max_of_12);                                            // Use precomputed angles for a 12 steps circle
     IMGUI_API void  PathBezierCurveTo(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, int num_segments = 0);
@@ -1891,9 +1891,9 @@ struct ImDrawList
     IMGUI_API void  PrimRect(const ImVec2& a, const ImVec2& b, ImU32 col);      // Axis aligned rectangle (composed of two triangles)
     IMGUI_API void  PrimRectUV(const ImVec2& a, const ImVec2& b, const ImVec2& uv_a, const ImVec2& uv_b, ImU32 col);
     IMGUI_API void  PrimQuadUV(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& d, const ImVec2& uv_a, const ImVec2& uv_b, const ImVec2& uv_c, const ImVec2& uv_d, ImU32 col);
-    inline    void  PrimWriteVtx(const ImVec2& pos, const ImVec2& uv, ImU32 col){ _VtxWritePtr->pos = pos; _VtxWritePtr->uv = uv; _VtxWritePtr->col = col; _VtxWritePtr++; _VtxCurrentIdx++; }
-    inline    void  PrimWriteIdx(ImDrawIdx idx)                                 { *_IdxWritePtr = idx; _IdxWritePtr++; }
-    inline    void  PrimVtx(const ImVec2& pos, const ImVec2& uv, ImU32 col)     { PrimWriteIdx((ImDrawIdx)_VtxCurrentIdx); PrimWriteVtx(pos, uv, col); }
+    __forceinline    void  PrimWriteVtx(const ImVec2& pos, const ImVec2& uv, ImU32 col){ _VtxWritePtr->pos = pos; _VtxWritePtr->uv = uv; _VtxWritePtr->col = col; _VtxWritePtr++; _VtxCurrentIdx++; }
+    __forceinline    void  PrimWriteIdx(ImDrawIdx idx)                                 { *_IdxWritePtr = idx; _IdxWritePtr++; }
+    __forceinline    void  PrimVtx(const ImVec2& pos, const ImVec2& uv, ImU32 col)     { PrimWriteIdx((ImDrawIdx)_VtxCurrentIdx); PrimWriteVtx(pos, uv, col); }
     IMGUI_API void  UpdateClipRect();
     IMGUI_API void  UpdateTextureID();
 };

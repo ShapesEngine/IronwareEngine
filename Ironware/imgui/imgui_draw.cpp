@@ -405,7 +405,7 @@ ImDrawList* ImDrawList::CloneOutput() const
     return dst;
 }
 
-// Using macros because C++ is a terrible language, we want guaranteed inline, no code in header, and no overhead in Debug builds
+// Using macros because C++ is a terrible language, we want guaranteed __forceinline, no code in header, and no overhead in Debug builds
 #define GetCurrentClipRect()    (_ClipRectStack.Size ? _ClipRectStack.Data[_ClipRectStack.Size-1]  : _Data->ClipRectFullscreen)
 #define GetCurrentTextureId()   (_TextureIdStack.Size ? _TextureIdStack.Data[_TextureIdStack.Size-1] : (ImTextureID)NULL)
 
@@ -614,7 +614,7 @@ void ImDrawList::PrimReserve(int idx_count, int vtx_count)
     _IdxWritePtr = IdxBuffer.Data + idx_buffer_old_size;
 }
 
-// Fully unrolled with inline call to keep our debug builds decently fast.
+// Fully unrolled with __forceinline call to keep our debug builds decently fast.
 void ImDrawList::PrimRect(const ImVec2& a, const ImVec2& c, ImU32 col)
 {
     ImVec2 b(c.x, a.y), d(a.x, c.y), uv(_Data->TexUvWhitePixel);
@@ -659,13 +659,13 @@ void ImDrawList::PrimQuadUV(const ImVec2& a, const ImVec2& b, const ImVec2& c, c
     _IdxWritePtr += 6;
 }
 
-// On AddPolyline() and AddConvexPolyFilled() we intentionally avoid using ImVec2 and superflous function calls to optimize debug/non-inlined builds.
+// On AddPolyline() and AddConvexPolyFilled() we intentionally avoid using ImVec2 and superflous function calls to optimize debug/non-__forceinlined builds.
 // Those macros expects l-values.
 #define IM_NORMALIZE2F_OVER_ZERO(VX,VY)                         { float d2 = VX*VX + VY*VY; if (d2 > 0.f) { float inv_len = 1.f / ImSqrt(d2); VX *= inv_len; VY *= inv_len; } }
 #define IM_NORMALIZE2F_OVER_EPSILON_CLAMP(VX,VY,EPS,INVLENMAX)  { float d2 = VX*VX + VY*VY; if (d2 > EPS)  { float inv_len = 1.f / ImSqrt(d2); if (inv_len > INVLENMAX) inv_len = INVLENMAX; VX *= inv_len; VY *= inv_len; } }
 
 // TODO: Thickness anti-aliased lines cap are missing their AA fringe.
-// We avoid using the ImVec2 math operators here to reduce cost to a minimum for debug/non-inlined builds.
+// We avoid using the ImVec2 math operators here to reduce cost to a minimum for debug/non-__forceinlined builds.
 void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32 col, bool closed, float thickness)
 {
     if (points_count < 2)
@@ -853,7 +853,7 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
     }
 }
 
-// We intentionally avoid using ImVec2 and its math operators here to reduce cost to a minimum for debug/non-inlined builds.
+// We intentionally avoid using ImVec2 and its math operators here to reduce cost to a minimum for debug/non-__forceinlined builds.
 void ImDrawList::AddConvexPolyFilled(const ImVec2* points, const int points_count, ImU32 col)
 {
     if (points_count < 3)
@@ -2905,7 +2905,7 @@ void ImFont::RenderText(ImDrawList* draw_list, float size, ImVec2 pos, ImU32 col
                         }
                     }
 
-                    // We are NOT calling PrimRectUV() here because non-inlined causes too much overhead in a debug builds. Inlined here:
+                    // We are NOT calling PrimRectUV() here because non-__forceinlined causes too much overhead in a debug builds. __forceinlined here:
                     {
                         idx_write[0] = (ImDrawIdx)(vtx_current_idx); idx_write[1] = (ImDrawIdx)(vtx_current_idx+1); idx_write[2] = (ImDrawIdx)(vtx_current_idx+2);
                         idx_write[3] = (ImDrawIdx)(vtx_current_idx); idx_write[4] = (ImDrawIdx)(vtx_current_idx+2); idx_write[5] = (ImDrawIdx)(vtx_current_idx+3);
@@ -2981,7 +2981,7 @@ void ImGui::RenderArrowPointingAt(ImDrawList* draw_list, ImVec2 pos, ImVec2 half
     }
 }
 
-static inline float ImAcos01(float x)
+static __forceinline float ImAcos01(float x)
 {
     if (x <= 0.f) return IM_PI * 0.5f;
     if (x >= 1.f) return 0.f;

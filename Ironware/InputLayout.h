@@ -23,7 +23,7 @@ public:
 				 const std::vector<D3D11_INPUT_ELEMENT_DESC>& layouts,
 				 ID3DBlob* pVertexShaderBytecode );
 
-	inline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }
+	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }
 
 protected:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;

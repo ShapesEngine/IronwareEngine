@@ -21,8 +21,8 @@ class IndexBuffer : public Bindable
 public:
 	IndexBuffer( Graphics& gfx, const std::vector<uint16_t>& indices );
 
-	inline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetIndexBuffer( pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u ); }
-	inline UINT GetCount() const noexcept { return count; }
+	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetIndexBuffer( pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u ); }
+	__forceinline UINT GetCount() const noexcept { return count; }
 
 protected:
 	UINT count;

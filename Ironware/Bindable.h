@@ -26,8 +26,8 @@ public:
 	virtual ~Bindable() = default;
 
 protected:
-	inline static ID3D11DeviceContext* GetContext( Graphics& gfx ) noexcept { return gfx.pImmediateContext.Get(); }
-	inline static ID3D11Device* GetDevice( Graphics& gfx ) noexcept { return gfx.pDevice.Get(); }
+	__forceinline static ID3D11DeviceContext* GetContext( Graphics& gfx ) noexcept { return gfx.pImmediateContext.Get(); }
+	__forceinline static ID3D11Device* GetDevice( Graphics& gfx ) noexcept { return gfx.pDevice.Get(); }
 	static DxgiInfoManager& GetInfoManager( Graphics& gfx ) noexcept( IS_DEBUG );
 };
 

@@ -22,8 +22,8 @@ class VertexShader : public Bindable
 public:
 	VertexShader( Graphics& gfx, const std::wstring& path );
 
-	inline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetShader( pVertexShader.Get(), nullptr, 0u ); }
-	inline ID3DBlob* GetBytecode() const noexcept { return pBytecodeBlob.Get(); }
+	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetShader( pVertexShader.Get(), nullptr, 0u ); }
+	__forceinline ID3DBlob* GetBytecode() const noexcept { return pBytecodeBlob.Get(); }
 
 protected:
 	Microsoft::WRL::ComPtr<ID3DBlob> pBytecodeBlob;

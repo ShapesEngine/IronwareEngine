@@ -52,7 +52,7 @@ class VertexConstantBuffer : public ConstantBuffer<C>
 
 public:
 	using ConstantBuffer<C>::ConstantBuffer;
-	inline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
+	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
 };
 
 template<typename C>

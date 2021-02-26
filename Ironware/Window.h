@@ -53,9 +53,9 @@ public:
 		 */
 		const char* what() const noexcept override;		
 
-		inline const wchar_t* GetType() const noexcept override { return L"Iron Window Exception"; }
-		inline HRESULT GetErrorCode() const noexcept { return hr; }
-		inline std::wstring GetErrorDescription() const noexcept { return Exception::TranslateErrorCode( hr ); }
+		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Window Exception"; }
+		__forceinline HRESULT GetErrorCode() const noexcept { return hr; }
+		__forceinline std::wstring GetErrorDescription() const noexcept { return Exception::TranslateErrorCode( hr ); }
 
 	private:
 		HRESULT hr;
@@ -74,7 +74,7 @@ public:
 	{
 	public:
 		using Exception::Exception;
-		inline const wchar_t* GetType() const noexcept override { return L"Iron Window [No Graphics] Exception"; }
+		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Window [No Graphics] Exception"; }
 	};
 
 private:
@@ -89,8 +89,8 @@ private:
 	class WindowClass
 	{
 	public:
-		inline static const wchar_t* GetName() noexcept { return wndClassName; }
-		inline static HINSTANCE GetInstance() noexcept { return wndClass.hInst; }
+		__forceinline static const wchar_t* GetName() noexcept { return wndClassName; }
+		__forceinline static HINSTANCE GetInstance() noexcept { return wndClass.hInst; }
 
 	private:
 		WindowClass() noexcept;
@@ -125,8 +125,8 @@ public:
 	static std::optional<int> ProcessMessages() noexcept;
 	Graphics& Gfx() const;
 
-	inline uint32_t GetWidth() const { return width; }
-	inline uint32_t GetHeight() const { return height; }
+	__forceinline uint32_t GetWidth() const { return width; }
+	__forceinline uint32_t GetHeight() const { return height; }
 
 private:
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
@@ -137,7 +137,7 @@ private:
 	 * @brief function that resets the window procedure. 
 	 * It's used to prevent various read access violation errors, mouse, keyboard, etc.
 	*/
-	inline static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
+	__forceinline static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
 
 public:
 	Keyboard kbd;

@@ -436,13 +436,13 @@ CODE
  - 2017/10/20 (1.52) - marked IsItemHoveredRect()/IsMouseHoveringWindow() as obsolete, in favor of using the newly introduced flags for IsItemHovered() and IsWindowHovered(). See https://github.com/ocornut/imgui/issues/1382 for details.
                        removed the IsItemRectHovered()/IsWindowRectHovered() names introduced in 1.51 since they were merely more consistent names for the two functions we are now obsoleting.
  - 2017/10/17 (1.52) - marked the old 5-parameters version of Begin() as obsolete (still available). Use SetNextWindowSize()+Begin() instead!
- - 2017/10/11 (1.52) - renamed AlignFirstTextHeightToWidgets() to AlignTextToFramePadding(). Kept inline redirection function (will obsolete).
+ - 2017/10/11 (1.52) - renamed AlignFirstTextHeightToWidgets() to AlignTextToFramePadding(). Kept __forceinline redirection function (will obsolete).
  - 2017/09/26 (1.52) - renamed ImFont::Glyph to ImFontGlyph. Keep redirection typedef (will obsolete).
  - 2017/09/25 (1.52) - removed SetNextWindowPosCenter() because SetNextWindowPos() now has the optional pivot information to do the same and more. Kept redirection function (will obsolete).
  - 2017/08/25 (1.52) - io.MousePos needs to be set to ImVec2(-FLT_MAX,-FLT_MAX) when mouse is unavailable/missing. Previously ImVec2(-1,-1) was enough but we now accept negative mouse coordinates. In your binding if you need to support unavailable mouse, make sure to replace "io.MousePos = ImVec2(-1,-1)" with "io.MousePos = ImVec2(-FLT_MAX,-FLT_MAX)".
- - 2017/08/22 (1.51) - renamed IsItemHoveredRect() to IsItemRectHovered(). Kept inline redirection function (will obsolete). -> (1.52) use IsItemHovered(ImGuiHoveredFlags_RectOnly)!
-                     - renamed IsMouseHoveringAnyWindow() to IsAnyWindowHovered() for consistency. Kept inline redirection function (will obsolete).
-                     - renamed IsMouseHoveringWindow() to IsWindowRectHovered() for consistency. Kept inline redirection function (will obsolete).
+ - 2017/08/22 (1.51) - renamed IsItemHoveredRect() to IsItemRectHovered(). Kept __forceinline redirection function (will obsolete). -> (1.52) use IsItemHovered(ImGuiHoveredFlags_RectOnly)!
+                     - renamed IsMouseHoveringAnyWindow() to IsAnyWindowHovered() for consistency. Kept __forceinline redirection function (will obsolete).
+                     - renamed IsMouseHoveringWindow() to IsWindowRectHovered() for consistency. Kept __forceinline redirection function (will obsolete).
  - 2017/08/20 (1.51) - renamed GetStyleColName() to GetStyleColorName() for consistency.
  - 2017/08/20 (1.51) - added PushStyleColor(ImGuiCol idx, ImU32 col) overload, which _might_ cause an "ambiguous call" compilation error if you are using ImColor() with implicit cast. Cast to ImU32 or ImVec4 explicily to fix.
  - 2017/08/15 (1.51) - marked the weird IMGUI_ONCE_UPON_A_FRAME helper macro as obsolete. prefer using the more explicit ImGuiOnceUponAFrame.
@@ -476,7 +476,7 @@ CODE
  - 2016/04/26 (1.49) - changed ImDrawList::PushClipRect(ImVec4 rect) to ImDrawList::PushClipRect(Imvec2 min,ImVec2 max,bool intersect_with_current_clip_rect=false). Note that higher-level ImGui::PushClipRect() is preferable because it will clip at logic/widget level, whereas ImDrawList::PushClipRect() only affect your renderer.
  - 2016/04/03 (1.48) - removed style.WindowFillAlphaDefault setting which was redundant. Bake default BG alpha inside style.Colors[ImGuiCol_WindowBg] and all other Bg color values. (ref github issue #337).
  - 2016/04/03 (1.48) - renamed ImGuiCol_TooltipBg to ImGuiCol_PopupBg, used by popups/menus and tooltips. popups/menus were previously using ImGuiCol_WindowBg. (ref github issue #337)
- - 2016/03/21 (1.48) - renamed GetWindowFont() to GetFont(), GetWindowFontSize() to GetFontSize(). Kept inline redirection function (will obsolete).
+ - 2016/03/21 (1.48) - renamed GetWindowFont() to GetFont(), GetWindowFontSize() to GetFontSize(). Kept __forceinline redirection function (will obsolete).
  - 2016/03/02 (1.48) - InputText() completion/history/always callbacks: if you modify the text buffer manually (without using DeleteChars()/InsertChars() helper) you need to maintain the BufTextLen field. added an assert.
  - 2016/01/23 (1.48) - fixed not honoring exact width passed to PushItemWidth(), previously it would add extra FramePadding.x*2 over that width. if you had manual pixel-perfect alignment in place it might affect you.
  - 2015/12/27 (1.48) - fixed ImDrawList::AddRect() which used to render a rectangle 1 px too large on each axis.
@@ -502,24 +502,24 @@ CODE
                      - if you REALLY cannot render indexed primitives, you can call the draw_data->DeIndexAllBuffers() method to de-index the buffers. This is slow and a waste of CPU/GPU. Prefer using indexed rendering!
                      - refer to code in the examples/ folder or ask on the GitHub if you are unsure of how to upgrade. please upgrade!
  - 2015/07/10 (1.43) - changed SameLine() parameters from int to float.
- - 2015/07/02 (1.42) - renamed SetScrollPosHere() to SetScrollFromCursorPos(). Kept inline redirection function (will obsolete).
+ - 2015/07/02 (1.42) - renamed SetScrollPosHere() to SetScrollFromCursorPos(). Kept __forceinline redirection function (will obsolete).
  - 2015/07/02 (1.42) - renamed GetScrollPosY() to GetScrollY(). Necessary to reduce confusion along with other scrolling functions, because positions (e.g. cursor position) are not equivalent to scrolling amount.
  - 2015/06/14 (1.41) - changed ImageButton() default bg_col parameter from (0,0,0,1) (black) to (0,0,0,0) (transparent) - makes a difference when texture have transparence
  - 2015/06/14 (1.41) - changed Selectable() API from (label, selected, size) to (label, selected, flags, size). Size override should have been rarely be used. Sorry!
- - 2015/05/31 (1.40) - renamed GetWindowCollapsed() to IsWindowCollapsed() for consistency. Kept inline redirection function (will obsolete).
- - 2015/05/31 (1.40) - renamed IsRectClipped() to IsRectVisible() for consistency. Note that return value is opposite! Kept inline redirection function (will obsolete).
+ - 2015/05/31 (1.40) - renamed GetWindowCollapsed() to IsWindowCollapsed() for consistency. Kept __forceinline redirection function (will obsolete).
+ - 2015/05/31 (1.40) - renamed IsRectClipped() to IsRectVisible() for consistency. Note that return value is opposite! Kept __forceinline redirection function (will obsolete).
  - 2015/05/27 (1.40) - removed the third 'repeat_if_held' parameter from Button() - sorry! it was rarely used and inconsistent. Use PushButtonRepeat(true) / PopButtonRepeat() to enable repeat on desired buttons.
  - 2015/05/11 (1.40) - changed BeginPopup() API, takes a string identifier instead of a bool. ImGui needs to manage the open/closed state of popups. Call OpenPopup() to actually set the "open" state of a popup. BeginPopup() returns true if the popup is opened.
  - 2015/05/03 (1.40) - removed style.AutoFitPadding, using style.WindowPadding makes more sense (the default values were already the same).
- - 2015/04/13 (1.38) - renamed IsClipped() to IsRectClipped(). Kept inline redirection function until 1.50.
+ - 2015/04/13 (1.38) - renamed IsClipped() to IsRectClipped(). Kept __forceinline redirection function until 1.50.
  - 2015/04/09 (1.38) - renamed ImDrawList::AddArc() to ImDrawList::AddArcFast() for compatibility with future API
  - 2015/04/03 (1.38) - removed ImGuiCol_CheckHovered, ImGuiCol_CheckActive, replaced with the more general ImGuiCol_FrameBgHovered, ImGuiCol_FrameBgActive.
  - 2014/04/03 (1.38) - removed support for passing -FLT_MAX..+FLT_MAX as the range for a SliderFloat(). Use DragFloat() or Inputfloat() instead.
- - 2015/03/17 (1.36) - renamed GetItemBoxMin()/GetItemBoxMax()/IsMouseHoveringBox() to GetItemRectMin()/GetItemRectMax()/IsMouseHoveringRect(). Kept inline redirection function until 1.50.
+ - 2015/03/17 (1.36) - renamed GetItemBoxMin()/GetItemBoxMax()/IsMouseHoveringBox() to GetItemRectMin()/GetItemRectMax()/IsMouseHoveringRect(). Kept __forceinline redirection function until 1.50.
  - 2015/03/15 (1.36) - renamed style.TreeNodeSpacing to style.IndentSpacing, ImGuiStyleVar_TreeNodeSpacing to ImGuiStyleVar_IndentSpacing
- - 2015/03/13 (1.36) - renamed GetWindowIsFocused() to IsWindowFocused(). Kept inline redirection function until 1.50.
+ - 2015/03/13 (1.36) - renamed GetWindowIsFocused() to IsWindowFocused(). Kept __forceinline redirection function until 1.50.
  - 2015/03/08 (1.35) - renamed style.ScrollBarWidth to style.ScrollbarWidth (casing)
- - 2015/02/27 (1.34) - renamed OpenNextNode(bool) to SetNextTreeNodeOpened(bool, ImGuiSetCond). Kept inline redirection function until 1.50.
+ - 2015/02/27 (1.34) - renamed OpenNextNode(bool) to SetNextTreeNodeOpened(bool, ImGuiSetCond). Kept __forceinline redirection function until 1.50.
  - 2015/02/27 (1.34) - renamed ImGuiSetCondition_*** to ImGuiSetCond_***, and _FirstUseThisSession becomes _Once.
  - 2015/02/11 (1.32) - changed text input callback ImGuiTextEditCallback return type from void-->int. reserved for future use, return 0 for now.
  - 2015/02/10 (1.32) - renamed GetItemWidth() to CalcItemWidth() to clarify its evolving behavior
@@ -1022,7 +1022,7 @@ static void             NavUpdateWindowing();
 static void             NavUpdateWindowingList();
 static void             NavUpdateMoveResult();
 static float            NavUpdatePageUpPageDown(int allowed_dir_flags);
-static inline void      NavUpdateAnyRequestFlag();
+static __forceinline void      NavUpdateAnyRequestFlag();
 static void             NavProcessItem(ImGuiWindow* window, const ImRect& nav_bb, const ImGuiID id);
 static ImVec2           NavCalcPreferredRefPos();
 static void             NavSaveLastChildNavWindow(ImGuiWindow* nav_window);
@@ -1666,7 +1666,7 @@ int ImTextCountCharsFromUtf8(const char* in_text, const char* in_text_end)
 }
 
 // Based on stb_to_utf8() from github.com/nothings/stb/
-static inline int ImTextCharToUtf8(char* buf, int buf_size, unsigned int c)
+static __forceinline int ImTextCharToUtf8(char* buf, int buf_size, unsigned int c)
 {
     if (c < 0x80)
     {
@@ -1710,7 +1710,7 @@ int ImTextCountUtf8BytesFromChar(const char* in_text, const char* in_text_end)
     return ImTextCharFromUtf8(&dummy, in_text, in_text_end);
 }
 
-static inline int ImTextCountUtf8BytesFromChar(unsigned int c)
+static __forceinline int ImTextCountUtf8BytesFromChar(unsigned int c)
 {
     if (c < 0x80) return 1;
     if (c < 0x800) return 2;
@@ -2720,7 +2720,7 @@ void ImGui::MarkItemEdited(ImGuiID id)
     g.CurrentWindow->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_Edited;
 }
 
-static inline bool IsWindowContentHoverable(ImGuiWindow* window, ImGuiHoveredFlags flags)
+static __forceinline bool IsWindowContentHoverable(ImGuiWindow* window, ImGuiHoveredFlags flags)
 {
     // An active popup disable hovering on other windows (apart from its own children)
     // FIXME-OPT: This could be cached/stored within the window.
@@ -7132,7 +7132,7 @@ ImGuiDir ImGetDirQuadrantFromDelta(float dx, float dy)
     return (dy > 0.f) ? ImGuiDir_Down : ImGuiDir_Up;
 }
 
-static float inline NavScoreItemDistInterval(float a0, float a1, float b0, float b1)
+static float __forceinline NavScoreItemDistInterval(float a0, float a1, float b0, float b1)
 {
     if (a1 < b0)
         return a1 - b0;
@@ -7141,7 +7141,7 @@ static float inline NavScoreItemDistInterval(float a0, float a1, float b0, float
     return 0.f;
 }
 
-static void inline NavClampRectToVisibleAreaForMoveDir(ImGuiDir move_dir, ImRect& r, const ImRect& clip_rect)
+static void __forceinline NavClampRectToVisibleAreaForMoveDir(ImGuiDir move_dir, ImRect& r, const ImRect& clip_rect)
 {
     if (move_dir == ImGuiDir_Left || move_dir == ImGuiDir_Right)
     {
@@ -7445,7 +7445,7 @@ static void NavRestoreLayer(ImGuiNavLayer layer)
         ImGui::NavInitWindow(g.NavWindow, true);
 }
 
-static inline void ImGui::NavUpdateAnyRequestFlag()
+static __forceinline void ImGui::NavUpdateAnyRequestFlag()
 {
     ImGuiContext& g = *GImGui;
     g.NavAnyRequest = g.NavMoveRequest || g.NavInitRequest || (IMGUI_DEBUG_NAV_SCORING && g.NavWindow != NULL);
@@ -8208,7 +8208,7 @@ static float PixelsToOffsetNorm(const ImGuiColumnsSet* columns, float offset)
     return offset / (columns->MaxX - columns->MinX);
 }
 
-static inline float GetColumnsRectHalfWidth() { return 4.f; }
+static __forceinline float GetColumnsRectHalfWidth() { return 4.f; }
 
 static float GetDraggedColumnOffset(ImGuiColumnsSet* columns, int column_index)
 {

@@ -41,9 +41,9 @@ public:
 			code( code )
 		{}
 
-		inline bool IsPress() const noexcept { return type == Type::PRESS; }
-		inline bool IsRelease() const noexcept { return type == Type::RELEASE; }
-		inline uint8_t GetCode() const noexcept { return code; }
+		__forceinline bool IsPress() const noexcept { return type == Type::PRESS; }
+		__forceinline bool IsRelease() const noexcept { return type == Type::RELEASE; }
+		__forceinline uint8_t GetCode() const noexcept { return code; }
 	};
 
 public:
@@ -52,25 +52,25 @@ public:
 	Keyboard& operator=( const Keyboard& ) = delete;
 
 	// clears key and char events
-	inline void Clear() noexcept { ClearKey(), ClearChar(); }
+	__forceinline void Clear() noexcept { ClearKey(), ClearChar(); }
 
 	/******************************* KEY EVENTS START ******************************/
 	std::optional<Event> ReadKey() noexcept;
-	inline bool KeyIsPressed( uint8_t keycode ) const noexcept { return keystates[keycode]; }
-	inline bool KeyIsEmpty() const noexcept { return keybuffer.empty(); }
-	inline void ClearKey() noexcept { std::queue<Event>().swap( keybuffer ); }
+	__forceinline bool KeyIsPressed( uint8_t keycode ) const noexcept { return keystates[keycode]; }
+	__forceinline bool KeyIsEmpty() const noexcept { return keybuffer.empty(); }
+	__forceinline void ClearKey() noexcept { std::queue<Event>().swap( keybuffer ); }
 	/******************************* KEY EVENTS END ******************************/
 
 	/******************************* CHAR EVENT START ******************************/
 	std::optional<wchar_t> ReadChar() noexcept;
-	inline bool CharIsEmpty() const noexcept { return charbuffer.empty(); }
-	inline void ClearChar() noexcept { std::queue<wchar_t>().swap( charbuffer ); }
+	__forceinline bool CharIsEmpty() const noexcept { return charbuffer.empty(); }
+	__forceinline void ClearChar() noexcept { std::queue<wchar_t>().swap( charbuffer ); }
 	/******************************* CHAR EVENT END ******************************/
 
 	/******************************* AUTOREPEAT START ******************************/
-	inline void EnableAutorepeat() noexcept { autorepeatEnabled = true; }
-	inline void DisableAutorepeat() noexcept { autorepeatEnabled = false; }
-	inline bool AutorepeatIsEnabled() const noexcept { return autorepeatEnabled; }
+	__forceinline void EnableAutorepeat() noexcept { autorepeatEnabled = true; }
+	__forceinline void DisableAutorepeat() noexcept { autorepeatEnabled = false; }
+	__forceinline bool AutorepeatIsEnabled() const noexcept { return autorepeatEnabled; }
 	/******************************* AUTOREPEAT END ******************************/
 
 private:

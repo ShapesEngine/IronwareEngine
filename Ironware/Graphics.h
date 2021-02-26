@@ -46,10 +46,10 @@ public:
 		 */
 		const char* what() const noexcept override;	
 
-		inline const wchar_t* GetType() const noexcept override { return L"Iron Graphics Exception"; }
-		inline HRESULT GetErrorCode() const noexcept { return hr; }
-		inline std::wstring GetErrorString() const noexcept { return DXGetErrorString( hr ); }
-		inline std::wstring GetErrorInfo() const noexcept { return info; }
+		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Graphics Exception"; }
+		__forceinline HRESULT GetErrorCode() const noexcept { return hr; }
+		__forceinline std::wstring GetErrorString() const noexcept { return DXGetErrorString( hr ); }
+		__forceinline std::wstring GetErrorInfo() const noexcept { return info; }
 		std::wstring GetErrorDescription() const noexcept;
 
 	private:
@@ -62,7 +62,7 @@ public:
 		using HrException::HrException;
 
 	public:
-		inline const wchar_t* GetType() const noexcept override { return L"Iron Graphics [DeviceRemoved] Exception"; }
+		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Graphics [DeviceRemoved] Exception"; }
 	};
 
 	class InfoException : public Exception
@@ -71,8 +71,8 @@ public:
 		InfoException( int line, const wchar_t* file, std::vector<std::wstring> infoMsgs = {} ) noexcept;
 
 		const char* what() const noexcept override;
-		inline const wchar_t* GetType() const noexcept override { return L"Iron Graphics [Info] Exception"; }
-		inline std::wstring GetErrorInfo() const noexcept { return info; }
+		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Graphics [Info] Exception"; }
+		__forceinline std::wstring GetErrorInfo() const noexcept { return info; }
 	private:
 		std::wstring info;
 	};
@@ -87,13 +87,13 @@ public:
 	void EndFrame();	
 	void DrawIndexed( UINT count ) noexcept( !IS_DEBUG );
 
-	inline void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
-	inline DirectX::XMMATRIX GetCamera() const noexcept { return camera; }
-	inline void SetProjection( DirectX::FXMMATRIX proj ) noexcept { projection = proj; }
-	inline DirectX::XMMATRIX GetProjection() const noexcept	{ return projection; }
-	inline void EnableImGui() noexcept { imGuiEnabled = true; }
-	inline void DisableImGui() noexcept { imGuiEnabled = false; }
-	inline bool IsImGuiEnabled() const noexcept { return imGuiEnabled; }
+	__forceinline void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
+	__forceinline DirectX::XMMATRIX GetCamera() const noexcept { return camera; }
+	__forceinline void SetProjection( DirectX::FXMMATRIX proj ) noexcept { projection = proj; }
+	__forceinline DirectX::XMMATRIX GetProjection() const noexcept	{ return projection; }
+	__forceinline void EnableImGui() noexcept { imGuiEnabled = true; }
+	__forceinline void DisableImGui() noexcept { imGuiEnabled = false; }
+	__forceinline bool IsImGuiEnabled() const noexcept { return imGuiEnabled; }
 
 private:
 	DirectX::XMMATRIX projection = {};
