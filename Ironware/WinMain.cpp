@@ -1,4 +1,12 @@
-﻿#include "App.h"
+﻿/*!
+ * \file WinMain.cpp
+ *
+ * \author Yernar Aldabergenov
+ * \date November 2020
+ *
+ * 
+ */
+#include "App.h"
 #include "IronUtils.h"
 
 int WINAPI wWinMain(
