@@ -58,13 +58,13 @@ public:
 	std::optional<Event> ReadKey() noexcept;
 	__forceinline bool KeyIsPressed( uint8_t keycode ) const noexcept { return keystates[keycode]; }
 	__forceinline bool KeyIsEmpty() const noexcept { return keybuffer.empty(); }
-	__forceinline void ClearKey() noexcept { std::queue<Event>().swap( keybuffer ); }
+	__forceinline void ClearKey() noexcept { keybuffer = std::queue<Event>(); }
 	/******************************* KEY EVENTS END ******************************/
 
 	/******************************* CHAR EVENT START ******************************/
 	std::optional<wchar_t> ReadChar() noexcept;
 	__forceinline bool CharIsEmpty() const noexcept { return charbuffer.empty(); }
-	__forceinline void ClearChar() noexcept { std::queue<wchar_t>().swap( charbuffer ); }
+	__forceinline void ClearChar() noexcept { charbuffer = std::queue<wchar_t>(); }
 	/******************************* CHAR EVENT END ******************************/
 
 	/******************************* AUTOREPEAT START ******************************/
