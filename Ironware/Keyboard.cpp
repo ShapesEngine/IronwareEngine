@@ -20,11 +20,6 @@
  */
 #include "Keyboard.h"
 
-bool Keyboard::KeyIsPressed( uint8_t keycode ) const noexcept
-{
-	return keystates[keycode];
-}
-
 std::optional<Keyboard::Event> Keyboard::ReadKey() noexcept
 {
 	if( keybuffer.size() > 0u )
@@ -34,11 +29,6 @@ std::optional<Keyboard::Event> Keyboard::ReadKey() noexcept
 		return e;
 	}
 	return {};
-}
-
-bool Keyboard::KeyIsEmpty() const noexcept
-{
-	return keybuffer.empty();
 }
 
 std::optional<wchar_t> Keyboard::ReadChar() noexcept
@@ -51,27 +41,6 @@ std::optional<wchar_t> Keyboard::ReadChar() noexcept
 	}
 
 	return {};
-}
-
-bool Keyboard::CharIsEmpty() const noexcept
-{
-	return charbuffer.empty();
-}
-
-void Keyboard::ClearKey() noexcept
-{
-	keybuffer = std::queue<Event>();
-}
-
-void Keyboard::ClearChar() noexcept
-{
-	charbuffer = std::queue<wchar_t>();
-}
-
-void Keyboard::Clear() noexcept
-{
-	ClearKey();
-	ClearChar();
 }
 
 void Keyboard::OnKeyPressed( uint8_t keycode ) noexcept

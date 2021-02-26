@@ -52,19 +52,19 @@ public:
 	Keyboard& operator=( const Keyboard& ) = delete;
 
 	// clears key and char events
-	void Clear() noexcept;
+	inline void Clear() noexcept { ClearKey(), ClearChar(); }
 
 	/******************************* KEY EVENTS START ******************************/
-	bool KeyIsPressed( uint8_t keycode ) const noexcept;
 	std::optional<Event> ReadKey() noexcept;
-	bool KeyIsEmpty() const noexcept;
-	void ClearKey() noexcept;
+	inline bool KeyIsPressed( uint8_t keycode ) const noexcept { return keystates[keycode]; }
+	inline bool KeyIsEmpty() const noexcept { return keybuffer.empty(); }
+	inline void ClearKey() noexcept { std::queue<Event>().swap( keybuffer ); }
 	/******************************* KEY EVENTS END ******************************/
-	
+
 	/******************************* CHAR EVENT START ******************************/
 	std::optional<wchar_t> ReadChar() noexcept;
-	bool CharIsEmpty() const noexcept;
-	void ClearChar() noexcept;	
+	inline bool CharIsEmpty() const noexcept { return charbuffer.empty(); }
+	inline void ClearChar() noexcept { std::queue<wchar_t>().swap( charbuffer ); }
 	/******************************* CHAR EVENT END ******************************/
 
 	/******************************* AUTOREPEAT START ******************************/
