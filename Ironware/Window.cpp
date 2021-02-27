@@ -264,7 +264,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		// not in client -> log move / maintain capture if button down
 		else
 		{
-			if( wParam & ( MK_LBUTTON | MK_RBUTTON ) )
+			if( mouse.LeftIsPressed() || mouse.RightIsPressed() )
 			{
 				mouse.OnMouseMove( pt.x, pt.y );
 			}
