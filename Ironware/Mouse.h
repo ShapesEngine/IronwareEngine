@@ -118,6 +118,12 @@ public:
 		*/
 		__forceinline bool MiddleIsPressed() const noexcept { return rightIsPressed; }
 
+		/**
+		* @brief A function that checks if any buttons(left, middle, right) were pressed at the time the event was triggered
+		* @return A boolean value
+		*/
+		__forceinline bool AnyButtonIsPressed() const noexcept { return LeftIsPressed() || RightIsPressed() || MiddleIsPressed(); }
+
 	private:
 		Type type;
 		bool leftIsPressed = false;
@@ -171,6 +177,12 @@ public:
 	* @return A boolean value
 	*/
 	__forceinline bool MiddleIsPressed() const noexcept { return middleIsPressed; }
+
+	/**
+	* @brief A function that checks if any buttons(left, middle, right) are being pressed
+	* @return A boolean value
+	*/
+	__forceinline bool AnyButtonIsPressed() const noexcept { return LeftIsPressed() || RightIsPressed() || MiddleIsPressed(); }
 
 	/**
 	* @brief A function that checks if the mouse is being inactive
