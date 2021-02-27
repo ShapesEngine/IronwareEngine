@@ -61,7 +61,6 @@ Window::Window( int width_in, int height_in, const wchar_t* name ) :
 	width( width_in ),
 	height( height_in )
 {
-	throw IRWND_EXCEPT( 0x153 );
 	// =======================================================================
 	// calculate window size based on desired client region size
 	// -----------------------------------------------------------------------
