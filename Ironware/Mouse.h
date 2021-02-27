@@ -20,6 +20,15 @@ class Mouse
 {
 	friend class Window;
 public:
+	/*!
+	 * \class Event
+	 *
+	 * \brief A class that holds mouse event info at the
+	 * * time the event has been triggered. 
+	 *
+	 * \author Yernar Aldabergenov
+	 * \date February 2021
+	 */
 	class Event
 	{
 	public:
@@ -36,16 +45,9 @@ public:
 			LEAVE,
 		};
 
-	private:
-		Type type;
-		bool leftIsPressed = false;
-		bool rightIsPressed = false;
-		int x = 0;
-		int y = 0;
-
 	public:
 		Event() noexcept = default;
-		Event( Type type, const Mouse& parent ) noexcept :
+		Event( Type type, const Mouse & parent ) noexcept :
 			type( type ),
 			leftIsPressed( parent.leftIsPressed ),
 			rightIsPressed( parent.rightIsPressed ),
@@ -54,11 +56,22 @@ public:
 		{}
 
 		__forceinline Type GetType() const noexcept { return type; }
+		/**
+		 * @brief a function that returns mouse position at the time the event was triggered
+		 * @return pair of { x, y } coordinates of the mouse 
+		*/
 		__forceinline std::pair<int, int> GetPos() const noexcept { return{ x, y }; }
 		__forceinline int GetPosX() const noexcept { return x; }
 		__forceinline int GetPosY() const noexcept { return y; }
 		__forceinline bool LeftIsPressed() const noexcept { return leftIsPressed; }
 		__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
+
+	private:
+		Type type;
+		bool leftIsPressed = false;
+		bool rightIsPressed = false;
+		int x = 0;
+		int y = 0;	
 	};
 
 public:
@@ -69,6 +82,10 @@ public:
 	std::optional<Event> Read() noexcept;
 
 	__forceinline bool IsInWindow() const noexcept { return isInWindow; }
+	/**
+	 * @brief a function that returns current mouse position
+	 * @return pair of { x, y } coordinates of the mouse
+	*/
 	__forceinline std::pair<int, int> GetPos() const noexcept { return { x, y }; }
 	__forceinline int GetPosX() const noexcept { return x; }
 	__forceinline int GetPosY() const noexcept { return y; }
@@ -100,4 +117,3 @@ private:
 	bool isInWindow = false;
 	std::queue<Event> buffer;
 };
-

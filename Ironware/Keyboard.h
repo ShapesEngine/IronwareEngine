@@ -31,10 +31,6 @@ public:
 			RELEASE,
 		};
 
-	private:
-		Type type;
-		uint8_t code = 0u;
-
 	public:
 		Event( Type type, uint8_t code ) noexcept :
 			type( type ),
@@ -44,6 +40,10 @@ public:
 		__forceinline bool IsPress() const noexcept { return type == Type::PRESS; }
 		__forceinline bool IsRelease() const noexcept { return type == Type::RELEASE; }
 		__forceinline uint8_t GetCode() const noexcept { return code; }
+
+	private:
+		Type type;
+		uint8_t code = 0u;	
 	};
 
 public:
