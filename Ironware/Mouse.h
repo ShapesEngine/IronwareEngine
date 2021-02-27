@@ -60,6 +60,8 @@ public:
 			LRELEASE,
 			RPRESS,
 			RRELEASE,
+			MPRESS,
+			MRELEASE,
 			WHEELUP,
 			WHEELDOWN,
 			MOVE,
@@ -73,6 +75,7 @@ public:
 			type( type ),
 			leftIsPressed( parent.leftIsPressed ),
 			rightIsPressed( parent.rightIsPressed ),
+			middleIsPressed( parent.middleIsPressed ),
 			x( parent.x ),
 			y( parent.y )
 		{}
@@ -109,10 +112,17 @@ public:
 		*/
 		__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
 
+		/**
+		 * @brief A function that return mouse middle button press state at the time the event was triggered
+		 * @return A boolean value
+		*/
+		__forceinline bool MiddleIsPressed() const noexcept { return rightIsPressed; }
+
 	private:
 		Type type;
 		bool leftIsPressed = false;
 		bool rightIsPressed = false;
+		bool middleIsPressed = false;
 		int x = 0;
 		int y = 0;
 	};
@@ -157,6 +167,12 @@ public:
 	__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
 
 	/**
+	* @brief A function that checks if the middle mouse button is being pressed
+	* @return A boolean value
+	*/
+	__forceinline bool MiddleIsPressed() const noexcept { return middleIsPressed; }
+
+	/**
 	* @brief A function that checks if the mouse is being inactive
 	* @return A boolean value
 	*/
@@ -175,6 +191,8 @@ private:
 	void OnLeftReleased( int x, int y ) noexcept;
 	void OnRightPressed( int x, int y ) noexcept;
 	void OnRightReleased( int x, int y ) noexcept;
+	void OnMiddlePressed( int x, int y ) noexcept;
+	void OnMiddleReleased( int x, int y ) noexcept;
 	void OnWheelUp( int x, int y ) noexcept;
 	void OnWheelDown( int x, int y ) noexcept;
 	void OnWheelDelta( int x, int y, int delta ) noexcept;
@@ -187,6 +205,7 @@ private:
 	int wheelDeltaCarry = 0;
 	bool leftIsPressed = false;
 	bool rightIsPressed = false;
+	bool middleIsPressed = false;
 	bool isInWindow = false;
 	std::queue<Event> buffer;
 };

@@ -88,10 +88,11 @@ int App::Begin()
 		if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
 			PostQuitMessage( 0 );
 
-		// process all messages pending, but to not block for new messages
+		// process all messages pending
+		// if return optional has value, it means we're quitting
 		if( const auto ecode = Window::ProcessMessages() )
 		{
-			// if return optional has value, means we're quitting so return exit code
+			// returns exit code
 			return *ecode;
 		}
 		SetupFrame();

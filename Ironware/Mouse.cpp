@@ -76,6 +76,22 @@ void Mouse::OnRightReleased( int x, int y ) noexcept
 	TrimBuffer();
 }
 
+void Mouse::OnMiddlePressed( int x, int y ) noexcept
+{
+	middleIsPressed = true;
+
+	buffer.push( Mouse::Event( Mouse::Event::Type::MPRESS, *this ) );
+	TrimBuffer();
+}
+
+void Mouse::OnMiddleReleased( int x, int y ) noexcept
+{
+	middleIsPressed = false;
+
+	buffer.push( Mouse::Event( Mouse::Event::Type::MRELEASE, *this ) );
+	TrimBuffer();
+}
+
 void Mouse::OnWheelUp( int x, int y ) noexcept
 {
 	buffer.push( Mouse::Event( Mouse::Event::Type::WHEELUP, *this ) );

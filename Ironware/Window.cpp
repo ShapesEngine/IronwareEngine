@@ -39,14 +39,14 @@ Window::WindowClass::WindowClass() noexcept :
 	wc.cbWndExtra = 0;
 	wc.hInstance = GetInstance();
 	wc.hIcon = static_cast<HICON>( LoadImage( GetInstance(), MAKEINTRESOURCE( IDI_ICON1 ),
-											  IMAGE_ICON, 32, 32, 0 ) );
+		IMAGE_ICON, 32, 32, 0 ) );
 	wc.hCursor = nullptr;
 	wc.hbrBackground = nullptr;
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = GetName();
 	// TODO: make small new icon with 16x16 dimensions
 	wc.hIconSm = static_cast<HICON>( LoadImage( GetInstance(), MAKEINTRESOURCE( IDI_ICON1 ),
-												IMAGE_ICON, 32, 32, 0 ) );
+		IMAGE_ICON, 32, 32, 0 ) );
 	RegisterClassEx( &wc );
 }
 
@@ -264,7 +264,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		// not in client -> log move / maintain capture if button down
 		else
 		{
-			if( mouse.LeftIsPressed() || mouse.RightIsPressed() )
+			if( mouse.LeftIsPressed() || mouse.RightIsPressed() || mouse.MiddleIsPressed() )
 			{
 				mouse.OnMouseMove( pt.x, pt.y );
 			}
@@ -310,6 +310,17 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		mouse.OnLeftReleased( pt.x, pt.y );
 		break;
 	}
+	case WM_MBUTTONDOWN:
+	{
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnMiddlePressed( pt.x, pt.y );
+		break;
+	}	
 	case WM_RBUTTONUP:
 	{
 		// stifle other keyboard messages if imgui wants to get full keyboard control
@@ -319,6 +330,17 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		}
 		const POINTS pt = MAKEPOINTS( lParam );
 		mouse.OnRightReleased( pt.x, pt.y );
+		break;
+	}
+	case WM_MBUTTONUP:
+	{
+		// stifle other keyboard messages if imgui wants to get full keyboard control
+		if( imGuiKbdCapture )
+		{
+			break;
+		}
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnMiddleReleased( pt.x, pt.y );
 		break;
 	}
 	case WM_MOUSEWHEEL:
