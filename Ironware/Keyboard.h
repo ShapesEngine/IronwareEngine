@@ -5,12 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class that is responsible for controlling keyboard input
+ * \brief Contains Keyboard class
  *
  * TODO:
  *
- * \note Contains Event class inside and Window is friend class
- * * as we will need to access this class' member private functions from Window
+ * \note
 */
 #pragma once
 
@@ -18,8 +17,18 @@
 #include <bitset>
 #include <optional>
 
+/*!
+ * \class Keyboard
+ *
+ * \brief A class that is responsible for controlling keyboard input
+ *
+ * \author Yernar Aldabergenov
+ * \date February 2021
+ */
 class Keyboard
 {
+	// Mouse gives access to its private members & function
+	// as all the message will come from window side
 	friend class Window;
 public:
 	class Event
@@ -43,7 +52,7 @@ public:
 
 	private:
 		Type type;
-		uint8_t code = 0u;	
+		uint8_t code = 0u;
 	};
 
 public:
@@ -51,7 +60,9 @@ public:
 	Keyboard( const Keyboard& ) = delete;
 	Keyboard& operator=( const Keyboard& ) = delete;
 
-	// clears key and char events
+	/**
+	 * @brief Clears key and char events
+	*/
 	__forceinline void Clear() noexcept { ClearKey(), ClearChar(); }
 
 	/******************************* KEY EVENTS START ******************************/
@@ -77,7 +88,17 @@ private:
 	void OnKeyPressed( uint8_t keycode ) noexcept;
 	void OnKeyReleased( uint8_t keycode ) noexcept;
 	void OnChar( wchar_t character ) noexcept;
-	void ClearState() noexcept;
+
+	/**
+	 * @brief A function that resets keystates
+	*/
+	__forceinline void ClearState() noexcept { keystates.reset(); }
+
+	/**
+	 * @brief Keeps the buffer's size less than specified MAXBUFFERSIZE
+	 * @tparam T queue's template type
+	 * @param buffer templated queue that will be trimmed
+	*/
 	template<typename T>
 	static void TrimBuffer( std::queue<T>& buffer ) noexcept;
 

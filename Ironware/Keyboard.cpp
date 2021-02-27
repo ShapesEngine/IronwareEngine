@@ -1,22 +1,10 @@
 /*!
- * \class Keyboard
- *
- * \ingroup DEV
- *
- * \brief A class that is responsible for controlling keyboard input
- *
- * TODO:
- *
- * \note 
+ * \file Keyboard.cpp
  *
  * \author Yernar Aldabergenov
+ * \date February 2021
  *
- * \version 1.0
- *
- * \date November 2020
- *
- * Contact: yernar.aa@gmail.com
- *
+ * 
  */
 #include "Keyboard.h"
 
@@ -61,11 +49,6 @@ void Keyboard::OnChar( wchar_t character ) noexcept
 {
 	charbuffer.push( character );
 	TrimBuffer( charbuffer );
-}
-
-void Keyboard::ClearState() noexcept
-{
-	keystates.reset();
 }
 
 template<typename T>

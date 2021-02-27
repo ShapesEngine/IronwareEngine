@@ -1,22 +1,10 @@
 /*!
- * \class Mouse
- *
- * \ingroup DEV
- *
- * \brief A class that is responsible for controlling mouse input
- *
- * TODO:
- *
- * \note
+ * \file Mouse.cpp
  *
  * \author Yernar Aldabergenov
- *
- * \version 1.0
- *
  * \date November 2020
  *
- * Contact: yernar.aa@gmail.com
- *
+ * 
  */
 
 #include "Mouse.h"

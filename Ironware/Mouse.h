@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class that is responsible for controlling mouse input
+ * \brief Contains mouse class
  *
  * TODO:
  *
@@ -16,15 +16,37 @@
 #include <queue>
 #include <optional>
 
+/*!
+ * \class Mouse
+ *
+ * \ingroup DEV
+ *
+ * \brief A class that is responsible for controlling mouse input
+ *
+ * TODO:
+ *
+ * \note
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \version 1.0
+ *
+ * \date November 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class Mouse
 {
+	// Mouse gives access to its private members & function
+	// as all the message will come from window side
 	friend class Window;
 public:
 	/*!
 	 * \class Event
 	 *
 	 * \brief A class that holds mouse event info at the
-	 * * time the event has been triggered. 
+	 * * time the event has been triggered.
 	 *
 	 * \author Yernar Aldabergenov
 	 * \date February 2021
@@ -47,7 +69,7 @@ public:
 
 	public:
 		Event() noexcept = default;
-		Event( Type type, const Mouse & parent ) noexcept :
+		Event( Type type, const Mouse& parent ) noexcept :
 			type( type ),
 			leftIsPressed( parent.leftIsPressed ),
 			rightIsPressed( parent.rightIsPressed ),
@@ -56,14 +78,35 @@ public:
 		{}
 
 		__forceinline Type GetType() const noexcept { return type; }
+
 		/**
-		 * @brief a function that returns mouse position at the time the event was triggered
-		 * @return pair of { x, y } coordinates of the mouse 
+		 * @brief A function that returns mouse position at the time the event was triggered
+		 * @return Pair of { x, y } coordinates of the mouse
 		*/
 		__forceinline std::pair<int, int> GetPos() const noexcept { return{ x, y }; }
+
+		/**
+		 * @brief A function that returns mouse X position at the time the event was triggered
+		 * @return X coordinate of the mouse
+		*/
 		__forceinline int GetPosX() const noexcept { return x; }
+
+		/**
+		 * @brief A function that returns mouse Y position at the time the event was triggered
+		 * @return Y coordinate of the mouse
+		*/
 		__forceinline int GetPosY() const noexcept { return y; }
+
+		/**
+		 * @brief A function that return mouse left button press state at the time the event was triggered
+		 * @return A boolean value
+		*/
 		__forceinline bool LeftIsPressed() const noexcept { return leftIsPressed; }
+
+		/**
+		 * @brief A function that return mouse right button press state at the time the event was triggered
+		 * @return A boolean value
+		*/
 		__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
 
 	private:
@@ -71,7 +114,7 @@ public:
 		bool leftIsPressed = false;
 		bool rightIsPressed = false;
 		int x = 0;
-		int y = 0;	
+		int y = 0;
 	};
 
 public:
@@ -82,16 +125,46 @@ public:
 	std::optional<Event> Read() noexcept;
 
 	__forceinline bool IsInWindow() const noexcept { return isInWindow; }
+
 	/**
-	 * @brief a function that returns current mouse position
-	 * @return pair of { x, y } coordinates of the mouse
+	 * @brief A function that returns current mouse position
+	 * @return Pair of { x, y } coordinates of the mouse
 	*/
 	__forceinline std::pair<int, int> GetPos() const noexcept { return { x, y }; }
+
+	/**
+	* @brief A function that returns the current mouse X position
+	* @return X coordinate of the mouse
+	*/
 	__forceinline int GetPosX() const noexcept { return x; }
+
+	/**
+	* @brief A function that returns the current mouse Y position
+	* @return Y coordinate of the mouse
+	*/
 	__forceinline int GetPosY() const noexcept { return y; }
+
+	/**
+	* @brief A function that checks if the left mouse button is being pressed
+	* @return A boolean value
+	*/
 	__forceinline bool LeftIsPressed() const noexcept { return leftIsPressed; }
+
+	/**
+	* @brief A function that checks if the right mouse button is being pressed
+	* @return A boolean value
+	*/
 	__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
+
+	/**
+	* @brief A function that checks if the mouse is being inactive
+	* @return A boolean value
+	*/
 	__forceinline bool IsEmpty() const noexcept { return buffer.empty(); }
+
+	/**
+	 * @brief A function that resets the buffer
+	*/
 	__forceinline void Clear() noexcept { buffer = std::queue<Event>(); }
 
 private:
