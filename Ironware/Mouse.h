@@ -73,7 +73,7 @@ public:
 	__forceinline int GetPosX() const noexcept { return x; }
 	__forceinline int GetPosY() const noexcept { return y; }
 	__forceinline bool LeftIsPressed() const noexcept { return leftIsPressed; }
-	__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }	
+	__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
 	__forceinline bool IsEmpty() const noexcept { return buffer.empty(); }
 	__forceinline void Clear() noexcept { buffer = std::queue<Event>(); }
 
@@ -87,7 +87,7 @@ private:
 	void OnRightReleased( int x, int y ) noexcept;
 	void OnWheelUp( int x, int y ) noexcept;
 	void OnWheelDown( int x, int y ) noexcept;
-	void OnWheelDelta( int x,int y,int delta ) noexcept;
+	void OnWheelDelta( int x, int y, int delta ) noexcept;
 	void TrimBuffer() noexcept;
 
 private:

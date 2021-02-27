@@ -7,7 +7,7 @@
  *
  * TODO:
  *
- * \note 
+ * \note
  *
  * \author Yernar Aldabergenov
  *

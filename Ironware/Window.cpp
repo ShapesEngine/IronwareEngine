@@ -216,7 +216,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 			break;
 		}
 		// filter autorepeat		
-		if( !( lParam & 0x40000000 ) || kbd.AutorepeatIsEnabled() ) // 30 bits hold the KEYDOWN message for repeating keys
+		if( !( lParam & 0x40000000 ) || kbd.AutorepeatIsEnabled() ) // 30 bits holds the previous key state
 		{
 			kbd.OnKeyPressed( static_cast<uint8_t>( wParam ) );
 		}
