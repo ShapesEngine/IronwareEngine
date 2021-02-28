@@ -35,11 +35,11 @@ private:
 private:
 	ImguiManager imgui;
 	Camera camera;
-	Window wnd;	
-	PointLight pointLight;	
+	Window wnd;
+	PointLight pointLight;
 	IronTimer timer;
 	std::vector<std::unique_ptr<class Drawable>> drawables;
-	float simulation_speed_factor = 1.f;
+	float simulationSpeedFactor = 1.f;
 	bool isSimulationRunning = true;
 	static constexpr size_t MAX_NDRAWABLES = 180;
 };

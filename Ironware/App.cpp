@@ -7,7 +7,7 @@
  *
  * TODO:
  *
- * \note 
+ * \note
  *
  * \author Yernar Aldabergenov
  *
@@ -37,7 +37,7 @@ GDIPlusManager gdiplm;
 App::App() :
 	wnd( 1024, 768, L"Ironware" ),
 	pointLight( wnd.Gfx() )
-{	
+{
 	class Factory
 	{
 	public:
@@ -55,13 +55,13 @@ App::App() :
 					);
 			case 1:
 				return std::make_unique<Cylinder>(
-					gfx, rng, adist, ddist, 
+					gfx, rng, adist, ddist,
 					odist, rdist, bdist, tdist
 					);
 			default:
 				assert( false && "impossible drawable option in factory" );
 				return {};
-			}		
+			}
 		}
 	private:
 		Graphics& gfx;
@@ -101,7 +101,7 @@ int App::Begin()
 
 void App::SetupFrame()
 {
-	const auto dt = timer.Mark() * simulation_speed_factor;
+	const auto dt = timer.Mark() * simulationSpeedFactor;
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 	// move away by 20.f from origin
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
@@ -118,19 +118,28 @@ void App::SetupFrame()
 	if( ImGui::Begin( "Simulation Speed" ) )
 	{
 		std::ostringstream simulationStatusText;
-		simulationStatusText << "Simulation State: " << ( isSimulationRunning ? "Running." : "Stopped." ) <<  "\nYou can press Space Bar to Stop!";
+		simulationStatusText << "Simulation State: " << ( isSimulationRunning ? "Running." : "Stopped." ) << "\nYou can press Space Bar to Stop!";
 		const float frame_rate = ImGui::GetIO().Framerate;
-		ImGui::SliderFloat( "Speed Factor", &simulation_speed_factor, 0.f, 5.f, "%.4f", 3.2f );
+		ImGui::SliderFloat( "Speed Factor", &simulationSpeedFactor, 0.f, 5.f, "%.4f", 3.2f );
 		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
 		ImGui::Text( simulationStatusText.str().c_str() );
 	}
+	
 	// toggling simulation
-	auto k = wnd.kbd.ReadKey();
-	if( simulation_speed_factor == 0.f || ( k.has_value() && k->IsPress() && k->GetCode() == VK_SPACE ) )
+	if( !wnd.kbd.KeyIsEmpty() )
 	{
-		isSimulationRunning = !isSimulationRunning;
+		const auto k = wnd.kbd.ReadKey();
+		if( ( k->IsPress() && k->GetCode() == VK_SPACE ) )
+		{
+			isSimulationRunning = !isSimulationRunning;
+		}
 	}
-		
+
+	if( simulationSpeedFactor == 0.f )
+	{
+		isSimulationRunning = false;
+	}
+
 	ImGui::End();
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
