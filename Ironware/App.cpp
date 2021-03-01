@@ -81,13 +81,10 @@ App::App() :
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
 }
 
-int App::Begin()
+int App::BeginFrame()
 {
 	while( true )
 	{
-		if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
-			PostQuitMessage( 0 );
-
 		// process all messages pending
 		// if return optional has value, it means we're quitting
 		if( const auto ecode = Window::ProcessMessages() )
@@ -95,12 +92,15 @@ int App::Begin()
 			// returns exit code
 			return *ecode;
 		}
-		SetupFrame();
+		DoFrame();
 	}
 }
 
-void App::SetupFrame()
+void App::DoFrame()
 {
+	if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
+		PostQuitMessage( 0 );
+
 	const auto dt = timer.Mark() * simulationSpeedFactor;
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 	// move away by 20.f from origin
@@ -124,7 +124,7 @@ void App::SetupFrame()
 		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
 		ImGui::Text( simulationStatusText.str().c_str() );
 	}
-	
+
 	// toggling simulation
 	if( !wnd.kbd.KeyIsEmpty() )
 	{

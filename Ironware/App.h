@@ -26,14 +26,20 @@ class App
 public:
 	App();
 
-	// master frame / message loop
-	int Begin();
+	/**
+	 * @brief Starts application frame. Processes window messages 
+	 * @return Integer exit code
+	*/
+	int BeginFrame();
 
 private:
-	void SetupFrame();
+	/**
+	 * @brief Processes main application frame
+	*/
+	void DoFrame();
 
 private:
-	ImguiManager imgui;
+	ImguiManager imguim;
 	Camera camera;
 	Window wnd;
 	PointLight pointLight;

@@ -118,9 +118,11 @@ public:
 	 * @param uType Type of the message box, ex. error, info, etc.
 	*/
 	static void ShowMessageBox( HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType );
+
 	/**
-	 * @brief 
-	 * @return 
+	 * @brief Processes Messages for all windows
+	 * @return optional int value that is valid only when there was a quit message
+	 * * in other situations the value is invalid
 	*/
 	static std::optional<int> ProcessMessages() noexcept;
 	Graphics& Gfx() const;
@@ -135,7 +137,7 @@ private:
 
 	/**
 	 * @brief function that resets the window procedure. 
-	 * It's used to prevent various read access violation errors, mouse, keyboard, etc.
+	 * * It's used to prevent various read access violation errors, mouse, keyboard, etc.
 	*/
 	__forceinline static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
 

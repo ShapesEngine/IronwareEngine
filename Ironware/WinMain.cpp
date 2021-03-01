@@ -18,7 +18,7 @@ int WINAPI wWinMain(
 {
 	try
 	{
-		return App{}.Begin();
+		return App{}.BeginFrame();
 	}
 	catch( const std::exception& e )
 	{
