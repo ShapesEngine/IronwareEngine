@@ -2,7 +2,7 @@
  * \file Mouse.cpp
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  *
  * 
  */

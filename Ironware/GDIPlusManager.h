@@ -1,6 +1,6 @@
 /*!
  * \file GDIPlusManager.h
- * \date 2020/12/03 11:20
+ * \date 2020/11/03 11:20
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com

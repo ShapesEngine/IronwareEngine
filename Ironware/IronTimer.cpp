@@ -4,7 +4,7 @@
  * \brief A timer class that is responsible for timer events
  *
  * \author Yernar Aldabergenov
- * \date December 2020
+ * \date November 2020
  */
 #include "IronTimer.h"
 

@@ -1,6 +1,6 @@
 /*!
  * \file App.h
- * \date 2020/11/14 13:02
+ * \date 2020/09/14 13:02
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com

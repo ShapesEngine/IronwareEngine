@@ -4,7 +4,7 @@
  * \brief 
  *
  * \author Yernar Aldabergenov
- * \date December 2020
+ * \date November 2020
  */
 #pragma once
 

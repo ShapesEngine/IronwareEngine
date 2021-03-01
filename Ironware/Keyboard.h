@@ -1,6 +1,6 @@
 /*!
  * \file Keyboard.h
- * \date 2020/11/12 18:30
+ * \date 2020/09/12 18:30
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
@@ -23,7 +23,7 @@
  * \brief A class that is responsible for controlling keyboard input
  *
  * \author Yernar Aldabergenov
- * \date February 2021
+ * \date September 2020
  */
 class Keyboard
 {

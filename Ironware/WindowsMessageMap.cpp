@@ -4,7 +4,7 @@
  * \brief An utility class that can be helpful to represent windows message
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  */
 
 #include "WindowsMessageMap.h"

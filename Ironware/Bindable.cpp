@@ -5,7 +5,7 @@
  * * All the child classes will get bound with the Bind function.
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  */
 #include "Bindable.h"
 #ifdef NDEBUG

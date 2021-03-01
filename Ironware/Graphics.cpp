@@ -13,7 +13,7 @@
  *
  * \version 1.0
  *
- * \date November 2020
+ * \date September 2020
  *
  * Contact: yernar.aa@gmail.com
  *
@@ -48,7 +48,7 @@ Graphics::Graphics( HWND hWnd )
 	descSwapChain.SampleDesc.Count = 1;
 	descSwapChain.SampleDesc.Quality = 0;
 	descSwapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	// back buffer count
+	// 1 back & 1 front buffers => double buffering
 	descSwapChain.BufferCount = 1;
 	descSwapChain.OutputWindow = hWnd;
 	descSwapChain.Windowed = TRUE;

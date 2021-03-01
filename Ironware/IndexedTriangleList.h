@@ -1,6 +1,6 @@
 /*!
  * \file IndexedTriangleList.h
- * \date 2020/11/25 21:15
+ * \date 2020/09/25 21:15
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com

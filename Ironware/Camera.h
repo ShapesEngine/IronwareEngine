@@ -1,6 +1,6 @@
 /*!
  * \file Camera.h
- * \date 2020/12/09 7:03
+ * \date 2020/11/09 7:03
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com

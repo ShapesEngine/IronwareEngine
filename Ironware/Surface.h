@@ -1,6 +1,6 @@
 /*!
  * \file Surface.h
- * \date 2020/12/03 11:31
+ * \date 2020/11/03 11:31
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
@@ -31,7 +31,7 @@ public:
 	 * \brief A class to represent the color data
 	 *
 	 * \author Yernar Aldabergenov
-	 * \date December 2020
+	 * \date November 2020
 	 */
 	class Color
 	{

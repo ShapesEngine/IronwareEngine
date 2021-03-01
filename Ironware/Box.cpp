@@ -4,7 +4,7 @@
  * \brief A Box child class will control(partly) the graphics pipeline and draw the box
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  */
 #include "Box.h"
 #include "BindableBase.h"

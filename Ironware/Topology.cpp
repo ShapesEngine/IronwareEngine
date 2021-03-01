@@ -4,7 +4,7 @@
  * \brief A Topology wrapper child class that will be bound in process of graphics pipeline.
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  */
 #include "Topology.h"
 

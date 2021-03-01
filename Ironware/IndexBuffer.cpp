@@ -5,7 +5,7 @@
  * * and store vertex indices in it.
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  */
 #include "IndexBuffer.h"
 #include "GraphicsExceptionMacros.h"

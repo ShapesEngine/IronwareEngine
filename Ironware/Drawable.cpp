@@ -15,7 +15,7 @@
  *
  * \version 1.0
  *
- * \date November 2020
+ * \date September 2020
  *
  * Contact: yernar.aa@gmail.com
  *

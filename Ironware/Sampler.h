@@ -1,6 +1,6 @@
 /*!
  * \file Sampler.h
- * \date 2020/12/06 14:20
+ * \date 2020/11/06 14:20
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com

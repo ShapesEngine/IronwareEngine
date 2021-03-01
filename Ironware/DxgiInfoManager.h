@@ -1,6 +1,6 @@
 /*!
  * \file DxgiInfoManager.h
- * \date 2020/11/16 4:38
+ * \date 2020/09/16 4:38
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com

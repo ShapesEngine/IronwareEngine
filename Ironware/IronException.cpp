@@ -4,7 +4,7 @@
  * \brief class for handling different kinds of exceptions
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  */
 
 #include "IronException.h"

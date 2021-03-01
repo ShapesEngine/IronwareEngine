@@ -1,6 +1,6 @@
 /*!
  * \file Window.h
- * \date 2020/11/11 16:30
+ * \date 2020/09/11 16:30
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
@@ -10,7 +10,6 @@
  *
  * \note
 */
-
 #pragma once
 
 #include "IronWin.h"
@@ -31,7 +30,7 @@ public:
 	 * \brief class to handle window exceptions
 	 *
 	 * \author Yernar Aldabergenov
-	 * \date November 2020
+	 * \date September 2020
 	 */
 	class Exception : public IronException
 	{
@@ -68,7 +67,7 @@ public:
 	 *
 	 *
 	 * \author Yernar Aldabergenov
-	 * \date November 2020
+	 * \date September 2020
 	 */
 	class NoGfxException : public Exception
 	{
@@ -84,7 +83,7 @@ private:
 	 * \brief A singleton class that's needed for WINAPI classes(Registering and Unregistering)
 	 *
 	 * \author Yernar Aldabergenov
-	 * \date November 2020
+	 * \date September 2020
 	 */
 	class WindowClass
 	{

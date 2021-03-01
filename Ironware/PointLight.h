@@ -1,6 +1,6 @@
 /*!
  * \file PointLight.h
- * \date 2020/12/11 5:09
+ * \date 2020/11/11 5:09
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com

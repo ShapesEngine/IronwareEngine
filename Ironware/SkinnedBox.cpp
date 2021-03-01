@@ -4,7 +4,7 @@
  * \brief A SkinnedBox child class will control(partly) the graphics pipeline and draw the skinned box
  *
  * \author Yernar Aldabergenov
- * \date December 2020
+ * \date November 2020
  */
 #include "SkinnedBox.h"
 #include "BindableBase.h"

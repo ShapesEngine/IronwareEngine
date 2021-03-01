@@ -4,7 +4,7 @@
  * \brief A class that represents point light that can be set into the scene
  *
  * \author Yernar Aldabergenov
- * \date December 2020
+ * \date November 2020
  */
 #include "PointLight.h"
 #include "imgui/imgui.h"

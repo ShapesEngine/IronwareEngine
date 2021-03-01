@@ -1,6 +1,6 @@
 /*!
  * \file Mouse.h
- * \date 2020/11/14 7:35
+ * \date 2020/09/14 7:35
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
@@ -31,7 +31,7 @@
  *
  * \version 1.0
  *
- * \date November 2020
+ * \date September 2020
  *
  * Contact: yernar.aa@gmail.com
  *

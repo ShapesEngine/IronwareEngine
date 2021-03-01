@@ -4,7 +4,7 @@
  * \brief A camera class that is responsible for controlling camera transformations via imgui
  *
  * \author Yernar Aldabergenov
- * \date December 2020
+ * \date November 2020
  */
 #include "Camera.h"
 #include "imgui/imgui.h"

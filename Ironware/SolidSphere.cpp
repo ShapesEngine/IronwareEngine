@@ -4,7 +4,7 @@
  * \brief A class that is responsible for creating & updating the sphere 
  *
  * \author Yernar Aldabergenov
- * \date December 2020
+ * \date November 2020
  */
 #include "SolidSphere.h"
 #include "BindableBase.h"

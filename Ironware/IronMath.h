@@ -2,7 +2,7 @@
  * \file IronMath.h
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  *
  * 
  */

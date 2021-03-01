@@ -4,7 +4,7 @@
  * \brief A vertex buffer class that controls buffers(binds, etc)
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date September 2020
  */
 #include "VertexBuffer.h"
 

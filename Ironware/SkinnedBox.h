@@ -1,6 +1,6 @@
 /*!
  * \file SkinnedBox.h
- * \date 2020/12/06 15:33
+ * \date 2020/11/06 15:33
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com

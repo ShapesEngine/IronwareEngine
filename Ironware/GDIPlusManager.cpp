@@ -4,7 +4,7 @@
  * \brief A class that is responsible for managing GDIplus
  *
  * \author Yernar Aldabergenov
- * \date December 2020
+ * \date November 2020
  */
 #define IR_FULL_WIN
 #include "IronWin.h"

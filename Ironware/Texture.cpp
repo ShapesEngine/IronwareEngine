@@ -5,7 +5,7 @@
  * * texture to the GPU
  *
  * \author Yernar Aldabergenov
- * \date December 2020
+ * \date November 2020
  */
 #include "Texture.h"
 #include "Surface.h"
