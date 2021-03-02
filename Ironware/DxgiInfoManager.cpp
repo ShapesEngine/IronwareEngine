@@ -11,12 +11,11 @@
 #include "Graphics.h"
 #include "IronUtils.h"
 #include "WindowExceptionMacros.h"
+#include "GraphicsExceptionMacros.h"
 
 #include <memory>
 
 #pragma comment(lib, "dxguid.lib")
-
-#define GFX_CALL_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HrException( __LINE__, WFILE, hr )
 
 DxgiInfoManager::DxgiInfoManager()
 {
@@ -47,7 +46,7 @@ void DxgiInfoManager::Set() noexcept
 {
 	// set the index (next) so that the next call to GetMessages()
 	// will only get errors generated after this call
-	// for other DXGI Debug message types, see DXGI_DEBUG_ID
+	// for specific DXGI Debug message types, see DXGI_DEBUG_ID
 	next = pDxgiInfoQueue->GetNumStoredMessages( DXGI_DEBUG_ALL );
 }
 
