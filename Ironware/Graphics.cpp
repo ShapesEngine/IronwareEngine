@@ -54,7 +54,7 @@ Graphics::Graphics( HWND hWnd )
 	descSwapChain.BufferCount = 1;
 	descSwapChain.OutputWindow = hWnd;
 	descSwapChain.Windowed = TRUE;
-	descSwapChain.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+	descSwapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	descSwapChain.Flags = 0;
 	UINT swapCreateFlags = 0u;
 #ifndef NDEBUG
