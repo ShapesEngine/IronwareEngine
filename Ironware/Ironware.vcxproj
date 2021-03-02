@@ -164,6 +164,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\External\DXErr\dxerr.cpp" />
+    <ClCompile Include="..\External\imgui\imgui.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Box.cpp" />
@@ -174,12 +180,6 @@
     <ClCompile Include="GDIPlusManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputLayout.cpp" />
     <ClCompile Include="IronTimer.cpp" />
@@ -193,6 +193,14 @@
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="SkinnedBox.cpp" />
     <ClInclude Include="..\External\DXErr\dxerr.h" />
+    <ClInclude Include="..\External\imgui\imconfig.h" />
+    <ClInclude Include="..\External\imgui\imgui.h" />
+    <ClInclude Include="..\External\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="..\External\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\External\imgui\imgui_internal.h" />
+    <ClInclude Include="..\External\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\External\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\External\imgui\imstb_truetype.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="ImGuiManager.h" />
@@ -224,14 +232,6 @@
     <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GraphicsExceptionMacros.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_impl_dx11.h" />
-    <ClInclude Include="imgui\imgui_impl_win32.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\imstb_rectpack.h" />
-    <ClInclude Include="imgui\imstb_textedit.h" />
-    <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="InputLayout.h" />
