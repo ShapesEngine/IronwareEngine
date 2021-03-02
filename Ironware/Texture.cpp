@@ -39,7 +39,7 @@ Texture::Texture( Graphics& gfx, const Surface& sur )
 	// row byte size === ( for ex. pixel[0][0] + width * sizeof( Surface::Color ) = pixel[1][0] )
 	subresTextureData.SysMemPitch = width * sizeof( Surface::Color );
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
-	GFX_THROW_INFO( GetDevice( gfx )->CreateTexture2D( &descTexture, &subresTextureData, &pTexture ) );
+	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateTexture2D( &descTexture, &subresTextureData, &pTexture ) );
 
 	// =======================================================================
 	// Create the resource view on the texture
@@ -49,5 +49,5 @@ Texture::Texture( Graphics& gfx, const Surface& sur )
 	descShaderResView.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	descShaderResView.Texture2D.MostDetailedMip = 0u;
 	descShaderResView.Texture2D.MipLevels = 1u;
-	GFX_THROW_INFO( GetDevice( gfx )->CreateShaderResourceView( pTexture.Get(), &descShaderResView, &pTextureView ) );
+	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateShaderResourceView( pTexture.Get(), &descShaderResView, &pTextureView ) );
 }

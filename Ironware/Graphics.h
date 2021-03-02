@@ -40,11 +40,10 @@ public:
 		HrException( int line, const wchar_t* file, HRESULT hr, std::vector<std::wstring> infoMsgs = {} ) noexcept;
 
 		/**
-		 * 	overridden function that will return type, error code, description and formatted string.
-		 *
-		 * \return const char_t* buffer
-		 */
-		const char* what() const noexcept override;	
+		 * @brief overridden function that will return type, error code, description and formatted string
+		 * @return const char_t* buffer
+		*/
+		const char* what() const noexcept override;
 
 		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Graphics Exception"; }
 		__forceinline HRESULT GetErrorCode() const noexcept { return hr; }
@@ -84,13 +83,13 @@ public:
 	~Graphics();
 
 	void BeginFrame( float red, float green, float blue ) noexcept;
-	void EndFrame();	
+	void EndFrame();
 	void DrawIndexed( UINT count ) noexcept( !IS_DEBUG );
 
 	__forceinline void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
 	__forceinline DirectX::XMMATRIX GetCamera() const noexcept { return camera; }
 	__forceinline void SetProjection( DirectX::FXMMATRIX proj ) noexcept { projection = proj; }
-	__forceinline DirectX::XMMATRIX GetProjection() const noexcept	{ return projection; }
+	__forceinline DirectX::XMMATRIX GetProjection() const noexcept { return projection; }
 	__forceinline void EnableImGui() noexcept { imGuiEnabled = true; }
 	__forceinline void DisableImGui() noexcept { imGuiEnabled = false; }
 	__forceinline bool IsImGuiEnabled() const noexcept { return imGuiEnabled; }

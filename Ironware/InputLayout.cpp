@@ -14,7 +14,7 @@ InputLayout::InputLayout( Graphics& gfx, const std::vector<D3D11_INPUT_ELEMENT_D
 {
 	INFOMAN( gfx );
 
-	GFX_THROW_INFO( GetDevice( gfx )->CreateInputLayout(
+	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateInputLayout(
 		layouts.data(), (UINT)layouts.size(),
 		pVertexShaderBytecode->GetBufferPointer(),
 		pVertexShaderBytecode->GetBufferSize(),

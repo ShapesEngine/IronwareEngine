@@ -35,7 +35,7 @@ public:
 		descVertexBuffer.StructureByteStride = sizeof( V );
 		D3D11_SUBRESOURCE_DATA subresVertexData = {};
 		subresVertexData.pSysMem = vertices.data();
-		GFX_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descVertexBuffer, &subresVertexData, &pVertexBuffer ) );
+		GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descVertexBuffer, &subresVertexData, &pVertexBuffer ) );
 	}
 
 	void Bind( Graphics& gfx ) noexcept override;

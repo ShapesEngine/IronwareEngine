@@ -7,7 +7,7 @@
  *
  * TODO:
  *
- * \note 
+ * \note
  *
  * \author Yernar Aldabergenov
  *
@@ -36,7 +36,9 @@ namespace dx = DirectX;
 Graphics::Graphics( HWND hWnd )
 {
 	DXGI_SWAP_CHAIN_DESC descSwapChain = {};
+	// D3D will automatically deduce width if it is 0
 	descSwapChain.BufferDesc.Width = 0;
+	// the same applies to height; 0 => window.height
 	descSwapChain.BufferDesc.Height = 0;
 	descSwapChain.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	descSwapChain.BufferDesc.RefreshRate.Numerator = 0;
@@ -52,7 +54,7 @@ Graphics::Graphics( HWND hWnd )
 	descSwapChain.BufferCount = 1;
 	descSwapChain.OutputWindow = hWnd;
 	descSwapChain.Windowed = TRUE;
-	descSwapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	descSwapChain.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 	descSwapChain.Flags = 0;
 	UINT swapCreateFlags = 0u;
 #ifndef NDEBUG
@@ -61,9 +63,9 @@ Graphics::Graphics( HWND hWnd )
 
 	// for checking results of d3d functions
 	HRESULT hr;
-	
+
 	// create device and front/back buffers, and swap chain and rendering context
-	GFX_THROW_INFO( D3D11CreateDeviceAndSwapChain(
+	GFX_CALL_THROW_INFO( D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
@@ -75,14 +77,14 @@ Graphics::Graphics( HWND hWnd )
 		&pSwapChain,
 		&pDevice,
 		nullptr,
-		&pImmediateContext 
+		&pImmediateContext
 	) );
 
 	// gain access to texture subresource in swap chain (back buffer)
 	wrl::ComPtr<ID3D11Resource> pBackBuffer;
 	// 0 is back buffer's index
-	GFX_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), &pBackBuffer ) );
-	GFX_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer.Get(), nullptr, &pRenderTargetView ) );
+	GFX_CALL_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), &pBackBuffer ) );
+	GFX_CALL_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer.Get(), nullptr, &pRenderTargetView ) );
 
 	// create depth stencil state
 	D3D11_DEPTH_STENCIL_DESC descDepthStencil = {};
@@ -90,7 +92,7 @@ Graphics::Graphics( HWND hWnd )
 	descDepthStencil.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	descDepthStencil.DepthFunc = D3D11_COMPARISON_LESS;
 	wrl::ComPtr<ID3D11DepthStencilState> pDSState;
-	GFX_THROW_INFO( pDevice->CreateDepthStencilState( &descDepthStencil, &pDSState ) );
+	GFX_CALL_THROW_INFO( pDevice->CreateDepthStencilState( &descDepthStencil, &pDSState ) );
 
 	// bind depth state
 	pImmediateContext->OMSetDepthStencilState( pDSState.Get(), 1u );
@@ -109,14 +111,14 @@ Graphics::Graphics( HWND hWnd )
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	descDepth.CPUAccessFlags = 0u;
 	descDepth.MiscFlags = 0u;
-	GFX_THROW_INFO( pDevice->CreateTexture2D( &descDepth, nullptr, &pDepth ) );
+	GFX_CALL_THROW_INFO( pDevice->CreateTexture2D( &descDepth, nullptr, &pDepth ) );
 
 	// create view of depth stencil texture
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
 	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
 	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	descDSV.Texture2D.MipSlice = 0u;
-	GFX_THROW_INFO( pDevice->CreateDepthStencilView(
+	GFX_CALL_THROW_INFO( pDevice->CreateDepthStencilView(
 		pDepth.Get(), &descDSV, &pDepthStencilView
 	) );
 
@@ -156,7 +158,7 @@ void Graphics::BeginFrame( float red, float green, float blue ) noexcept
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
-	}	
+	}
 }
 
 void Graphics::EndFrame()
@@ -175,7 +177,7 @@ void Graphics::EndFrame()
 	GFX_THROW_UNHANDLED_EXCEPTION
 		infoManager.Set();
 #endif
-	// sync interval = 60; expected to consistently present at this rate
+	// expected to consistently present at the present sync interval
 	if( FAILED( hr = pSwapChain->Present( 1u, 0u ) ) )
 	{
 		if( hr == DXGI_ERROR_DEVICE_REMOVED )
@@ -189,9 +191,9 @@ void Graphics::EndFrame()
 	}
 }
 
-void Graphics::DrawIndexed( UINT count ) noexcept( !IS_DEBUG ) 
-{ 
-	GFX_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0u ) ); 
+void Graphics::DrawIndexed( UINT count ) noexcept( !IS_DEBUG )
+{
+	GFX_CALL_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0u ) );
 }
 /******************************* GRAPHICS END ******************************/
 

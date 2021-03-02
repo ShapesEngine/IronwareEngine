@@ -1,24 +1,10 @@
 /*!
- * \class DxgiInfoManager
- *
- * \ingroup DEV
- *
- * \brief A helper class that is used for getting DXGI error information
- *
- * TODO:
- *
- * \note Call Set every time you want to capture an error. Call Set => DirectXFunc => GetMessages
- * * Set moves the message index to the present so that it will show only the messages related to the
- * * function call
+ * \file DxgiInfoManager.cpp
  *
  * \author Yernar Aldabergenov
- *
- * \version 1.0
- *
  * \date September 2020
  *
- * Contact: yernar.aa@gmail.com
- *
+ * 
  */
 #include "DxgiInfoManager.h"
 #include "Window.h"
@@ -30,7 +16,7 @@
 
 #pragma comment(lib, "dxguid.lib")
 
-#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HrException( __LINE__, WFILE, hr )
+#define GFX_CALL_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HrException( __LINE__, WFILE, hr )
 
 DxgiInfoManager::DxgiInfoManager()
 {
@@ -54,12 +40,12 @@ DxgiInfoManager::DxgiInfoManager()
 	}
 
 	HRESULT hr;
-	GFX_THROW_NOINFO( DxgiGetDebugInterface( __uuidof( IDXGIInfoQueue ), &pDxgiInfoQueue ) );
+	GFX_CALL_THROW_NOINFO( DxgiGetDebugInterface( __uuidof( IDXGIInfoQueue ), &pDxgiInfoQueue ) );
 }
 
 void DxgiInfoManager::Set() noexcept
 {
-	// set the index (next) so that the next all to GetMessages()
+	// set the index (next) so that the next call to GetMessages()
 	// will only get errors generated after this call
 	// for other DXGI Debug message types, see DXGI_DEBUG_ID
 	next = pDxgiInfoQueue->GetNumStoredMessages( DXGI_DEBUG_ALL );
@@ -74,12 +60,12 @@ std::vector<std::wstring> DxgiInfoManager::GetMessages() const
 		HRESULT hr;
 		SIZE_T messageLength = 0;
 		// get the size of message i in bytes
-		GFX_THROW_NOINFO( pDxgiInfoQueue->GetMessage( DXGI_DEBUG_ALL, i, nullptr, &messageLength ) );
+		GFX_CALL_THROW_NOINFO( pDxgiInfoQueue->GetMessage( DXGI_DEBUG_ALL, i, nullptr, &messageLength ) );
 		// allocate memory for message
 		auto bytes = std::make_unique<byte[]>( messageLength );
 		auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>( bytes.get() );
 		// get the message and push its description into the vector
-		GFX_THROW_NOINFO( pDxgiInfoQueue->GetMessage( DXGI_DEBUG_ALL, i, pMessage, &messageLength ) );
+		GFX_CALL_THROW_NOINFO( pDxgiInfoQueue->GetMessage( DXGI_DEBUG_ALL, i, pMessage, &messageLength ) );
 		messages.emplace_back( ToWide( pMessage->pDescription ) );
 	}
 	return messages;

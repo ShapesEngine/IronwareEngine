@@ -20,5 +20,5 @@ Sampler::Sampler( Graphics& gfx )
 	descSampler.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	descSampler.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
-	GFX_THROW_INFO( GetDevice( gfx )->CreateSamplerState( &descSampler, &pSampler ) );
+	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateSamplerState( &descSampler, &pSampler ) );
 }

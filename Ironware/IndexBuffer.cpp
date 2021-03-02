@@ -24,5 +24,5 @@ IndexBuffer::IndexBuffer( Graphics& gfx, const std::vector<uint16_t>& indices ) 
 	descInputBuffer.StructureByteStride = sizeof( uint16_t );
 	D3D11_SUBRESOURCE_DATA subresInputData = {};
 	subresInputData.pSysMem = indices.data();
-	GFX_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descInputBuffer, &subresInputData, &pIndexBuffer ) );
+	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descInputBuffer, &subresInputData, &pIndexBuffer ) );
 }
