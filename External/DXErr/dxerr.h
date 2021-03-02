@@ -12,7 +12,7 @@
 //--------------------------------------------------------------------------------------
 
 #pragma once
-#include "IronWin.h"
+#include "../../Ironware/IronWin.h"
 #include <sal.h>
 
 #ifdef __cplusplus

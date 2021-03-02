@@ -15,7 +15,7 @@
 
 #include "IronWin.h"
 #include "IronException.h"
-#include "dxerr.h"
+#include <DXErr/dxerr.h>
 #include "DxgiInfoManager.h"
 
 #include <vector>
