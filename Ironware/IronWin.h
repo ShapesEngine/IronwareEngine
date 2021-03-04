@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief The header is used to define all the macros that (not) needed/used
+ * \brief The header is used to define & include all the macros/headers that are (not) needed/used
  *
  * 
  *
@@ -15,13 +15,13 @@
 
 #pragma once
 
-// target Windows 8 or later
+// target Windows 7 or later
 // you can remove/change it 
 // if you'd like to target other platforms or only win10
-#define _WIN32_WINNT 0x0602
+#define _WIN32_WINNT 0x0601
 #include <sdkddkver.h>
 
-// Needed for the cases when other libraries(gdi+) use these defines
+// Needed for the cases when other libraries(gdi+) uses these defines
 #ifndef IR_FULL_WIN
 // The following #defines disable a bunch of unused windows stuff. If you 
 // get weird errors when trying to do some windows stuff, try removing some
