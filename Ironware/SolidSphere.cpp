@@ -41,7 +41,7 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElem =
 		{
-			{ "Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
 		};
 		AddStaticBind( std::make_unique<InputLayout>( gfx, descInputElem, pVertexShaderBytecode ) );
 

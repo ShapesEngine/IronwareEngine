@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date November 2020
  *
- * 
+ *
  */
 #include "Surface.h"
 #define IR_FULL_WIN
@@ -26,7 +26,7 @@ namespace Gdiplus
 
 /******************************* SURFACE START ******************************/
 Surface::Surface( uint32_t width, uint32_t height ) noexcept :
-	pBuffer( std::make_unique<Color[]>( (size_t)width * height ) ),
+	pBuffer( std::make_unique<Color[]>( (size_t)width* height ) ),
 	width( width ),
 	height( height )
 {}
@@ -113,7 +113,7 @@ void Surface::Save( const std::wstring& filename ) const
 			throw Exception( __LINE__, WFILE, wss.str() );
 		}
 
-		pImageCodecInfo = ( Gdiplus::ImageCodecInfo* )( malloc( size ) );
+		pImageCodecInfo = (Gdiplus::ImageCodecInfo*)( malloc( size ) );
 		if( pImageCodecInfo == nullptr )
 		{
 			std::wstringstream wss;
@@ -152,7 +152,7 @@ void Surface::Save( const std::wstring& filename ) const
 	}
 }
 
-void Surface::Copy( const Surface & src ) noexcept( !IS_DEBUG )
+void Surface::Copy( const Surface& src ) noexcept( !IS_DEBUG )
 {
 	assert( width == src.width );
 	assert( height == src.height );
