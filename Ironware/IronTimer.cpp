@@ -12,7 +12,7 @@ using namespace std::chrono;
 
 IronTimer::IronTimer() noexcept
 {
-	last = steady_clock::now();
+	last = start = steady_clock::now();
 }
 
 float IronTimer::Mark() noexcept
@@ -25,5 +25,5 @@ float IronTimer::Mark() noexcept
 
 float IronTimer::Peek() const noexcept
 {
-	return duration<float>( steady_clock::now() - last ).count();
+	return duration<float>( steady_clock::now() - start ).count();
 }

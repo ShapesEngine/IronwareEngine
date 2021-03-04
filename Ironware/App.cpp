@@ -122,6 +122,7 @@ void App::DoFrame()
 		const float frame_rate = ImGui::GetIO().Framerate;
 		ImGui::SliderFloat( "Speed Factor", &simulationSpeedFactor, 0.f, 5.f, "%.4f", 3.2f );
 		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
+		ImGui::Text( "Application running for: %.f seconds", timer.Peek() );
 		ImGui::Text( simulationStatusText.str().c_str() );
 	}
 
