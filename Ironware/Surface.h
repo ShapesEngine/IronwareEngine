@@ -8,7 +8,7 @@
  * \brief In this file we have Surface, Color, Exception classes.
  * * Surface needs Color class to represent color of a pixel.
  * * Surface could be used for setting/getting pixel data,
- * * saving & loading a texture from a file.  
+ * * saving & loading a texture from a file.
  *
  * TODO:
  *
@@ -40,30 +40,25 @@ public:
 
 	public:
 		constexpr Color() noexcept = default;
-		constexpr Color( const Color& col ) noexcept
-			:
+		constexpr Color( const Color& col ) noexcept :
 			dword( col.dword )
 		{}
-		constexpr Color( uint32_t dw ) noexcept
-			:
+		constexpr Color( uint32_t dw ) noexcept :
 			dword( dw )
 		{}
-		constexpr Color( uint8_t x, uint8_t r, uint8_t g, uint8_t b ) noexcept
-			:
+		constexpr Color( uint8_t x, uint8_t r, uint8_t g, uint8_t b ) noexcept :
 			dword( ( x << 24u ) | ( r << 16u ) | ( g << 8u ) | b )
 		{}
-		constexpr Color( uint8_t r, uint8_t g, uint8_t b ) noexcept
-			:
+		constexpr Color( uint8_t r, uint8_t g, uint8_t b ) noexcept :
 			dword( ( r << 16u ) | ( g << 8u ) | b )
 		{}
-		constexpr Color( Color col, uint8_t x ) noexcept
-			:
+		constexpr Color( Color col, uint8_t x ) noexcept :
 			Color( ( x << 24u ) | col.dword )
 		{}
-		Color& operator =( Color color ) noexcept 
-		{ 
-			dword = color.dword; 	
-			return *this; 
+		Color& operator =( Color color ) noexcept
+		{
+			dword = color.dword;
+			return *this;
 		}
 		__forceinline constexpr uint8_t GetX() const noexcept { return dword >> 24u; }
 		__forceinline constexpr uint8_t GetA() const noexcept { return GetX(); }
@@ -96,9 +91,9 @@ public:
 	Surface& operator=( Surface&& donor ) noexcept;
 	Surface& operator=( const Surface& ) = delete;
 	~Surface() = default;
-	
+
 	void PutPixel( uint32_t x, uint32_t y, Color c ) noexcept( !IS_DEBUG );
-	Color GetPixel( uint32_t x, uint32_t y ) const noexcept( !IS_DEBUG );	
+	Color GetPixel( uint32_t x, uint32_t y ) const noexcept( !IS_DEBUG );
 	static Surface FromFile( const std::wstring& name );
 	void Save( const std::wstring& filename ) const;
 	void Copy( const Surface& src ) noexcept( !IS_DEBUG );
