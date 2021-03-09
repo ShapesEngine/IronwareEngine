@@ -25,7 +25,8 @@
 
 #include <sstream>
 
- /******************************* WINDOW CLASS START ******************************/
+#pragma region WindowClass
+
 Window::WindowClass Window::WindowClass::wndClass;
 
 Window::WindowClass::WindowClass() noexcept :
@@ -54,9 +55,11 @@ Window::WindowClass::~WindowClass()
 {
 	UnregisterClass( wndClassName, GetInstance() );
 }
-/******************************* WINDOW CLASS END ******************************/
 
-/******************************* WINDOW START ******************************/
+#pragma endregion WindowClass
+
+#pragma region Window
+
 Window::Window( int width_in, int height_in, const wchar_t* name ) :
 	width( width_in ),
 	height( height_in )
@@ -360,9 +363,11 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 
 	return DefWindowProc( hWnd, msg, wParam, lParam );
 }
-/******************************* WINDOW END ******************************/
 
-/******************************* WINDOW EXCEPTION START ******************************/
+#pragma endregion Window
+
+#pragma region WindowException
+
 Window::HrException::HrException( int line, const wchar_t* file, HRESULT hr ) noexcept :
 	Exception( line, file ),
 	hr( hr )
@@ -404,4 +409,5 @@ std::wstring Window::Exception::TranslateErrorCode( HRESULT hr ) noexcept
 	LocalFree( pMsgBuf );
 	return errorString;
 }
-/******************************* WINDOW EXCEPTION END ******************************/
+
+#pragma endregion WindowException

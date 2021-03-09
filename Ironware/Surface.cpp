@@ -24,7 +24,8 @@ namespace Gdiplus
 
 #pragma comment(lib, "gdiplus.lib")
 
-/******************************* SURFACE START ******************************/
+#pragma region Surface
+
 Surface::Surface( uint32_t width, uint32_t height ) noexcept :
 	pBuffer( std::make_unique<Color[]>( (size_t)width* height ) ),
 	width( width ),
@@ -164,9 +165,11 @@ Surface::Surface( uint32_t width, uint32_t height, std::unique_ptr<Color[]> pBuf
 	width( width ),
 	height( height )
 {}
-/******************************* SURFACE END ******************************/
 
-/******************************* SURFACE EXCEPTION START ******************************/
+#pragma endregion Surface
+
+#pragma region SurfaceException
+
 Surface::Exception::Exception( int line, const wchar_t* file, std::wstring note ) noexcept :
 	IronException( line, file ),
 	note( std::move( note ) )
@@ -180,4 +183,5 @@ const char* Surface::Exception::what() const noexcept
 	whatBuffer = woss.str();
 	return reinterpret_cast<const char*>( whatBuffer.c_str() );
 }
-/******************************* SURFACE EXCEPTION END ******************************/
+
+#pragma endregion SurfaceException

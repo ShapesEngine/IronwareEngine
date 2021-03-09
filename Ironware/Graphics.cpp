@@ -32,7 +32,8 @@
 namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
 
-/******************************* GRAPHICS START ******************************/
+#pragma region Graphics
+
 Graphics::Graphics( HWND hWnd )
 {
 	DXGI_SWAP_CHAIN_DESC descSwapChain = {};
@@ -196,9 +197,11 @@ void Graphics::DrawIndexed( UINT count ) noexcept( !IS_DEBUG )
 {
 	GFX_CALL_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0u ) );
 }
-/******************************* GRAPHICS END ******************************/
 
-/******************************* GRAPHICS EXCEPTION START ******************************/
+#pragma endregion Graphics
+
+#pragma region GraphicsException
+
 Graphics::HrException::HrException( int line, const wchar_t* file, HRESULT hr, std::vector<std::wstring> infoMsgs ) noexcept :
 	Exception( line, file ),
 	hr( hr )
@@ -269,4 +272,5 @@ const char* Graphics::InfoException::what() const noexcept
 
 	return CON_CHREINT_CAST( whatBuffer.c_str() );
 }
-/******************************* GRAPHICS EXCEPTION END ******************************/
+
+#pragma endregion GraphicsException
