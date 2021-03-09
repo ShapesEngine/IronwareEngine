@@ -92,16 +92,17 @@ int App::BeginFrame()
 			// returns exit code
 			return *ecode;
 		}
-		DoFrame();
+
+		ProcessFrame();
 	}
 }
 
-void App::DoFrame()
+void App::ProcessFrame()
 {
 	if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
 		PostQuitMessage( 0 );
 
-	const auto dt = timer.Mark() * simulationSpeedFactor;
+	const auto dt = isSimulationRunning ? timer.Mark() * simulationSpeedFactor : 0.f;
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 	// move away by 20.f from origin
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
@@ -109,7 +110,7 @@ void App::DoFrame()
 
 	for( auto& d : drawables )
 	{
-		d->Update( isSimulationRunning ? dt : 0.f );
+		d->Update( dt );
 		d->Draw( wnd.Gfx() );
 	}
 	pointLight.Draw( wnd.Gfx() );

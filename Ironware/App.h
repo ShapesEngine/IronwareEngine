@@ -36,7 +36,7 @@ private:
 	/**
 	 * @brief Processes main application frame
 	*/
-	void DoFrame();
+	void ProcessFrame();
 
 private:
 	ImguiManager imguim;
