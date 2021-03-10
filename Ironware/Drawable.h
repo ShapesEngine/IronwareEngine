@@ -36,7 +36,7 @@ public:
 	void Draw( Graphics & gfx ) const noexcept( !IS_DEBUG );
 	virtual void Update( float dt ) noexcept = 0;
 	void AddBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG );
-	void AddIndexBuffer( std::unique_ptr<class IndexBuffer> ibuf ) noexcept( !IS_DEBUG );
+	void AddIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept( !IS_DEBUG );
 
 private:
 	virtual const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept = 0;

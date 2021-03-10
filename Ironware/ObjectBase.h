@@ -58,9 +58,11 @@ public:
 private:
 	// positional
 	float r;
+	// relative rotation
 	float roll = 0.f;
 	float pitch = 0.f;
 	float yaw = 0.f;
+	// world rotation
 	float theta;
 	float phi;
 	float chi;

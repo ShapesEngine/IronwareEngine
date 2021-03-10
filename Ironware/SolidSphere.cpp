@@ -24,7 +24,7 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 		auto model = Sphere::Make<Vertex>();
 		model.Transform( dx::XMMatrixScaling( radius, radius, radius ) );
 		AddBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
-		AddIndexBuffer( std::make_unique<IndexBuffer>( gfx, model.indices ) );
+		AddIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
 		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"SolidVS.cso" );
 		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
