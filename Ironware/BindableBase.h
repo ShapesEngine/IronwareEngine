@@ -17,7 +17,7 @@
 #include "IndexBuffer.h"
 #include "InputLayout.h"
 #include "PixelShader.h"
-#include "Topology.h"
+#include "PrimitiveTopology.h"
 #include "TransformCBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexShader.h"

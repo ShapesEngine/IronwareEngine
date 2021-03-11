@@ -210,7 +210,7 @@
     <ClCompile Include="SolidSphere.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Topology.cpp" />
+    <ClCompile Include="PrimitiveTopology.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -251,7 +251,7 @@
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Topology.h" />
+    <ClInclude Include="PrimitiveTopology.h" />
     <ClInclude Include="TransformCBuffer.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />

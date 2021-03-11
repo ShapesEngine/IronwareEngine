@@ -108,9 +108,6 @@
     <ClCompile Include="Sampler.cpp">
       <Filter>Source Files\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Topology.cpp">
-      <Filter>Source Files\Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="DxgiInfoManager.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
@@ -165,6 +162,9 @@
     <ClCompile Include="..\External\imgui\imgui.cpp">
       <Filter>External\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="PrimitiveTopology.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -216,9 +216,6 @@
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="PixelShader.h">
-      <Filter>Header Files\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Topology.h">
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="TransformCBuffer.h">
@@ -337,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="..\External\imgui\imconfig.h">
       <Filter>External\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveTopology.h">
+      <Filter>Header Files\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

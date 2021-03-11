@@ -52,7 +52,7 @@ Cylinder::Cylinder( Graphics& gfx, std::mt19937& rng,
 		};
 		AddStaticBind( std::make_unique<InputLayout>( gfx, descInputElem, pVertexShaderBytecode ) );
 
-		AddStaticBind( std::make_unique<Topology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
+		AddStaticBind( std::make_unique<PrimitiveTopology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 
 		struct PSMaterialConstant
 		{
