@@ -5,24 +5,32 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A vertex buffer class that controls buffers(binds, etc)
+ * \brief A vertex buffer class that controls vertex input buffers(binds, etc)
  *
  * TODO:
  *
- * \note Constructor of this class is templated because we would like to have buffers 
- * * of several types.
+ * \note
 */
 #pragma once
 
 #include "Bindable.h"
 #include "GraphicsExceptionMacros.h"
 
+/*!
+ * \class VertexBuffer
+ *
+ * \brief A vertex buffer class that controls vertex input buffers(binds, etc)
+ *
+ * \author Yernar Aldabergenov
+ * \date September 2020
+ */
 class VertexBuffer : public Bindable
 {
 public:
 	template<class V>
-	VertexBuffer( Graphics& gfx, const std::vector<V>& vertices ) :
-		stride( sizeof( V ) )
+	VertexBuffer( Graphics& gfx, const std::vector<V>& vertices, UINT offset = 0 ) :
+		stride( sizeof( V ) ),
+		offset( offset )
 	{
 		INFOMAN( gfx );
 
@@ -32,15 +40,16 @@ public:
 		descVertexBuffer.CPUAccessFlags = 0u;
 		descVertexBuffer.MiscFlags = 0u;
 		descVertexBuffer.ByteWidth = UINT( sizeof( V ) * vertices.size() );
-		descVertexBuffer.StructureByteStride = sizeof( V );
+		descVertexBuffer.StructureByteStride = stride;
 		D3D11_SUBRESOURCE_DATA subresVertexData = {};
 		subresVertexData.pSysMem = vertices.data();
 		GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descVertexBuffer, &subresVertexData, &pVertexBuffer ) );
 	}
 
-	void Bind( Graphics& gfx ) noexcept override;
+	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
 
-protected:
-	UINT stride;
+private:
+	const UINT stride;
+	const UINT offset;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
 };
