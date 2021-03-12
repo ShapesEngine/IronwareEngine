@@ -74,5 +74,3 @@ private:
 	float dphi;
 	float dchi;
 };
-
-

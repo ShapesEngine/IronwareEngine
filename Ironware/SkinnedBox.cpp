@@ -54,7 +54,7 @@ SkinnedBox::SkinnedBox( Graphics& gfx, std::mt19937& rng,
 
 		AddStaticBind( std::make_unique<PixelShader>( gfx, L"TexturePS.cso" ) );
 
-		AddStaticIndexBuffer( std::make_unique<IndexBuffer>( gfx, model.indices ) );
+		AddStaticIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElement =
 		{

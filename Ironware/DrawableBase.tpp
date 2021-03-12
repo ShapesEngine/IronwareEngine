@@ -17,7 +17,7 @@ void DrawableBase<T>::AddStaticBind( std::unique_ptr<Bindable> bind ) noexcept( 
 }
 
 template<typename T>
-void DrawableBase<T>::AddStaticIndexBuffer( std::unique_ptr<class IndexBuffer> ibuf ) noexcept
+void DrawableBase<T>::AddStaticIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept
 {
 	assert( "Attempting to add index buffer a second time" && pIndexBuffer == nullptr );
 	pIndexBuffer = ibuf.get();

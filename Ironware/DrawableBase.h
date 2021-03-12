@@ -23,7 +23,7 @@ protected:
 	static __forceinline bool IsStaticInitialized() { return !staticBinds.empty(); }
 
 	static void AddStaticBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG );
-	void AddStaticIndexBuffer( std::unique_ptr<class IndexBuffer> ibuf ) noexcept;
+	void AddStaticIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept;
 	void SetIndexFromStatic() noexcept( !IS_DEBUG );
 
 private:
