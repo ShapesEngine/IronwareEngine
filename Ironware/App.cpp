@@ -137,6 +137,7 @@ void App::ProcessFrame()
 		}
 	}
 
+	// todo: fix the bug
 	if( simulationSpeedFactor == 0.f )
 	{
 		isSimulationRunning = false;

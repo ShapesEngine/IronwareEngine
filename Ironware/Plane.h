@@ -60,6 +60,7 @@ public:
 		std::vector<uint16_t> indices;
 		indices.reserve( sq( divisions_x * divisions_y ) * 6 );
 		{
+			// vertex x and y to index
 			const auto vxy2i = [nVertices_x]( size_t x, size_t y )
 			{
 				return (uint16_t)( y * nVertices_x + x );
