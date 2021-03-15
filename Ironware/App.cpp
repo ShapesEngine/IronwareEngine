@@ -141,6 +141,8 @@ void App::ProcessFrame()
 	{
 		isSimulationRunning = false;
 	}
+	else
+		isSimulationRunning = true;
 
 	ImGui::End();
 	// imgui window to control camera & light
