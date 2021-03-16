@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class for generating cone vertices and indices
+ * \brief
  *
  * TODO:
  *
@@ -17,6 +17,14 @@
 
 #include <DirectXMath.h>
 
+/*!
+ * \class Cone
+ *
+ * \brief A class for generating cone vertices and indices
+ *
+ * \author Yernar Aldabergenov
+ * \date September 2021
+ */
 class Cone
 {
 public:

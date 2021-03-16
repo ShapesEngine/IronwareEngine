@@ -5,11 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class for generating plane vertices and indices
+ * \brief
  *
  * TODO:
  *
- * \note
+ * \note Call Make if you don't want to set division x & y manually
 */
 #pragma once
 
@@ -19,6 +19,14 @@
 #include <vector>
 #include <array>
 
+/*!
+ * \class Plane
+ *
+ * \brief A class for generating plane vertices and indices
+ *
+ * \author Yernar Aldabergenov
+ * \date September 2021
+ */
 class Plane
 {
 public:

@@ -5,8 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class for generating indices and vertices.
- * * Also can translate the vertices
+ * \brief
  *
  * TODO:
  *
@@ -18,6 +17,15 @@
 
 #include <DirectXMath.h>
 
+/*!
+ * \class IndexedTriangleList
+ *
+ * \brief A class that stores object's vertices & indices.
+ * * Also can perform various transformations on that vertices.
+ *
+ * \author Yernar Aldabergenov
+ * \date March 2021
+ */
 template<class T>
 class IndexedTriangleList
 {

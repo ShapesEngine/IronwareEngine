@@ -5,11 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class for generating prism vertices and indices
+ * \brief
  *
  * TODO:
  *
- * \note
+ * \note Call Make if you don't want to set manually longitude division
 */
 #pragma once
 
@@ -18,6 +18,14 @@
 
 #include <DirectXMath.h>
 
+/*!
+ * \class Prism
+ *
+ * \brief A class for generating prism vertices and indices
+ *
+ * \author Yernar Aldabergenov
+ * \date September 2021
+ */
 class Prism
 {
 public:

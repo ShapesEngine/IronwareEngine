@@ -5,11 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class for generating sphere vertices and indices
+ * \brief
  *
  * TODO:
  *
- * \note
+ * \note Call Make if you don't want to set manually lattitude & longitude divisions
 */
 #pragma once
 
@@ -18,7 +18,14 @@
 
 #include <DirectXMath.h>
 
-
+/*!
+ * \class Sphere
+ *
+ * \brief A class for generating sphere vertices and indices
+ *
+ * \author Yernar Aldabergenov
+ * \date September 2021
+ */
 class Sphere
 {
 public:
@@ -61,32 +68,37 @@ public:
 		const auto iSouthPole = (uint16_t)vertices.size();
 		vertices.emplace_back();
 		dx::XMStoreFloat3( &vertices.back().pos, dx::XMVectorNegate( base ) );
-
-		const auto calcIdx = [latDiv, longDiv]( uint16_t iLat, uint16_t iLong )
+		// TODO: remove latDiv
+		const auto calcIdx = [longDiv]( uint16_t iLong, uint16_t iLat )
 		{
 			return iLat * longDiv + iLong;
 		};
 		std::vector<uint16_t> indices;
+		// latdiv - 2, because we haven't set 2 rows of the vector
+		// we skipped the first & last rows.
 		for( uint16_t iLat = 0; iLat < latDiv - 2; iLat++ )
 		{
+			// skip wrapping
 			for( uint16_t iLong = 0; iLong < longDiv - 1; iLong++ )
 			{
-				indices.push_back( calcIdx( iLat, iLong ) );
-				indices.push_back( calcIdx( iLat + 1, iLong ) );
-				indices.push_back( calcIdx( iLat, iLong + 1 ) );
-				indices.push_back( calcIdx( iLat, iLong + 1 ) );
-				indices.push_back( calcIdx( iLat + 1, iLong ) );
-				indices.push_back( calcIdx( iLat + 1, iLong + 1 ) );
+				indices.emplace_back( calcIdx( iLong, iLat ) );
+				indices.emplace_back( calcIdx( iLong, iLat + 1 ) );
+				indices.emplace_back( calcIdx( iLong + 1, iLat ) );
+
+				indices.emplace_back( calcIdx( iLong + 1, iLat ) );
+				indices.emplace_back( calcIdx( iLong, iLat + 1 ) );
+				indices.emplace_back( calcIdx( iLong + 1, iLat + 1 ) );
 			}
 			// =======================================================================
 			// wrap band
 			// -----------------------------------------------------------------------
-			indices.push_back( calcIdx( iLat, longDiv - 1 ) );
-			indices.push_back( calcIdx( iLat + 1, longDiv - 1 ) );
-			indices.push_back( calcIdx( iLat, 0 ) );
-			indices.push_back( calcIdx( iLat, 0 ) );
-			indices.push_back( calcIdx( iLat + 1, longDiv - 1 ) );
-			indices.push_back( calcIdx( iLat + 1, 0 ) );
+			indices.push_back( calcIdx( longDiv - 1, iLat ) );
+			indices.push_back( calcIdx( longDiv - 1, iLat + 1 ) );
+			indices.push_back( calcIdx( 0, iLat ) );
+
+			indices.push_back( calcIdx( 0, iLat ) );
+			indices.push_back( calcIdx( longDiv - 1, iLat + 1 ) );
+			indices.push_back( calcIdx( 0, iLat + 1 ) );
 		}
 
 		// =======================================================================
@@ -96,11 +108,11 @@ public:
 		{
 			/******************************* North ******************************/
 			indices.push_back( iNorthPole );
-			indices.push_back( calcIdx( 0, iLong ) );
-			indices.push_back( calcIdx( 0, iLong + 1 ) );
-			/******************************* South ******************************/
-			indices.push_back( calcIdx( latDiv - 2, iLong + 1 ) );
-			indices.push_back( calcIdx( latDiv - 2, iLong ) );
+			indices.push_back( calcIdx( iLong, 0 ) );
+			indices.push_back( calcIdx( iLong + 1, 0 ) );
+			/******************************* South ******************************/		
+			indices.push_back( calcIdx( iLong + 1, latDiv - 2 ) );
+			indices.push_back( calcIdx( iLong, latDiv - 2 ) );
 			indices.push_back( iSouthPole );
 		}
 
@@ -109,11 +121,11 @@ public:
 		// -----------------------------------------------------------------------
 		/******************************* North ******************************/
 		indices.push_back( iNorthPole );
-		indices.push_back( calcIdx( 0, longDiv - 1 ) );
+		indices.push_back( calcIdx( longDiv - 1, 0 ) );
 		indices.push_back( calcIdx( 0, 0 ) );
-		/******************************* South ******************************/
-		indices.push_back( calcIdx( latDiv - 2, 0 ) );
-		indices.push_back( calcIdx( latDiv - 2, longDiv - 1 ) );
+		/******************************* South ******************************/		
+		indices.push_back( calcIdx( 0, latDiv - 2 ) );
+		indices.push_back( calcIdx( longDiv - 1, latDiv - 2 ) );
 		indices.push_back( iSouthPole );
 
 		return { std::move( vertices ), std::move( indices ) };

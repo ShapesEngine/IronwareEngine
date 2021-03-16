@@ -136,14 +136,12 @@ void App::ProcessFrame()
 			isSimulationRunning = !isSimulationRunning;
 		}
 	}
-
-	// todo: fix the bug
+	
+	// TODO: fix resuming simulation after the speedfactor was 0
 	if( simulationSpeedFactor == 0.f )
 	{
 		isSimulationRunning = false;
 	}
-	else
-		isSimulationRunning = true;
 
 	ImGui::End();
 	// imgui window to control camera & light

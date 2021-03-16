@@ -5,11 +5,11 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class for generating cube vertices and indices
+ * \brief
  *
  * TODO:
  *
- * \note Skinned Cube needs to have separate vertices
+ * \note Skinned Cube should have separate vertices
 */
 #pragma once
 
@@ -17,6 +17,14 @@
 
 #include <DirectXMath.h>
 
+/*!
+ * \class Cube
+ *
+ * \brief A class for generating cube vertices and indices
+ *
+ * \author Yernar Aldabergenov
+ * \date September 2021
+ */
 class Cube
 {
 public:
