@@ -25,7 +25,7 @@
  * \brief A class for generating plane vertices and indices
  *
  * \author Yernar Aldabergenov
- * \date September 2021
+ * \date September 2020
  */
 class Plane
 {

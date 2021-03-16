@@ -7,8 +7,6 @@
  *
  * \brief In this file we have Surface, Color, Exception classes.
  * * Surface needs Color class to represent color of a pixel.
- * * Surface could be used for setting/getting pixel data,
- * * saving & loading a texture from a file.
  *
  * TODO:
  *
@@ -19,14 +17,23 @@
 #include "IronException.h"
 
 #include <string>
-#include <assert.h>
+#include <cassert>
 #include <memory>
 
+/*!
+ * \class Surface
+ *
+ * \brief Surface could be used for setting/getting pixel data,
+ * * saving & loading a texture from a file.
+ *
+ * \author Yernar Aldabergenov
+ * \date November 2020
+ */
 class Surface
 {
 public:
 	/*!
-	 * \class Surface
+	 * \class Color
 	 *
 	 * \brief A class to represent the color data
 	 *
@@ -72,6 +79,14 @@ public:
 		__forceinline void SetB( uint8_t b ) noexcept { dword = ( dword & 0xFFFFFF00u ) | b; }
 	};
 
+	/*!
+	 * \class Exception
+	 *
+	 * \brief A class for handling surface exceptions
+	 *
+	 * \author Yernar Aldabergenov
+	 * \date March 2021
+	 */
 	class Exception : public IronException
 	{
 	public:

@@ -24,7 +24,7 @@
  * * Also can perform various transformations on that vertices.
  *
  * \author Yernar Aldabergenov
- * \date March 2021
+ * \date March 2020
  */
 template<class T>
 class IndexedTriangleList

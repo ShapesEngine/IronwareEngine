@@ -27,7 +27,7 @@ namespace Gdiplus
 #pragma region Surface
 
 Surface::Surface( uint32_t width, uint32_t height ) noexcept :
-	pBuffer( std::make_unique<Color[]>( (size_t)width* height ) ),
+	pBuffer( std::make_unique<Color[]>( (size_t)width * height ) ),
 	width( width ),
 	height( height )
 {}

@@ -49,7 +49,7 @@ public:
 	 * * time the event has been triggered.
 	 *
 	 * \author Yernar Aldabergenov
-	 * \date February 2021
+	 * \date February 2020
 	 */
 	class Event
 	{
