@@ -1,23 +1,13 @@
 /*!
- * \class GDIPlusManager
- *
- * \brief A class that is responsible for managing GDIplus
+ * \file GDIPlusManager.cpp
  *
  * \author Yernar Aldabergenov
  * \date November 2020
+ *
+ * 
  */
-#define IR_FULL_WIN
-#include "IronWin.h"
+#include "GDIPlusStd.inl"
 #include "GDIPlusManager.h"
-
-#include <algorithm>
-namespace Gdiplus
-{
-	// replacing the min max from windows with stdminmax
-	using std::min;
-	using std::max;
-}
-#include <gdiplus.h>
 
 ULONG_PTR GDIPlusManager::token = 0;
 int GDIPlusManager::refCount = 0;

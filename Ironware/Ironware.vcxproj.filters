@@ -388,5 +388,8 @@
     <None Include="..\External\DXErr\DXTrace.inl">
       <Filter>External\DXErr</Filter>
     </None>
+    <None Include="GDIPlusStd.inl">
+      <Filter>Header Files\Utils</Filter>
+    </None>
   </ItemGroup>
 </Project>

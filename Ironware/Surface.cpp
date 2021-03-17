@@ -7,22 +7,10 @@
  *
  */
 #include "Surface.h"
-#define IR_FULL_WIN
-#include "IronWin.h"
 #include "IronUtils.h"
+#include "GDIPlusStd.inl"
 
 #include <sstream>
-#include <algorithm>
-
-namespace Gdiplus
-{
-	// replacing win minmax with stdminmax
-	using std::min;
-	using std::max;
-}
-#include <gdiplus.h>
-
-#pragma comment(lib, "gdiplus.lib")
 
 #pragma region Surface
 
