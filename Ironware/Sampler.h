@@ -22,7 +22,7 @@
  * \brief A class that is is responsible for setting lookup configs.
  *
  * \author Yernar Aldabergenov
- * \date November 2021
+ * \date November 2020
  */
 class Sampler : public Bindable
 {

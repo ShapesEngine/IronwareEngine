@@ -95,7 +95,10 @@ Window::Window( int width_in, int height_in, const wchar_t* name ) :
 	ShowWindow( hWnd, SW_SHOWDEFAULT );
 
 	// Init ImGui Win32 Impl
-	ImGui_ImplWin32_Init( hWnd );
+	if( !ImGui_ImplWin32_Init( hWnd ) )
+	{
+		throw std::exception( "ImGui Initialization Fail" );
+	}
 
 	// create graphics object
 	pGfx = std::make_unique<Graphics>( hWnd );
@@ -323,7 +326,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		const POINTS pt = MAKEPOINTS( lParam );
 		mouse.OnMiddlePressed( pt.x, pt.y );
 		break;
-	}	
+	}
 	case WM_RBUTTONUP:
 	{
 		// stifle other keyboard messages if imgui wants to get full keyboard control

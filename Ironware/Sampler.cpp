@@ -2,7 +2,7 @@
  * \file Sampler.cpp
  *
  * \author Yernar Aldabergenov
- * \date November 2021
+ * \date November 2020
  *
  * 
  */

@@ -13,9 +13,20 @@
 */
 #pragma once
 
+/*!
+ * \class ImGuiManager
+ *
+ * \brief A manager class for creating and configuring(setting styles, etc..) imgui
+ *
+ * \author Yernar Aldabergenov
+ * \date November 2020
+ */
 class ImguiManager
 {
 public:
 	ImguiManager();
 	~ImguiManager();
+
+private:
+	static size_t refCount;
 };
