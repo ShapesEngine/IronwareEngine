@@ -4,12 +4,13 @@
  * \author Yernar Aldabergenov
  * \date November 2020
  *
- * 
+ *
  */
 #include "Sampler.h"
 #include "GraphicsExceptionMacros.h"
 
-Sampler::Sampler( Graphics& gfx, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE texAddrMode )
+Sampler::Sampler( Graphics& gfx, UINT slot, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE texAddrMode ) :
+	slot( slot )
 {
 	INFOMAN( gfx );
 

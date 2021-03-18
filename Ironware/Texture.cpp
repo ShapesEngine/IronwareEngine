@@ -4,13 +4,14 @@
  * \author Yernar Aldabergenov
  * \date November 2020
  *
- * 
+ *
  */
 #include "Texture.h"
 #include "Surface.h"
 #include "GraphicsExceptionMacros.h"
 
-Texture::Texture( Graphics& gfx, const Surface& sur )
+Texture::Texture( Graphics& gfx, const Surface& sur, UINT slot ) :
+	slot( slot )
 {
 	INFOMAN( gfx );
 

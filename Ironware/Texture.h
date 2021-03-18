@@ -29,10 +29,11 @@
 class Texture : public Bindable
 {
 public:
-	Texture( Graphics& gfx, const class Surface& sur );
-	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShaderResources( 0u, 1u, pTextureView.GetAddressOf() ); }
+	Texture( Graphics& gfx, const class Surface& sur, UINT slot = 0u );
+	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShaderResources( slot, 1u, pTextureView.GetAddressOf() ); }
 
 protected:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
+	const UINT slot;
 };
 
