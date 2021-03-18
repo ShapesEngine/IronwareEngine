@@ -195,6 +195,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		return true;
 	}
 
+	const auto imio = ImGui::GetIO();
+
 	switch( bool imGuiKbdCapture = ImGui::GetIO().WantCaptureKeyboard; msg )
 	{
 	case WM_CLOSE:

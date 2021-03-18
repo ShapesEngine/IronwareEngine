@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A camera class that is responsible for controlling camera transformations via imgui
+ * \brief A header that contains camera class
  *
  * TODO:
  *
@@ -15,19 +15,28 @@
 
 #include "Graphics.h"
 
+/*!
+ * \class Camera
+ *
+ * \brief A camera class that is responsible for controlling camera transformations via imgui
+ *
+ * \author Yernar Aldabergenov
+ * \date November 2020
+ */
 class Camera
 {
 public:
+	Camera();	
 	DirectX::XMMATRIX GetMatrix() const noexcept;
 	void SpawnControlWindow() noexcept;
 	void Reset() noexcept;
 
 private:
-	float zOffset = 20.f;
-	float theta = 0.f;
-	float phi = 0.f;
-	float pitch = 0.f;
-	float yaw = 0.f;
-	float roll = 0.f;
+	float zOffset;
+	float theta;
+	float phi;
+	float pitch;
+	float yaw;
+	float roll;
 };
 

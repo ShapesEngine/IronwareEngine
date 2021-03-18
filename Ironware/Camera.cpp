@@ -1,20 +1,25 @@
 /*!
- * \class Camera
- *
- * \brief A camera class that is responsible for controlling camera transformations via imgui
+ * \file Camera.cpp
  *
  * \author Yernar Aldabergenov
  * \date November 2020
+ *
+ * 
  */
 #include "Camera.h"
 #include "imgui/imgui.h"
 
 namespace dx = DirectX;
 
+Camera::Camera()
+{
+	Reset();
+}
+
 DirectX::XMMATRIX Camera::GetMatrix() const noexcept
 {
 	const auto position = dx::XMVector3Transform(
-		dx::XMVectorSet( 0.f, 0.f, -zOffset, 0.f ),
+		dx::XMVectorSet( 0.f, 0.f, zOffset, 0.f ),
 		dx::XMMatrixRotationRollPitchYaw( phi, -theta, 0.f )
 	);
 	return dx::XMMatrixLookAtLH( position, dx::XMVectorZero(),
