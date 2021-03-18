@@ -6,8 +6,7 @@
  * Contact: yernar.aa@gmail.com
  *
  * \brief This file contains a class Sampler.
- * * Sampler is responsible for performing lookups in a texture,
- * * such as setting filtering, wrapping etc.
+ * * 
  *
  * TODO:
  *
@@ -17,10 +16,18 @@
 
 #include "Bindable.h"
 
+/*!
+ * \class Sampler
+ *
+ * \brief A class that is is responsible for setting lookup configs.
+ *
+ * \author Yernar Aldabergenov
+ * \date November 2021
+ */
 class Sampler : public Bindable
 {
 public:
-	Sampler( Graphics& gfx );
+	Sampler( Graphics& gfx, D3D11_FILTER filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_MODE texAddrMode = D3D11_TEXTURE_ADDRESS_WRAP );
 	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetSamplers( 0u, 1u, pSampler.GetAddressOf() ); }
 
 protected:

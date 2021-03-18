@@ -1,11 +1,10 @@
 /*!
- * \class Texture
- *
- * \brief Texture class is responsible for creating & loading the
- * * texture to the GPU
+ * \file Texture.cpp
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date November 2021
+ *
+ * 
  */
 #include "Texture.h"
 #include "Surface.h"

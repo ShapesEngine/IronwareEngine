@@ -17,6 +17,15 @@
 
 #include "Bindable.h"
 
+/*!
+ * \class Texture
+ *
+ * \brief Texture class is responsible for creating & loading the
+ * * texture to the GPU
+ *
+ * \author Yernar Aldabergenov
+ * \date November 2020
+ */
 class Texture : public Bindable
 {
 public:

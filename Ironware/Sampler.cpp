@@ -1,24 +1,23 @@
 /*!
- * \class Sampler
- *
- * \brief Sampler is responsible for performing lookups in a texture,
- * * such as setting filtering, wrapping mode etc.
+ * \file Sampler.cpp
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ * \date November 2021
+ *
+ * 
  */
 #include "Sampler.h"
 #include "GraphicsExceptionMacros.h"
 
-Sampler::Sampler( Graphics& gfx )
+Sampler::Sampler( Graphics& gfx, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE texAddrMode )
 {
 	INFOMAN( gfx );
 
 	D3D11_SAMPLER_DESC descSampler = {};
-	descSampler.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	descSampler.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	descSampler.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	descSampler.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	descSampler.Filter = filter;
+	descSampler.AddressU = texAddrMode;
+	descSampler.AddressV = texAddrMode;
+	descSampler.AddressW = texAddrMode;
 
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateSamplerState( &descSampler, &pSampler ) );
 }
