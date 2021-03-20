@@ -5,8 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A drawable abstract class that controls(partly) the graphics pipeline and provides
- * * an interface for the other geometry object types 
+ * \brief A header that contains a drawable class
  *
  * TODO:
  *
@@ -21,8 +20,25 @@
 
 #include <memory>
 
-class Bindable;
-
+/*!
+ * \class Drawable
+ *
+ * \ingroup Drawables
+ *
+ * \brief A drawable abstract class that controls(partly) the graphics pipeline and provides
+ * * an interface for the other geometry object types
+ *
+ * TODO:
+ *
+ * \note
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class Drawable
 {
 	template<class T>
@@ -45,4 +61,3 @@ private:
 	const class IndexBuffer* pIndexBuffer = nullptr;
 	std::vector<std::unique_ptr<Bindable>> binds;
 };
-

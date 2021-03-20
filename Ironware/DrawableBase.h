@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A CRTP class for managing static binds in the graph pipeline
+ * \brief A header that contains a (drawable) drawablebase class
  *
  * TODO:
  *
@@ -16,6 +16,24 @@
 #include "Drawable.h"
 #include "IndexBuffer.h"
 
+/*!
+ * \class DrawableBase
+ *
+ * \ingroup Drawables
+ *
+ * \brief A CRTP class for managing static binds in the graph pipeline
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 template<typename T>
 class DrawableBase : public Drawable
 {

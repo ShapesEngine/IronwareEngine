@@ -15,6 +15,24 @@
 
 #include "DrawableBase.h"
 
+/*!
+ * \class Pyramid
+ *
+ * \ingroup Drawables
+ *
+ * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the pyramid
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class Pyramid : public DrawableBase<Pyramid>
 {
 public:
@@ -43,4 +61,3 @@ private:
 	float dphi;
 	float dchi;
 };
-

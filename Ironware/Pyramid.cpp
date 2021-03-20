@@ -1,22 +1,10 @@
 /*!
- * \class Pyramid
- *
- * \ingroup DEV
- *
- * \brief A Pyramid child class will control(partly) the graphics pipeline and draw the box
- *
- * TODO:
- *
- * \note The class contains variables that are needed for translation, rotation, etc.
+ * \file Pyramid.cpp
  *
  * \author Yernar Aldabergenov
- *
- * \version 1.0
- *
  * \date September 2020
  *
- * Contact: yernar.aa@gmail.com
- *
+ * 
  */
 #include "Pyramid.h"
 #include "BindableBase.h"

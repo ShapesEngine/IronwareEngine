@@ -1,10 +1,10 @@
 /*!
- * \class Box
- *
- * \brief A Box child class will control(partly) the graphics pipeline and draw the box
+ * \file Box.cpp
  *
  * \author Yernar Aldabergenov
  * \date September 2020
+ *
+ * 
  */
 #include "Box.h"
 #include "BindableBase.h"

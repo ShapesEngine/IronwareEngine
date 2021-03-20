@@ -1,10 +1,10 @@
 /*!
- * \class SolidSphere
- *
- * \brief A class that is responsible for creating & updating the sphere 
+ * \file SolidSphere.cpp
  *
  * \author Yernar Aldabergenov
  * \date November 2020
+ *
+ * 
  */
 #include "SolidSphere.h"
 #include "BindableBase.h"

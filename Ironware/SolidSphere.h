@@ -12,8 +12,27 @@
  * \note
 */
 #pragma once
+
 #include "DrawableBase.h"
 
+/*!
+ * \class SolidSphere
+ *
+ * \ingroup Drawables
+ *
+ * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the solidsphere
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date November 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class SolidSphere : public DrawableBase<SolidSphere>
 {
 public:

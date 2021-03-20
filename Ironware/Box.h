@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A Box child class will control(partly) the graphics pipeline and draw the box
+ * \brief A header that contains a (drawable) box class
  *
  * TODO:
  *
@@ -15,6 +15,24 @@
 
 #include "ObjectBase.h"
 
+/*!
+ * \class Box
+ *
+ * \ingroup Drawables
+ *
+ * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the box
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class Box : public ObjectBase<Box>
 {
 public:
@@ -32,4 +50,3 @@ private:
 	// model transform
 	DirectX::XMFLOAT3X3 mt = {};
 };
-

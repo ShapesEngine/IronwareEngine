@@ -1,7 +1,7 @@
 /*!
  * \class Cylinder
  *
- * \brief 
+ * \brief A header that contains a (drawable) cylinder class
  *
  * \author Yernar Aldabergenov
  * \date November 2020
@@ -10,6 +10,24 @@
 
 #include "ObjectBase.h"
 
+/*!
+ * \class Cylinder
+ *
+ * \ingroup Drawables
+ *
+ * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the cylinder
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date November 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class Cylinder : public ObjectBase<Cylinder>
 {
 public:
@@ -21,4 +39,3 @@ public:
 			  std::uniform_real_distribution<float>& bdist,
 			  std::uniform_int_distribution<int>& tdist );
 };
-

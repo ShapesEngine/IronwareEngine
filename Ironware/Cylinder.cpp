@@ -1,16 +1,11 @@
 /*!
  * \file Cylinder.cpp
- * \date 2020/11/14 21:59
  *
  * \author Yernar Aldabergenov
- * Contact: yernar.aa@gmail.com
+ * \date November 2020
  *
- * \brief 
- *
- * TODO:
- *
- * \note
-*/
+ * 
+ */
 #include "Cylinder.h"
 #include "Prism.h"
 #include "BindableBase.h"

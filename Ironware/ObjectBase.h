@@ -15,15 +15,33 @@
 
 #include "DrawableBase.h"
 
+/*!
+ * \class ObjectBase
+ *
+ * \ingroup Drawables
+ *
+ * \brief CRTP Class that is responsible for pasting boilerplate code
+ *
+ * TODO:
+ *
+ * \note
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date Novemeber 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 template<class T>
 class ObjectBase : public DrawableBase<T>
 {
 public:
 	ObjectBase( Graphics& gfx, std::mt19937& rng,
-				std::uniform_real_distribution<float>& adist,
-				std::uniform_real_distribution<float>& ddist,
-				std::uniform_real_distribution<float>& odist,
-				std::uniform_real_distribution<float>& rdist )
+		std::uniform_real_distribution<float>& adist,
+		std::uniform_real_distribution<float>& ddist,
+		std::uniform_real_distribution<float>& odist,
+		std::uniform_real_distribution<float>& rdist )
 		:
 		r( rdist( rng ) ),
 		droll( ddist( rng ) ),
