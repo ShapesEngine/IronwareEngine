@@ -1,10 +1,10 @@
 /*!
- * \class TransformCBuffer
- *
- * \brief A Transform Constant Buffer wrapper child class that will be bound in process of graphics pipeline.
+ * \file TransformCBuffer.cpp
  *
  * \author Yernar Aldabergenov
  * \date September 2020
+ *
+ * 
  */
 #include "TransformCBuffer.h"
 

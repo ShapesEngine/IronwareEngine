@@ -104,7 +104,7 @@ public:
 				4, 5, 7, 4, 7, 6,
 				2, 10, 11, 2, 11, 6,
 				12, 3, 7, 12, 7, 13
-		}
+			}
 		};
 	}
 
@@ -115,35 +115,35 @@ public:
 
 		std::vector<V> vertices( 24 );
 		/******************************* near side ******************************/
-		vertices[0].pos = { -side, -side, -side };// 0
-		vertices[1].pos = { side, -side, -side };// 1
-		vertices[2].pos = { -side, side, -side };// 2
-		vertices[3].pos = { side, side, -side };// 3
+		vertices[0].pos = { -side, -side, -side };
+		vertices[1].pos = { side, -side, -side };
+		vertices[2].pos = { -side, side, -side };
+		vertices[3].pos = { side, side, -side };
 		/******************************* far side ******************************/
-		vertices[4].pos = { -side, -side, side };// 4
-		vertices[5].pos = { side, -side, side };// 5
-		vertices[6].pos = { -side, side, side };// 6
-		vertices[7].pos = { side, side, side };// 7
+		vertices[4].pos = { -side, -side, side };
+		vertices[5].pos = { side, -side, side };
+		vertices[6].pos = { -side, side, side };
+		vertices[7].pos = { side, side, side };
 		/******************************* left side ******************************/
-		vertices[8].pos = { -side, -side, -side };// 8
-		vertices[9].pos = { -side, side, -side };// 9
-		vertices[10].pos = { -side, -side, side };// 10
-		vertices[11].pos = { -side, side, side };// 11
+		vertices[8].pos = { -side, -side, -side };
+		vertices[9].pos = { -side, side, -side };
+		vertices[10].pos = { -side, -side, side };
+		vertices[11].pos = { -side, side, side };
 		/******************************* right side ******************************/
-		vertices[12].pos = { side, -side, -side };// 12
-		vertices[13].pos = { side, side, -side };// 13
-		vertices[14].pos = { side, -side, side };// 14
-		vertices[15].pos = { side, side, side };// 15
+		vertices[12].pos = { side, -side, -side };
+		vertices[13].pos = { side, side, -side };
+		vertices[14].pos = { side, -side, side };
+		vertices[15].pos = { side, side, side };
 		/******************************* bottom side ******************************/
-		vertices[16].pos = { -side, -side, -side };// 16
-		vertices[17].pos = { side, -side, -side };// 17
-		vertices[18].pos = { -side, -side, side };// 18
-		vertices[19].pos = { side, -side, side };// 19
+		vertices[16].pos = { -side, -side, -side };
+		vertices[17].pos = { side, -side, -side };
+		vertices[18].pos = { -side, -side, side };
+		vertices[19].pos = { side, -side, side };
 		/******************************* top side ******************************/
-		vertices[20].pos = { -side, side, -side };// 20
-		vertices[21].pos = { side, side, -side };// 21
-		vertices[22].pos = { -side, side, side };// 22
-		vertices[23].pos = { side, side, side };// 23
+		vertices[20].pos = { -side, side, -side };
+		vertices[21].pos = { side, side, -side };
+		vertices[22].pos = { -side, side, side };
+		vertices[23].pos = { side, side, side };
 
 		return{
 			std::move( vertices ), {

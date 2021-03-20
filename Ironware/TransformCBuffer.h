@@ -20,6 +20,14 @@
 
 #include <DirectXMath.h>
 
+/*!
+ * \class TransformCBuffer
+ *
+ * \brief A Transform Constant Buffer wrapper child class that will be bound in process of graphics pipeline.
+ *
+ * \author Yernar Aldabergenov
+ * \date September 2020
+ */
 class TransformCBuffer : public Bindable
 {
 private:
