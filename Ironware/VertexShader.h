@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A VertexShader wrapper class that will be bound in process of graphics pipeline.
+ * \brief A header that contains a (bindable) vertexshader class
  *
  * TODO:
  *
@@ -17,6 +17,24 @@
 #include "Bindable.h"
 #include <d3dcompiler.h>
 
+/*!
+ * \class VertexShader
+ *
+ * \ingroup Bindables
+ *
+ * \brief A VertexShader wrapper class that will be bound in process of graphics pipeline.
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class VertexShader : public Bindable
 {
 public:

@@ -1,10 +1,10 @@
 /*!
- * \class PixelShader
- *
- * \brief A PixelShader wrapper class that will be bound in process of graphics pipeline.
+ * \file PixelShader.cpp
  *
  * \author Yernar Aldabergenov
  * \date September 2020
+ *
+ * 
  */
 #include "PixelShader.h"
 #include "GraphicsExceptionMacros.h"

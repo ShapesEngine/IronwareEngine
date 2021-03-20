@@ -1,11 +1,10 @@
 /*!
- * \class InputLayout
- *
- * \brief An InputLayout wrapper class that will be needed and bound in process of graphics pipeline
- * * and store vertex indices in it.
+ * \file InputLayout.cpp
  *
  * \author Yernar Aldabergenov
  * \date September 2020
+ *
+ * 
  */
 #include "InputLayout.h"
 #include "GraphicsExceptionMacros.h"

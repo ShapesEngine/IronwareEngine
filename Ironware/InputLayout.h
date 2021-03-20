@@ -5,8 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief An InputLayout wrapper class that will be needed and bound in process of graphics pipeline
- * * and store vertex indices in it.
+ * \brief A header that contains a (bindable) inputlayout class
  *
  * TODO:
  *
@@ -16,6 +15,25 @@
 
 #include "Bindable.h"
 
+/*!
+ * \class InputLayout
+ *
+ * \ingroup Bindables
+ *
+ * \brief An InputLayout wrapper class that will be needed and bound in process of graphics pipeline
+ * * and store vertex indices in it.
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class InputLayout : public Bindable
 {
 public:

@@ -1,10 +1,10 @@
 /*!
- * \class VertexShader
- *
- * \brief A VertexShader wrapper class that will be bound in process of graphics pipeline.
+ * \file VertexShader.cpp
  *
  * \author Yernar Aldabergenov
  * \date September 2020
+ *
+ * 
  */
 #include "VertexShader.h"
 #include "GraphicsExceptionMacros.h"

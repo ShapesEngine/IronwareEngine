@@ -5,8 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A PixelShader wrapper class that will be bound in process of graphics pipeline.
- *
+ * \brief A header that contains a (bindable) pixelshader wrapper class
  *
  * TODO:
  *
@@ -16,6 +15,24 @@
 
 #include "Bindable.h"
 
+/*!
+ * \class PixelShader
+ *
+ * \ingroup Bindables
+ *
+ * \brief A PixelShader wrapper class that will be bound in process of graphics pipeline.
+ *
+ * TODO:
+ *
+ * \note
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class PixelShader : public Bindable
 {
 public:
@@ -26,4 +43,3 @@ public:
 protected:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
 };
-

@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A header that includes all bindable classes, as they are needed for pipeline
+ * \brief A header that includes all the bindable classes, as they are needed for pipeline
  *
  * TODO:
  *

@@ -5,9 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief This file contains Texture class.
- * * Texture class is responsible for creating & loading the
- * * texture to the GPU
+ * \brief This file contains a (bindable) Texture class.
  *
  * TODO:
  *
@@ -20,11 +18,20 @@
 /*!
  * \class Texture
  *
- * \brief Texture class is responsible for creating & loading the
- * * texture to the GPU
+ * \ingroup Bindables
+ *
+ * \brief Responsible class for creating & loading the texture to the GPU
+ *
+ * TODO:
+ *
+ * \note 
  *
  * \author Yernar Aldabergenov
- * \date November 2020
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
  */
 class Texture : public Bindable
 {
@@ -36,4 +43,3 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
 	const UINT slot;
 };
-

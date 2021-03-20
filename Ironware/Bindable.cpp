@@ -1,11 +1,10 @@
 /*!
- * \class Bindable
- *
- * \brief An abstract class that will be inherited from other bindable types.
- * * All the child classes will get bound with the Bind function.
+ * \file Bindable.cpp
  *
  * \author Yernar Aldabergenov
  * \date September 2020
+ *
+ *
  */
 #include "Bindable.h"
 #ifdef NDEBUG

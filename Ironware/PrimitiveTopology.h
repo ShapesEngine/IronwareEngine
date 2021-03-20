@@ -5,16 +5,34 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A PrimitiveTopology wrapper child class that will be bound in process of graphics pipeline.
+ * \brief A header that contains a (bindable) primitivetopology class
  *
  * TODO:
  *
- * \note It stores primitive PrimitiveTopology type
+ * \note
 */
 #pragma once
 
 #include "Bindable.h"
 
+/*!
+ * \class PrimitiveTopology
+ *
+ * \ingroup Bindables
+ *
+ * \brief A PrimitiveTopology wrapper child class that will be bound in process of graphics pipeline.
+ *
+ * TODO:
+ *
+ * \note 
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
 class PrimitiveTopology : public Bindable
 {
 public:
@@ -25,4 +43,3 @@ public:
 protected:
 	D3D11_PRIMITIVE_TOPOLOGY type;
 };
-

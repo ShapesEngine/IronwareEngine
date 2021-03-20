@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A vertex buffer class that controls vertex input buffers(binds, etc)
+ * \brief A header that contains a (bindable) vertexbuffer class
  *
  * TODO:
  *
@@ -19,10 +19,20 @@
 /*!
  * \class VertexBuffer
  *
+ * \ingroup Bindables
+ *
  * \brief A vertex buffer class that controls vertex input buffers(binds, etc)
  *
+ * TODO:
+ *
+ * \note 
+ *
  * \author Yernar Aldabergenov
+ *
  * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
  */
 class VertexBuffer : public Bindable
 {

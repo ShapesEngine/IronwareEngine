@@ -5,8 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief This file contains a class Sampler.
- * * 
+ * \brief This file contains a (bindable) sampler class.
  *
  * TODO:
  *
@@ -19,10 +18,20 @@
 /*!
  * \class Sampler
  *
+ * \ingroup Bindables
+ *
  * \brief A class that is is responsible for setting lookup configs.
  *
+ * TODO:
+ *
+ * \note 
+ *
  * \author Yernar Aldabergenov
- * \date November 2020
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
  */
 class Sampler : public Bindable
 {
@@ -34,4 +43,3 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
 	const UINT slot;
 };
-

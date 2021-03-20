@@ -1,11 +1,10 @@
 /*!
- * \class IndexBuffer
- *
- * \brief An IndexBuffer wrapper class that will be bound in process of graphics pipeline
- * * and store vertex indices in it.
+ * \file IndexBuffer.cpp
  *
  * \author Yernar Aldabergenov
  * \date September 2020
+ *
+ * 
  */
 #include "IndexBuffer.h"
 #include "GraphicsExceptionMacros.h"

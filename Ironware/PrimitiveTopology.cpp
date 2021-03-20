@@ -1,10 +1,10 @@
 /*!
- * \class PrimitiveTopology
- *
- * \brief A PrimitiveTopology wrapper child class that will be bound in process of graphics pipeline.
+ * \file PrimitiveTopology.cpp
  *
  * \author Yernar Aldabergenov
  * \date September 2020
+ *
+ * 
  */
 #include "PrimitiveTopology.h"
 
