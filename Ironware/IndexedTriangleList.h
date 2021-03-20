@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief
+ * \brief A header that contains a indexedtriagnlelist
  *
  * TODO:
  *
@@ -24,7 +24,7 @@
  * * Also can perform various transformations on that vertices.
  *
  * \author Yernar Aldabergenov
- * \date March 2020
+ * \date September 2020
  */
 template<class T>
 class IndexedTriangleList

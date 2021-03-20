@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief
+ * \brief A header that contains a (geometry) plane class
  *
  * TODO:
  *
