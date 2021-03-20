@@ -7,9 +7,6 @@
  *
  * \brief A class that is responsible for creating & updating the sphere 
  *
- * TODO:
- *
- * \note
 */
 #pragma once
 
@@ -21,10 +18,6 @@
  * \ingroup Drawables
  *
  * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the solidsphere
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

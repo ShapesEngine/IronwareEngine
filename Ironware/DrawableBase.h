@@ -7,8 +7,6 @@
  *
  * \brief A header that contains a (drawable) drawablebase class
  *
- * TODO:
- *
  * \note Index Buffer needs to be set separately for every geometry object type
 */
 #pragma once
@@ -22,10 +20,6 @@
  * \ingroup Drawables
  *
  * \brief A CRTP class for managing static binds in the graph pipeline
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

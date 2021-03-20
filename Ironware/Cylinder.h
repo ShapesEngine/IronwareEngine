@@ -17,10 +17,6 @@
  *
  * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the cylinder
  *
- * TODO:
- *
- * \note 
- *
  * \author Yernar Aldabergenov
  *
  * \date November 2020

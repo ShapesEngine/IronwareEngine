@@ -7,8 +7,6 @@
  *
  * \brief A Pyramid child class will control(partly) the graphics pipeline and draw the pyramid
  *
- * TODO:
- *
  * \note It contains variables that are needed for translation, rotation, etc.
 */
 #pragma once
@@ -21,10 +19,6 @@
  * \ingroup Drawables
  *
  * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the pyramid
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

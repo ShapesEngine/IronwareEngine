@@ -7,9 +7,6 @@
  *
  * \brief A CRTP class for replacing boilerplate code in drawables
  *
- * TODO:
- *
- * \note
 */
 #pragma once
 
@@ -21,10 +18,6 @@
  * \ingroup Drawables
  *
  * \brief CRTP Class that is responsible for pasting boilerplate code
- *
- * TODO:
- *
- * \note
  *
  * \author Yernar Aldabergenov
  *

@@ -7,8 +7,6 @@
  *
  * \brief A header that contains a drawable class
  *
- * TODO:
- *
  * \note It contains: pIndexBuffer, as it's needed to get its count.
  * *				  binds collection that stores various bindable types in it.
 */
@@ -27,10 +25,6 @@
  *
  * \brief A drawable abstract class that controls(partly) the graphics pipeline and provides
  * * an interface for the other geometry object types
- *
- * TODO:
- *
- * \note
  *
  * \author Yernar Aldabergenov
  *
