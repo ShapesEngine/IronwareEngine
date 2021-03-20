@@ -9,9 +9,6 @@
  * * That will be able to create cbuffer type buffers.
  * * They will have Update function that makes it possible to update the existing buffer contents.
  *
- *
- * TODO:
- *
  * \note Each class in this file contains appropriate constant buffers
 */
 #pragma once
@@ -31,7 +28,6 @@
  * \note 
  *
  * \author Yernar Aldabergenov
- *
  *
  * \date September 2020
  *
@@ -76,10 +72,6 @@ protected:
  *
  * \brief Responsible class for binding & setting vertex shader constant buffers
  *
- * TODO:
- *
- * \note 
- *
  * \author Yernar Aldabergenov
  *
  * \date September 2020
@@ -105,10 +97,6 @@ public:
  * \ingroup Bindables
  *
  * \brief Responsible class for binding & setting pixel shader constant buffers
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

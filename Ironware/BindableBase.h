@@ -7,9 +7,6 @@
  *
  * \brief A header that includes all the bindable classes, as they are needed for pipeline
  *
- * TODO:
- *
- * \note
 */
 #pragma once
 

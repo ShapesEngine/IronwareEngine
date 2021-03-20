@@ -7,9 +7,6 @@
  *
  * \brief A header that contains a (bindable) inputlayout class
  *
- * TODO:
- *
- * \note
 */
 #pragma once
 
@@ -22,10 +19,6 @@
  *
  * \brief An InputLayout wrapper class that will be needed and bound in process of graphics pipeline
  * * and store vertex indices in it.
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

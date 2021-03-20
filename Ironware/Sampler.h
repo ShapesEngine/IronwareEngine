@@ -7,9 +7,6 @@
  *
  * \brief This file contains a (bindable) sampler class.
  *
- * TODO:
- *
- * \note
 */
 #pragma once
 
@@ -21,10 +18,6 @@
  * \ingroup Bindables
  *
  * \brief A class that is is responsible for setting lookup configs.
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

@@ -6,10 +6,7 @@
  * Contact: yernar.aa@gmail.com
  *
  * \brief A header that contains a (bindable) indexbuffer class
- *
- * TODO:
- *
- * \note
+ * 
 */
 #pragma once
 
@@ -22,10 +19,6 @@
  *
  * \brief An IndexBuffer wrapper class that will be bound in process of graphics pipeline
  * * and store vertex indices in it.
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

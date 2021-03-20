@@ -7,9 +7,6 @@
  *
  * \brief A header that contains a (bindable) vertexbuffer class
  *
- * TODO:
- *
- * \note
 */
 #pragma once
 
@@ -22,10 +19,6 @@
  * \ingroup Bindables
  *
  * \brief A vertex buffer class that controls vertex input buffers(binds, etc)
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

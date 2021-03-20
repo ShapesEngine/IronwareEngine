@@ -7,8 +7,6 @@
  *
  * \brief A header that contains a (bindable) pixelshader wrapper class
  *
- * TODO:
- *
  * \note It stores created pixel shader data
 */
 #pragma once
@@ -21,10 +19,6 @@
  * \ingroup Bindables
  *
  * \brief A PixelShader wrapper class that will be bound in process of graphics pipeline.
- *
- * TODO:
- *
- * \note
  *
  * \author Yernar Aldabergenov
  *

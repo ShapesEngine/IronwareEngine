@@ -7,9 +7,6 @@
  *
  * \brief A header that contains a (bindable) primitivetopology class
  *
- * TODO:
- *
- * \note
 */
 #pragma once
 
@@ -21,10 +18,6 @@
  * \ingroup Bindables
  *
  * \brief A PrimitiveTopology wrapper child class that will be bound in process of graphics pipeline.
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

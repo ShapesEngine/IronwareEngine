@@ -7,9 +7,6 @@
  *
  * \brief This file contains a (bindable) Texture class.
  *
- * TODO:
- *
- * \note
 */
 #pragma once
 
@@ -21,10 +18,6 @@
  * \ingroup Bindables
  *
  * \brief Responsible class for creating & loading the texture to the GPU
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

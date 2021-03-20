@@ -7,8 +7,6 @@
  *
  * \brief A header that contains a (bindable) vertexshader class
  *
- * TODO:
- *
  * \note It stores: bytecode, as its bufferpointer and buffer size are needed in creation process
  * *				vertexShader is created vertexshader data
 */
@@ -23,10 +21,6 @@
  * \ingroup Bindables
  *
  * \brief A VertexShader wrapper class that will be bound in process of graphics pipeline.
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *

@@ -7,8 +7,6 @@
  *
  * \brief A header that contains a (bindable) transformcbuffer class
  *
- * TODO:
- *
  * \note It stores parent and vertexConstBuffer. parent is needed to get transform matrix and
  * vertConstBuffer is needed to update and bind the buffer.
 */
@@ -26,10 +24,6 @@
  * \ingroup Bindables
  *
  * \brief A Transform Constant Buffer wrapper child class that will be bound in process of graphics pipeline.
- *
- * TODO:
- *
- * \note 
  *
  * \author Yernar Aldabergenov
  *
