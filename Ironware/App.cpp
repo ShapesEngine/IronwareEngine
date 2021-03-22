@@ -102,7 +102,9 @@ void App::ProcessFrame()
 	if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
 		PostQuitMessage( 0 );
 
-	const auto dt = isSimulationRunning ? timer.Mark() * simulationSpeedFactor : 0.f;
+	const float mark = timer.Mark();
+
+	const auto dt = isSimulationRunning ? mark : 0.f;
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 	// move away by 20.f from origin
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
