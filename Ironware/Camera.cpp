@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date November 2020
  *
- * 
+ *
  */
 #include "Camera.h"
 #include "imgui/imgui.h"
@@ -24,7 +24,7 @@ DirectX::XMMATRIX Camera::GetMatrix() const noexcept
 	);
 	return dx::XMMatrixLookAtLH( position, dx::XMVectorZero(),
 		// world up vector
-		dx::XMVectorSet( 0.f, 1.f, 0.f, 0.f ) ) * 
+		dx::XMVectorSet( 0.f, 1.f, 0.f, 0.f ) ) *
 		dx::XMMatrixRotationRollPitchYaw( pitch, -yaw, roll );
 }
 
@@ -33,7 +33,7 @@ void Camera::SpawnControlWindow() noexcept
 	if( ImGui::Begin( "Camera" ) )
 	{
 		ImGui::Text( "Position" );
-		ImGui::SliderFloat( "Z Offset", &zOffset, 0.f, 80.f, "%.1f" );
+		ImGui::SliderFloat( "Z Offset", &zOffset, FLT_EPSILON, 80.f, "%.1f" );
 		ImGui::SliderAngle( "Y Rotation", &theta, -180.f, 180.f );
 		ImGui::SliderAngle( "X Rotation", &phi, -89.f, 89.f );
 		ImGui::Text( "Orientation" );
@@ -46,6 +46,13 @@ void Camera::SpawnControlWindow() noexcept
 		}
 	}
 	ImGui::End();
+
+	// zOffset = epsilon, otherwise it will assert
+	// because zOffset is eq to the vector that was set from XMMatrixLookAtLH
+	if( zOffset <= 0 )
+	{
+		zOffset = FLT_EPSILON;
+	}
 }
 
 void Camera::Reset() noexcept
