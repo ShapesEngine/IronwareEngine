@@ -11,8 +11,7 @@
 
 #include <sstream>
 
-IronException::IronException( int line, const wchar_t* file ) noexcept
-	:
+IronException::IronException( int line, const wchar_t* file ) noexcept :
 	line( line ),
 	file( file )
 {}
@@ -31,7 +30,7 @@ std::wstring IronException::GetOriginString() const noexcept
 {
 	std::wostringstream woss;
 	woss << "[File] " << file << std::endl
-		<< "[Line] " << line;
+		<< "[Line] " << line << ( true ? "Good" : "Bsad" );
 
 	return woss.str();
 }

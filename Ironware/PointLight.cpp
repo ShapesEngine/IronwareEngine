@@ -51,9 +51,13 @@ void PointLight::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
 
 void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept
 { 
+	// We have to first transform the pos to the view pos, 
+	// as all of our computations are being computed relative to the camera
+	// ==============================================================================
 	auto dataCopy = cbufData;
 	const auto pos = DirectX::XMLoadFloat3( &cbufData.pos );
 	DirectX::XMStoreFloat3( &dataCopy.pos, DirectX::XMVector3Transform( pos, view ) );
+	// ------------------------------------------------------------------------------
 	cbuffer.Update( gfx, dataCopy );
 	cbuffer.Bind( gfx );
 }

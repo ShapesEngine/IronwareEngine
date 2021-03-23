@@ -30,9 +30,9 @@ private:
 	struct PointLightCBuf
 	{
 		// GPU expects 16 byte val
-		alignas( 16 ) DirectX::XMFLOAT3 pos;
-		alignas( 16 ) DirectX::XMFLOAT3 ambient;
-		alignas( 16 ) DirectX::XMFLOAT3 diffuseColor;
+		DirectX::XMFLOAT3A pos;
+		DirectX::XMFLOAT3A ambient;
+		DirectX::XMFLOAT3 diffuseColor;
 		float diffuseIntensity;
 		float attConst;
 		float attLin;
