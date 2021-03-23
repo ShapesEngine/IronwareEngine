@@ -37,8 +37,8 @@ class TransformCBuffer : public Bindable
 private:
 	struct Transforms
 	{
+		DirectX::XMMATRIX modelView;
 		DirectX::XMMATRIX modelViewProj;
-		DirectX::XMMATRIX model;
 	};
 
 public:

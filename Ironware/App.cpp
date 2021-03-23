@@ -104,7 +104,7 @@ void App::ProcessFrame()
 
 	const float mark = timer.Mark();
 
-	const auto dt = isSimulationRunning ? mark : 0.f;
+	const auto dt = isSimulationRunning ? mark * simulationSpeedFactor : 0.f;
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 	// move away by 20.f from origin
 	wnd.Gfx().SetCamera( camera.GetMatrix() );

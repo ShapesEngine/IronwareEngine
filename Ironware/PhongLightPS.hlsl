@@ -2,7 +2,7 @@
 cbuffer LightCBuf
 {
     float3 lightPos;
-    float3 ambient;
+    float3 ambi;
     float3 diffuseColor;
     float diffuseIntensity;
     float attConst;
@@ -28,7 +28,7 @@ float4 main( float3 viewPos : Position, float3 n : Normal ) : SV_Target
     const float att = attConst + attLin * distToL + attQuad * ( distToL * distToL );
     const float luminosity = 1.f / att;
     // ambient luminosity
-    const float3 ambi = ambient * luminosity;
+    const float3 ambient = ambi * luminosity;
 	// diffuse intensity
     const float3 diffuse = diffuseColor * diffuseIntensity * luminosity * max( 0.f, dot( dirToL, n ) );
     // reflected light vector
@@ -39,5 +39,5 @@ float4 main( float3 viewPos : Position, float3 n : Normal ) : SV_Target
     const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) *
                             specularIntensity * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularPower );
 	// final color
-    return float4( saturate( ( diffuse + ambi + specular ) * materialColor ), 1.f );
+    return float4( saturate( ( diffuse + ambient + specular ) * materialColor ), 1.f );
 }
