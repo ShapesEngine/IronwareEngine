@@ -6,12 +6,12 @@
  *
  * 
  */
-#include "Pyramid.h"
+#include "Cone.h"
 #include "BindableBase.h"
 #include "GraphicsExceptionMacros.h"
-#include "Cone.h"
+#include "Pyramid.h"
 
-Pyramid::Pyramid( Graphics& gfx,
+Cone::Cone( Graphics& gfx,
 				  std::mt19937& rng,
 				  std::uniform_real_distribution<float>& adist,
 				  std::uniform_real_distribution<float>& ddist,
@@ -43,7 +43,7 @@ Pyramid::Pyramid( Graphics& gfx,
 				uint8_t a;
 			} color;
 		};
-		auto model = Cone::MakeTesselated<Vertex>( 4 );
+		auto model = Pyramid::MakeTesselated<Vertex>( 4 );
 		// set vertex colors for mesh
 		model.vertices[0].color = { 255, 255, 0 };
 		model.vertices[1].color = { 255, 255, 0 };
@@ -81,7 +81,7 @@ Pyramid::Pyramid( Graphics& gfx,
 	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
 }
 
-void Pyramid::Update( float dt ) noexcept
+void Cone::Update( float dt ) noexcept
 {
 	roll += droll * dt;
 	pitch += dpitch * dt;
@@ -91,7 +91,7 @@ void Pyramid::Update( float dt ) noexcept
 	chi += dchi * dt;
 }
 
-DirectX::XMMATRIX Pyramid::GetTransformXM() const noexcept
+DirectX::XMMATRIX Cone::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
 

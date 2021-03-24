@@ -23,6 +23,7 @@
 #include "IronMath.h"
 #include "IronMath.h"
 #include "GDIPlusManager.h"
+#include "Box.h"
 #include "Surface.h"
 #include "Cylinder.h"
 #include "imgui/imgui.h"

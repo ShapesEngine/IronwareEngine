@@ -49,7 +49,7 @@ void Camera::SpawnControlWindow() noexcept
 
 	// zOffset = epsilon, otherwise it will assert
 	// because zOffset is eq to the vector that was set from XMMatrixLookAtLH
-	if( zOffset <= 0 )
+	if( zOffset <= 0.f )
 	{
 		zOffset = FLT_EPSILON;
 	}

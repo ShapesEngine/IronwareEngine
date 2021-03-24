@@ -1,57 +1,85 @@
 /*!
- * \file Pyramid.h
- * \date 2020/09/25 22:37
+ * \file Cone.h
+ * \date 2020/09/25 22:28
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A Pyramid child class will control(partly) the graphics pipeline and draw the pyramid
+ * \brief A header that contains a (geometry) cone class
  *
- * \note It contains variables that are needed for translation, rotation, etc.
+ * TODO:
+ *
+ * \note
 */
 #pragma once
+#include "IndexedTriangleList.h"
+#include "IronMath.h"
 
-#include "DrawableBase.h"
+#include <DirectXMath.h>
 
 /*!
- * \class Pyramid
+ * \class Cone
  *
- * \ingroup Drawables
- *
- * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the pyramid
+ * \brief A class for generating cone vertices and indices
  *
  * \author Yernar Aldabergenov
- *
  * \date September 2020
- *
- * Contact: yernar.aa@gmail.com
- *
  */
-class Pyramid : public DrawableBase<Pyramid>
+class Pyramid
 {
 public:
-	Pyramid( Graphics& gfx, std::mt19937& rng,
-			 std::uniform_real_distribution<float>& adist,
-			 std::uniform_real_distribution<float>& ddist,
-			 std::uniform_real_distribution<float>& odist,
-			 std::uniform_real_distribution<float>& rdist );
-	void Update( float dt ) noexcept override;
-	DirectX::XMMATRIX GetTransformXM() const noexcept override;
+	template<class V>
+	static IndexedTriangleList<V> MakeTesselated( int longDiv )
+	{
+		namespace dx = DirectX;
 
-private:
-	// positional
-	float zOffset;
-	float roll = 0.f;
-	float pitch = 0.f;
-	float yaw = 0.f;
-	float theta;
-	float phi;
-	float chi;
-	// speed (delta/s)
-	float droll;
-	float dpitch;
-	float dyaw;
-	float dtheta;
-	float dphi;
-	float dchi;
+		assert( longDiv >= 3 );
+
+		const auto base = dx::XMVectorSet( 1.f, 0.f, -1.f, 0.f );
+		const float longitudeAngle = 2.f * PI / longDiv;
+
+		// base vertices
+		std::vector<V> vertices;
+		for( int iLong = 0; iLong < longDiv; iLong++ )
+		{
+			vertices.emplace_back();
+			auto v = dx::XMVector3Transform(
+				base,
+				dx::XMMatrixRotationZ( longitudeAngle * iLong )
+			);
+			dx::XMStoreFloat3( &vertices.back().pos, v );
+		}
+		/******************************* Center *****************************/
+		vertices.emplace_back();
+		vertices.back().pos = { 0.f, 0.f, -1.f };
+		const auto iCenter = (uint16_t)( vertices.size() - 1 );
+		// -----------------------------------------------------------------------
+		/******************************* Tip ******************************/
+		vertices.emplace_back();
+		vertices.back().pos = { 0.f, 0.f, 1.f };
+		const auto iTip = (uint16_t)( vertices.size() - 1 );
+		// -----------------------------------------------------------------------
+
+		// base indices
+		std::vector<uint16_t> indices;
+		for( uint16_t iLong = 0; iLong < longDiv; iLong++ )
+		{
+			indices.push_back( iCenter );
+			indices.push_back( ( iLong + 1 ) % longDiv );
+			indices.push_back( iLong );
+		}
+
+		// cone indices
+		for( uint16_t iLong = 0; iLong < longDiv; iLong++ )
+		{
+			indices.push_back( iLong );
+			indices.push_back( ( iLong + 1 ) % longDiv );
+			indices.push_back( iTip );
+		}
+
+		return { std::move( vertices ), std::move( indices ) };
+	}
+
+	template<class V>
+	__forceinline static IndexedTriangleList<V> Make() { return MakeTesselated<V>( 24 ); }
 };
