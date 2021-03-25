@@ -32,10 +32,20 @@ template<typename T>
 class DrawableBase : public Drawable
 {
 protected:
+	/**
+	 * @brief Checks if staticbinds is already initialized. Use this function to check
+	 * * in drawables if the reusable bindables are already added into the staticbinds
+	 * @return boolean value that answers to the question :)
+	*/
 	static __forceinline bool IsStaticInitialized() { return !staticBinds.empty(); }
 
 	static void AddStaticBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG );
 	void AddStaticIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept;
+
+	/**
+	 * @brief Sets index buffer from staticbinds. It's needed when you're going to draw
+	 * * a drawable, as drawindexed requires indexcount
+	*/
 	void SetIndexFromStatic() noexcept( !IS_DEBUG );
 
 private:
