@@ -49,6 +49,15 @@ public:
 	void AddBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG );
 	void AddIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept( !IS_DEBUG );
 
+protected:
+	/**
+	 * @brief Retrieves specified bindable from binds collection
+	 * @tparam T required bindable type
+	 * @return pointer to the bindable type, if it was found
+	*/
+	template<typename T>
+	T* QueryBindable();
+
 private:
 	virtual const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept = 0;
 
