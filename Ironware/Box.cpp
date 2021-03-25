@@ -10,6 +10,7 @@
 #include "BindableBase.h"
 #include "GraphicsExceptionMacros.h"
 #include "Cube.h"
+#include "imgui/imgui.h"
 
 Box::Box( Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
@@ -73,4 +74,31 @@ DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 	namespace dx = DirectX;
 
 	return dx::XMLoadFloat3x3( &mt ) * ObjectBase::GetTransformXM();
+}
+
+void Box::SpawnControlWindow( int id, Graphics & gfx ) noexcept( !IS_DEBUG )
+{
+	//using namespace std::string_literals;
+	bool dirty = false;
+
+	if( ImGui::Begin( ( "Box " + std::to_string( id ) ).c_str() ) )
+	{
+		dirty = dirty | ImGui::ColorEdit3( "Material Color", &materialConstants.color.x );
+		dirty = dirty | ImGui::SliderFloat( "Specular Intensity", &materialConstants.specularIntensity, 0.f, 1.f );
+		dirty = dirty | ImGui::SliderFloat( "Specular Power", &materialConstants.specularPower, 0.f, 1.f, "%.f" );
+	}
+
+	ImGui::End();
+
+	if( dirty )
+	{
+		SyncMaterials( gfx );
+	}
+}
+
+void Box::SyncMaterials( Graphics& gfx )
+{
+	const auto pMatCbuf = QueryBindable<MaterialCBuf>();
+	assert( pMatCbuf );
+	pMatCbuf->Update( gfx, materialConstants );
 }
