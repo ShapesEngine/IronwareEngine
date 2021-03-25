@@ -33,12 +33,12 @@ Box::Box( Graphics& gfx, std::mt19937& rng,
 		model.SetNormalsIndependentFlat();
 		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
 
-		auto pVertShader = std::make_unique<VertexShader>( gfx, L"PhongLightVS.cso" );
+		auto pVertShader = std::make_unique<VertexShader>( gfx, L"PhongVS.cso" );
 		// save bytecode, as it will be needed in input layout
 		auto pVertShaderBytecode = pVertShader->GetBytecode();
 		AddStaticBind( std::move( pVertShader ) );
 
-		AddStaticBind( std::make_unique<PixelShader>( gfx, L"PhongLightPS.cso" ) );
+		AddStaticBind( std::make_unique<PixelShader>( gfx, L"PhongPS.cso" ) );
 
 		AddStaticIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 

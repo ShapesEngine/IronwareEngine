@@ -32,11 +32,11 @@ Cylinder::Cylinder( Graphics& gfx, std::mt19937& rng,
 
 		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
 
-		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"PhongLightVS.cso" );
+		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"PhongVS.cso" );
 		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 		AddStaticBind( std::move( pVertexShader ) );
 
-		AddStaticBind( std::make_unique<PixelShader>( gfx, L"IndexedPhongLightPS.cso" ) );
+		AddStaticBind( std::make_unique<PixelShader>( gfx, L"IndexedPhongPS.cso" ) );
 
 		AddStaticIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
