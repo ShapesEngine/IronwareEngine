@@ -1,11 +1,11 @@
 /*!
- * \file Pyramid.h
+ * \file Cone.h
  * \date 2020/09/25 22:37
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A Pyramid child class will control(partly) the graphics pipeline and draw the pyramid
+ * \brief A Pyramid child class will control(partly) the graphics pipeline and draw the cone
  *
  * \note It contains variables that are needed for translation, rotation, etc.
 */
@@ -14,11 +14,11 @@
 #include "DrawableBase.h"
 
 /*!
- * \class Pyramid
+ * \class Cone
  *
  * \ingroup Drawables
  *
- * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the pyramid
+ * \brief Responsible class for controlling(partly) the graphics pipeline and drawing the cone
  *
  * \author Yernar Aldabergenov
  *
@@ -34,7 +34,8 @@ public:
 			 std::uniform_real_distribution<float>& adist,
 			 std::uniform_real_distribution<float>& ddist,
 			 std::uniform_real_distribution<float>& odist,
-			 std::uniform_real_distribution<float>& rdist );
+			 std::uniform_real_distribution<float>& rdist,
+			 std::uniform_int_distribution<>& tdist );
 	void Update( float dt ) noexcept override;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 

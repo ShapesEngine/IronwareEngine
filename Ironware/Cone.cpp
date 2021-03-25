@@ -4,19 +4,22 @@
  * \author Yernar Aldabergenov
  * \date September 2020
  *
- * 
+ *
  */
 #include "Cone.h"
 #include "BindableBase.h"
 #include "GraphicsExceptionMacros.h"
 #include "Pyramid.h"
 
+#include <array>
+
 Cone::Cone( Graphics& gfx,
-				  std::mt19937& rng,
-				  std::uniform_real_distribution<float>& adist,
-				  std::uniform_real_distribution<float>& ddist,
-				  std::uniform_real_distribution<float>& odist,
-				  std::uniform_real_distribution<float>& rdist ) :
+	std::mt19937& rng,
+	std::uniform_real_distribution<float>& adist,
+	std::uniform_real_distribution<float>& ddist,
+	std::uniform_real_distribution<float>& odist,
+	std::uniform_real_distribution<float>& rdist,
+	std::uniform_int_distribution<>& tdist ) :
 	zOffset( rdist( rng ) ),
 	droll( ddist( rng ) ),
 	dpitch( ddist( rng ) ),
@@ -35,22 +38,18 @@ Cone::Cone( Graphics& gfx,
 		struct Vertex
 		{
 			dx::XMFLOAT3 pos;
-			struct
-			{
-				uint8_t zOffset;
-				uint8_t g;
-				uint8_t b;
-				uint8_t a;
-			} color;
+			dx::XMFLOAT3 n;
+			std::array<uint8_t, 4> colors;
 		};
-		auto model = Pyramid::MakeTesselated<Vertex>( 4 );
+		auto model = Pyramid::MakeTesselatedIndependentFaces<Vertex>( tdist( rng ) );
+		model.SetNormalsIndependentFlat();
 		// set vertex colors for mesh
-		model.vertices[0].color = { 255, 255, 0 };
-		model.vertices[1].color = { 255, 255, 0 };
-		model.vertices[2].color = { 255, 255, 0 };
-		model.vertices[3].color = { 255, 255, 0 };
-		model.vertices[4].color = { 255, 255, 80 };
-		model.vertices[5].color = { 255, 10, 0 };
+		for( auto& v : model.vertices )
+		{
+			v.colors = { (char)40,(char)40,(char)255 };
+		}
+		model.vertices.front().colors = { (char)255,(char)20,(char)20 }; // very first vertex is the cone tip
+
 		// deform mesh linearly
 		model.Transform( dx::XMMatrixScaling( 1.f, 1.f, 0.7f ) );
 
