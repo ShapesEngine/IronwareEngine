@@ -45,6 +45,7 @@ private:
 	PointLight pointLight;
 	IronTimer timer;
 	std::vector<std::unique_ptr<class Drawable>> drawables;
+	std::vector<class Box*> boxes;
 	float simulationSpeedFactor = 1.f;
 	bool isSimulationRunning = true;
 	static constexpr size_t MAX_NDRAWABLES = 180;

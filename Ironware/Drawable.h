@@ -56,7 +56,7 @@ protected:
 	 * @return pointer to the bindable type, if it was found
 	*/
 	template<typename T>
-	T* QueryBindable();
+	T* QueryBindable() const;
 
 private:
 	virtual const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept = 0;
@@ -67,7 +67,7 @@ private:
 };
 
 template<typename T>
-T* Drawable::QueryBindable()
+T* Drawable::QueryBindable() const
 {
 	for( const auto& pb : binds )
 	{

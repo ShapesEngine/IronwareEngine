@@ -91,6 +91,14 @@ App::App() :
 	drawables.reserve( MAX_NDRAWABLES );
 	std::generate_n( std::back_inserter( drawables ), MAX_NDRAWABLES, Factory{ wnd.Gfx() } );
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
+
+	for( auto& pD : drawables )
+	{
+		if( auto pB = dynamic_cast<Box*>( pD.get() ) )
+		{
+			boxes.push_back( pB );
+		}
+	}
 }
 
 int App::BeginFrame()
@@ -129,6 +137,8 @@ void App::ProcessFrame()
 	}
 	pointLight.Draw( wnd.Gfx() );
 
+	boxes.front()->SpawnControlWindow( 0, wnd.Gfx() );
+
 	// imgui window to control simulation speed
 	if( ImGui::Begin( "Simulation Speed" ) )
 	{
@@ -150,7 +160,7 @@ void App::ProcessFrame()
 			isSimulationRunning = !isSimulationRunning;
 		}
 	}
-	
+
 	// TODO: fix resuming simulation after the speedfactor was 0
 	if( simulationSpeedFactor == 0.f )
 	{
