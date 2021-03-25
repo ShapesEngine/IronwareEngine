@@ -39,16 +39,3 @@ void Drawable::AddIndexBufferBind( std::unique_ptr<IndexBuffer> ibuf ) noexcept(
 	pIndexBuffer = ibuf.get();
 	binds.push_back( std::move( ibuf ) );
 }
-
-template<typename T>
-T* Drawable::QueryBindable()
-{
-	for( const auto& pb : binds )
-	{
-		if( const auto pT = dynamic_cast<const T*>( pb.get() ) )
-		{
-			return pT;
-		}
-	}
-	return nullptr;
-}

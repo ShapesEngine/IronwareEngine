@@ -65,3 +65,16 @@ private:
 	const class IndexBuffer* pIndexBuffer = nullptr;
 	std::vector<std::unique_ptr<Bindable>> binds;
 };
+
+template<typename T>
+T* Drawable::QueryBindable()
+{
+	for( const auto& pb : binds )
+	{
+		if( auto pT = dynamic_cast<T*>( pb.get() ) )
+		{
+			return pT;
+		}
+	}
+	return nullptr;
+}
