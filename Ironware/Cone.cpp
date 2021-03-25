@@ -13,23 +13,13 @@
 
 #include <array>
 
-Cone::Cone( Graphics& gfx,
-	std::mt19937& rng,
+Cone::Cone( Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
 	std::uniform_real_distribution<float>& odist,
 	std::uniform_real_distribution<float>& rdist,
 	std::uniform_int_distribution<>& tdist ) :
-	zOffset( rdist( rng ) ),
-	droll( ddist( rng ) ),
-	dpitch( ddist( rng ) ),
-	dyaw( ddist( rng ) ),
-	dphi( odist( rng ) ),
-	dtheta( odist( rng ) ),
-	dchi( odist( rng ) ),
-	chi( adist( rng ) ),
-	theta( adist( rng ) ),
-	phi( adist( rng ) )
+	ObjectBase( gfx, rng, adist, ddist, odist, rdist )
 {
 	namespace dx = DirectX;
 
@@ -92,23 +82,4 @@ Cone::Cone( Graphics& gfx,
 	}
 
 	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
-}
-
-void Cone::Update( float dt ) noexcept
-{
-	roll += droll * dt;
-	pitch += dpitch * dt;
-	yaw += dyaw * dt;
-	theta += dtheta * dt;
-	phi += dphi * dt;
-	chi += dchi * dt;
-}
-
-DirectX::XMMATRIX Cone::GetTransformXM() const noexcept
-{
-	namespace dx = DirectX;
-
-	return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-		dx::XMMatrixTranslation( zOffset, 0.f, 0.f ) *
-		dx::XMMatrixRotationRollPitchYaw( theta, phi, chi );
 }

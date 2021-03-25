@@ -58,7 +58,7 @@ public:
 		chi += dchi * dt;
 	}
 
-	DirectX::XMMATRIX GetTransformXM() const noexcept
+	DirectX::XMMATRIX GetTransformXM() const noexcept override
 	{
 		namespace dx = DirectX;
 		return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
