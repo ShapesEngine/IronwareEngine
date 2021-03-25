@@ -26,6 +26,7 @@
 #include "Box.h"
 #include "Surface.h"
 #include "Cylinder.h"
+#include "Cone.h"
 #include "imgui/imgui.h"
 
 #include <memory>
@@ -59,6 +60,11 @@ App::App() :
 					gfx, rng, adist, ddist,
 					odist, rdist, bdist, tdist
 					);
+			case 2:
+				return std::make_unique<Cone>(
+					gfx, rng, adist, ddist,
+					odist, rdist, tdist
+					);
 			default:
 				assert( false && "impossible drawable option in factory" );
 				return {};
@@ -67,7 +73,7 @@ App::App() :
 	private:
 		Graphics& gfx;
 		std::mt19937 rng{ std::random_device{}( ) };
-		std::uniform_int_distribution<> sdist{ 0, 1 };
+		std::uniform_int_distribution<> sdist{ 0, 2 };
 		std::uniform_real_distribution<float> adist{ 0.f, PI * 2.f };
 		std::uniform_real_distribution<float> ddist{ 0.f, PI * 0.5f };
 		std::uniform_real_distribution<float> odist{ 0.f, PI * 0.08f };

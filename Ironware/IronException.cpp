@@ -30,7 +30,7 @@ std::wstring IronException::GetOriginString() const noexcept
 {
 	std::wostringstream woss;
 	woss << "[File] " << file << std::endl
-		<< "[Line] " << line << ( true ? "Good" : "Bsad" );
+		<< "[Line] " << line ;
 
 	return woss.str();
 }

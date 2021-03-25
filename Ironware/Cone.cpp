@@ -39,33 +39,34 @@ Cone::Cone( Graphics& gfx,
 		{
 			dx::XMFLOAT3 pos;
 			dx::XMFLOAT3 n;
-			std::array<uint8_t, 4> colors;
+			std::array<uint8_t, 3> colors;
 		};
 		auto model = Pyramid::MakeTesselatedIndependentFaces<Vertex>( tdist( rng ) );
 		model.SetNormalsIndependentFlat();
 		// set vertex colors for mesh
 		for( auto& v : model.vertices )
 		{
-			v.colors = { (char)40,(char)40,(char)255 };
+			v.colors = { 40, 40, 255 };
 		}
-		model.vertices.front().colors = { (char)255,(char)20,(char)20 }; // very first vertex is the cone tip
+		model.vertices.front().colors = { 255,20,20 }; // very first vertex is the cone tip
 
 		// deform mesh linearly
 		model.Transform( dx::XMMatrixScaling( 1.f, 1.f, 0.7f ) );
 
 		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
 
-		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"ColorBlendVS.cso" );
+		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"ColorBlendPhongVS.cso" );
 		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 		AddStaticBind( std::move( pVertexShader ) );
 
-		AddStaticBind( std::make_unique<PixelShader>( gfx, L"ColorBlendPS.cso" ) );
+		AddStaticBind( std::make_unique<PixelShader>( gfx, L"ColorBlendPhongPS.cso" ) );
 
 		AddStaticIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElement =
 		{
 			{ "Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
+			{ "Normal", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0u },
 			{ "Color", 0u, DXGI_FORMAT_R8G8B8A8_UNORM, 0u, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0u },
 		};
 		AddStaticBind( std::make_unique<InputLayout>( gfx, descInputElement, pVertexShaderBytecode ) );

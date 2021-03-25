@@ -371,12 +371,6 @@
     <FxCompile Include="IndexedPhongLightPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="PhongColorBlendVS.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="PhongColorBlendPS.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
     <FxCompile Include="ColorBlendPhongVS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>

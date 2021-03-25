@@ -13,6 +13,7 @@
 #pragma once
 
 #include "Graphics.h"
+#include "Bindable.h"
 
 #include <DirectXMath.h>
 
