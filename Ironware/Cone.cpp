@@ -25,38 +25,11 @@ Cone::Cone( Graphics& gfx, std::mt19937& rng,
 
 	if( !IsStaticInitialized() )
 	{
-		struct Vertex
-		{
-			dx::XMFLOAT3 pos;
-			dx::XMFLOAT3 n;
-			std::array<uint8_t, 3> colors;
-		};
-
-		const auto tesselation = tdist( rng );
-		auto model = Pyramid::MakeTesselatedIndependentFaces<Vertex>( tesselation );
-		model.SetNormalsIndependentFlat();
-		// set vertex colors for mesh
-		for( auto& v : model.vertices )
-		{
-			v.colors = { 10, 10, 255 };
-		}
-		for( size_t i = 0; i < tesselation; i++ )
-		{
-			model.vertices[i * 3].colors = { 255, 10, 10 };
-		}
-
-		// deform mesh linearly
-		model.Transform( dx::XMMatrixScaling( 1.f, 1.f, 0.7f ) );
-
-		AddStaticBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
-
 		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"ColorBlendPhongVS.cso" );
 		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 		AddStaticBind( std::move( pVertexShader ) );
 
 		AddStaticBind( std::make_unique<PixelShader>( gfx, L"ColorBlendPhongPS.cso" ) );
-
-		AddStaticIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElement =
 		{
@@ -76,10 +49,32 @@ Cone::Cone( Graphics& gfx, std::mt19937& rng,
 		} colorConst;
 		AddStaticBind( std::make_unique<PixelConstantBuffer<PSMaterialConstant>>( gfx, colorConst, 1u ) );
 	}
-	else
+
+	struct Vertex
 	{
-		SetIndexFromStatic();
+		dx::XMFLOAT3 pos;
+		dx::XMFLOAT3 n;
+		std::array<uint8_t, 3> colors;
+	};
+
+	const auto tesselation = tdist( rng );
+	auto model = Pyramid::MakeTesselatedIndependentFaces<Vertex>( tesselation );
+	model.SetNormalsIndependentFlat();
+	// set vertex colors for mesh
+	for( auto& v : model.vertices )
+	{
+		v.colors = { 10, 10, 255 };
 	}
+	for( size_t i = 0; i < tesselation; i++ )
+	{
+		model.vertices[i * 3].colors = { 255, 10, 10 };
+	}
+
+	// deform mesh linearly
+	model.Transform( dx::XMMatrixScaling( 1.f, 1.f, 0.7f ) );
+
+	AddBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
+	AddIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
 	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
 }
