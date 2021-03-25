@@ -72,13 +72,21 @@ Cone::Cone( Graphics& gfx,
 		AddStaticBind( std::make_unique<InputLayout>( gfx, descInputElement, pVertexShaderBytecode ) );
 
 		AddStaticBind( std::make_unique<PrimitiveTopology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
+
+		struct PSMaterialConstant
+		{
+			float specularIntensity = 0.6f;
+			float specularPower = 30.0f;
+			float padding[2];
+		} colorConst;
+		AddStaticBind( std::make_unique<PixelConstantBuffer<PSMaterialConstant>>( gfx, colorConst, 1u ) );
 	}
 	else
 	{
 		SetIndexFromStatic();
 	}
 
-	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
+	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );	
 }
 
 void Cone::Update( float dt ) noexcept
