@@ -12,6 +12,7 @@
 #pragma once
 
 #include "ObjectBase.h"
+#include "ConstantBuffers.h"
 
 /*!
  * \class Box
@@ -41,6 +42,15 @@ public:
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 
 private:
+	struct PSMaterialConstant
+	{
+		DirectX::XMFLOAT3 color = {};
+		float specularIntensity = 0.6f;
+		alignas( 16 ) float specularPower = 30.f;
+	} materialConstants;
+
+	using MaterialCBuf = PixelConstantBuffer<PSMaterialConstant>;
+
 	// model transform
 	DirectX::XMFLOAT3X3 mt = {};
 };
