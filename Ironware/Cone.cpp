@@ -41,14 +41,19 @@ Cone::Cone( Graphics& gfx,
 			dx::XMFLOAT3 n;
 			std::array<uint8_t, 3> colors;
 		};
-		auto model = Pyramid::MakeTesselatedIndependentFaces<Vertex>( tdist( rng ) );
+
+		const auto tesselation = tdist( rng );
+		auto model = Pyramid::MakeTesselatedIndependentFaces<Vertex>( tesselation );
 		model.SetNormalsIndependentFlat();
 		// set vertex colors for mesh
 		for( auto& v : model.vertices )
 		{
-			v.colors = { 40, 40, 255 };
+			v.colors = { 10, 10, 255 };
 		}
-		model.vertices.front().colors = { 255,20,20 }; // very first vertex is the cone tip
+		for( size_t i = 0; i < tesselation; i++ )
+		{
+			model.vertices[i * 3].colors = { 255, 10, 10 };
+		}
 
 		// deform mesh linearly
 		model.Transform( dx::XMMatrixScaling( 1.f, 1.f, 0.7f ) );
@@ -86,7 +91,7 @@ Cone::Cone( Graphics& gfx,
 		SetIndexFromStatic();
 	}
 
-	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );	
+	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
 }
 
 void Cone::Update( float dt ) noexcept

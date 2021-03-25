@@ -44,4 +44,3 @@ private:
 	mutable SolidSphere mesh;
 	mutable PixelConstantBuffer<PointLightCBuf> cbuffer;
 };
-
