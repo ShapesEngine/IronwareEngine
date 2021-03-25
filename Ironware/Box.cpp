@@ -10,7 +10,8 @@
 #include "BindableBase.h"
 #include "GraphicsExceptionMacros.h"
 #include "Cube.h"
-#include "imgui/imgui.h"
+
+#include <imgui/imgui.h>
 
 Box::Box( Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,

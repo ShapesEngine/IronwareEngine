@@ -7,7 +7,7 @@
  * \date November 2020
  */
 #include "PointLight.h"
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 
 PointLight::PointLight( Graphics& gfx, float radius ) :
 	mesh( gfx, radius ),
