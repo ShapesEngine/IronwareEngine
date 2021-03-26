@@ -1,7 +1,7 @@
 cbuffer LightCBuf
 {
     float3 lightPos;
-    float3 ambi;
+    float3 ambient;
     float3 diffuseColor;
     float diffuseIntensity;
     float attConst;
@@ -27,8 +27,6 @@ float4 main( float3 viewPos : Position, float3 n : Normal, uint tid : SV_Primiti
 	// attenuation
     const float att = attConst + attLin * distToL + attQuad * ( distToL * distToL );
     const float luminosity = 1.f / att;
-    // ambient luminosity
-    const float3 ambient = ambi * luminosity;
 	// diffuse intensity
     const float3 diffuse = diffuseColor * diffuseIntensity * luminosity * max( 0.f, dot( dirToL, n ) );
 	// reflected light vector
