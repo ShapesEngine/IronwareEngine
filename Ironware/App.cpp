@@ -138,6 +138,62 @@ void App::ProcessFrame()
 	}
 	pointLight.Draw( wnd.Gfx() );
 
+	SpawnBoxWindowManagerWindow();
+	SpawnActiveBoxWindows();
+
+	SpawnSimulationWindow();
+
+	// toggling simulation
+	if( !wnd.kbd.KeyIsEmpty() )
+	{
+		const auto k = wnd.kbd.ReadKey();
+		if( ( k->IsPress() && k->GetCode() == VK_SPACE ) )
+		{
+			isSimulationRunning = !isSimulationRunning;
+		}
+	}
+
+	// TODO: fix resuming simulation after the speedfactor was 0
+	if( simulationSpeedFactor == 0.f )
+	{
+		isSimulationRunning = false;
+	}
+
+	ImGui::End();
+	// imgui window to control camera & light
+	camera.SpawnControlWindow();
+	pointLight.SpawnControlWindow();
+
+	// present frame
+	wnd.Gfx().EndFrame();
+}
+
+void App::SpawnActiveBoxWindows()
+{
+	// imgui box attribute control windows
+	for( auto id : boxControlIndexes )
+	{
+		boxes[id]->SpawnControlWindow( id, wnd.Gfx() );
+	}
+}
+
+void App::SpawnSimulationWindow()
+{
+	// imgui window to control simulation speed
+	if( ImGui::Begin( "Simulation Speed" ) )
+	{
+		std::ostringstream simulationStatusText;
+		simulationStatusText << "Simulation State: " << ( isSimulationRunning ? "Running." : "Stopped." ) << "\nYou can press Space Bar to Stop!";
+		const float frame_rate = ImGui::GetIO().Framerate;
+		ImGui::SliderFloat( "Speed Factor", &simulationSpeedFactor, 0.f, 5.f, "%.4f", 3.2f );
+		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
+		ImGui::Text( "Application running for: %.f seconds", timer.Peek() );
+		ImGui::Text( simulationStatusText.str().c_str() );
+	}
+}
+
+void App::SpawnBoxWindowManagerWindow()
+{
 	if( ImGui::Begin( "Boxes" ) )
 	{
 		const auto preview = comboBoxIndex ? std::to_string( *comboBoxIndex ) : "Choose a box...";
@@ -164,45 +220,4 @@ void App::ProcessFrame()
 		}
 	}
 	ImGui::End();
-	// imgui box attribute control windows
-	for( auto id : boxControlIndexes )
-	{
-		boxes[id]->SpawnControlWindow( id, wnd.Gfx() );
-	}
-
-	// imgui window to control simulation speed
-	if( ImGui::Begin( "Simulation Speed" ) )
-	{
-		std::ostringstream simulationStatusText;
-		simulationStatusText << "Simulation State: " << ( isSimulationRunning ? "Running." : "Stopped." ) << "\nYou can press Space Bar to Stop!";
-		const float frame_rate = ImGui::GetIO().Framerate;
-		ImGui::SliderFloat( "Speed Factor", &simulationSpeedFactor, 0.f, 5.f, "%.4f", 3.2f );
-		ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.f / frame_rate, frame_rate );
-		ImGui::Text( "Application running for: %.f seconds", timer.Peek() );
-		ImGui::Text( simulationStatusText.str().c_str() );
-	}
-
-	// toggling simulation
-	if( !wnd.kbd.KeyIsEmpty() )
-	{
-		const auto k = wnd.kbd.ReadKey();
-		if( ( k->IsPress() && k->GetCode() == VK_SPACE ) )
-		{
-			isSimulationRunning = !isSimulationRunning;
-		}
-	}
-
-	// TODO: fix resuming simulation after the speedfactor was 0
-	if( simulationSpeedFactor == 0.f )
-	{
-		isSimulationRunning = false;
-	}
-
-	ImGui::End();
-	// imgui window to control camera & light
-	camera.SpawnControlWindow();
-	pointLight.SpawnControlWindow();
-
-	// present frame
-	wnd.Gfx().EndFrame();
 }

@@ -40,6 +40,12 @@ private:
 	*/
 	void ProcessFrame();
 
+	void SpawnActiveBoxWindows();
+
+	void SpawnSimulationWindow();
+
+	void SpawnBoxWindowManagerWindow();
+
 private:
 	ImguiManager imguim;
 	Camera camera;
