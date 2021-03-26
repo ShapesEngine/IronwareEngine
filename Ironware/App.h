@@ -21,6 +21,8 @@
 #include "ImGuiManager.h"
 #include "PointLight.h"
 
+#include <set>
+
 class App
 {
 public:
@@ -49,6 +51,8 @@ private:
 	float simulationSpeedFactor = 1.f;
 	bool isSimulationRunning = true;
 	static constexpr size_t MAX_NDRAWABLES = 180;
+	std::optional<uint32_t> comboBoxIndex;
+	std::set<uint32_t> boxControlIndexes;
 };
 
 

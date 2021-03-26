@@ -40,7 +40,7 @@ public:
 		DirectX::XMFLOAT3 materialColor );
 
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
-	void SpawnControlWindow( int id, Graphics& gfx ) noexcept( !IS_DEBUG );
+	void SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG );
 
 private:
 	void SyncMaterials( Graphics& gfx );

@@ -138,7 +138,37 @@ void App::ProcessFrame()
 	}
 	pointLight.Draw( wnd.Gfx() );
 
-	boxes.front()->SpawnControlWindow( 0, wnd.Gfx() );
+	if( ImGui::Begin( "Boxes" ) )
+	{
+		const auto preview = comboBoxIndex ? std::to_string( *comboBoxIndex ) : "Choose a box...";
+		if( ImGui::BeginCombo( "Box Number", preview.c_str() ) )
+		{
+			for( int i = 0; i < boxes.size(); i++ )
+			{
+				const bool selected = *comboBoxIndex == i;
+				if( ImGui::Selectable( std::to_string( i ).c_str(), selected ) )
+				{
+					comboBoxIndex = i;
+				}
+				if( selected )
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+		if( ImGui::Button( "Spawn Control Window" ) && comboBoxIndex )
+		{
+			boxControlIndexes.insert( *comboBoxIndex );
+			comboBoxIndex.reset();
+		}
+	}
+	ImGui::End();
+	// imgui box attribute control windows
+	for( auto id : boxControlIndexes )
+	{
+		boxes[id]->SpawnControlWindow( id, wnd.Gfx() );
+	}
 
 	// imgui window to control simulation speed
 	if( ImGui::Begin( "Simulation Speed" ) )
