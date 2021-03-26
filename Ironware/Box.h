@@ -40,10 +40,11 @@ public:
 		DirectX::XMFLOAT3 materialColor );
 
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
+
 	/**
-	 * @brief 
-	 * @param id 
-	 * @param gfx 
+	 * @brief Spawns imgui window to control the box properties
+	 * @param id index of the box
+	 * @param gfx Needed to access pixel constant buffer
 	 * @return window status(open or closed)
 	*/
 	bool SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG );

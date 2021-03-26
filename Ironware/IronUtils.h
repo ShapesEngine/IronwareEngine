@@ -18,14 +18,14 @@
 // default buffer size
 constexpr size_t DEFAULT_BUFFER_SIZE = 512;
 
-// wide char reinterpret cast
+// reinterprets a variable as wide character pointer
 #define WCHREINT_CAST( x ) reinterpret_cast<wchar_t*>( x )
-// char reinterpret cast
+// reinterprets a variable as character pointer
 #define CHREINT_CAST( x ) reinterpret_cast<char*>( x )
 
-// const char reinterpret cast
+// reinterprets a variable as constant character pointer
 #define CON_CHREINT_CAST( x ) reinterpret_cast<const char*>( x )
-// const wide char reinterpret cast
+// reinterprets a variable as wide constant character pointer
 #define CON_WCHREINT_CAST( x ) reinterpret_cast<const wchar_t*>( x )
 
 /**
@@ -41,5 +41,3 @@ std::wstring ToWide( const std::string& narrow );
  * @return narrow output string
 */
 std::string ToNarrow( const std::wstring& wide );
-
-

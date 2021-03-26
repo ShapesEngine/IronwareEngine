@@ -44,7 +44,7 @@ Cone::Cone( Graphics& gfx, std::mt19937& rng,
 		struct PSMaterialConstant
 		{
 			float specularIntensity = 0.6f;
-			float specularPower = 30.0f;
+			float specularPower = 30.f;
 			float padding[2];
 		} colorConst;
 		AddStaticBind( std::make_unique<PixelConstantBuffer<PSMaterialConstant>>( gfx, colorConst, 1u ) );

@@ -92,13 +92,13 @@ bool Box::SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG )
 		// it's unnecessary to check for dirty when controlling position and roatation,
 		// as it will be updated by transformcbuf
 		ImGui::Text( "Position" );
-		ImGui::SliderFloat( "zOffset", &r, 0.0f, 80.0f, "%.1f" );
-		ImGui::SliderAngle( "Theta", &theta, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Phi", &phi, -89.0f, 89.0f );
+		ImGui::SliderFloat( "zOffset", &r, 0.f, 80.f, "%.1f" );
+		ImGui::SliderAngle( "Theta", &theta, -180.f, 180.f );
+		ImGui::SliderAngle( "Phi", &phi, -180.f, 89.f );
 		ImGui::Text( "Orientation" );
-		ImGui::SliderAngle( "Roll", &roll, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Pitch", &pitch, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Yaw", &yaw, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Roll", &roll, -180.f, 180.f );
+		ImGui::SliderAngle( "Pitch", &pitch, -180.f, 180.f );
+		ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f );
 	}
 
 	ImGui::End();

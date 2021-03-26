@@ -19,6 +19,12 @@ constexpr auto sq( const T& x )
 	return x * x;
 }
 
+/**
+ * @brief Wraps an angle to the range between -PI and +PI
+ * @tparam T type of the angle
+ * @param theta angle in radians
+ * @return wrapped angle in radians
+*/
 template<typename T>
 T wrap_angle( T theta )
 {
