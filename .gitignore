@@ -1044,3 +1044,6 @@ dkms.conf
 
 # Compiled Shader files
 *.cso
+
+# Our Directory where meshes are placed
+!Ironware/Models/*.obj

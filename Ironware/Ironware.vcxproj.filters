@@ -171,6 +171,9 @@
     <ClCompile Include="..\External\Includes\imgui\imgui.cpp">
       <Filter>External\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -565,6 +568,9 @@
     </ClInclude>
     <ClInclude Include="..\External\Includes\assimp\ZipArchiveIOSystem.h">
       <Filter>External\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

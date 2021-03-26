@@ -127,6 +127,7 @@
     <ClCompile Include="IronException.cpp" />
     <ClCompile Include="IronUtils.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="ImGuiManager.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SkinnedBox.h" />
