@@ -83,10 +83,22 @@ void Box::SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG )
 
 	if( ImGui::Begin( ( "Box: " + std::to_string( id ) ).c_str() ) )
 	{
+		ImGui::Text( "Material Properties" );
 		const bool mc = ImGui::ColorEdit3( "Material Color", &materialConstants.color.x );
 		const bool si = ImGui::SliderFloat( "Specular Intensity", &materialConstants.specularIntensity, 0.f, 1.f );
 		const bool sp = ImGui::SliderFloat( "Specular Power", &materialConstants.specularPower, 0.f, 100.f, "%.f" );
 		dirty = mc || si || sp;
+
+		// it's unnecessary to check for dirty when controlling position and roatation,
+		// as it will be updated by transformcbuf
+		ImGui::Text( "Position" );
+		ImGui::SliderFloat( "zOffset", &r, 0.0f, 80.0f, "%.1f" );
+		ImGui::SliderAngle( "Theta", &theta, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Phi", &phi, -89.0f, 89.0f );
+		ImGui::Text( "Orientation" );
+		ImGui::SliderAngle( "Roll", &roll, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Pitch", &pitch, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Yaw", &yaw, -180.0f, 180.0f );
 	}
 
 	ImGui::End();

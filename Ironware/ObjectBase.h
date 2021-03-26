@@ -66,7 +66,7 @@ public:
 			dx::XMMatrixRotationRollPitchYaw( theta, phi, chi );
 	}
 
-private:
+protected:
 	// positional
 	float r;
 	// relative rotation
