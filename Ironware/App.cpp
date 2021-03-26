@@ -28,6 +28,7 @@
 #include "Surface.h"
 #include "Cylinder.h"
 #include "Cone.h"
+#include "Mesh.h"
 
 #include <imgui/imgui.h>
 
@@ -63,14 +64,13 @@ App::App() :
 					odist, rdist, bdist, tdist
 					);
 			case 2:
-				return std::make_unique<Cone>(
-					gfx, rng, adist, ddist,
-					odist, rdist, tdist
-					);
-			case 3:
 				return std::make_unique<TexturedBox>(
 					gfx, rng, adist, ddist,
 					odist, rdist, bdist );
+			case 3:
+				return std::make_unique<Mesh>(
+					gfx, rng, adist, ddist,
+					odist, rdist, DirectX::XMFLOAT3{ cdist( rng ), cdist( rng ), cdist( rng ) }, 1.f );
 			default:
 				assert( false && "impossible drawable option in factory" );
 				return {};
