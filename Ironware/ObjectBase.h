@@ -37,16 +37,16 @@ public:
 		std::uniform_real_distribution<float>& odist,
 		std::uniform_real_distribution<float>& rdist )
 		:
-		r( rdist( rng ) ),
+		zOffset( rdist( rng ) ),
 		droll( ddist( rng ) ),
 		dpitch( ddist( rng ) ),
 		dyaw( ddist( rng ) ),
-		dphi( odist( rng ) ),
-		dtheta( odist( rng ) ),
-		dchi( odist( rng ) ),
-		chi( adist( rng ) ),
-		theta( adist( rng ) ),
-		phi( adist( rng ) )
+		dbeta( odist( rng ) ),
+		dalpha( odist( rng ) ),
+		dgamma( odist( rng ) ),
+		gamma( adist( rng ) ),
+		alpha( adist( rng ) ),
+		beta( adist( rng ) )
 	{}
 
 	void Update( float dt ) noexcept
@@ -54,35 +54,35 @@ public:
 		roll = wrap_angle( roll + droll * dt );
 		pitch = wrap_angle( pitch + dpitch * dt );
 		yaw = wrap_angle( yaw + dyaw * dt );
-		theta = wrap_angle( theta + dtheta * dt );
-		phi = wrap_angle( phi + dphi * dt );
-		chi = wrap_angle( chi + dchi * dt );
+		alpha = wrap_angle( alpha + dalpha * dt );
+		beta = wrap_angle( beta + dbeta * dt );
+		gamma = wrap_angle( gamma + dgamma * dt );
 	}
 
 	DirectX::XMMATRIX GetTransformXM() const noexcept override
 	{
 		namespace dx = DirectX;
 		return dx::XMMatrixRotationRollPitchYaw( pitch, yaw, roll ) *
-			dx::XMMatrixTranslation( r, 0.f, 0.f ) *
-			dx::XMMatrixRotationRollPitchYaw( theta, phi, chi );
+			dx::XMMatrixTranslation( zOffset, 0.f, 0.f ) *
+			dx::XMMatrixRotationRollPitchYaw( alpha, beta, gamma );
 	}
 
 protected:
 	// positional
-	float r;
+	float zOffset;
 	// relative rotation
 	float roll = 0.f;
 	float pitch = 0.f;
 	float yaw = 0.f;
 	// world rotation
-	float theta;
-	float phi;
-	float chi;
+	float alpha;
+	float beta;
+	float gamma;
 	// speed (delta/s)
 	float droll;
 	float dpitch;
 	float dyaw;
-	float dtheta;
-	float dphi;
-	float dchi;
+	float dalpha;
+	float dbeta;
+	float dgamma;
 };
