@@ -171,9 +171,16 @@ void App::ProcessFrame()
 void App::SpawnActiveBoxWindows()
 {
 	// imgui box attribute control windows
-	for( auto id : boxControlIndexes )
+	for( auto i = boxControlIndexes.begin(); i != boxControlIndexes.end(); )
 	{
-		boxes[id]->SpawnControlWindow( id, wnd.Gfx() );
+		if( !boxes[*i]->SpawnControlWindow( *i, wnd.Gfx() ) )
+		{
+			i = boxControlIndexes.erase( i );
+		}
+		else
+		{
+			i++;
+		}
 	}
 }
 

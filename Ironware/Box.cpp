@@ -77,11 +77,11 @@ DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 	return dx::XMLoadFloat3x3( &mt ) * ObjectBase::GetTransformXM();
 }
 
-void Box::SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG )
+bool Box::SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG )
 {
 	bool dirty = false;
-
-	if( ImGui::Begin( ( "Box: " + std::to_string( id ) ).c_str() ) )
+	bool isOpen = true;
+	if( ImGui::Begin( ( "Box: " + std::to_string( id ) ).c_str(), &isOpen ) )
 	{
 		ImGui::Text( "Material Properties" );
 		const bool mc = ImGui::ColorEdit3( "Material Color", &materialConstants.color.x );
@@ -107,6 +107,8 @@ void Box::SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG )
 	{
 		SyncMaterials( gfx );
 	}
+
+	return isOpen;
 }
 
 void Box::SyncMaterials( Graphics& gfx )
