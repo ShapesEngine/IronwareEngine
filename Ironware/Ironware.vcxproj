@@ -45,13 +45,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)/External/;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/External/Includes/;$(IncludePath)</IncludePath>
     <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <LibraryPath>$(SolutionDir)/External/Libs/Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)/External/;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/External/Includes/;$(IncludePath)</IncludePath>
     <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <LibraryPath>$(SolutionDir)/External/Libs/Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -68,7 +70,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gdiplus.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>4.0</ShaderModel>
@@ -94,7 +96,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gdiplus.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>4.0</ShaderModel>
@@ -102,13 +104,13 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\External\DXErr\dxerr.cpp" />
-    <ClCompile Include="..\External\imgui\imgui.cpp" />
-    <ClCompile Include="..\External\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\External\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\External\imgui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\External\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\External\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\External\Includes\DXErr\dxerr.cpp" />
+    <ClCompile Include="..\External\Includes\imgui\imgui.cpp" />
+    <ClCompile Include="..\External\Includes\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\External\Includes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\External\Includes\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\External\Includes\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\External\Includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Box.cpp" />
@@ -131,15 +133,88 @@
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="SkinnedBox.cpp" />
-    <ClInclude Include="..\External\DXErr\dxerr.h" />
-    <ClInclude Include="..\External\imgui\imconfig.h" />
-    <ClInclude Include="..\External\imgui\imgui.h" />
-    <ClInclude Include="..\External\imgui\imgui_impl_dx11.h" />
-    <ClInclude Include="..\External\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="..\External\imgui\imgui_internal.h" />
-    <ClInclude Include="..\External\imgui\imstb_rectpack.h" />
-    <ClInclude Include="..\External\imgui\imstb_textedit.h" />
-    <ClInclude Include="..\External\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\External\Includes\assimp\aabb.h" />
+    <ClInclude Include="..\External\Includes\assimp\ai_assert.h" />
+    <ClInclude Include="..\External\Includes\assimp\anim.h" />
+    <ClInclude Include="..\External\Includes\assimp\BaseImporter.h" />
+    <ClInclude Include="..\External\Includes\assimp\Bitmap.h" />
+    <ClInclude Include="..\External\Includes\assimp\BlobIOSystem.h" />
+    <ClInclude Include="..\External\Includes\assimp\ByteSwapper.h" />
+    <ClInclude Include="..\External\Includes\assimp\camera.h" />
+    <ClInclude Include="..\External\Includes\assimp\cexport.h" />
+    <ClInclude Include="..\External\Includes\assimp\cfileio.h" />
+    <ClInclude Include="..\External\Includes\assimp\cimport.h" />
+    <ClInclude Include="..\External\Includes\assimp\color4.h" />
+    <ClInclude Include="..\External\Includes\assimp\config.h" />
+    <ClInclude Include="..\External\Includes\assimp\CreateAnimMesh.h" />
+    <ClInclude Include="..\External\Includes\assimp\DefaultIOStream.h" />
+    <ClInclude Include="..\External\Includes\assimp\DefaultIOSystem.h" />
+    <ClInclude Include="..\External\Includes\assimp\DefaultLogger.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\Defines.h" />
+    <ClInclude Include="..\External\Includes\assimp\defs.h" />
+    <ClInclude Include="..\External\Includes\assimp\Exceptional.h" />
+    <ClInclude Include="..\External\Includes\assimp\Exporter.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\fast_atof.h" />
+    <ClInclude Include="..\External\Includes\assimp\GenericProperty.h" />
+    <ClInclude Include="..\External\Includes\assimp\Hash.h" />
+    <ClInclude Include="..\External\Includes\assimp\Importer.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\importerdesc.h" />
+    <ClInclude Include="..\External\Includes\assimp\IOStream.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\IOStreamBuffer.h" />
+    <ClInclude Include="..\External\Includes\assimp\IOSystem.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\irrXMLWrapper.h" />
+    <ClInclude Include="..\External\Includes\assimp\light.h" />
+    <ClInclude Include="..\External\Includes\assimp\LineSplitter.h" />
+    <ClInclude Include="..\External\Includes\assimp\LogAux.h" />
+    <ClInclude Include="..\External\Includes\assimp\Logger.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\LogStream.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\Macros.h" />
+    <ClInclude Include="..\External\Includes\assimp\material.h" />
+    <ClInclude Include="..\External\Includes\assimp\MathFunctions.h" />
+    <ClInclude Include="..\External\Includes\assimp\matrix3x3.h" />
+    <ClInclude Include="..\External\Includes\assimp\matrix4x4.h" />
+    <ClInclude Include="..\External\Includes\assimp\MemoryIOWrapper.h" />
+    <ClInclude Include="..\External\Includes\assimp\mesh.h" />
+    <ClInclude Include="..\External\Includes\assimp\metadata.h" />
+    <ClInclude Include="..\External\Includes\assimp\NullLogger.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\ParsingUtils.h" />
+    <ClInclude Include="..\External\Includes\assimp\pbrmaterial.h" />
+    <ClInclude Include="..\External\Includes\assimp\postprocess.h" />
+    <ClInclude Include="..\External\Includes\assimp\Profiler.h" />
+    <ClInclude Include="..\External\Includes\assimp\ProgressHandler.hpp" />
+    <ClInclude Include="..\External\Includes\assimp\qnan.h" />
+    <ClInclude Include="..\External\Includes\assimp\quaternion.h" />
+    <ClInclude Include="..\External\Includes\assimp\RemoveComments.h" />
+    <ClInclude Include="..\External\Includes\assimp\scene.h" />
+    <ClInclude Include="..\External\Includes\assimp\SceneCombiner.h" />
+    <ClInclude Include="..\External\Includes\assimp\SGSpatialSort.h" />
+    <ClInclude Include="..\External\Includes\assimp\SkeletonMeshBuilder.h" />
+    <ClInclude Include="..\External\Includes\assimp\SmoothingGroups.h" />
+    <ClInclude Include="..\External\Includes\assimp\SpatialSort.h" />
+    <ClInclude Include="..\External\Includes\assimp\StandardShapes.h" />
+    <ClInclude Include="..\External\Includes\assimp\StreamReader.h" />
+    <ClInclude Include="..\External\Includes\assimp\StreamWriter.h" />
+    <ClInclude Include="..\External\Includes\assimp\StringComparison.h" />
+    <ClInclude Include="..\External\Includes\assimp\StringUtils.h" />
+    <ClInclude Include="..\External\Includes\assimp\Subdivision.h" />
+    <ClInclude Include="..\External\Includes\assimp\texture.h" />
+    <ClInclude Include="..\External\Includes\assimp\TinyFormatter.h" />
+    <ClInclude Include="..\External\Includes\assimp\types.h" />
+    <ClInclude Include="..\External\Includes\assimp\vector2.h" />
+    <ClInclude Include="..\External\Includes\assimp\vector3.h" />
+    <ClInclude Include="..\External\Includes\assimp\version.h" />
+    <ClInclude Include="..\External\Includes\assimp\Vertex.h" />
+    <ClInclude Include="..\External\Includes\assimp\XMLTools.h" />
+    <ClInclude Include="..\External\Includes\assimp\ZipArchiveIOSystem.h" />
+    <ClInclude Include="..\External\Includes\DXErr\dxerr.h" />
+    <ClInclude Include="..\External\Includes\imgui\imconfig.h" />
+    <ClInclude Include="..\External\Includes\imgui\imgui.h" />
+    <ClInclude Include="..\External\Includes\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="..\External\Includes\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\External\Includes\imgui\imgui_internal.h" />
+    <ClInclude Include="..\External\Includes\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\External\Includes\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\External\Includes\imgui\imstb_truetype.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="ImGuiManager.h" />
@@ -285,9 +360,18 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\External\DXErr\DXGetErrorDescription.inl" />
-    <None Include="..\External\DXErr\DXGetErrorString.inl" />
-    <None Include="..\External\DXErr\DXTrace.inl" />
+    <None Include="..\External\Includes\assimp\color4.inl" />
+    <None Include="..\External\Includes\assimp\config.h.in" />
+    <None Include="..\External\Includes\assimp\material.inl" />
+    <None Include="..\External\Includes\assimp\matrix3x3.inl" />
+    <None Include="..\External\Includes\assimp\matrix4x4.inl" />
+    <None Include="..\External\Includes\assimp\quaternion.inl" />
+    <None Include="..\External\Includes\assimp\SmoothingGroups.inl" />
+    <None Include="..\External\Includes\assimp\vector2.inl" />
+    <None Include="..\External\Includes\assimp\vector3.inl" />
+    <None Include="..\External\Includes\DXErr\DXGetErrorDescription.inl" />
+    <None Include="..\External\Includes\DXErr\DXGetErrorString.inl" />
+    <None Include="..\External\Includes\DXErr\DXTrace.inl" />
     <None Include="GDIPlusStd.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
