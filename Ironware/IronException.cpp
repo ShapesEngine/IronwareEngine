@@ -23,7 +23,7 @@ const char* IronException::what() const noexcept
 		<< GetOriginString();
 
 	whatBuffer = woss.str();
-	return reinterpret_cast<const char*>( whatBuffer.c_str() );
+	return CON_CHREINT_CAST( whatBuffer.c_str() );
 }
 
 std::wstring IronException::GetOriginString() const noexcept

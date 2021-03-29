@@ -15,7 +15,8 @@
 #pragma once
 
 #include <exception>
-#include <string>
+
+#include "IronUtils.h"
 
 class IronException : public std::exception
 {
