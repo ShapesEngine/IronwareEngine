@@ -1047,3 +1047,7 @@ dkms.conf
 
 # Our Directory where meshes are placed
 !Ironware/Models/*.obj
+
+# Libs dir
+!External/Libs/Debug/*
+!External/Libs/Release/*
