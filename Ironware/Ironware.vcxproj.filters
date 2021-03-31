@@ -613,9 +613,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GDIPlusStd.inl">
-      <Filter>Header Files\Utils</Filter>
-    </None>
     <None Include="..\External\Includes\DXErr\DXGetErrorDescription.inl">
       <Filter>External\DXErr</Filter>
     </None>
@@ -651,6 +648,9 @@
     </None>
     <None Include="..\External\Includes\assimp\vector3.inl">
       <Filter>External\assimp</Filter>
+    </None>
+    <None Include="GDIPlusStd.h">
+      <Filter>Header Files\Utils</Filter>
     </None>
   </ItemGroup>
 </Project>

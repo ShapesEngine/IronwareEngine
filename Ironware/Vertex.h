@@ -126,6 +126,7 @@ private:
 	const VertexLayout& layout;
 };
 
+
 #pragma region impl
 
 #pragma region layoutImpl

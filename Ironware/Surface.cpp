@@ -8,7 +8,7 @@
  */
 #include "Surface.h"
 #include "IronUtils.h"
-#include "GDIPlusStd.inl"
+#include "GDIPlusStd.h"
 
 #include <sstream>
 

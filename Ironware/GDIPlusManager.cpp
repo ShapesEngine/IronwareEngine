@@ -6,7 +6,7 @@
  *
  * 
  */
-#include "GDIPlusStd.inl"
+#include "GDIPlusStd.h"
 #include "GDIPlusManager.h"
 
 ULONG_PTR GDIPlusManager::token = 0;

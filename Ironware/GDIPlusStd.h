@@ -1,5 +1,5 @@
 /*!
- * \file GDIPlusStd.inl
+ * \file GDIPlusStd.h
  *
  * \author Yernar Aldabergenov
  * \date March 2021
