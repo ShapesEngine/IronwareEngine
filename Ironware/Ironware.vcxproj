@@ -229,6 +229,7 @@
     <ClCompile Include="PrimitiveTopology.cpp" />
     <ClCompile Include="TexturedBox.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
+    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowsMessageMap.cpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="PrimitiveTopology.h" />
     <ClInclude Include="TexturedBox.h" />
     <ClInclude Include="TransformCBuffer.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Window.h" />

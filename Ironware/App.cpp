@@ -43,6 +43,7 @@ App::App() :
 	wnd( 1024, 768, L"Ironware" ),
 	pointLight( wnd.Gfx() )
 {
+	std::byte* a = (std::byte*)"jask";
 	class Factory
 	{
 	public:
