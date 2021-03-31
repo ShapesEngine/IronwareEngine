@@ -13,6 +13,7 @@
 #include <DirectXMath.h>
 #include <type_traits>
 
+#define TPack typename...
 
 struct BGRAColor
 {
@@ -95,7 +96,39 @@ private:
 	std::vector<Element> elements;
 };
 
-#pragma region implementation
+class Vertex
+{
+	using ElType = VertexLayout::Element::Type;
+public:
+	/**
+	 * @brief Gives an access to the element from the layout.
+	 * * Can be used for modification/obtaining the value of the element.
+	 * @tparam Semantic attribute type
+	 * @return Reference to appropriate memory data. Reinterpreted as needed type.
+	*/
+	template<ElType Type>
+	auto& Element() noexcept( !IS_DEBUG );
+
+private:
+	Vertex( std::byte* data, const VertexLayout& layout );
+
+	template<typename T>
+	void SetElementByIndex( size_t index, T&& value ) noexcept( !IS_DEBUG );
+
+	template<typename First, TPack Rest>
+	void SetElementByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG );
+
+	template<typename Dest, typename Src>
+	void SetElement( Dest* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
+
+private:
+	std::byte* pData = nullptr;
+	const VertexLayout& layout;
+};
+
+#pragma region impl
+
+#pragma region layoutImpl
 
 template<VertexLayout::Element::Type Type>
 const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
@@ -119,4 +152,110 @@ VertexLayout& VertexLayout::Append() noexcept( !IS_DEBUG )
 	return *this;
 }
 
-#pragma endregion implementation
+#pragma endregion layoutImpl
+
+#pragma region vertexImpl
+
+template<Vertex::ElType Type>
+auto& Vertex::Element() noexcept( !IS_DEBUG )
+{
+	using namespace DirectX;
+	const auto& element = layout.Resolve<Type>();
+	auto pAttribute = pData + element.GetOffset();
+	if constexpr( Type == ElType::Position2D )
+	{
+		return *reinterpret_cast<XMFLOAT2*>( pAttribute );
+	}
+	else if constexpr( Type == ElType::Position3D )
+	{
+		return *reinterpret_cast<XMFLOAT3*>( pAttribute );
+	}
+	else if constexpr( Type == ElType::Texture2D )
+	{
+		return *reinterpret_cast<XMFLOAT2*>( pAttribute );
+	}
+	else if constexpr( Type == ElType::Normal )
+	{
+		return *reinterpret_cast<XMFLOAT3*>( pAttribute );
+	}
+	else if constexpr( Type == ElType::Float3Color )
+	{
+		return *reinterpret_cast<XMFLOAT3*>( pAttribute );
+	}
+	else if constexpr( Type == ElType::Float4Color )
+	{
+		return *reinterpret_cast<XMFLOAT4*>( pAttribute );
+	}
+	else if constexpr( Type == ElType::BGRAColor )
+	{
+		return *reinterpret_cast<BGRAColor*>( pAttribute );
+	}
+	else if constexpr( Type == ElType::Count )
+	{
+		assert( "Don't use count here!" && false );
+	}
+	else
+	{
+		assert( "Bad element type" && false );
+	}
+	return *reinterpret_cast<std::byte*>( pAttribute );
+}
+
+template<typename T>
+void Vertex::SetElementByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
+{
+	using namespace DirectX;
+	const auto& element = layout.ResolveByIndex( index );
+	auto pAttribute = pData + element.GetOffset();
+	switch( element.GetType() )
+	{
+	case ElType::Position2D:
+		SetElement<XMFLOAT2>( pAttribute, std::forward<T>( value ) );
+		break;
+	case ElType::Position3D:
+		SetElement<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		break;
+	case ElType::Texture2D:
+		SetElement<XMFLOAT2>( pAttribute, std::forward<T>( value ) );
+		break;
+	case ElType::Normal:
+		SetElement<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		break;
+	case VertexLayout::Float3Color:
+		SetElement<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		break;
+	case ElType::Float4Color:
+		SetElement<XMFLOAT4>( pAttribute, std::forward<T>( value ) );
+		break;
+	case ElType::BGRAColor:
+		SetElement<BGRAColor>( pAttribute, std::forward<T>( value ) );
+		break;
+	case ElType::Count:
+		assert( "Don't use count type here!" && false );
+		break;
+	default:
+		assert( "Bad element type" && false );
+	}
+}
+
+template<typename First, TPack Rest>
+void Vertex::SetElementByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG )
+{
+	SetElementByIndex( index, std::forward<First>( first ) );
+	SetElementByIndex( index + 1, std::forward<Rest>( rest )... );
+}
+
+template<typename Dest, typename Src>
+void Vertex::SetElement( Dest* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
+{
+	if constexpr( std::is_assignable( dest, srcValue ) )
+	{
+		*dest = srcValue;
+	}
+	else
+	{
+		static_assert( "destination is not assignable" && false );	
+	}
+}
+
+#pragma endregion vertexImpl

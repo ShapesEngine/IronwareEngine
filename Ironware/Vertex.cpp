@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date March 2021
  *
- * 
+ *
  */
 #include "Vertex.h"
 
@@ -25,7 +25,17 @@ constexpr size_t VertexLayout::Element::SizeOf( Type type ) noexcept( !IS_DEBUG 
 
 	case BGRAColor:
 		return sizeof( uint32_t );
+
+	case Count:
+		assert( "Don't use count here!" && false );
 	}
 	assert( "Invalid element type" && false );
 	return 0u;
+}
+
+Vertex::Vertex( std::byte* data, const VertexLayout& layout ) :
+	pData( data ),
+	layout( layout )
+{
+	assert( pData != nullptr );
 }
