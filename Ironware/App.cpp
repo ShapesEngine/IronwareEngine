@@ -66,11 +66,14 @@ App::App() :
 			case 2:
 				return std::make_unique<TexturedBox>(
 					gfx, rng, adist, ddist,
-					odist, rdist, bdist );
+					odist, rdist, bdist 
+					);
 			case 3:
 				return std::make_unique<Mesh>(
 					gfx, rng, adist, ddist,
-					odist, rdist, DirectX::XMFLOAT3{ cdist( rng ), cdist( rng ), cdist( rng ) }, 1.f );
+					odist, rdist, DirectX::XMFLOAT3{ cdist( rng ), cdist( rng ), cdist( rng ) }, 
+					1.f 
+					);
 			default:
 				assert( false && "impossible drawable option in factory" );
 				return {};

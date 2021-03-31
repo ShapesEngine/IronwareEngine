@@ -284,14 +284,6 @@
     <Image Include="ironware_WaA_icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConstantBuffers.tpp">
-      <FileType>Document</FileType>
-    </ClInclude>
-    <ClInclude Include="DrawableBase.tpp">
-      <FileType>Document</FileType>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <FxCompile Include="ColorBlendPhongPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
