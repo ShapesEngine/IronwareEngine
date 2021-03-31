@@ -44,7 +44,7 @@ public:
 			Count
 		};
 
-	private:
+	public:
 		Element( Type type, size_t offset ) :
 			type( type ),
 			offset( offset )
@@ -52,6 +52,12 @@ public:
 			assert( type != Count );
 		}
 
+		/**
+		 * @return offset after this element( previous offset + size of this element )
+		*/
+		__forceinline size_t GetOffsetAfter() const { return offset + GetSize(); }
+
+	private:
 		__forceinline size_t GetOffset() const { return offset; }
 		/**
 		 * @return size of the element type
@@ -60,12 +66,6 @@ public:
 		__forceinline Type GetType() const { return type; }
 
 		static constexpr size_t SizeOf( Type type ) noexcept( !IS_DEBUG );
-
-	public:
-		/**
-		 * @return offset after this element( previous offset + size of this element )
-		*/
-		__forceinline size_t GetOffsetAfter() const { return offset + GetSize(); }
 
 	private:
 		Type type;
@@ -177,8 +177,8 @@ const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
 template<VertexLayout::Element::Type Type>
 VertexLayout& VertexLayout::Append() noexcept( !IS_DEBUG )
 {
-	static_assert( Type != Element::Type::Count );
-	elements.push_back( Type, Size() );
+	static_assert( Type != VertexLayout::Element::Type::Count );
+	elements.push_back( { Type, Size() } );
 	return *this;
 }
 
