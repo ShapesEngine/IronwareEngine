@@ -39,3 +39,7 @@ Vertex::Vertex( std::byte* data, const VertexLayout& layout ) :
 {
 	assert( pData != nullptr );
 }
+
+VertexByteBuffer::VertexByteBuffer( VertexLayout layout ) :
+	layout( std::move( layout ) )
+{}

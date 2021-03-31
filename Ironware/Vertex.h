@@ -13,7 +13,7 @@
 #include <DirectXMath.h>
 #include <type_traits>
 
-#define TPack typename...
+#define TPACK typename...
 
 struct BGRAColor
 {
@@ -84,10 +84,11 @@ public:
 	/**
 	 * @brief Resolves an element in the layout by index
 	 * @param index of the element in a vector
-	 * @return Refence to the element
+	 * @return Reference to the element
 	*/
 	__forceinline const Element& ResolveByIndex( uint32_t index ) const noexcept( !IS_DEBUG ) { return elements[index]; }
 	__forceinline size_t Size() const noexcept( !IS_DEBUG ) { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
+	__forceinline size_t GetElementCount() const noexcept( !IS_DEBUG ) { return elements.size(); }
 
 	template<Element::Type Type>
 	VertexLayout& Append() noexcept( !IS_DEBUG );
@@ -99,6 +100,7 @@ private:
 class Vertex
 {
 	using ElType = VertexLayout::Element::Type;
+	friend class VertexByteBuffer;
 public:
 	/**
 	 * @brief Gives an access to the element from the layout.
@@ -115,17 +117,44 @@ private:
 	template<typename T>
 	void SetElementByIndex( size_t index, T&& value ) noexcept( !IS_DEBUG );
 
-	template<typename First, TPack Rest>
+	template<typename First, TPACK Rest>
 	void SetElementByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG );
 
 	template<typename Dest, typename Src>
 	void SetElement( Dest* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
 
 private:
-	std::byte* pData = nullptr;
+	std::byte* pData;
 	const VertexLayout& layout;
 };
 
+class VertexByteBuffer
+{
+public:
+	VertexByteBuffer( VertexLayout layout );
+
+	__forceinline VertexLayout& GetLayout() noexcept { return layout; }
+	/**
+	 * @return element count in the buffer
+	*/
+	__forceinline size_t Size() const noexcept { return layout.GetElementCount(); }
+
+	template<TPACK Params>
+	void EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG );
+
+	/**
+	 * @brief Retrieves vertex with appropriate index
+	 * @tparam alignment represents the alignment of the indexing
+	 * @param index represents the index value with appropriate alignment
+	 * @return Vertex instance
+	*/
+	template<size_t alignment>
+	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );
+
+private:
+	std::vector<std::byte> buffer;
+	VertexLayout layout;
+};
 
 #pragma region impl
 
@@ -239,7 +268,7 @@ void Vertex::SetElementByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
 	}
 }
 
-template<typename First, TPack Rest>
+template<typename First, TPACK Rest>
 void Vertex::SetElementByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG )
 {
 	SetElementByIndex( index, std::forward<First>( first ) );
@@ -255,8 +284,33 @@ void Vertex::SetElement( Dest* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
 	}
 	else
 	{
-		static_assert( "destination is not assignable" && false );	
+		static_assert( "destination is not assignable" && false );
 	}
 }
 
 #pragma endregion vertexImpl
+
+#pragma region bufferImpl
+
+template<TPACK Params>
+void VertexByteBuffer::EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG )
+{
+	const auto layoutSize = layout.Size();
+	static_assert( layoutSize != 0 );
+	buffer.resize( layoutSize );
+	Vertex{ buffer.data(), layout }.SetElementByIndex( 0, std::forward( params )... );
+}
+
+template<size_t alignment>
+Vertex VertexByteBuffer::operator[]( size_t index ) noexcept( !IS_DEBUG )
+{
+	const auto layoutSize = layout.Size();
+	const auto i = layoutSize * alignment / layoutSize * index;
+	static_assert( layoutSize > alignment );
+	assert( layoutSize > i );
+	return Vertex{ buffer.data() + i, layout };
+}
+
+#pragma endregion bufferImpl
+
+#pragma endregion impl
