@@ -170,6 +170,8 @@ public:
 
 	VertexLayout& Append(ElementType ElementType) noexcept( !IS_DEBUG );
 
+	std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const noexcept( !IS_DEBUG );	
+
 private:
 	std::vector<Element> elements;
 };

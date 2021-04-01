@@ -42,3 +42,14 @@ VertexLayout& VertexLayout::Append( ElementType Type ) noexcept( !IS_DEBUG )
 	elements.emplace_back( Type, Size() );
 	return *this;
 }
+
+std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const noexcept( !IS_DEBUG )
+{
+	std::vector<D3D11_INPUT_ELEMENT_DESC> desc;
+	desc.reserve( GetElementCount() );
+	for( const auto& e : elements )
+	{
+		desc.push_back( e.GetDesc() );
+	}
+	return desc;
+}
