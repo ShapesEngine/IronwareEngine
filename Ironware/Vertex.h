@@ -15,6 +15,7 @@
 
 #define TPACK typename...
 
+// ARGB color struct
 struct BGRAColor
 {
 	uint8_t a;
@@ -98,6 +99,11 @@ private:
 	std::vector<Element> elements;
 };
 
+/**
+ * @brief Middle level class that works as a view to the vbuffer.
+ * * Doesn't hold the buffer itself, but has a pointer to the memory
+ * * where appropriate data is stored.
+*/
 class Vertex
 {
 	using ElType = VertexLayout::ElementType;
@@ -129,6 +135,9 @@ private:
 	const VertexLayout& layout;
 };
 
+/**
+ * @brief Lower level class that holds data buffer as bytes. 
+*/
 class VertexByteBuffer
 {
 public:
@@ -139,7 +148,10 @@ public:
 	 * @return element count in the buffer
 	*/
 	__forceinline size_t Size() const noexcept { return layout.GetElementCount(); }
-
+	/**
+	 * @brief Sets the vertex layout values(order needs to be the as the layout's ordering)
+	 * @param ...params values as parameter pack
+	*/
 	template<TPACK Params>
 	void EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG );
 
