@@ -36,9 +36,9 @@ Vertex VertexByteBuffer::operator[]( size_t index ) noexcept( !IS_DEBUG )
 	return Vertex{ buffer.data() + index * layout.Size(), layout };
 }
 
-VertexLayout & VertexLayout::Append( Element::Type Type ) noexcept( !IS_DEBUG )
+VertexLayout& VertexLayout::Append( ElementType Type ) noexcept( !IS_DEBUG )
 {
-	assert( Type != VertexLayout::ElementType::Count );
+	assert( Type != ElementType::Count );
 	elements.emplace_back( Type, Size() );
 	return *this;
 }

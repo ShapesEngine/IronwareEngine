@@ -29,10 +29,10 @@ Mesh::Mesh( Graphics& gfx, std::mt19937& rng,
 	if( !IsStaticInitialized() )
 	{
 		using ElType = VertexLayout::ElementType;
-		VertexByteBuffer vbuff( 
+		VertexByteBuffer vbuff(
 			VertexLayout{}
-			.Append(ElType::Position3D)
-			.Append(ElType::Normal)
+			.Append( ElType::Position3D )
+			.Append( ElType::Normal )
 		);
 
 		Assimp::Importer importer;
@@ -45,7 +45,7 @@ Mesh::Mesh( Graphics& gfx, std::mt19937& rng,
 		for( uint32_t i = 0; i < meshVerticesNum; i++ )
 		{
 			vbuff.EmplaceBack( dx::XMFLOAT3{ pMesh->mVertices[i].x * scale, pMesh->mVertices[i].y * scale, pMesh->mVertices[i].z * scale },
-								*reinterpret_cast<dx::XMFLOAT3*>( &pMesh->mNormals[i] ) );
+				*reinterpret_cast<dx::XMFLOAT3*>( &pMesh->mNormals[i] ) );
 		}
 
 		AddStaticBind( std::make_unique<VertexBuffer>( gfx, vbuff ) );

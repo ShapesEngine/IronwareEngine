@@ -31,27 +31,26 @@ struct BGRAColor
 class VertexLayout
 {
 public:
+	enum class ElementType
+	{
+		Position2D,
+		Position3D,
+		Texture2D,
+		Normal,
+		Float3Color,
+		Float4Color,
+		BGRAColor,
+		Count
+	};
+
 	class Element
 	{
 	public:
-		enum class Type
-		{
-			Position2D,
-			Position3D,
-			Texture2D,
-			Normal,
-			Float3Color,
-			Float4Color,
-			BGRAColor,
-			Count
-		};
-
-	public:
-		Element( Type type, size_t offset ) :
+		Element( ElementType type, size_t offset ) :
 			type( type ),
 			offset( offset )
 		{
-			assert( type != Type::Count );
+			assert( type != ElementType::Count );
 		}
 
 		/**
@@ -64,16 +63,14 @@ public:
 		 * @return size of the element type
 		*/
 		__forceinline size_t GetSize() const { return SizeOf( type ); }
-		__forceinline Type GetType() const { return type; }
+		__forceinline ElementType GetType() const { return type; }
 
-		static constexpr size_t SizeOf( Type type ) noexcept( !IS_DEBUG );
+		static constexpr size_t SizeOf( ElementType type ) noexcept( !IS_DEBUG );
 
 	private:
-		Type type;
+		ElementType type;
 		size_t offset;
 	};
-	// alias
-	using ElementType = Element::Type;
 
 	template<ElementType> struct Map;
 	template<> struct Map<ElementType::Position2D>
@@ -125,7 +122,7 @@ public:
 	 * @tparam Type of the element
 	 * @return Reference to the element
 	*/
-	template<Element::Type Type>
+	template<ElementType ElementType>
 	const Element& Resolve() const noexcept( !IS_DEBUG );
 
 	/**
@@ -140,7 +137,7 @@ public:
 	__forceinline size_t Size() const noexcept( !IS_DEBUG ) { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
 	__forceinline size_t GetElementCount() const noexcept( !IS_DEBUG ) { return elements.size(); }
 
-	VertexLayout& Append(Element::Type Type) noexcept( !IS_DEBUG );
+	VertexLayout& Append(ElementType ElementType) noexcept( !IS_DEBUG );
 
 private:
 	std::vector<Element> elements;
@@ -280,7 +277,7 @@ private:
 
 #pragma region layoutImpl
 
-constexpr size_t VertexLayout::Element::SizeOf( Type type ) noexcept( !IS_DEBUG )
+constexpr size_t VertexLayout::Element::SizeOf( ElementType type ) noexcept( !IS_DEBUG )
 {
 	using namespace DirectX;
 	switch( type )
@@ -369,7 +366,7 @@ template<typename First, TPACK Rest>
 void Vertex::SetAttributeByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG )
 {
 	SetAttributeByIndex( index, std::forward<First>( first ) );
-	SetAttributeByIndex( index + 1, std::forward<Rest>( rest )... );
+	SetAttributeByIndex( index + 1u, std::forward<Rest>( rest )... );
 }
 
 template<VertexLayout::ElementType DestLayoutType, typename SrcType>
@@ -396,7 +393,7 @@ void VertexByteBuffer::EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG )
 	assert( sizeof...( params ) == layout.GetElementCount() && "Parameter and layout count is NOT equal!" );
 	const auto layoutSize = layout.Size();
 	buffer.resize( layoutSize + buffer.size() );
-	Back().SetAttributeByIndex( 0, std::forward<Params>( params )... );
+	Back().SetAttributeByIndex( 0u, std::forward<Params>( params )... );
 }
 
 #pragma endregion bufferImpl
