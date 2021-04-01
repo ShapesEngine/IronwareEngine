@@ -186,6 +186,7 @@ public:
 	VertexByteBuffer( VertexLayout layout );
 
 	__forceinline VertexLayout& GetLayout() noexcept { return layout; }
+	__forceinline const VertexLayout& GetLayout() const noexcept { return layout; }
 	/**
 	 * @return attribute count in the buffer
 	*/

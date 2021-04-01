@@ -230,6 +230,7 @@
     <ClCompile Include="TexturedBox.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowsMessageMap.cpp" />

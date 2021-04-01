@@ -12,6 +12,7 @@
 
 #include "Bindable.h"
 #include "GraphicsExceptionMacros.h"
+#include "Vertex.h"
 
 /*!
  * \class VertexBuffer
@@ -48,6 +49,8 @@ public:
 		subresVertexData.pSysMem = vertices.data();
 		GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descVertexBuffer, &subresVertexData, &pVertexBuffer ) );
 	}
+
+	VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, UINT offset = 0 );
 
 	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
 
