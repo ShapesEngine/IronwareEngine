@@ -136,7 +136,7 @@ private:
 };
 
 /**
- * @brief Lower level class that holds data buffer as bytes. 
+ * @brief Lower level class that holds data buffer as bytes.
 */
 class VertexByteBuffer
 {
@@ -338,8 +338,9 @@ void Vertex::SetElement( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
 template<TPACK Params>
 void VertexByteBuffer::EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG )
 {
+	assert( sizeof...( params ) == layout.GetElementCount() && "Parameter and layout count is NOT equal!" );
 	const auto layoutSize = layout.Size();
-	assert( layoutSize != 0 );
+	assert( layoutSize != 0 && "Layout is NOT set or something wrong happened!" );
 	buffer.resize( layoutSize );
 	Vertex{ buffer.data(), layout }.SetElementByIndex( 0, std::forward<Params>( params )... );
 }
