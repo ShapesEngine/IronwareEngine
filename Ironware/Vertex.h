@@ -30,7 +30,7 @@ struct BGRAColor
 class VertexLayout
 {
 public:
-	class Attribute
+	class Element
 	{
 	public:
 		enum class Type
@@ -46,7 +46,7 @@ public:
 		};
 
 	public:
-		Attribute( Type type, size_t offset ) :
+		Element( Type type, size_t offset ) :
 			type( type ),
 			offset( offset )
 		{
@@ -72,7 +72,7 @@ public:
 		size_t offset;
 	};
 	// alias
-	using ElementType = Attribute::Type;
+	using ElementType = Element::Type;
 
 public:
 	/**
@@ -80,26 +80,26 @@ public:
 	 * @tparam Type of the element
 	 * @return Reference to the element
 	*/
-	template<Attribute::Type Type>
-	const Attribute& Resolve() const noexcept( !IS_DEBUG );
+	template<Element::Type Type>
+	const Element& Resolve() const noexcept( !IS_DEBUG );
 
 	/**
 	 * @brief Resolves an element in the layout by index
 	 * @param index of the element in a vector
 	 * @return Reference to the element
 	*/
-	__forceinline const Attribute& ResolveByIndex( size_t index ) const noexcept( !IS_DEBUG ) { return elements[index]; }
+	__forceinline const Element& ResolveByIndex( size_t index ) const noexcept( !IS_DEBUG ) { return elements[index]; }
 	/**
 	 * @return size of the elements in bytes
 	*/
 	__forceinline size_t Size() const noexcept( !IS_DEBUG ) { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
 	__forceinline size_t GetElementCount() const noexcept( !IS_DEBUG ) { return elements.size(); }
 
-	template<Attribute::Type Type>
+	template<Element::Type Type>
 	VertexLayout& Append() noexcept( !IS_DEBUG );
 
 private:
-	std::vector<Attribute> elements;
+	std::vector<Element> elements;
 };
 
 /**
@@ -199,7 +199,7 @@ private:
 
 #pragma region layoutImpl
 
-constexpr size_t VertexLayout::Attribute::SizeOf( Type type ) noexcept( !IS_DEBUG )
+constexpr size_t VertexLayout::Element::SizeOf( Type type ) noexcept( !IS_DEBUG )
 {
 	using namespace DirectX;
 	switch( type )
@@ -215,7 +215,7 @@ constexpr size_t VertexLayout::Attribute::SizeOf( Type type ) noexcept( !IS_DEBU
 		return sizeof( XMFLOAT3 );
 
 	case VertexLayout::ElementType::BGRAColor:
-		return sizeof( uint32_t );
+		return sizeof( BGRAColor );
 
 	case VertexLayout::ElementType::Count:
 		assert( "Don't use count here!" && false );
@@ -225,7 +225,7 @@ constexpr size_t VertexLayout::Attribute::SizeOf( Type type ) noexcept( !IS_DEBU
 }
 
 template<VertexLayout::ElementType Type>
-const VertexLayout::Attribute& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
+const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
 {
 	for( const auto& e : elements )
 	{
