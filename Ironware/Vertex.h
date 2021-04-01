@@ -193,8 +193,8 @@ private:
 	 * @param dest memory address
 	 * @param srcValue that will be set
 	*/
-	template<typename Dest, typename Src>
-	void SetAttribute( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
+	template<ElType DestLayoutType, typename SrcType>
+	void SetAttribute( std::byte* dest, SrcType&& srcValue ) noexcept( !IS_DEBUG );
 
 private:
 	std::byte* pData;
@@ -332,31 +332,30 @@ auto& Vertex::Attribute() noexcept( !IS_DEBUG )
 template<typename T>
 void Vertex::SetAttributeByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
 {
-	using namespace DirectX;
 	const auto& element = layout.ResolveByIndex( index );
 	auto pAttribute = pData + element.GetOffset();
 	switch( element.GetType() )
 	{
 	case ElType::Position2D:
-		SetAttribute<XMFLOAT2>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<ElType::Position2D>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Position3D:
-		SetAttribute<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<ElType::Position3D>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Texture2D:
-		SetAttribute<XMFLOAT2>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<ElType::Texture2D>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Normal:
-		SetAttribute<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<ElType::Normal>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Float3Color:
-		SetAttribute<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<ElType::Float3Color>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Float4Color:
-		SetAttribute<XMFLOAT4>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<ElType::Float4Color>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::BGRAColor:
-		SetAttribute<BGRAColor>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<ElType::BGRAColor>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Count:
 		assert( "Don't use count type here!" && false );
@@ -373,10 +372,11 @@ void Vertex::SetAttributeByIndex( size_t index, First&& first, Rest&&... rest ) 
 	SetAttributeByIndex( index + 1, std::forward<Rest>( rest )... );
 }
 
-template<typename Dest, typename Src>
-void Vertex::SetAttribute( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
+template<VertexLayout::ElementType DestLayoutType, typename SrcType>
+void Vertex::SetAttribute( std::byte* dest, SrcType&& srcValue ) noexcept( !IS_DEBUG )
 {
-	if constexpr( std::is_assignable<Dest, Src>::value )
+	using Dest = typename VertexLayout::Map<DestLayoutType>::SysType;
+	if constexpr( std::is_assignable<Dest, SrcType>::value )
 	{
 		*reinterpret_cast<Dest*>( dest ) = srcValue;
 	}
