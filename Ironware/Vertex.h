@@ -205,6 +205,15 @@ public:
 	*/
 	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );
 
+	__forceinline ConstVertex Back() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Back(); }
+	__forceinline ConstVertex Front() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Front(); }
+	/**
+	 * @brief Retrieves vertex with appropriate index
+	 * @param index represents the index value with appropriate layout
+	 * @return Vertex instance that will hold all the elements of a single vertex
+	*/
+	__forceinline ConstVertex operator[]( size_t i ) const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer&>( *this )[i]; }
+
 private:
 	// buffer has no alignment, so when you will be dealing
 	// with data you have to keep it in mind
