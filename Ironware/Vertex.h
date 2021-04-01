@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <DirectXMath.h>
+#include <dxgiformat.h>
 #include <type_traits>
 
 #define TPACK typename...
@@ -73,6 +74,50 @@ public:
 	};
 	// alias
 	using ElementType = Element::Type;
+
+	template<ElementType> struct Map;
+	template<> struct Map<ElementType::Position2D>
+	{
+		using SysType = DirectX::XMFLOAT2;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
+		static constexpr const char* semantic = "Position";
+	};
+	template<> struct Map<ElementType::Position3D>
+	{
+		using SysType = DirectX::XMFLOAT3;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+		static constexpr const char* semantic = "Position";
+	};
+	template<> struct Map<ElementType::Texture2D>
+	{
+		using SysType = DirectX::XMFLOAT2;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
+		static constexpr const char* semantic = "TexCoord";
+	};
+	template<> struct Map<ElementType::Normal>
+	{
+		using SysType = DirectX::XMFLOAT3;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+		static constexpr const char* semantic = "Normal";
+	};
+	template<> struct Map<ElementType::Float3Color>
+	{
+		using SysType = DirectX::XMFLOAT3;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+		static constexpr const char* semantic = "Color";
+	};
+	template<> struct Map<ElementType::Float4Color>
+	{
+		using SysType = DirectX::XMFLOAT4;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		static constexpr const char* semantic = "Color";
+	};
+	template<> struct Map<ElementType::BGRAColor>
+	{
+		using SysType = BGRAColor;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+		static constexpr const char* semantic = "Color";
+	};
 
 public:
 	/**
