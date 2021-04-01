@@ -30,7 +30,7 @@ struct BGRAColor
 class VertexLayout
 {
 public:
-	class Element
+	class Attribute
 	{
 	public:
 		enum class Type
@@ -46,7 +46,7 @@ public:
 		};
 
 	public:
-		Element( Type type, size_t offset ) :
+		Attribute( Type type, size_t offset ) :
 			type( type ),
 			offset( offset )
 		{
@@ -72,7 +72,7 @@ public:
 		size_t offset;
 	};
 	// alias
-	using ElementType = Element::Type;
+	using ElementType = Attribute::Type;
 
 public:
 	/**
@@ -80,23 +80,26 @@ public:
 	 * @tparam Type of the element
 	 * @return Reference to the element
 	*/
-	template<Element::Type Type>
-	const Element& Resolve() const noexcept( !IS_DEBUG );
+	template<Attribute::Type Type>
+	const Attribute& Resolve() const noexcept( !IS_DEBUG );
 
 	/**
 	 * @brief Resolves an element in the layout by index
 	 * @param index of the element in a vector
 	 * @return Reference to the element
 	*/
-	__forceinline const Element& ResolveByIndex( uint32_t index ) const noexcept( !IS_DEBUG ) { return elements[index]; }
+	__forceinline const Attribute& ResolveByIndex( size_t index ) const noexcept( !IS_DEBUG ) { return elements[index]; }
+	/**
+	 * @return size of the elements in bytes
+	*/
 	__forceinline size_t Size() const noexcept( !IS_DEBUG ) { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
 	__forceinline size_t GetElementCount() const noexcept( !IS_DEBUG ) { return elements.size(); }
 
-	template<Element::Type Type>
+	template<Attribute::Type Type>
 	VertexLayout& Append() noexcept( !IS_DEBUG );
 
 private:
-	std::vector<Element> elements;
+	std::vector<Attribute> elements;
 };
 
 /**
@@ -116,19 +119,38 @@ public:
 	 * @return Reference to appropriate memory data. Reinterpreted as needed type.
 	*/
 	template<ElType Type>
-	auto& Element() noexcept( !IS_DEBUG );
+	auto& Attribute() noexcept( !IS_DEBUG );
 
 private:
 	Vertex( std::byte* data, const VertexLayout& layout );
 
+	/**
+	 * @brief Sets the attribute with appropriate index
+	 * @tparam T value type
+	 * @param index number in the layout
+	 * @param value that will be set
+	*/
 	template<typename T>
-	void SetElementByIndex( size_t index, T&& value ) noexcept( !IS_DEBUG );
+	void SetAttributeByIndex( size_t index, T&& value ) noexcept( !IS_DEBUG );
 
+	/**
+	 * @brief Sets the attributes with parameter pack
+	 * @tparam First type of the single element in the pack
+	 * @tparam Rest pack itself
+	 * @param index only needed for parameter pack recursion, default value is 0
+	*/
 	template<typename First, TPACK Rest>
-	void SetElementByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG );
+	void SetAttributeByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG );
 
+	/**
+	 * @brief Sets the attribute value
+	 * @tparam Dest type of the location
+	 * @tparam Src type of the value
+	 * @param dest memory address
+	 * @param srcValue that will be set
+	*/
 	template<typename Dest, typename Src>
-	void SetElement( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
+	void SetAttribute( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
 
 private:
 	std::byte* pData;
@@ -145,9 +167,10 @@ public:
 
 	__forceinline VertexLayout& GetLayout() noexcept { return layout; }
 	/**
-	 * @return element count in the buffer
+	 * @return attribute count in the buffer
 	*/
-	__forceinline size_t Size() const noexcept { return layout.GetElementCount(); }
+	__forceinline size_t Size() const noexcept { return buffer.size() / layout.Size(); }
+
 	/**
 	 * @brief Sets the vertex layout values(order needs to be the as the layout's ordering)
 	 * @param ...params values as parameter pack
@@ -155,16 +178,15 @@ public:
 	template<TPACK Params>
 	void EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG );
 
-	__forceinline Vertex GetElement() noexcept( !IS_DEBUG ) { return{ buffer.data(), layout }; }
+	Vertex Back() noexcept( !IS_DEBUG );
+	Vertex Front() noexcept( !IS_DEBUG );
 
-	/** TODO: ...
+	/**
 	 * @brief Retrieves vertex with appropriate index
-	 * @tparam alignment represents the alignment of the indexing
-	 * @param index represents the index value with appropriate alignment
-	 * @return Vertex instance
+	 * @param index represents the index value with appropriate layout
+	 * @return Vertex instance that will hold all the elements of a single vertex
 	*/
-	/*template<size_t alignment>
-	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );*/
+	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );
 
 private:
 	// buffer has no alignment, so when you will be dealing
@@ -177,7 +199,7 @@ private:
 
 #pragma region layoutImpl
 
-constexpr size_t VertexLayout::Element::SizeOf( Type type ) noexcept( !IS_DEBUG )
+constexpr size_t VertexLayout::Attribute::SizeOf( Type type ) noexcept( !IS_DEBUG )
 {
 	using namespace DirectX;
 	switch( type )
@@ -203,7 +225,7 @@ constexpr size_t VertexLayout::Element::SizeOf( Type type ) noexcept( !IS_DEBUG 
 }
 
 template<VertexLayout::ElementType Type>
-const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
+const VertexLayout::Attribute& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
 {
 	for( const auto& e : elements )
 	{
@@ -229,7 +251,7 @@ VertexLayout& VertexLayout::Append() noexcept( !IS_DEBUG )
 #pragma region vertexImpl
 
 template<Vertex::ElType Type>
-auto& Vertex::Element() noexcept( !IS_DEBUG )
+auto& Vertex::Attribute() noexcept( !IS_DEBUG )
 {
 	using namespace DirectX;
 	const auto& element = layout.Resolve<Type>();
@@ -275,7 +297,7 @@ auto& Vertex::Element() noexcept( !IS_DEBUG )
 }
 
 template<typename T>
-void Vertex::SetElementByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
+void Vertex::SetAttributeByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
 {
 	using namespace DirectX;
 	const auto& element = layout.ResolveByIndex( index );
@@ -283,25 +305,25 @@ void Vertex::SetElementByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
 	switch( element.GetType() )
 	{
 	case ElType::Position2D:
-		SetElement<XMFLOAT2>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<XMFLOAT2>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Position3D:
-		SetElement<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Texture2D:
-		SetElement<XMFLOAT2>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<XMFLOAT2>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Normal:
-		SetElement<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Float3Color:
-		SetElement<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Float4Color:
-		SetElement<XMFLOAT4>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<XMFLOAT4>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::BGRAColor:
-		SetElement<BGRAColor>( pAttribute, std::forward<T>( value ) );
+		SetAttribute<BGRAColor>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Count:
 		assert( "Don't use count type here!" && false );
@@ -312,14 +334,14 @@ void Vertex::SetElementByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
 }
 
 template<typename First, TPACK Rest>
-void Vertex::SetElementByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG )
+void Vertex::SetAttributeByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG )
 {
-	SetElementByIndex( index, std::forward<First>( first ) );
-	SetElementByIndex( index + 1, std::forward<Rest>( rest )... );
+	SetAttributeByIndex( index, std::forward<First>( first ) );
+	SetAttributeByIndex( index + 1, std::forward<Rest>( rest )... );
 }
 
 template<typename Dest, typename Src>
-void Vertex::SetElement( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
+void Vertex::SetAttribute( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
 {
 	if constexpr( std::is_assignable<Dest, Src>::value )
 	{
@@ -340,21 +362,9 @@ void VertexByteBuffer::EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG )
 {
 	assert( sizeof...( params ) == layout.GetElementCount() && "Parameter and layout count is NOT equal!" );
 	const auto layoutSize = layout.Size();
-	assert( layoutSize != 0 && "Layout is NOT set or something wrong happened!" );
-	buffer.resize( layoutSize );
-	Vertex{ buffer.data(), layout }.SetElementByIndex( 0, std::forward<Params>( params )... );
+	buffer.resize( layoutSize + buffer.size() );
+	Back().SetAttributeByIndex( 0, std::forward<Params>( params )... );
 }
-
-// TODO: ...
-//template<size_t alignment>
-//Vertex VertexByteBuffer::operator[]( size_t index ) noexcept( !IS_DEBUG )
-//{
-//	const auto layoutSize = layout.Size();
-//	const auto i = alignment * index;
-//	static_assert( alignment > 0 );
-//	assert( layoutSize > alignment && layoutSize > i );
-//	return Vertex{ buffer.data() + i, layout };
-//}
 
 #pragma endregion bufferImpl
 

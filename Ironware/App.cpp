@@ -40,17 +40,30 @@
 
 GDIPlusManager gdiplm;
 
-using namespace DirectX;
-
 void test()
 {
-	VertexLayout vl;
-	vl.Append<VertexLayout::ElementType::Position3D>()
-		.Append<VertexLayout::ElementType::Position2D>();
-	VertexByteBuffer vb( std::move( vl ) );
-	vb.EmplaceBack( XMFLOAT3{ 1.0f,1.0f,5.0f }, XMFLOAT2{ 2.0f,1.0f } );
-	// auto pos = vb[0]<12>.Element<VertexLayout::Element::Position3D>();
-	auto pos = vb.GetElement().Element<VertexLayout::ElementType::Position3D>();
+	namespace dx = DirectX;
+	VertexByteBuffer vb( std::move(
+		VertexLayout{}
+		.Append<VertexLayout::ElementType::Position3D>()
+		.Append<VertexLayout::ElementType::Normal>()
+		.Append<VertexLayout::ElementType::Texture2D>()
+	) );
+	vb.EmplaceBack(
+		dx::XMFLOAT3{ 1.0f,1.0f,5.0f },
+		dx::XMFLOAT3{ 2.0f,1.0f,4.0f },
+		dx::XMFLOAT2{ 6.0f,9.0f }
+	);
+	vb.EmplaceBack(
+		dx::XMFLOAT3{ 6.0f,9.0f,6.0f },
+		dx::XMFLOAT3{ 9.0f,6.0f,9.0f },
+		dx::XMFLOAT2{ 4.2f,0.0f }
+	);
+	auto pos = vb[0].Attribute<VertexLayout::ElementType::Position3D>();
+	auto nor = vb[0].Attribute<VertexLayout::ElementType::Normal>();
+	auto tex = vb[1].Attribute<VertexLayout::ElementType::Texture2D>();
+	vb.Back().Attribute<VertexLayout::ElementType::Position3D>().z = 420.0f;
+	pos = vb.Back().Attribute<VertexLayout::ElementType::Position3D>();
 }
 
 App::App() :
