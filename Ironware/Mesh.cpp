@@ -28,11 +28,12 @@ Mesh::Mesh( Graphics& gfx, std::mt19937& rng,
 
 	if( !IsStaticInitialized() )
 	{
-		struct Vertex
-		{
-			dx::XMFLOAT3 pos;
-			dx::XMFLOAT3 n;
-		};
+		using ElType = VertexLayout::ElementType;
+		VertexByteBuffer vbuff( 
+			VertexLayout{}
+			.Append<ElType::Position3D>()
+			.Append<ElType::Normal>()
+		);
 
 		Assimp::Importer importer;
 		auto pModel = importer.ReadFile( "Models\\suzanne.obj", aiProcess_Triangulate | aiProcess_JoinIdenticalVertices );
@@ -40,18 +41,14 @@ Mesh::Mesh( Graphics& gfx, std::mt19937& rng,
 		// 0, as there is only 1 mesh in the file
 		auto pMesh = pModel->mMeshes[0];
 		const auto meshVerticesNum = pMesh->mNumVertices;
-		std::vector<Vertex> vertices;
-		vertices.reserve( meshVerticesNum );
 
 		for( uint32_t i = 0; i < meshVerticesNum; i++ )
 		{
-			vertices.push_back( {
-				{ pMesh->mVertices[i].x * scale, pMesh->mVertices[i].y * scale, pMesh->mVertices[i].z * scale },
-				*reinterpret_cast<dx::XMFLOAT3*>( &pMesh->mNormals[i] )
-				} );
+			vbuff.EmplaceBack( dx::XMFLOAT3{ pMesh->mVertices[i].x * scale, pMesh->mVertices[i].y * scale, pMesh->mVertices[i].z * scale },
+								*reinterpret_cast<dx::XMFLOAT3*>( &pMesh->mNormals[i] ) );
 		}
 
-		AddStaticBind( std::make_unique<VertexBuffer>( gfx, vertices ) );
+		AddStaticBind( std::make_unique<VertexBuffer>( gfx, vbuff ) );
 
 		auto pVertShader = std::make_unique<VertexShader>( gfx, L"PhongVS.cso" );
 		// save bytecode, as it will be needed in input layout
