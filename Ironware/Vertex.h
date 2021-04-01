@@ -32,7 +32,7 @@ public:
 	class Element
 	{
 	public:
-		enum Type
+		enum class Type
 		{
 			Position2D,
 			Position3D,
@@ -49,7 +49,7 @@ public:
 			type( type ),
 			offset( offset )
 		{
-			assert( type != Count );
+			assert( type != Type::Count );
 		}
 
 		/**
@@ -70,6 +70,8 @@ public:
 		Type type;
 		size_t offset;
 	};
+	// alias
+	using ElementType = Element::Type;
 
 public:
 	/**
@@ -98,7 +100,7 @@ private:
 
 class Vertex
 {
-	using ElType = VertexLayout::Element::Type;
+	using ElType = VertexLayout::ElementType;
 	friend class VertexByteBuffer;
 public:
 	/**
@@ -111,7 +113,7 @@ public:
 	auto& Element() noexcept( !IS_DEBUG );
 
 private:
-	Vertex( uint8_t* data, const VertexLayout& layout );
+	Vertex( std::byte* data, const VertexLayout& layout );
 
 	template<typename T>
 	void SetElementByIndex( size_t index, T&& value ) noexcept( !IS_DEBUG );
@@ -120,10 +122,10 @@ private:
 	void SetElementByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG );
 
 	template<typename Dest, typename Src>
-	void SetElement( uint8_t* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
+	void SetElement( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
 
 private:
-	uint8_t* pData;
+	std::byte* pData;
 	const VertexLayout& layout;
 };
 
@@ -141,17 +143,21 @@ public:
 	template<TPACK Params>
 	void EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG );
 
-	/**
+	__forceinline Vertex GetElement() noexcept( !IS_DEBUG ) { return{ buffer.data(), layout }; }
+
+	/** TODO: ...
 	 * @brief Retrieves vertex with appropriate index
 	 * @tparam alignment represents the alignment of the indexing
 	 * @param index represents the index value with appropriate alignment
 	 * @return Vertex instance
 	*/
-	template<size_t alignment>
-	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );
+	/*template<size_t alignment>
+	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );*/
 
 private:
-	std::vector<uint8_t> buffer;
+	// buffer has no alignment, so when you will be dealing
+	// with data you have to keep it in mind
+	std::vector<std::byte> buffer;
 	VertexLayout layout;
 };
 
@@ -164,27 +170,27 @@ constexpr size_t VertexLayout::Element::SizeOf( Type type ) noexcept( !IS_DEBUG 
 	using namespace DirectX;
 	switch( type )
 	{
-	case Position2D:
-	case Texture2D:
+	case VertexLayout::ElementType::Position2D:
+	case VertexLayout::ElementType::Texture2D:
 		return sizeof( XMFLOAT2 );
 
-	case Position3D:
-	case Normal:
-	case Float3Color:
-	case Float4Color:
+	case VertexLayout::ElementType::Position3D:
+	case VertexLayout::ElementType::Normal:
+	case VertexLayout::ElementType::Float3Color:
+	case VertexLayout::ElementType::Float4Color:
 		return sizeof( XMFLOAT3 );
 
-	case BGRAColor:
+	case VertexLayout::ElementType::BGRAColor:
 		return sizeof( uint32_t );
 
-	case Count:
+	case VertexLayout::ElementType::Count:
 		assert( "Don't use count here!" && false );
 	}
 	assert( "Invalid element type" && false );
 	return 0u;
 }
 
-template<VertexLayout::Element::Type Type>
+template<VertexLayout::ElementType Type>
 const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
 {
 	for( const auto& e : elements )
@@ -198,10 +204,10 @@ const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
 	return elements.front();
 }
 
-template<VertexLayout::Element::Type Type>
+template<VertexLayout::ElementType Type>
 VertexLayout& VertexLayout::Append() noexcept( !IS_DEBUG )
 {
-	static_assert( Type != VertexLayout::Element::Type::Count );
+	static_assert( Type != VertexLayout::ElementType::Count );
 	elements.emplace_back( Type, Size() );
 	return *this;
 }
@@ -246,12 +252,12 @@ auto& Vertex::Element() noexcept( !IS_DEBUG )
 	}
 	else if constexpr( Type == ElType::Count )
 	{
-		return *reinterpret_cast<uint8_t*>( pAttribute );
+		return *reinterpret_cast<std::byte*>( pAttribute );
 		assert( "Don't use count here!" && false );
 	}
 	else
 	{
-		return *reinterpret_cast<uint8_t*>( pAttribute );
+		return *reinterpret_cast<std::byte*>( pAttribute );
 		assert( "Bad element type" && false );
 	}
 }
@@ -301,7 +307,7 @@ void Vertex::SetElementByIndex( size_t index, First&& first, Rest&&... rest ) no
 }
 
 template<typename Dest, typename Src>
-void Vertex::SetElement( uint8_t* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
+void Vertex::SetElement( std::byte* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
 {
 	if constexpr( std::is_assignable<Dest, Src>::value )
 	{
@@ -326,14 +332,16 @@ void VertexByteBuffer::EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG )
 	Vertex{ buffer.data(), layout }.SetElementByIndex( 0, std::forward<Params>( params )... );
 }
 
-template<size_t alignment>
-Vertex VertexByteBuffer::operator[]( size_t index ) noexcept( !IS_DEBUG )
-{
-	const auto layoutSize = layout.Size();
-	const auto i = layoutSize * alignment / layoutSize * index;
-	assert( layoutSize > alignment && layoutSize > i );
-	return Vertex{ buffer.data() + i, layout };
-}
+// TODO: ...
+//template<size_t alignment>
+//Vertex VertexByteBuffer::operator[]( size_t index ) noexcept( !IS_DEBUG )
+//{
+//	const auto layoutSize = layout.Size();
+//	const auto i = alignment * index;
+//	static_assert( alignment > 0 );
+//	assert( layoutSize > alignment && layoutSize > i );
+//	return Vertex{ buffer.data() + i, layout };
+//}
 
 #pragma endregion bufferImpl
 

@@ -45,12 +45,12 @@ using namespace DirectX;
 void test()
 {
 	VertexLayout vl;
-	vl.Append<VertexLayout::Element::Position3D>()
-		.Append<VertexLayout::Element::Position2D>();
+	vl.Append<VertexLayout::ElementType::Position3D>()
+		.Append<VertexLayout::ElementType::Position2D>();
 	VertexByteBuffer vb( std::move( vl ) );
 	vb.EmplaceBack( XMFLOAT3{ 1.0f,1.0f,5.0f }, XMFLOAT2{ 2.0f,1.0f } );
 	// auto pos = vb[0]<12>.Element<VertexLayout::Element::Position3D>();
-	auto pos = vb.operator[]<12>( 1 ).Element<VertexLayout::Element::Position3D>();
+	auto pos = vb.GetElement().Element<VertexLayout::ElementType::Position3D>();
 }
 
 App::App() :

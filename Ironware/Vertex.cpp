@@ -8,7 +8,7 @@
  */
 #include "Vertex.h"
 
-Vertex::Vertex( uint8_t* data, const VertexLayout& layout ) :
+Vertex::Vertex( std::byte* data, const VertexLayout& layout ) :
 	pData( data ),
 	layout( layout )
 {
