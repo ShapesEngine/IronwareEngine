@@ -31,8 +31,8 @@ Mesh::Mesh( Graphics& gfx, std::mt19937& rng,
 		using ElType = VertexLayout::ElementType;
 		VertexByteBuffer vbuff( 
 			VertexLayout{}
-			.Append<ElType::Position3D>()
-			.Append<ElType::Normal>()
+			.Append(ElType::Position3D)
+			.Append(ElType::Normal)
 		);
 
 		Assimp::Importer importer;

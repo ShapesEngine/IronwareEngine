@@ -29,7 +29,6 @@
 #include "Cylinder.h"
 #include "Cone.h"
 #include "Mesh.h"
-#include "Vertex.h"
 
 #include <imgui/imgui.h>
 

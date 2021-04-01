@@ -35,3 +35,10 @@ Vertex VertexByteBuffer::operator[]( size_t index ) noexcept( !IS_DEBUG )
 	assert( index < Size() );
 	return Vertex{ buffer.data() + index * layout.Size(), layout };
 }
+
+VertexLayout & VertexLayout::Append( Element::Type Type ) noexcept( !IS_DEBUG )
+{
+	assert( Type != VertexLayout::ElementType::Count );
+	elements.emplace_back( Type, Size() );
+	return *this;
+}

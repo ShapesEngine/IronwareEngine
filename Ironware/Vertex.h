@@ -140,8 +140,7 @@ public:
 	__forceinline size_t Size() const noexcept( !IS_DEBUG ) { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
 	__forceinline size_t GetElementCount() const noexcept( !IS_DEBUG ) { return elements.size(); }
 
-	template<Element::Type Type>
-	VertexLayout& Append() noexcept( !IS_DEBUG );
+	VertexLayout& Append(Element::Type Type) noexcept( !IS_DEBUG );
 
 private:
 	std::vector<Element> elements;
@@ -286,21 +285,20 @@ constexpr size_t VertexLayout::Element::SizeOf( Type type ) noexcept( !IS_DEBUG 
 	using namespace DirectX;
 	switch( type )
 	{
-	case VertexLayout::ElementType::Position2D:
-	case VertexLayout::ElementType::Texture2D:
-		return sizeof( XMFLOAT2 );
-
-	case VertexLayout::ElementType::Position3D:
-	case VertexLayout::ElementType::Normal:
-	case VertexLayout::ElementType::Float3Color:
-	case VertexLayout::ElementType::Float4Color:
-		return sizeof( XMFLOAT3 );
-
-	case VertexLayout::ElementType::BGRAColor:
-		return sizeof( BGRAColor );
-
-	case VertexLayout::ElementType::Count:
-		assert( "Don't use count here!" && false );
+	case ElementType::Position2D:
+		return sizeof( Map<ElementType::Position2D>::SysType );
+	case ElementType::Position3D:
+		return sizeof( Map<ElementType::Position3D>::SysType );
+	case ElementType::Texture2D:
+		return sizeof( Map<ElementType::Texture2D>::SysType );
+	case ElementType::Normal:
+		return sizeof( Map<ElementType::Normal>::SysType );
+	case ElementType::Float3Color:
+		return sizeof( Map<ElementType::Float3Color>::SysType );
+	case ElementType::Float4Color:
+		return sizeof( Map<ElementType::Float4Color>::SysType );
+	case ElementType::BGRAColor:
+		return sizeof( Map<ElementType::BGRAColor>::SysType );
 	}
 	assert( "Invalid element type" && false );
 	return 0u;
@@ -320,14 +318,6 @@ const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
 	return elements.front();
 }
 
-template<VertexLayout::ElementType Type>
-VertexLayout& VertexLayout::Append() noexcept( !IS_DEBUG )
-{
-	static_assert( Type != VertexLayout::ElementType::Count );
-	elements.emplace_back( Type, Size() );
-	return *this;
-}
-
 #pragma endregion layoutImpl
 
 #pragma region vertexImpl
@@ -335,47 +325,8 @@ VertexLayout& VertexLayout::Append() noexcept( !IS_DEBUG )
 template<Vertex::ElType Type>
 auto& Vertex::Attribute() noexcept( !IS_DEBUG )
 {
-	using namespace DirectX;
-	const auto& element = layout.Resolve<Type>();
-	auto pAttribute = pData + element.GetOffset();
-	if constexpr( Type == ElType::Position2D )
-	{
-		return *reinterpret_cast<XMFLOAT2*>( pAttribute );
-	}
-	else if constexpr( Type == ElType::Position3D )
-	{
-		return *reinterpret_cast<XMFLOAT3*>( pAttribute );
-	}
-	else if constexpr( Type == ElType::Texture2D )
-	{
-		return *reinterpret_cast<XMFLOAT2*>( pAttribute );
-	}
-	else if constexpr( Type == ElType::Normal )
-	{
-		return *reinterpret_cast<XMFLOAT3*>( pAttribute );
-	}
-	else if constexpr( Type == ElType::Float3Color )
-	{
-		return *reinterpret_cast<XMFLOAT3*>( pAttribute );
-	}
-	else if constexpr( Type == ElType::Float4Color )
-	{
-		return *reinterpret_cast<XMFLOAT4*>( pAttribute );
-	}
-	else if constexpr( Type == ElType::BGRAColor )
-	{
-		return *reinterpret_cast<BGRAColor*>( pAttribute );
-	}
-	else if constexpr( Type == ElType::Count )
-	{
-		return *reinterpret_cast<std::byte*>( pAttribute );
-		assert( "Don't use count here!" && false );
-	}
-	else
-	{
-		return *reinterpret_cast<std::byte*>( pAttribute );
-		assert( "Bad element type" && false );
-	}
+	auto pAttribute = pData + layout.Resolve<Type>().GetOffset();
+	return *reinterpret_cast<typename VertexLayout::Map<Type>::SysType*>( pAttribute );
 }
 
 template<typename T>
