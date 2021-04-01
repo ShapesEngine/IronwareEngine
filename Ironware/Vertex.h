@@ -104,7 +104,7 @@ private:
 
 /**
  * @brief Middle level class that works as a view to the vbuffer.
- * * Doesn't hold the buffer itself, but has a pointer to the memory
+ * * Doesn't hold the buffer itself, but has a pointer to the memory,
  * * where appropriate data is stored.
 */
 class Vertex
@@ -158,7 +158,9 @@ private:
 };
 
 /**
- * @brief Constant version of Vertex class
+ * @brief Middle level class that works as a view to the vbuffer.
+ * * Doesn't hold the buffer itself, but has a pointer to the memory,
+ * * where appropriate data is stored.
 */
 class ConstVertex
 {
@@ -176,6 +178,7 @@ private:
 
 /**
  * @brief Lower level class that holds data buffer as bytes.
+ * * Allows emplacing the vertices to the buffer.
 */
 class VertexByteBuffer
 {
@@ -187,6 +190,13 @@ public:
 	 * @return attribute count in the buffer
 	*/
 	__forceinline size_t Size() const noexcept { return buffer.size() / layout.Size(); }
+	/**
+	 * @return attribute count in the buffer
+	*/
+	__forceinline size_t Count() const noexcept { return Size(); }
+	__forceinline size_t SizeBytes() const noexcept { return buffer.size(); }
+	__forceinline std::byte* GetData() noexcept { return buffer.data(); }
+	__forceinline const std::byte* GetData() const noexcept { return const_cast<VertexByteBuffer*>( this )->GetData(); }
 
 	/**
 	 * @brief Sets the vertex layout values(order needs to be the as the layout's ordering)
@@ -208,11 +218,11 @@ public:
 	__forceinline ConstVertex Back() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Back(); }
 	__forceinline ConstVertex Front() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Front(); }
 	/**
-	 * @brief Retrieves vertex with appropriate index
+	 * @brief Retrieves constant vertex with appropriate index
 	 * @param index represents the index value with appropriate layout
-	 * @return Vertex instance that will hold all the elements of a single vertex
+	 * @return ConstVertex instance that will hold all the elements of a single vertex
 	*/
-	__forceinline ConstVertex operator[]( size_t i ) const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer&>( *this )[i]; }
+	__forceinline ConstVertex operator[]( size_t index ) const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer&>( *this )[index]; }
 
 private:
 	// buffer has no alignment, so when you will be dealing
