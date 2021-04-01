@@ -64,6 +64,8 @@ void test()
 	auto tex = vb[1].Attribute<VertexLayout::ElementType::Texture2D>();
 	vb.Back().Attribute<VertexLayout::ElementType::Position3D>().z = 420.0f;
 	pos = vb.Back().Attribute<VertexLayout::ElementType::Position3D>();
+
+	const auto ctex = const_cast<VertexByteBuffer&>( vb ).Back().Attribute<VertexLayout::ElementType::Texture2D>();
 }
 
 App::App() :
