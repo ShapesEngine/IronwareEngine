@@ -13,6 +13,7 @@
 #include <DirectXMath.h>
 #include <dxgiformat.h>
 #include <type_traits>
+#include <d3d11.h>
 
 #define TPACK typename...
 
@@ -41,35 +42,6 @@ public:
 		Float4Color,
 		BGRAColor,
 		Count
-	};
-
-	class Element
-	{
-	public:
-		Element( ElementType type, size_t offset ) :
-			type( type ),
-			offset( offset )
-		{
-			assert( type != ElementType::Count );
-		}
-
-		/**
-		 * @return offset after this element( previous offset + size of this element )
-		*/
-		__forceinline size_t GetOffsetAfter() const { return offset + GetSize(); }
-
-		__forceinline size_t GetOffset() const { return offset; }
-		/**
-		 * @return size of the element type
-		*/
-		__forceinline size_t GetSize() const { return SizeOf( type ); }
-		__forceinline ElementType GetType() const { return type; }
-
-		static constexpr size_t SizeOf( ElementType type ) noexcept( !IS_DEBUG );
-
-	private:
-		ElementType type;
-		size_t offset;
 	};
 
 	template<ElementType> struct Map;
@@ -114,6 +86,65 @@ public:
 		using SysType = BGRAColor;
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 		static constexpr const char* semantic = "Color";
+	};
+
+	class Element
+	{
+	public:
+		Element( ElementType type, size_t offset ) :
+			type( type ),
+			offset( offset )
+		{
+			assert( type != ElementType::Count );
+		}
+
+		/**
+		 * @return offset after this element( previous offset + size of this element )
+		*/
+		__forceinline size_t GetOffsetAfter() const { return offset + GetSize(); }
+
+		__forceinline size_t GetOffset() const { return offset; }
+		/**
+		 * @return size of the element type
+		*/
+		__forceinline size_t GetSize() const { return SizeOf( type ); }
+		__forceinline ElementType GetType() const { return type; }
+
+		static constexpr size_t SizeOf( ElementType type ) noexcept( !IS_DEBUG );
+
+		D3D11_INPUT_ELEMENT_DESC GetDesc() const noexcept( !IS_DEBUG )
+		{
+			switch( type )
+			{
+			case ElementType::Position2D:
+				return GenerateDesc<ElementType::Position2D>( GetOffset() );
+			case ElementType::Position3D:
+				return GenerateDesc<ElementType::Position3D>( GetOffset() );
+			case ElementType::Texture2D:
+				return GenerateDesc<ElementType::Texture2D>( GetOffset() );
+			case ElementType::Normal:
+				return GenerateDesc<ElementType::Normal>( GetOffset() );
+			case ElementType::Float3Color:
+				return GenerateDesc<ElementType::Float3Color>( GetOffset() );
+			case ElementType::Float4Color:
+				return GenerateDesc<ElementType::Float4Color>( GetOffset() );
+			case ElementType::BGRAColor:
+				return GenerateDesc<ElementType::BGRAColor>( GetOffset() );
+			}
+			assert( "Invalid element type" && false );
+			return { "INVALID",0,DXGI_FORMAT_UNKNOWN,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 };
+		}
+
+	private:
+		template<ElementType type>
+		static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc( size_t offset ) noexcept( !IS_DEBUG )
+		{
+			return { Map<type>::semantic, 0, Map<type>::dxgiFormat, 0, (UINT)offset, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		}
+
+	private:
+		ElementType type;
+		size_t offset;
 	};
 
 public:
