@@ -46,11 +46,11 @@ void test()
 {
 	VertexLayout vl;
 	vl.Append<VertexLayout::Element::Position3D>()
-		.Append<VertexLayout::Element::Normal>();
+		.Append<VertexLayout::Element::Position2D>();
 	VertexByteBuffer vb( std::move( vl ) );
-	vb.EmplaceBack( XMFLOAT3{ 1.0f,1.0f,5.0f }, XMFLOAT3{ 2.0f,1.0f,4.0f } );
+	vb.EmplaceBack( XMFLOAT3{ 1.0f,1.0f,5.0f }, XMFLOAT2{ 2.0f,1.0f } );
 	// auto pos = vb[0]<12>.Element<VertexLayout::Element::Position3D>();
-	// vb.operator[]<12>(0);
+	auto pos = vb.operator[]<12>( 1 ).Element<VertexLayout::Element::Position3D>();
 }
 
 App::App() :
@@ -81,13 +81,13 @@ App::App() :
 			case 2:
 				return std::make_unique<TexturedBox>(
 					gfx, rng, adist, ddist,
-					odist, rdist, bdist 
+					odist, rdist, bdist
 					);
 			case 3:
 				return std::make_unique<Mesh>(
 					gfx, rng, adist, ddist,
-					odist, rdist, DirectX::XMFLOAT3{ cdist( rng ), cdist( rng ), cdist( rng ) }, 
-					1.f 
+					odist, rdist, DirectX::XMFLOAT3{ cdist( rng ), cdist( rng ), cdist( rng ) },
+					1.f
 					);
 			default:
 				assert( false && "impossible drawable option in factory" );

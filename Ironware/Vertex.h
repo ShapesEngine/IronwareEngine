@@ -57,7 +57,6 @@ public:
 		*/
 		__forceinline size_t GetOffsetAfter() const { return offset + GetSize(); }
 
-	private:
 		__forceinline size_t GetOffset() const { return offset; }
 		/**
 		 * @return size of the element type
@@ -112,7 +111,7 @@ public:
 	auto& Element() noexcept( !IS_DEBUG );
 
 private:
-	Vertex( std::byte* data, const VertexLayout& layout );
+	Vertex( uint8_t* data, const VertexLayout& layout );
 
 	template<typename T>
 	void SetElementByIndex( size_t index, T&& value ) noexcept( !IS_DEBUG );
@@ -121,10 +120,10 @@ private:
 	void SetElementByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG );
 
 	template<typename Dest, typename Src>
-	void SetElement( Dest* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
+	void SetElement( uint8_t* dest, Src&& srcValue ) noexcept( !IS_DEBUG );
 
 private:
-	std::byte* pData;
+	uint8_t* pData;
 	const VertexLayout& layout;
 };
 
@@ -152,13 +151,38 @@ public:
 	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );
 
 private:
-	std::vector<std::byte> buffer;
+	std::vector<uint8_t> buffer;
 	VertexLayout layout;
 };
 
 #pragma region impl
 
 #pragma region layoutImpl
+
+constexpr size_t VertexLayout::Element::SizeOf( Type type ) noexcept( !IS_DEBUG )
+{
+	using namespace DirectX;
+	switch( type )
+	{
+	case Position2D:
+	case Texture2D:
+		return sizeof( XMFLOAT2 );
+
+	case Position3D:
+	case Normal:
+	case Float3Color:
+	case Float4Color:
+		return sizeof( XMFLOAT3 );
+
+	case BGRAColor:
+		return sizeof( uint32_t );
+
+	case Count:
+		assert( "Don't use count here!" && false );
+	}
+	assert( "Invalid element type" && false );
+	return 0u;
+}
 
 template<VertexLayout::Element::Type Type>
 const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
@@ -178,7 +202,7 @@ template<VertexLayout::Element::Type Type>
 VertexLayout& VertexLayout::Append() noexcept( !IS_DEBUG )
 {
 	static_assert( Type != VertexLayout::Element::Type::Count );
-	elements.push_back( { Type, Size() } );
+	elements.emplace_back( Type, Size() );
 	return *this;
 }
 
@@ -222,13 +246,14 @@ auto& Vertex::Element() noexcept( !IS_DEBUG )
 	}
 	else if constexpr( Type == ElType::Count )
 	{
+		return *reinterpret_cast<uint8_t*>( pAttribute );
 		assert( "Don't use count here!" && false );
 	}
 	else
 	{
+		return *reinterpret_cast<uint8_t*>( pAttribute );
 		assert( "Bad element type" && false );
 	}
-	return *reinterpret_cast<std::byte*>( pAttribute );
 }
 
 template<typename T>
@@ -251,7 +276,7 @@ void Vertex::SetElementByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
 	case ElType::Normal:
 		SetElement<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
 		break;
-	case VertexLayout::Float3Color:
+	case ElType::Float3Color:
 		SetElement<XMFLOAT3>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Float4Color:
@@ -276,15 +301,15 @@ void Vertex::SetElementByIndex( size_t index, First&& first, Rest&&... rest ) no
 }
 
 template<typename Dest, typename Src>
-void Vertex::SetElement( Dest* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
+void Vertex::SetElement( uint8_t* dest, Src&& srcValue ) noexcept( !IS_DEBUG )
 {
-	if constexpr( std::is_assignable( dest, srcValue ) )
+	if constexpr( std::is_assignable<Dest, Src>::value )
 	{
-		*dest = srcValue;
+		*reinterpret_cast<Dest*>( dest ) = srcValue;
 	}
 	else
 	{
-		static_assert( "destination is not assignable" && false );
+		assert( "destination is not assignable" && false );
 	}
 }
 
@@ -296,9 +321,9 @@ template<TPACK Params>
 void VertexByteBuffer::EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG )
 {
 	const auto layoutSize = layout.Size();
-	static_assert( layoutSize != 0 );
+	assert( layoutSize != 0 );
 	buffer.resize( layoutSize );
-	Vertex{ buffer.data(), layout }.SetElementByIndex( 0, std::forward( params )... );
+	Vertex{ buffer.data(), layout }.SetElementByIndex( 0, std::forward<Params>( params )... );
 }
 
 template<size_t alignment>
@@ -306,8 +331,7 @@ Vertex VertexByteBuffer::operator[]( size_t index ) noexcept( !IS_DEBUG )
 {
 	const auto layoutSize = layout.Size();
 	const auto i = layoutSize * alignment / layoutSize * index;
-	static_assert( layoutSize > alignment );
-	assert( layoutSize > i );
+	assert( layoutSize > alignment && layoutSize > i );
 	return Vertex{ buffer.data() + i, layout };
 }
 
