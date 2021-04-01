@@ -158,6 +158,23 @@ private:
 };
 
 /**
+ * @brief Constant version of Vertex class
+*/
+class ConstVertex
+{
+public:
+	ConstVertex( const Vertex& v ) noexcept( !IS_DEBUG ) :
+		vertex( v )
+	{}
+
+	template<VertexLayout::ElementType Type>
+	__forceinline const auto& Attribute() const noexcept( !IS_DEBUG ) { return const_cast<Vertex&>( vertex ).Attribute<Type>(); }
+
+private:
+	Vertex vertex;
+};
+
+/**
  * @brief Lower level class that holds data buffer as bytes.
 */
 class VertexByteBuffer
