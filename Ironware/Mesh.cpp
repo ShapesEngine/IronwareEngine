@@ -71,12 +71,7 @@ Mesh::Mesh( Graphics& gfx, std::mt19937& rng,
 
 		AddStaticIndexBufferBind( std::make_unique<IndexBuffer>( gfx, indices ) );
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElem =
-		{
-			{ "Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
-			{ "Normal", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0u },
-		};
-		AddStaticBind( std::make_unique<InputLayout>( gfx, descInputElem, pVertShaderBytecode ) );
+		AddStaticBind( std::make_unique<InputLayout>( gfx, vbuff.GetLayout().GetD3DLayout(), pVertShaderBytecode ) );
 
 		AddStaticBind( std::make_unique<PrimitiveTopology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 
