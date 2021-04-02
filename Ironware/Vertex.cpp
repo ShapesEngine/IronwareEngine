@@ -63,7 +63,7 @@ D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const noexcept( !IS_DE
 		return GenerateDesc<ElementType::BGRAColor>( GetOffset() );
 	}
 	assert( "Invalid element type" && false );
-	return { "INVALID",0,DXGI_FORMAT_UNKNOWN,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 };
+	return { "INVALID", 0u, DXGI_FORMAT_UNKNOWN, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u };
 }
 
 std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const noexcept( !IS_DEBUG )

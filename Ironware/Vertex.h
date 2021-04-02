@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief
+ * \brief Header file that contains VertexLayout, Vertex and VertexByteBuffer
 */
 #pragma once
 
@@ -118,7 +118,7 @@ public:
 		template<ElementType type>
 		static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc( size_t offset ) noexcept( !IS_DEBUG )
 		{
-			return { Map<type>::semantic, 0, Map<type>::dxgiFormat, 0, (UINT)offset, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+			return { Map<type>::semantic, 0u, Map<type>::dxgiFormat, 0u, (UINT)offset, D3D11_INPUT_PER_VERTEX_DATA, 0u };
 		}
 
 	private:
