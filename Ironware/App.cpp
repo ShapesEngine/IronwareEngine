@@ -13,6 +13,7 @@ App::App() :
 	pointLight(wnd.Gfx())
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
+	wnd.DisableMouseCursor();
 }
 
 int App::BeginFrame()

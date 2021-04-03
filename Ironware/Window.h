@@ -17,6 +17,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "imgui/imgui_impl_win32.h"
 
 #include <optional>
 #include <memory>
@@ -44,13 +45,13 @@ public:
 	{
 	public:
 		HrException( int line, const wchar_t* file, HRESULT hr ) noexcept;
-		
+
 		/**
 		 * 	overridden function that will return type, error code, description and formatted string.
 		 *
 		 * \return const char_t* buffer
 		 */
-		const char* what() const noexcept override;		
+		const char* what() const noexcept override;
 
 		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Window Exception"; }
 		__forceinline HRESULT GetErrorCode() const noexcept { return hr; }
@@ -124,18 +125,28 @@ public:
 	 * * in other situations the value is invalid
 	*/
 	static std::optional<int> ProcessMessages() noexcept;
+
+	/**
+	 * @return Reference to graphics object
+	*/
 	Graphics& Gfx() const;
 
 	__forceinline uint32_t GetWidth() const { return width; }
 	__forceinline uint32_t GetHeight() const { return height; }
+
+	void EnableMouseCursor() noexcept;
+	void DisableMouseCursor() noexcept;
 
 private:
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	LRESULT HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 
+	__forceinline void EnableImGuiMouse() noexcept { ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse; }
+	__forceinline void DisableImGuiMouse() noexcept { ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse; }
+
 	/**
-	 * @brief function that resets the window procedure. 
+	 * @brief function that resets the window procedure.
 	 * * It's used to prevent various read access violation errors, mouse, keyboard, etc.
 	*/
 	__forceinline static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
@@ -147,6 +158,6 @@ public:
 private:
 	uint32_t width;
 	uint32_t height;
-	HWND hWnd;	
+	HWND hWnd;
 	std::unique_ptr<Graphics> pGfx;
 };

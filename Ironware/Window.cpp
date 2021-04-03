@@ -21,7 +21,6 @@
 #include "Window.h"
 #include "resource.h"
 #include "WindowExceptionMacros.h"
-#include "imgui/imgui_impl_win32.h"
 
 #include <sstream>
 
@@ -154,6 +153,18 @@ Graphics& Window::Gfx() const
 		throw IRWND_NOGFX_EXCEPT();
 	}
 	return *pGfx;
+}
+
+void Window::EnableMouseCursor() noexcept
+{
+	mouse.ShowCursor();
+	EnableImGuiMouse();
+}
+
+void Window::DisableMouseCursor() noexcept
+{
+	mouse.HideCursor();
+	DisableImGuiMouse();
 }
 
 LRESULT CALLBACK Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept

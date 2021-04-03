@@ -190,9 +190,6 @@ public:
 
 	__forceinline bool IsCursorShown() const noexcept { return cursorIsShown; }
 
-	void ShowCursor() noexcept;
-	void HideCursor() noexcept;
-
 private:
 	void OnMouseLeave() noexcept;
 	void OnMouseEnter() noexcept;
@@ -207,6 +204,8 @@ private:
 	void OnWheelDown( int x, int y ) noexcept;
 	void OnWheelDelta( int x, int y, int delta ) noexcept;
 	void TrimBuffer() noexcept;
+	void ShowCursor() noexcept;
+	void HideCursor() noexcept;
 
 private:
 	static constexpr uint32_t MAXBUFFERSIZE = 16u;
