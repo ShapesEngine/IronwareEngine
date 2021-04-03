@@ -6,7 +6,7 @@
  *
  *
  */
-#include "AppMess.h"
+#include "App.h"
 #include "IronUtils.h"
 #include <queue>
 
@@ -18,7 +18,7 @@ int WINAPI wWinMain(
 {
 	try
 	{
-		return AppMess{}.BeginFrame();
+		return App{}.BeginFrame();
 	}
 	catch( const std::exception& e )
 	{
