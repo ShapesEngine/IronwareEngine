@@ -19,7 +19,7 @@
 /*!
  * \class Mouse
  *
- * \ingroup DEV
+ * \ingroup Input
  *
  * \brief A class that is responsible for controlling mouse input
  *
@@ -71,14 +71,7 @@ public:
 
 	public:
 		Event() noexcept = default;
-		Event( Type type, const Mouse& parent ) noexcept :
-			type( type ),
-			leftIsPressed( parent.leftIsPressed ),
-			rightIsPressed( parent.rightIsPressed ),
-			middleIsPressed( parent.middleIsPressed ),
-			x( parent.x ),
-			y( parent.y )
-		{}
+		Event( Type type, const Mouse& parent ) noexcept;
 
 		__forceinline Type GetType() const noexcept { return type; }
 
@@ -195,6 +188,11 @@ public:
 	*/
 	__forceinline void Clear() noexcept { buffer = std::queue<Event>(); }
 
+	__forceinline bool IsCursorShown() const noexcept { return cursorIsShown; }
+
+	void ShowCursor() noexcept;
+	void HideCursor() noexcept;
+
 private:
 	void OnMouseLeave() noexcept;
 	void OnMouseEnter() noexcept;
@@ -220,4 +218,5 @@ private:
 	bool middleIsPressed = false;
 	bool isInWindow = false;
 	std::queue<Event> buffer;
+	bool cursorIsShown = true;
 };

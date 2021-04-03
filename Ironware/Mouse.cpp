@@ -4,21 +4,45 @@
  * \author Yernar Aldabergenov
  * \date September 2020
  *
- * 
  */
 
 #include "Mouse.h"
 #include "IronWin.h"
 
+Mouse::Event::Event( Type type, const Mouse & parent ) noexcept :
+	type( type ),
+	leftIsPressed( parent.leftIsPressed ),
+	rightIsPressed( parent.rightIsPressed ),
+	middleIsPressed( parent.middleIsPressed ),
+	x( parent.x ),
+	y( parent.y )
+{}
+
 std::optional<Mouse::Event> Mouse::Read() noexcept
 {
-	if( buffer.size() > 0u )
+	if( !buffer.empty() )
 	{
 		Mouse::Event e = buffer.front();
 		buffer.pop();
 		return e;
 	}
 	return {};
+}
+
+void Mouse::ShowCursor() noexcept
+{
+	cursorIsShown = true;
+	// loop until showcursor's value is more/equal than/to 0,
+	// as at this point cursor gets shown
+	while( ::ShowCursor( TRUE ) < 0 );
+}
+
+void Mouse::HideCursor() noexcept
+{
+	cursorIsShown = false;
+	// loop until showcursor's value is less than 0,
+	// as at this point cursor gets hidden
+	while( ::ShowCursor( FALSE ) >= 0 );
 }
 
 void Mouse::OnMouseLeave() noexcept
