@@ -142,8 +142,8 @@ private:
 	static LRESULT CALLBACK HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	LRESULT HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 
-	__forceinline void EnableImGuiMouse() noexcept { ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse; }
-	__forceinline void DisableImGuiMouse() noexcept { ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse; }
+	__forceinline void EnableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse; }
+	__forceinline void DisableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse; }
 
 	__forceinline void ConfineCursor() const noexcept { ConfineCursor( true ); }
 	__forceinline void FreeCursor() const noexcept { ConfineCursor( false ); }
