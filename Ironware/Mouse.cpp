@@ -15,7 +15,9 @@ Mouse::Event::Event( Type type, const Mouse & parent ) noexcept :
 	rightIsPressed( parent.rightIsPressed ),
 	middleIsPressed( parent.middleIsPressed ),
 	x( parent.x ),
-	y( parent.y )
+	y( parent.y ),
+	dx( parent.dx ),
+	dy( parent.dy )
 {}
 
 std::optional<Mouse::Event> Mouse::Read() noexcept
@@ -49,6 +51,12 @@ void Mouse::OnMouseMove( int newx, int newy ) noexcept
 	y = newy;
 
 	buffer.push( Mouse::Event( Mouse::Event::Type::MOVE, *this ) );
+	TrimBuffer();
+}
+
+void Mouse::OnRawDeltaMove( int newdx, int newdy ) noexcept
+{
+	buffer.push( Mouse::Event( Mouse::Event::Type::RAWMOVE, *this ) );
 	TrimBuffer();
 }
 

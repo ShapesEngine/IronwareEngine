@@ -67,6 +67,7 @@ public:
 			MOVE,
 			ENTER,
 			LEAVE,
+			RAWMOVE
 		};
 
 	public:
@@ -92,6 +93,24 @@ public:
 		 * @return Y coordinate of the mouse
 		*/
 		__forceinline int GetPosY() const noexcept { return y; }
+
+		/**
+		 * @brief A function that returns mouse raw delta values at the time the event was triggered
+		 * @return Pair of { x, y } coordinates of the mouse
+		*/
+		__forceinline std::pair<int, int> GetRawDeltas() const noexcept { return{ dx, dy }; }
+
+		/**
+		 * @brief A function that returns mouse raw delta X value at the time the event was triggered
+		 * @return X delta value
+		*/
+		__forceinline int GetRawDeltaX() const noexcept { return dx; }
+
+		/**
+		 * @brief A function that returns mouse raw delta Y value at the time the event was triggered
+		 * @return Y delta value
+		*/
+		__forceinline int GetRawDeltaY() const noexcept { return dy; }
 
 		/**
 		 * @brief A function that return mouse left button press state at the time the event was triggered
@@ -122,8 +141,10 @@ public:
 		bool leftIsPressed = false;
 		bool rightIsPressed = false;
 		bool middleIsPressed = false;
-		int x = 0;
-		int y = 0;
+		// window coordinate values
+		int x = 0, y = 0;
+		// raw delta values
+		int dx = 0, dy = 0;
 	};
 
 public:
@@ -192,6 +213,7 @@ private:
 	void OnMouseLeave() noexcept;
 	void OnMouseEnter() noexcept;
 	void OnMouseMove( int x, int y ) noexcept;
+	void OnRawDeltaMove( int newdx,int newdy ) noexcept;
 	void OnLeftPressed( int x, int y ) noexcept;
 	void OnLeftReleased( int x, int y ) noexcept;
 	void OnRightPressed( int x, int y ) noexcept;
@@ -205,8 +227,10 @@ private:
 
 private:
 	static constexpr uint32_t MAXBUFFERSIZE = 16u;
-	int x = 0;
-	int y = 0;
+	// window coordinate values
+	int x = 0, y = 0;
+	// raw delta values
+	int dx = 0, dy = 0;
 	int wheelDeltaCarry = 0;
 	bool leftIsPressed = false;
 	bool rightIsPressed = false;

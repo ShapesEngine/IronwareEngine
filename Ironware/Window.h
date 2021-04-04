@@ -176,6 +176,7 @@ private:
 	uint32_t height;
 	HWND hWnd;
 	std::unique_ptr<Graphics> pGfx;
+	std::vector<std::byte> rawData;
 	// state that is set manually
 	bool cursorIsEnabled;
 	// state that is updated every frame

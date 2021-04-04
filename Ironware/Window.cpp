@@ -386,6 +386,36 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		mouse.OnWheelDelta( pt.x, pt.y, delta );
 		break;
 	}
+	case WM_INPUT:
+	{
+		UINT size;
+		if( GetRawInputData( reinterpret_cast<HRAWINPUT>( lParam ),
+			RID_HEADER, nullptr,
+			&size, sizeof( RAWINPUTHEADER ) ) != 0 )
+		{
+			break;
+		}
+
+		rawData.resize( size );
+		if( GetRawInputData( reinterpret_cast<HRAWINPUT>( lParam ),
+			RID_HEADER, rawData.data(),
+			&size, sizeof( RAWINPUTHEADER ) ) != size )
+		{
+			break;
+		}
+
+		auto& ri = *reinterpret_cast<RAWINPUT*>( rawData.data() );
+		if( ri.header.dwType == RIM_TYPEMOUSE )
+		{
+			int dx = ri.data.mouse.lLastX;
+			int dy = ri.data.mouse.lLastY;
+			if( ( dx + dy ) != 0 )
+			{
+				mouse.OnRawDeltaMove( ri.data.mouse.lLastX, ri.data.mouse.lLastY );
+			}
+		}
+		break;
+	}
 	case WM_ACTIVATE:
 	{
 		// confine/free cursor on window to foreground/background if cursor disabled
@@ -402,6 +432,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 				FreeCursor();
 			}
 		}
+		break;
 	}
 	}
 	// =======================================================================
