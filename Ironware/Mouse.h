@@ -188,7 +188,7 @@ public:
 	*/
 	__forceinline void Clear() noexcept { buffer = std::queue<Event>(); }
 
-	__forceinline bool IsCursorShown() const noexcept { return cursorIsShown; }
+	__forceinline bool IsCursorEnabled() const noexcept { return cursorIsEnabled; }
 
 private:
 	void OnMouseLeave() noexcept;
@@ -217,5 +217,5 @@ private:
 	bool middleIsPressed = false;
 	bool isInWindow = false;
 	std::queue<Event> buffer;
-	bool cursorIsShown = true;
+	bool cursorIsEnabled = true;
 };

@@ -159,14 +159,14 @@ void Window::EnableMouseCursor() noexcept
 {
 	mouse.ShowCursor();
 	EnableImGuiMouse();
-	ConfineCursor( false );
+	FreeCursor();
 }
 
 void Window::DisableMouseCursor() noexcept
 {
 	mouse.HideCursor();
-	DisableImGuiMouse();
-	ConfineCursor( true );
+	DisableImGuiMouse();	
+	ConfineCursor();
 }
 
 LRESULT CALLBACK Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
@@ -223,9 +223,9 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	case WM_KILLFOCUS:
 		kbd.ClearState();
 		break;
-		// =======================================================================
-		// Keyboard Messages Handling
-		// -----------------------------------------------------------------------	
+	// =======================================================================
+	// Keyboard Messages Handling
+	// -----------------------------------------------------------------------	
 	case WM_KEYDOWN:
 		// SYSKEY messages need to be handled to track system keys such as ALT, F10, etc.
 		// Basic KEYDOWN messages applies also to system keys
@@ -261,9 +261,9 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		break;
 		// =======================================================================
 
-		// =======================================================================
-		// Mouse Messages Handling
-		// -----------------------------------------------------------------------
+	// =======================================================================
+	// Mouse Messages Handling
+	// -----------------------------------------------------------------------
 	case WM_MOUSEMOVE:
 	{
 		// stifle other keyboard messages if imgui wants to get full keyboard control
@@ -376,13 +376,24 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		mouse.OnWheelDelta( pt.x, pt.y, delta );
 		break;
 	}
+	case WM_ACTIVATE:
+	{
+		// confine/free cursor on window to foreground/background if cursor disabled
+		if( !mouse.cursorIsEnabled )
+		{
+			if( wParam & WA_ACTIVE )
+			{
+				ConfineCursor( true );
+			}
+		}
+	}
 	}
 	// =======================================================================
 
 	return DefWindowProc( hWnd, msg, wParam, lParam );
 }
 
-void Window::ConfineCursor( bool isMouseConfinedToWindow )
+void Window::ConfineCursor( bool isMouseConfinedToWindow ) const noexcept
 {
 	std::unique_ptr<RECT> rc = nullptr;
 	RECT* pRectTemp = nullptr;
