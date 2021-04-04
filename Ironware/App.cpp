@@ -9,11 +9,11 @@
 #include "App.h"
 
 App::App() :
-	wnd( 1024, 768, L"Ironware Engine" ),
+	wnd( 1280, 960, L"Ironware Engine" ),
 	pointLight(wnd.Gfx())
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
-	wnd.DisableMouseCursor();
+	wnd.EnableMouseCursor();
 }
 
 int App::BeginFrame()
@@ -45,6 +45,27 @@ void App::ProcessFrame()
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
 
+	ShowRawMouseWindow();
+
 	// present frame
 	wnd.Gfx().EndFrame();
+}
+
+void App::ShowRawMouseWindow()
+{
+	/*while( const auto e = wnd.mouse.Read() )
+	{
+		if( e->GetType() == Mouse::Event::Type::RAWMOVE )
+		{
+			x += e->GetRawDeltaX();
+			y += e->GetRawDeltaY();
+		}
+	}*/
+	x = wnd.mouse.GetPosX();
+	y = wnd.mouse.GetPosY();
+	if( ImGui::Begin( "Raw Input" ) )
+	{
+		ImGui::Text( "Tally: (%d,%d)", x, y );
+	}
+	ImGui::End();
 }

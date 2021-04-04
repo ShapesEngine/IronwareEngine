@@ -102,8 +102,8 @@ Graphics::Graphics( HWND hWnd )
 	// stencil is not applied yet, only depth
 	wrl::ComPtr<ID3D11Texture2D> pDepth;
 	D3D11_TEXTURE2D_DESC descDepth;
-	descDepth.Width = 1024;
-	descDepth.Height = 768;
+	descDepth.Width = 1280;
+	descDepth.Height = 960;
 	descDepth.MipLevels = 0u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
@@ -129,8 +129,8 @@ Graphics::Graphics( HWND hWnd )
 
 	// configure viewport
 	D3D11_VIEWPORT vp;
-	vp.Width = 1024.f;
-	vp.Height = 768.f;
+	vp.Width = 1280.f;
+	vp.Height = 960.f;
 	vp.MinDepth = 0.f;
 	vp.MaxDepth = 1.f;
 	vp.TopLeftX = 0.f;

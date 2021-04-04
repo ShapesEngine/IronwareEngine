@@ -388,10 +388,10 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_INPUT:
 	{
-		UINT size;
+		UINT size = 0u;
 		if( GetRawInputData( reinterpret_cast<HRAWINPUT>( lParam ),
 			RID_HEADER, nullptr,
-			&size, sizeof( RAWINPUTHEADER ) ) != 0 )
+			&size, sizeof( RAWINPUTHEADER ) ) == -1 )
 		{
 			break;
 		}
@@ -404,14 +404,14 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 			break;
 		}
 
-		auto& ri = *reinterpret_cast<RAWINPUT*>( rawData.data() );
+		auto& ri = reinterpret_cast<RAWINPUT&>( *rawData.data() );
 		if( ri.header.dwType == RIM_TYPEMOUSE )
 		{
 			int dx = ri.data.mouse.lLastX;
 			int dy = ri.data.mouse.lLastY;
 			if( ( dx + dy ) != 0 )
 			{
-				mouse.OnRawDeltaMove( ri.data.mouse.lLastX, ri.data.mouse.lLastY );
+				mouse.OnRawDeltaMove( dx, dy );
 			}
 		}
 		break;
@@ -477,7 +477,7 @@ void Window::RegisterRawMouseInput() const
 	rid.dwFlags = 0u;
 	rid.hwndTarget = nullptr;
 
-	if( RegisterRawInputDevices( &rid, 1u, sizeof( RAWINPUTDEVICE ) ) == FALSE )
+	if( RegisterRawInputDevices( &rid, 1u, sizeof( rid ) ) == FALSE )
 	{
 		throw IRWND_LAST_EXCEPT();
 	}

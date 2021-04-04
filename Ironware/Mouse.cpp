@@ -56,6 +56,9 @@ void Mouse::OnMouseMove( int newx, int newy ) noexcept
 
 void Mouse::OnRawDeltaMove( int newdx, int newdy ) noexcept
 {
+	dx = newdx;
+	dy = newdy;
+
 	buffer.push( Mouse::Event( Mouse::Event::Type::RAWMOVE, *this ) );
 	TrimBuffer();
 }

@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date April 2021
  *
- * 
+ *
  */
 #pragma once
 
@@ -12,16 +12,16 @@
 #include "ImGuiManager.h"
 #include "Camera.h"
 #include "PointLight.h"
-/**
- * @brief 
-*/
+ /**
+  * @brief
+ */
 class App
 {
 public:
 	App();
 
 	/**
-	 * @brief Starts application frame. Processes window messages 
+	 * @brief Starts application frame. Processes window messages
 	 * @return Integer exit code
 	*/
 	int BeginFrame();
@@ -32,7 +32,10 @@ private:
 	*/
 	void ProcessFrame();
 
+	void ShowRawMouseWindow();
+
 private:
+	int x = 0, y = 0;
 	ImguiManager imguim;
 	Camera camera;
 	Window wnd;
