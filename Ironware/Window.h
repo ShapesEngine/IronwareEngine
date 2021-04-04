@@ -156,10 +156,8 @@ private:
 	__forceinline void EnableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse; }
 	__forceinline void DisableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse; }
 
-	__forceinline void ConfineCursor() const noexcept { ConfineCursor( true ); }
 	__forceinline void FreeCursor() const noexcept { ConfineCursor( false ); }
-
-	void ConfineCursor( bool isMouseConfinedToWindow ) const noexcept;
+	void ConfineCursor( bool isMouseConfinedToWindow = true ) const noexcept;
 
 	/**
 	 * @brief function that resets the window procedure.

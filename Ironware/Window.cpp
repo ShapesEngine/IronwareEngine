@@ -303,9 +303,10 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	case WM_LBUTTONDOWN:
 	{
 		SetForegroundWindow( hWnd );
-		if( !mouse.cursorIsEnabled )
+		if( !cursorIsEnabled )
 		{
-			DisableMouseCursor();
+			HideMouseCursor();
+			ConfineCursor();
 		}
 		// stifle other keyboard messages if imgui wants to get full keyboard control
 		if( imGuiKbdCapture )
@@ -386,16 +387,17 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	case WM_ACTIVATE:
 	{
 		// confine/free cursor on window to foreground/background if cursor disabled
-		if( !mouse.cursorIsEnabled )
+		if( !cursorIsEnabled )
 		{
 			if( wParam & WA_ACTIVE )
 			{
-				EnableMouseCursor();
+				HideMouseCursor();
+				ConfineCursor();
 			}
 			else // wParam = deactivate
 			{
-				OutputDebugString( L"activate => free\n" );
-				DisableMouseCursor();
+				ShowMouseCursor();
+				FreeCursor();
 			}
 		}
 	}
@@ -407,7 +409,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 
 void Window::ShowMouseCursor() noexcept
 {
-	cursorIsEnabled = true;
+	cursorIsShown = true;
 	// loop until showcursor's value is more/equal than/to 0,
 	// as at this point cursor gets shown
 	while( ::ShowCursor( TRUE ) < 0 );
@@ -430,7 +432,6 @@ void Window::ConfineCursor( bool isMouseConfinedToWindow ) const noexcept
 		rc = std::make_unique<RECT>();
 		pRectTemp = rc.get();
 		GetWindowRect( hWnd, pRectTemp );
-		MapWindowPoints( hWnd, nullptr, reinterpret_cast<POINT*>( pRectTemp ), 2u );
 	}
 	ClipCursor( pRectTemp );
 }

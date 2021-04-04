@@ -213,5 +213,4 @@ private:
 	bool middleIsPressed = false;
 	bool isInWindow = false;
 	std::queue<Event> buffer;
-	bool cursorIsEnabled = true;
 };
