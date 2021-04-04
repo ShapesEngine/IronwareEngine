@@ -157,15 +157,17 @@ Graphics& Window::Gfx() const
 
 void Window::EnableMouseCursor() noexcept
 {
-	mouse.ShowCursor();
+	cursorIsEnabled = true;
+	ShowMouseCursor();
 	EnableImGuiMouse();
 	FreeCursor();
 }
 
 void Window::DisableMouseCursor() noexcept
 {
-	mouse.HideCursor();
-	DisableImGuiMouse();	
+	cursorIsEnabled = false;
+	HideMouseCursor();
+	DisableImGuiMouse();
 	ConfineCursor();
 }
 
@@ -223,9 +225,9 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	case WM_KILLFOCUS:
 		kbd.ClearState();
 		break;
-	// =======================================================================
-	// Keyboard Messages Handling
-	// -----------------------------------------------------------------------	
+		// =======================================================================
+		// Keyboard Messages Handling
+		// -----------------------------------------------------------------------	
 	case WM_KEYDOWN:
 		// SYSKEY messages need to be handled to track system keys such as ALT, F10, etc.
 		// Basic KEYDOWN messages applies also to system keys
@@ -300,6 +302,11 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_LBUTTONDOWN:
 	{
+		SetForegroundWindow( hWnd );
+		if( !mouse.cursorIsEnabled )
+		{
+			DisableMouseCursor();
+		}
 		// stifle other keyboard messages if imgui wants to get full keyboard control
 		if( imGuiKbdCapture )
 		{
@@ -383,7 +390,12 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		{
 			if( wParam & WA_ACTIVE )
 			{
-				ConfineCursor( true );
+				EnableMouseCursor();
+			}
+			else // wParam = deactivate
+			{
+				OutputDebugString( L"activate => free\n" );
+				DisableMouseCursor();
 			}
 		}
 	}
@@ -391,6 +403,22 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	// =======================================================================
 
 	return DefWindowProc( hWnd, msg, wParam, lParam );
+}
+
+void Window::ShowMouseCursor() noexcept
+{
+	cursorIsEnabled = true;
+	// loop until showcursor's value is more/equal than/to 0,
+	// as at this point cursor gets shown
+	while( ::ShowCursor( TRUE ) < 0 );
+}
+
+void Window::HideMouseCursor() noexcept
+{
+	cursorIsShown = false;
+	// loop until showcursor's value is less than 0,
+	// as at this point cursor gets hidden
+	while( ::ShowCursor( FALSE ) >= 0 );
 }
 
 void Window::ConfineCursor( bool isMouseConfinedToWindow ) const noexcept

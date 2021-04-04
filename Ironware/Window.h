@@ -133,6 +133,14 @@ public:
 
 	__forceinline uint32_t GetWidth() const { return width; }
 	__forceinline uint32_t GetHeight() const { return height; }
+	/**
+	 * @return Boolean state that is set manually
+	*/
+	__forceinline bool IsCursorEnabled() const noexcept { return cursorIsEnabled; }
+	/**
+	 * @return Boolean state that is updated every frame regarding the window
+	*/
+	__forceinline bool IsCursorShown() const noexcept { return cursorIsShown; }
 
 	void EnableMouseCursor() noexcept;
 	void DisableMouseCursor() noexcept;
@@ -141,6 +149,9 @@ private:
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	LRESULT HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
+
+	void ShowMouseCursor() noexcept;
+	void HideMouseCursor() noexcept;
 
 	__forceinline void EnableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse; }
 	__forceinline void DisableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse; }
@@ -165,4 +176,8 @@ private:
 	uint32_t height;
 	HWND hWnd;
 	std::unique_ptr<Graphics> pGfx;
+	// state that is set manually
+	bool cursorIsEnabled;
+	// state that is updated every frame
+	bool cursorIsShown;
 };

@@ -188,8 +188,6 @@ public:
 	*/
 	__forceinline void Clear() noexcept { buffer = std::queue<Event>(); }
 
-	__forceinline bool IsCursorEnabled() const noexcept { return cursorIsEnabled; }
-
 private:
 	void OnMouseLeave() noexcept;
 	void OnMouseEnter() noexcept;
@@ -204,8 +202,6 @@ private:
 	void OnWheelDown( int x, int y ) noexcept;
 	void OnWheelDelta( int x, int y, int delta ) noexcept;
 	void TrimBuffer() noexcept;
-	void ShowCursor() noexcept;
-	void HideCursor() noexcept;
 
 private:
 	static constexpr uint32_t MAXBUFFERSIZE = 16u;

@@ -29,22 +29,6 @@ std::optional<Mouse::Event> Mouse::Read() noexcept
 	return {};
 }
 
-void Mouse::ShowCursor() noexcept
-{
-	cursorIsEnabled = true;
-	// loop until showcursor's value is more/equal than/to 0,
-	// as at this point cursor gets shown
-	while( ::ShowCursor( TRUE ) < 0 );
-}
-
-void Mouse::HideCursor() noexcept
-{
-	cursorIsEnabled = false;
-	// loop until showcursor's value is less than 0,
-	// as at this point cursor gets hidden
-	while( ::ShowCursor( FALSE ) >= 0 );
-}
-
 void Mouse::OnMouseLeave() noexcept
 {
 	isInWindow = false;
