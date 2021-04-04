@@ -36,8 +36,6 @@
  */
 class Drawable
 {
-	template<class T>
-	friend class DrawableBase;
 public:
 	Drawable() = default;
 	Drawable( const Drawable& ) = delete;
@@ -61,8 +59,10 @@ protected:
 private:
 	virtual const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept = 0;
 
-private:
+protected:
 	const class IndexBuffer* pIndexBuffer = nullptr;
+
+private:
 	std::vector<std::unique_ptr<Bindable>> binds;
 };
 
