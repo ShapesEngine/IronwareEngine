@@ -159,12 +159,14 @@ void Window::EnableMouseCursor() noexcept
 {
 	mouse.ShowCursor();
 	EnableImGuiMouse();
+	ConfineCursor( false );
 }
 
 void Window::DisableMouseCursor() noexcept
 {
 	mouse.HideCursor();
 	DisableImGuiMouse();
+	ConfineCursor( true );
 }
 
 LRESULT CALLBACK Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
@@ -378,6 +380,20 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	// =======================================================================
 
 	return DefWindowProc( hWnd, msg, wParam, lParam );
+}
+
+void Window::ConfineCursor( bool isMouseConfinedToWindow )
+{
+	std::unique_ptr<RECT> rc = nullptr;
+	RECT* pRectTemp = nullptr;
+	if( isMouseConfinedToWindow )
+	{
+		rc = std::make_unique<RECT>();
+		pRectTemp = rc.get();
+		GetWindowRect( hWnd, pRectTemp );
+		MapWindowPoints( hWnd, nullptr, reinterpret_cast<POINT*>( pRectTemp ), 2u );
+	}
+	ClipCursor( pRectTemp );
 }
 
 #pragma endregion Window

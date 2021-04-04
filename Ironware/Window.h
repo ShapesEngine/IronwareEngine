@@ -145,6 +145,8 @@ private:
 	__forceinline void EnableImGuiMouse() noexcept { ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse; }
 	__forceinline void DisableImGuiMouse() noexcept { ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse; }
 
+	void ConfineCursor( bool isMouseConfinedToWindow );
+
 	/**
 	 * @brief function that resets the window procedure.
 	 * * It's used to prevent various read access violation errors, mouse, keyboard, etc.
