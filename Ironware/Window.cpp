@@ -99,6 +99,8 @@ Window::Window( int width_in, int height_in, const wchar_t* name ) :
 		throw std::exception( "ImGui Initialization Fail" );
 	}
 
+	RegisterRawMouseInput();
+
 	// create graphics object
 	pGfx = std::make_unique<Graphics>( hWnd );
 }
@@ -434,6 +436,20 @@ void Window::ConfineCursor( bool isMouseConfinedToWindow ) const noexcept
 		GetWindowRect( hWnd, pRectTemp );
 	}
 	ClipCursor( pRectTemp );
+}
+
+void Window::RegisterRawMouseInput() const
+{
+	RAWINPUTDEVICE rid = {};
+	rid.usUsagePage = 0x01; // Generic Desktop Controls
+	rid.usUsage = 0x02; // Mouse Usage ID
+	rid.dwFlags = 0u;
+	rid.hwndTarget = nullptr;
+
+	if( RegisterRawInputDevices( &rid, 1u, sizeof( RAWINPUTDEVICE ) ) == FALSE )
+	{
+		throw IRWND_LAST_EXCEPT();
+	}
 }
 
 #pragma endregion Window

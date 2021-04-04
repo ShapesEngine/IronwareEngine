@@ -103,7 +103,7 @@ private:
 	};
 
 public:
-	Window( int width, int height, const wchar_t* name );
+	Window( int width, int height, const wchar_t* name );	
 	~Window();
 	Window( const Window& ) = delete;
 	Window& operator=( const Window& ) = delete;
@@ -158,6 +158,8 @@ private:
 
 	__forceinline void FreeCursor() const noexcept { ConfineCursor( false ); }
 	void ConfineCursor( bool isMouseConfinedToWindow = true ) const noexcept;
+
+	void RegisterRawMouseInput() const;
 
 	/**
 	 * @brief function that resets the window procedure.
