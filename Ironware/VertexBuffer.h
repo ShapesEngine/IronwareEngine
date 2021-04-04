@@ -52,7 +52,7 @@ public:
 
 	VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, UINT offset = 0 );
 
-	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
+	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
 
 private:
 	const UINT stride;

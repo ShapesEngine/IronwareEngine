@@ -37,7 +37,7 @@ protected:
 	 * * in drawables if the reusable bindables are already added into the staticbinds
 	 * @return boolean value that answers to the question :)
 	*/
-	static __forceinline bool IsStaticInitialized() { return !staticBinds.empty(); }
+	static bool IsStaticInitialized() { return !staticBinds.empty(); }
 
 	static void AddStaticBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG );
 	void AddStaticIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept;
@@ -49,7 +49,7 @@ protected:
 	void SetIndexFromStatic() noexcept( !IS_DEBUG );
 
 private:
-	__forceinline const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept override { return staticBinds; }
+	const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept override { return staticBinds; }
 
 private:
 	static std::vector<std::unique_ptr<Bindable>> staticBinds;

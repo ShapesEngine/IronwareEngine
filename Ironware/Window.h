@@ -53,9 +53,9 @@ public:
 		 */
 		const char* what() const noexcept override;
 
-		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Window Exception"; }
-		__forceinline HRESULT GetErrorCode() const noexcept { return hr; }
-		__forceinline std::wstring GetErrorDescription() const noexcept { return Exception::TranslateErrorCode( hr ); }
+		const wchar_t* GetType() const noexcept override { return L"Iron Window Exception"; }
+		HRESULT GetErrorCode() const noexcept { return hr; }
+		std::wstring GetErrorDescription() const noexcept { return Exception::TranslateErrorCode( hr ); }
 
 	private:
 		HRESULT hr;
@@ -74,7 +74,7 @@ public:
 	{
 	public:
 		using Exception::Exception;
-		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Window [No Graphics] Exception"; }
+		const wchar_t* GetType() const noexcept override { return L"Iron Window [No Graphics] Exception"; }
 	};
 
 private:
@@ -89,8 +89,8 @@ private:
 	class WindowClass
 	{
 	public:
-		__forceinline static const wchar_t* GetName() noexcept { return wndClassName; }
-		__forceinline static HINSTANCE GetInstance() noexcept { return wndClass.hInst; }
+		static const wchar_t* GetName() noexcept { return wndClassName; }
+		static HINSTANCE GetInstance() noexcept { return wndClass.hInst; }
 
 	private:
 		WindowClass() noexcept;
@@ -131,16 +131,16 @@ public:
 	*/
 	Graphics& Gfx() const;
 
-	__forceinline uint32_t GetWidth() const { return width; }
-	__forceinline uint32_t GetHeight() const { return height; }
+	uint32_t GetWidth() const { return width; }
+	uint32_t GetHeight() const { return height; }
 	/**
 	 * @return Boolean state that is set manually
 	*/
-	__forceinline bool IsCursorEnabled() const noexcept { return cursorIsEnabled; }
+	bool IsCursorEnabled() const noexcept { return cursorIsEnabled; }
 	/**
 	 * @return Boolean state that is updated every frame regarding the window
 	*/
-	__forceinline bool IsCursorShown() const noexcept { return cursorIsShown; }
+	bool IsCursorShown() const noexcept { return cursorIsShown; }
 
 	void EnableMouseCursor() noexcept;
 	void DisableMouseCursor() noexcept;
@@ -153,10 +153,10 @@ private:
 	void ShowMouseCursor() noexcept;
 	void HideMouseCursor() noexcept;
 
-	__forceinline void EnableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse; }
-	__forceinline void DisableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse; }
+	void EnableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse; }
+	void DisableImGuiMouse() const noexcept { ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse; }
 
-	__forceinline void FreeCursor() const noexcept { ConfineCursor( false ); }
+	void FreeCursor() const noexcept { ConfineCursor( false ); }
 	void ConfineCursor( bool isMouseConfinedToWindow = true ) const noexcept;
 
 	void RegisterRawMouseInput() const;
@@ -165,7 +165,7 @@ private:
 	 * @brief function that resets the window procedure.
 	 * * It's used to prevent various read access violation errors, mouse, keyboard, etc.
 	*/
-	__forceinline static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
+	static void ResetWindowProc() { SetWindowLongPtr( GetActiveWindow(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( &DefWindowProc ) ); }
 
 public:
 	Keyboard kbd;

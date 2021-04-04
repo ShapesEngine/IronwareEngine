@@ -101,14 +101,14 @@ public:
 		/**
 		 * @return offset after this element( previous offset + size of this element )
 		*/
-		__forceinline size_t GetOffsetAfter() const { return offset + GetSize(); }
+		size_t GetOffsetAfter() const { return offset + GetSize(); }
 
-		__forceinline size_t GetOffset() const { return offset; }
+		size_t GetOffset() const { return offset; }
 		/**
 		 * @return size of the element type
 		*/
-		__forceinline size_t GetSize() const { return SizeOf( type ); }
-		__forceinline ElementType GetType() const { return type; }
+		size_t GetSize() const { return SizeOf( type ); }
+		ElementType GetType() const { return type; }
 
 		static constexpr size_t SizeOf( ElementType type ) noexcept( !IS_DEBUG );
 
@@ -140,12 +140,12 @@ public:
 	 * @param index of the element in a vector
 	 * @return Reference to the element
 	*/
-	__forceinline const Element& ResolveByIndex( size_t index ) const noexcept( !IS_DEBUG ) { return elements[index]; }
+	const Element& ResolveByIndex( size_t index ) const noexcept( !IS_DEBUG ) { return elements[index]; }
 	/**
 	 * @return size of the elements in bytes
 	*/
-	__forceinline size_t Size() const noexcept( !IS_DEBUG ) { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
-	__forceinline size_t GetElementCount() const noexcept( !IS_DEBUG ) { return elements.size(); }
+	size_t Size() const noexcept( !IS_DEBUG ) { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
+	size_t GetElementCount() const noexcept( !IS_DEBUG ) { return elements.size(); }
 
 	VertexLayout& Append(ElementType ElementType) noexcept( !IS_DEBUG );
 
@@ -223,7 +223,7 @@ public:
 	{}
 
 	template<VertexLayout::ElementType Type>
-	__forceinline const auto& Attribute() const noexcept( !IS_DEBUG ) { return const_cast<Vertex&>( vertex ).Attribute<Type>(); }
+	const auto& Attribute() const noexcept( !IS_DEBUG ) { return const_cast<Vertex&>( vertex ).Attribute<Type>(); }
 
 private:
 	Vertex vertex;
@@ -238,19 +238,19 @@ class VertexByteBuffer
 public:
 	VertexByteBuffer( VertexLayout layout );
 
-	__forceinline VertexLayout& GetLayout() noexcept { return layout; }
-	__forceinline const VertexLayout& GetLayout() const noexcept { return layout; }
+	VertexLayout& GetLayout() noexcept { return layout; }
+	const VertexLayout& GetLayout() const noexcept { return layout; }
 	/**
 	 * @return attribute count in the buffer
 	*/
-	__forceinline size_t Size() const noexcept { return buffer.size() / layout.Size(); }
+	size_t Size() const noexcept { return buffer.size() / layout.Size(); }
 	/**
 	 * @return attribute count in the buffer
 	*/
-	__forceinline size_t Count() const noexcept { return Size(); }
-	__forceinline size_t SizeBytes() const noexcept { return buffer.size(); }
-	__forceinline std::byte* GetData() noexcept { return buffer.data(); }
-	__forceinline const std::byte* GetData() const noexcept { return const_cast<VertexByteBuffer*>( this )->GetData(); }
+	size_t Count() const noexcept { return Size(); }
+	size_t SizeBytes() const noexcept { return buffer.size(); }
+	std::byte* GetData() noexcept { return buffer.data(); }
+	const std::byte* GetData() const noexcept { return const_cast<VertexByteBuffer*>( this )->GetData(); }
 
 	/**
 	 * @brief Sets the vertex layout values(order needs to be the as the layout's ordering)
@@ -269,14 +269,14 @@ public:
 	*/
 	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );
 
-	__forceinline ConstVertex Back() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Back(); }
-	__forceinline ConstVertex Front() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Front(); }
+	ConstVertex Back() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Back(); }
+	ConstVertex Front() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Front(); }
 	/**
 	 * @brief Retrieves constant vertex with appropriate index
 	 * @param index represents the index value with appropriate layout
 	 * @return ConstVertex instance that will hold all the elements of a single vertex
 	*/
-	__forceinline ConstVertex operator[]( size_t index ) const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer&>( *this )[index]; }
+	ConstVertex operator[]( size_t index ) const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer&>( *this )[index]; }
 
 private:
 	// buffer has no alignment, so when you will be dealing

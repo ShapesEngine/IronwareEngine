@@ -46,9 +46,9 @@ public:
 			code( code )
 		{}
 
-		__forceinline bool IsPress() const noexcept { return type == Type::PRESS; }
-		__forceinline bool IsRelease() const noexcept { return type == Type::RELEASE; }
-		__forceinline uint8_t GetCode() const noexcept { return code; }
+		bool IsPress() const noexcept { return type == Type::PRESS; }
+		bool IsRelease() const noexcept { return type == Type::RELEASE; }
+		uint8_t GetCode() const noexcept { return code; }
 
 	private:
 		Type type;
@@ -63,25 +63,25 @@ public:
 	/**
 	 * @brief Clears key and char events
 	*/
-	__forceinline void Clear() noexcept { ClearKey(), ClearChar(); }
+	void Clear() noexcept { ClearKey(), ClearChar(); }
 
 	/******************************* KEY EVENTS START ******************************/
 	std::optional<Event> ReadKey() noexcept;
-	__forceinline bool KeyIsPressed( uint8_t keycode ) const noexcept { return keystates[keycode]; }
-	__forceinline bool KeyIsEmpty() const noexcept { return keybuffer.empty(); }
-	__forceinline void ClearKey() noexcept { keybuffer = std::queue<Event>(); }
+	bool KeyIsPressed( uint8_t keycode ) const noexcept { return keystates[keycode]; }
+	bool KeyIsEmpty() const noexcept { return keybuffer.empty(); }
+	void ClearKey() noexcept { keybuffer = std::queue<Event>(); }
 	/******************************* KEY EVENTS END ******************************/
 
 	/******************************* CHAR EVENT START ******************************/
 	std::optional<wchar_t> ReadChar() noexcept;
-	__forceinline bool CharIsEmpty() const noexcept { return charbuffer.empty(); }
-	__forceinline void ClearChar() noexcept { charbuffer = std::queue<wchar_t>(); }
+	bool CharIsEmpty() const noexcept { return charbuffer.empty(); }
+	void ClearChar() noexcept { charbuffer = std::queue<wchar_t>(); }
 	/******************************* CHAR EVENT END ******************************/
 
 	/******************************* AUTOREPEAT START ******************************/
-	__forceinline void EnableAutorepeat() noexcept { autorepeatEnabled = true; }
-	__forceinline void DisableAutorepeat() noexcept { autorepeatEnabled = false; }
-	__forceinline bool AutorepeatIsEnabled() const noexcept { return autorepeatEnabled; }
+	void EnableAutorepeat() noexcept { autorepeatEnabled = true; }
+	void DisableAutorepeat() noexcept { autorepeatEnabled = false; }
+	bool AutorepeatIsEnabled() const noexcept { return autorepeatEnabled; }
 	/******************************* AUTOREPEAT END ******************************/
 
 private:
@@ -92,7 +92,7 @@ private:
 	/**
 	 * @brief A function that resets keystates
 	*/
-	__forceinline void ClearState() noexcept { keystates.reset(); }
+	void ClearState() noexcept { keystates.reset(); }
 
 	/**
 	 * @brief Keeps the buffer's size less than specified MAXBUFFERSIZE

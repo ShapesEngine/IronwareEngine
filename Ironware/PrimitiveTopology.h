@@ -31,7 +31,7 @@ class PrimitiveTopology : public Bindable
 public:
 	PrimitiveTopology( Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type );
 
-	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetPrimitiveTopology( type ); }
+	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetPrimitiveTopology( type ); }
 
 protected:
 	D3D11_PRIMITIVE_TOPOLOGY type;

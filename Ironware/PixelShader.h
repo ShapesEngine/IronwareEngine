@@ -32,7 +32,7 @@ class PixelShader : public Bindable
 public:
 	PixelShader( Graphics& gfx, const std::wstring& path );
 
-	__forceinline void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShader( pPixelShader.Get(), nullptr, 0u ); }
+	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShader( pPixelShader.Get(), nullptr, 0u ); }
 
 protected:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;

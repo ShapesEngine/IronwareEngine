@@ -42,8 +42,8 @@ public:
 	virtual ~Bindable() = default;
 
 protected:
-	__forceinline static ID3D11DeviceContext* GetContext( Graphics& gfx ) noexcept { return gfx.pImmediateContext.Get(); }
-	__forceinline static ID3D11Device* GetDevice( Graphics& gfx ) noexcept { return gfx.pDevice.Get(); }
+	static ID3D11DeviceContext* GetContext( Graphics& gfx ) noexcept { return gfx.pImmediateContext.Get(); }
+	static ID3D11Device* GetDevice( Graphics& gfx ) noexcept { return gfx.pDevice.Get(); }
 
 	/**
 	 * @brief Avoid calling this function directly, instead call INFOMAN macro

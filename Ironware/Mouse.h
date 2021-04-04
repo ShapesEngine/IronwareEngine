@@ -74,67 +74,67 @@ public:
 		Event() noexcept = default;
 		Event( Type type, const Mouse& parent ) noexcept;
 
-		__forceinline Type GetType() const noexcept { return type; }
+		Type GetType() const noexcept { return type; }
 
 		/**
 		 * @brief A function that returns mouse position at the time the event was triggered
 		 * @return Pair of { x, y } coordinates of the mouse
 		*/
-		__forceinline std::pair<int, int> GetPos() const noexcept { return{ x, y }; }
+		std::pair<int, int> GetPos() const noexcept { return{ x, y }; }
 
 		/**
 		 * @brief A function that returns mouse X position at the time the event was triggered
 		 * @return X coordinate of the mouse
 		*/
-		__forceinline int GetPosX() const noexcept { return x; }
+		int GetPosX() const noexcept { return x; }
 
 		/**
 		 * @brief A function that returns mouse Y position at the time the event was triggered
 		 * @return Y coordinate of the mouse
 		*/
-		__forceinline int GetPosY() const noexcept { return y; }
+		int GetPosY() const noexcept { return y; }
 
 		/**
 		 * @brief A function that returns mouse raw delta values at the time the event was triggered
 		 * @return Pair of { x, y } coordinates of the mouse
 		*/
-		__forceinline std::pair<int, int> GetRawDeltas() const noexcept { return{ dx, dy }; }
+		std::pair<int, int> GetRawDeltas() const noexcept { return{ dx, dy }; }
 
 		/**
 		 * @brief A function that returns mouse raw delta X value at the time the event was triggered
 		 * @return X delta value
 		*/
-		__forceinline int GetRawDeltaX() const noexcept { return dx; }
+		int GetRawDeltaX() const noexcept { return dx; }
 
 		/**
 		 * @brief A function that returns mouse raw delta Y value at the time the event was triggered
 		 * @return Y delta value
 		*/
-		__forceinline int GetRawDeltaY() const noexcept { return dy; }
+		int GetRawDeltaY() const noexcept { return dy; }
 
 		/**
 		 * @brief A function that return mouse left button press state at the time the event was triggered
 		 * @return A boolean value
 		*/
-		__forceinline bool LeftIsPressed() const noexcept { return leftIsPressed; }
+		bool LeftIsPressed() const noexcept { return leftIsPressed; }
 
 		/**
 		 * @brief A function that return mouse right button press state at the time the event was triggered
 		 * @return A boolean value
 		*/
-		__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
+		bool RightIsPressed() const noexcept { return rightIsPressed; }
 
 		/**
 		 * @brief A function that return mouse middle button press state at the time the event was triggered
 		 * @return A boolean value
 		*/
-		__forceinline bool MiddleIsPressed() const noexcept { return rightIsPressed; }
+		bool MiddleIsPressed() const noexcept { return rightIsPressed; }
 
 		/**
 		* @brief A function that checks if any buttons(left, middle, right) were pressed at the time the event was triggered
 		* @return A boolean value
 		*/
-		__forceinline bool AnyButtonIsPressed() const noexcept { return LeftIsPressed() || RightIsPressed() || MiddleIsPressed(); }
+		bool AnyButtonIsPressed() const noexcept { return LeftIsPressed() || RightIsPressed() || MiddleIsPressed(); }
 
 	private:
 		Type type;
@@ -154,60 +154,60 @@ public:
 
 	std::optional<Event> Read() noexcept;
 
-	__forceinline bool IsInWindow() const noexcept { return isInWindow; }
+	bool IsInWindow() const noexcept { return isInWindow; }
 
 	/**
 	 * @brief A function that returns current mouse position
 	 * @return Pair of { x, y } coordinates of the mouse
 	*/
-	__forceinline std::pair<int, int> GetPos() const noexcept { return { x, y }; }
+	std::pair<int, int> GetPos() const noexcept { return { x, y }; }
 
 	/**
 	* @brief A function that returns the current mouse X position
 	* @return X coordinate of the mouse
 	*/
-	__forceinline int GetPosX() const noexcept { return x; }
+	int GetPosX() const noexcept { return x; }
 
 	/**
 	* @brief A function that returns the current mouse Y position
 	* @return Y coordinate of the mouse
 	*/
-	__forceinline int GetPosY() const noexcept { return y; }
+	int GetPosY() const noexcept { return y; }
 
 	/**
 	* @brief A function that checks if the left mouse button is being pressed
 	* @return A boolean value
 	*/
-	__forceinline bool LeftIsPressed() const noexcept { return leftIsPressed; }
+	bool LeftIsPressed() const noexcept { return leftIsPressed; }
 
 	/**
 	* @brief A function that checks if the right mouse button is being pressed
 	* @return A boolean value
 	*/
-	__forceinline bool RightIsPressed() const noexcept { return rightIsPressed; }
+	bool RightIsPressed() const noexcept { return rightIsPressed; }
 
 	/**
 	* @brief A function that checks if the middle mouse button is being pressed
 	* @return A boolean value
 	*/
-	__forceinline bool MiddleIsPressed() const noexcept { return middleIsPressed; }
+	bool MiddleIsPressed() const noexcept { return middleIsPressed; }
 
 	/**
 	* @brief A function that checks if any buttons(left, middle, right) are being pressed
 	* @return A boolean value
 	*/
-	__forceinline bool AnyButtonIsPressed() const noexcept { return LeftIsPressed() || RightIsPressed() || MiddleIsPressed(); }
+	bool AnyButtonIsPressed() const noexcept { return LeftIsPressed() || RightIsPressed() || MiddleIsPressed(); }
 
 	/**
 	* @brief A function that checks if the mouse is being inactive
 	* @return A boolean value
 	*/
-	__forceinline bool IsEmpty() const noexcept { return buffer.empty(); }
+	bool IsEmpty() const noexcept { return buffer.empty(); }
 
 	/**
 	 * @brief A function that resets the buffer
 	*/
-	__forceinline void Clear() noexcept { buffer = std::queue<Event>(); }
+	void Clear() noexcept { buffer = std::queue<Event>(); }
 
 private:
 	void OnMouseLeave() noexcept;

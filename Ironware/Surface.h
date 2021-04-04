@@ -67,16 +67,16 @@ public:
 			dword = color.dword;
 			return *this;
 		}
-		__forceinline constexpr uint8_t GetX() const noexcept { return dword >> 24u; }
-		__forceinline constexpr uint8_t GetA() const noexcept { return GetX(); }
-		__forceinline constexpr uint8_t GetR() const noexcept { return ( dword >> 16u ) & 0xFFu; }
-		__forceinline constexpr uint8_t GetG() const noexcept { return ( dword >> 8u ) & 0xFFu; }
-		__forceinline constexpr uint8_t GetB() const noexcept { return dword & 0xFFu; }
-		__forceinline void SetX( uint8_t x ) noexcept { dword = ( dword & 0xFFFFFFu ) | ( x << 24u ); }
-		__forceinline void SetA( uint8_t a ) noexcept { SetX( a ); }
-		__forceinline void SetR( uint8_t r ) noexcept { dword = ( dword & 0xFF00FFFFu ) | ( r << 16u ); }
-		__forceinline void SetG( uint8_t g ) noexcept { dword = ( dword & 0xFFFF00FFu ) | ( g << 8u ); }
-		__forceinline void SetB( uint8_t b ) noexcept { dword = ( dword & 0xFFFFFF00u ) | b; }
+		constexpr uint8_t GetX() const noexcept { return dword >> 24u; }
+		constexpr uint8_t GetA() const noexcept { return GetX(); }
+		constexpr uint8_t GetR() const noexcept { return ( dword >> 16u ) & 0xFFu; }
+		constexpr uint8_t GetG() const noexcept { return ( dword >> 8u ) & 0xFFu; }
+		constexpr uint8_t GetB() const noexcept { return dword & 0xFFu; }
+		void SetX( uint8_t x ) noexcept { dword = ( dword & 0xFFFFFFu ) | ( x << 24u ); }
+		void SetA( uint8_t a ) noexcept { SetX( a ); }
+		void SetR( uint8_t r ) noexcept { dword = ( dword & 0xFF00FFFFu ) | ( r << 16u ); }
+		void SetG( uint8_t g ) noexcept { dword = ( dword & 0xFFFF00FFu ) | ( g << 8u ); }
+		void SetB( uint8_t b ) noexcept { dword = ( dword & 0xFFFFFF00u ) | b; }
 	};
 
 	/*!
@@ -93,8 +93,8 @@ public:
 		Exception( int line, const wchar_t* file, std::wstring note ) noexcept;
 		const char* what() const noexcept override;
 
-		__forceinline const wchar_t* GetType() const noexcept override { return L"Iron Surface Exception"; }
-		__forceinline const std::wstring& GetNote() const noexcept { return note; }
+		const wchar_t* GetType() const noexcept override { return L"Iron Surface Exception"; }
+		const std::wstring& GetNote() const noexcept { return note; }
 	private:
 		std::wstring note;
 	};
@@ -113,12 +113,12 @@ public:
 	void Save( const std::wstring& filename ) const;
 	void Copy( const Surface& src ) noexcept( !IS_DEBUG );
 
-	__forceinline void Clear( Color fillValue ) noexcept { memset( pBuffer.get(), fillValue.dword, (size_t)width * height * sizeof( Color ) ); }
-	__forceinline uint32_t GetWidth() const noexcept { return width; }
-	__forceinline uint32_t GetHeight() const noexcept { return height; }
-	__forceinline Color* GetBufferPtr() noexcept { return pBuffer.get(); }
-	__forceinline const Color* GetBufferPtr() const noexcept { return pBuffer.get(); }
-	__forceinline const Color* GetBufferPtrConst() const noexcept { return pBuffer.get(); }
+	void Clear( Color fillValue ) noexcept { memset( pBuffer.get(), fillValue.dword, (size_t)width * height * sizeof( Color ) ); }
+	uint32_t GetWidth() const noexcept { return width; }
+	uint32_t GetHeight() const noexcept { return height; }
+	Color* GetBufferPtr() noexcept { return pBuffer.get(); }
+	const Color* GetBufferPtr() const noexcept { return pBuffer.get(); }
+	const Color* GetBufferPtrConst() const noexcept { return pBuffer.get(); }
 
 private:
 	Surface( uint32_t width, uint32_t height, std::unique_ptr<Color[]> pBufferParam ) noexcept;
