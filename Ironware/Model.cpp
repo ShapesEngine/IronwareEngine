@@ -26,7 +26,7 @@ Mesh::Mesh( Graphics& gfx, std::vector<std::unique_ptr<Bindable>> bindablePtrs )
 	{
 		if( const auto pi = dynamic_cast<IndexBuffer*>( pb.get() ) )
 		{
-			AddBind( std::unique_ptr<IndexBuffer>{ pi } );
+			AddIndexBufferBind( std::unique_ptr<IndexBuffer>{ pi } );
 			pb.release();
 		}
 		else
@@ -53,18 +53,18 @@ Node::Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX transform_in ) 
 void Node::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG )
 {
 	const auto built = DirectX::XMLoadFloat4x4( &transform ) * accumulatedTransform;
-	for( const auto pMesh : meshPtrs )
+	for( const auto pm : meshPtrs )
 	{
-		pMesh->Draw( gfx, built );
+		pm->Draw( gfx, built );
 	}
 
-	for( auto& pNode : childPtrs )
+	for( const auto& pc : childPtrs )
 	{
-		pNode->Draw( gfx, built );
+		pc->Draw( gfx, built );
 	}
 }
 
-void Node::AddChild( std::unique_ptr<Node> pChild )
+void Node::AddChild( std::unique_ptr<Node> pChild ) noexcept( !IS_DEBUG )
 {
 	assert( pChild );
 	childPtrs.push_back( std::move( pChild ) );
@@ -102,12 +102,14 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh ) noex
 	}
 
 	std::vector<uint16_t> indices;
-	indices.reserve( mesh.mNumFaces * 3 );
+	indices.reserve( (size_t)mesh.mNumFaces * 3u );
 	for( uint32_t i = 0u; i < mesh.mNumFaces; i++ )
 	{
-		indices.push_back( mesh.mFaces[i].mIndices[0] );
-		indices.push_back( mesh.mFaces[i].mIndices[1] );
-		indices.push_back( mesh.mFaces[i].mIndices[2] );
+		const auto& face = mesh.mFaces[i];
+		assert( face.mNumIndices == 3 );
+		indices.push_back( face.mIndices[0] );
+		indices.push_back( face.mIndices[1] );
+		indices.push_back( face.mIndices[2] );
 	}
 
 	std::vector<std::unique_ptr<Bindable>> bindablePtrs;
@@ -143,10 +145,11 @@ std::unique_ptr<Node> Model::ParseNode( const aiNode& node ) noexcept( !IS_DEBUG
 	const auto transform = DirectX::XMMatrixTranspose( DirectX::XMLoadFloat4x4( reinterpret_cast<const DirectX::XMFLOAT4X4*>( &node.mTransformation ) ) );
 
 	std::vector<Mesh*> curMeshPtrs;
+	curMeshPtrs.reserve( (size_t)node.mNumMeshes );
 	for( uint32_t i = 0; i < node.mNumMeshes; i++ )
 	{
 		const auto meshIdx = node.mMeshes[i];
-		curMeshPtrs.push_back( meshPtrs[i].get() );
+		curMeshPtrs.push_back( meshPtrs.at( meshIdx ).get() );
 	}
 
 	auto pNode = std::make_unique<Node>( std::move( curMeshPtrs ), transform );

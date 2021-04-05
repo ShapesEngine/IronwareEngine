@@ -10,7 +10,7 @@
 
 App::App() :
 	wnd( 1280, 960, L"Ironware Engine" ),
-	pointLight(wnd.Gfx())
+	pointLight( wnd.Gfx() )
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
 	wnd.EnableMouseCursor();
@@ -39,6 +39,7 @@ void App::ProcessFrame()
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
+	nano.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
 
 	// imgui window to control camera & light

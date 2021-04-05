@@ -12,8 +12,10 @@
 #include "ImGuiManager.h"
 #include "Camera.h"
 #include "PointLight.h"
+#include "Model.h"
+
  /**
-  * @brief
+  * @brief Base class that controls scene
  */
 class App
 {
@@ -40,4 +42,5 @@ private:
 	Camera camera;
 	Window wnd;
 	PointLight pointLight;
+	Model nano{ wnd.Gfx(), "Models\\nanosuit.obj" };
 };

@@ -20,18 +20,18 @@ public:
 	DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMLoadFloat4x4( &transform ); }
 
 private:
-	mutable DirectX::XMFLOAT4X4 transform;
+	mutable DirectX::XMFLOAT4X4 transform = {};
 };
 
 class Node
 {
 	friend class Model;
 public:
-	Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX transform_in );
+	Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX transform_in ) noexcept( !IS_DEBUG );
 	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG );
 
 private:
-	void AddChild( std::unique_ptr<Node> pChild );
+	void AddChild( std::unique_ptr<Node> pChild ) noexcept( !IS_DEBUG );
 
 private:
 	std::vector<Mesh*> meshPtrs;
@@ -46,6 +46,7 @@ class Model
 {
 public:
 	Model( Graphics& gfx, std::string filename );
+	void Draw(Graphics& gfx) const noexcept( !IS_DEBUG ) { pRoot->Draw( gfx, DirectX::XMMatrixIdentity() ); }
 
 private:
 	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh ) noexcept( !IS_DEBUG );
