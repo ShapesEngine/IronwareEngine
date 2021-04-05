@@ -1,13 +1,13 @@
 /*!
- * \file Mesh.cpp
+ * \file Model.cpp
  *
  * \author Yernar Aldabergenov
  * \date March 2021
  *
  *
  */
-#include "Mesh.h"
-#include "BindableBase.h"
+#include "Model.h"
+#include "BindableCommon.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -16,7 +16,7 @@
 #include <memory>
 #include <vector>
 
-Mesh::Mesh( Graphics& gfx, std::mt19937& rng,
+Model::Model( Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
 	std::uniform_real_distribution<float>& odist,

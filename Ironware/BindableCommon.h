@@ -1,5 +1,5 @@
 /*!
- * \file BindableBase.h
+ * \file BindableCommon.h
  * \date 2020/09/23 6:18
  *
  * \author Yernar Aldabergenov

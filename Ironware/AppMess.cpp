@@ -28,7 +28,7 @@
 #include "Surface.h"
 #include "Cylinder.h"
 #include "Cone.h"
-#include "Mesh.h"
+#include "Model.h"
 
 #include <imgui/imgui.h>
 
@@ -69,7 +69,7 @@ AppMess::AppMess() :
 					odist, rdist, bdist
 					);
 			case 3:
-				return std::make_unique<Mesh>(
+				return std::make_unique<Model>(
 					gfx, rng, adist, ddist,
 					odist, rdist, DirectX::XMFLOAT3{ cdist( rng ), cdist( rng ), cdist( rng ) },
 					1.f

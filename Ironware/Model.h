@@ -1,5 +1,5 @@
 /*!
- * \file Mesh.h
+ * \file Model.h
  *
  * \author Yernar Aldabergenov
  * \date March 2021
@@ -11,7 +11,7 @@
 #include "ObjectBase.h"
 
 /*!
- * \class Mesh
+ * \class Model
  *
  * \ingroup Drawables
  *
@@ -24,10 +24,10 @@
  * Contact: yernar.aa@gmail.com
  *
  */
-class Mesh : public ObjectBase<Mesh>
+class Model : public ObjectBase<Model>
 {
 public:
-	Mesh( Graphics& gfx, std::mt19937& rng,
+	Model( Graphics& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,

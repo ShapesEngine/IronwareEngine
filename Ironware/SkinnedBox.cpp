@@ -7,7 +7,7 @@
  * \date November 2020
  */
 #include "SkinnedBox.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 #include "GraphicsExceptionMacros.h"
 #include "Cube.h"
 #include "Surface.h"

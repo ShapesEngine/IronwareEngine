@@ -7,7 +7,7 @@
  *
  */
 #include "TexturedBox.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 #include "GraphicsExceptionMacros.h"
 #include "Cube.h"
 #include "Texture.h"

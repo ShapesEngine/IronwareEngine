@@ -8,7 +8,7 @@
  */
 #include "Cylinder.h"
 #include "Prism.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 
 Cylinder::Cylinder( Graphics& gfx, std::mt19937& rng, 
 					std::uniform_real_distribution<float>& adist, 

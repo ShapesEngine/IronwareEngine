@@ -7,7 +7,7 @@
  *
  */
 #include "Cone.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 #include "GraphicsExceptionMacros.h"
 #include "Pyramid.h"
 
