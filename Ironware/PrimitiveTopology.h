@@ -29,7 +29,7 @@
 class PrimitiveTopology : public Bindable
 {
 public:
-	PrimitiveTopology( Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type );
+	PrimitiveTopology( Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetPrimitiveTopology( type ); }
 

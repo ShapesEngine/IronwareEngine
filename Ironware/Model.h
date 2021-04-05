@@ -4,34 +4,57 @@
  * \author Yernar Aldabergenov
  * \date March 2021
  *
- * 
+ *
  */
 #pragma once
 
-#include "ObjectBase.h"
+#include "DrawableBase.h"
 
-/*!
- * \class Model
- *
- * \ingroup Drawables
- *
- * \brief Responsible class for drawing a mesh from specified file
- *
- * \author Yernar Aldabergenov
- *
- * \date March 2021
- *
- * Contact: yernar.aa@gmail.com
- *
- */
-class Model : public ObjectBase<Model>
+#include <assimp/scene.h>
+
+class Mesh : public DrawableBase<Mesh>
 {
 public:
-	Model( Graphics& gfx, std::mt19937& rng,
-		std::uniform_real_distribution<float>& adist,
-		std::uniform_real_distribution<float>& ddist,
-		std::uniform_real_distribution<float>& odist,
-		std::uniform_real_distribution<float>& rdist,
-		DirectX::XMFLOAT3 material,
-		float scale );
+	Mesh( Graphics& gfx, std::vector<std::unique_ptr<Bindable>> bindablePtrs );
+	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG );
+	DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMLoadFloat4x4( &transform ); }
+
+private:
+	mutable DirectX::XMFLOAT4X4 transform;
+};
+
+class Node
+{
+	friend class Model;
+public:
+	Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX transform_in );
+	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG );
+
+private:
+	void AddChild( std::unique_ptr<Node> pChild );
+
+private:
+	std::vector<Mesh*> meshPtrs;
+	std::vector<std::unique_ptr<Node>> childPtrs;
+	DirectX::XMFLOAT4X4 transform;
+};
+
+/**
+ * @brief Responsible class for drawing a mesh from specified file
+*/
+class Model
+{
+public:
+	Model( Graphics& gfx, std::string filename );
+
+private:
+	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh ) noexcept( !IS_DEBUG );
+	std::unique_ptr<Node> ParseNode( const aiNode& node ) noexcept( !IS_DEBUG );
+
+private:
+	std::vector<std::unique_ptr<Mesh>> meshPtrs;
+	// we only keep pointer to the root
+	// other nodes are used when the draw 
+	// has been called
+	std::unique_ptr<Node> pRoot;
 };
