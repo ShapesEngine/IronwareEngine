@@ -112,6 +112,10 @@
     <ClCompile Include="..\External\Includes\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\External\Includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="AppMess.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
