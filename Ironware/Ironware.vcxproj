@@ -231,7 +231,6 @@
     <ClCompile Include="SolidSphere.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="PrimitiveTopology.cpp" />
     <ClCompile Include="TexturedBox.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
     <ClCompile Include="Vertex.cpp" />

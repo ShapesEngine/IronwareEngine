@@ -12,27 +12,32 @@
 
 #include "Bindable.h"
 
-/*!
- * \class PrimitiveTopology
- *
- * \ingroup Bindables
- *
- * \brief A PrimitiveTopology wrapper child class that will be bound in process of graphics pipeline.
- *
- * \author Yernar Aldabergenov
- *
- * \date September 2020
- *
- * Contact: yernar.aa@gmail.com
- *
- */
-class PrimitiveTopology : public Bindable
+namespace PipelineBindable
 {
-public:
-	PrimitiveTopology( Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	/*!
+	 * \class PrimitiveTopology
+	 *
+	 * \ingroup Bindables
+	 *
+	 * \brief A PrimitiveTopology wrapper child class that will be bound in process of graphics pipeline.
+	 *
+	 * \author Yernar Aldabergenov
+	 *
+	 * \date September 2020
+	 *
+	 * Contact: yernar.aa@gmail.com
+	 *
+	 */
+	class PrimitiveTopology : public Bindable
+	{
+	public:
+		PrimitiveTopology( Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) :
+			type( type )
+		{}
 
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetPrimitiveTopology( type ); }
+		void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetPrimitiveTopology( type ); }
 
-protected:
-	D3D11_PRIMITIVE_TOPOLOGY type;
-};
+	protected:
+		D3D11_PRIMITIVE_TOPOLOGY type;
+	};
+}

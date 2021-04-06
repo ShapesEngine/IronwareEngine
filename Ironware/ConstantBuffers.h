@@ -5,7 +5,7 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A header that contains wrapper (bindable) Constant Buffer classes and its child classes. 
+ * \brief A header that contains wrapper (bindable) Constant Buffer classes and its child classes.
  * * That will be able to create cbuffer type buffers.
  * * They will have Update function that makes it possible to update the existing buffer contents.
  *
@@ -16,106 +16,109 @@
 #include "Bindable.h"
 #include "GraphicsExceptionMacros.h"
 
-/*!
- * \class ConstantBuffer
- *
- * \ingroup Bindables
- *
- * \brief Base CBuffer class that contains various functions for binding & setting buffers
- *
- * TODO:
- *
- * \note 
- *
- * \author Yernar Aldabergenov
- *
- * \date September 2020
- *
- * Contact: yernar.aa@gmail.com
- *
- */
-template<typename C>
-class ConstantBuffer : public Bindable
+namespace PipelineBindable
 {
-public:
-	/**
-	 * @brief Create constant buffer without initializing the buffer
-	 * @param gfx Graphics object needed to get access to the pDevice
-	 * @param slot binds resource to the specified slot
-	*/
-	ConstantBuffer( Graphics& gfx, UINT slot = 0u );
+	/*!
+	 * \class ConstantBuffer
+	 *
+	 * \ingroup Bindables
+	 *
+	 * \brief Base CBuffer class that contains various functions for binding & setting buffers
+	 *
+	 * TODO:
+	 *
+	 * \note
+	 *
+	 * \author Yernar Aldabergenov
+	 *
+	 * \date September 2020
+	 *
+	 * Contact: yernar.aa@gmail.com
+	 *
+	 */
+	template<typename C>
+	class ConstantBuffer : public Bindable
+	{
+	public:
+		/**
+		 * @brief Create constant buffer without initializing the buffer
+		 * @param gfx Graphics object needed to get access to the pDevice
+		 * @param slot binds resource to the specified slot
+		*/
+		ConstantBuffer( Graphics& gfx, UINT slot = 0u );
 
-	/**
-	 * @brief Create constant buffer and initialize the buffer with data
-	 * @param gfx Graphics object needed to get access to the pDevice
-	 * @param consts buffer const data
-	 * @param slot binds resource to the specified slot
-	*/
-	ConstantBuffer( Graphics& gfx, const C& consts, UINT slot = 0u );
+		/**
+		 * @brief Create constant buffer and initialize the buffer with data
+		 * @param gfx Graphics object needed to get access to the pDevice
+		 * @param consts buffer const data
+		 * @param slot binds resource to the specified slot
+		*/
+		ConstantBuffer( Graphics& gfx, const C& consts, UINT slot = 0u );
 
-	/**
-	 * @brief Updates the current constant buffer with a new one
-	 * @param gfx Graphics object needed to get access to the pContext
-	 * @param consts Source constant buffer
-	*/
-	void Update( Graphics& gfx, const C& consts );
+		/**
+		 * @brief Updates the current constant buffer with a new one
+		 * @param gfx Graphics object needed to get access to the pContext
+		 * @param consts Source constant buffer
+		*/
+		void Update( Graphics& gfx, const C& consts );
 
-protected:
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
-	UINT slot;
-};
+	protected:
+		Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
+		UINT slot;
+	};
 
-/*!
- * \class VertexConstantBuffer
- *
- * \ingroup Bindables
- *
- * \brief Responsible class for binding & setting vertex shader constant buffers
- *
- * \author Yernar Aldabergenov
- *
- * \date September 2020
- *
- * Contact: yernar.aa@gmail.com
- *
- */
-template<typename C>
-class VertexConstantBuffer : public ConstantBuffer<C>
-{
-	using ConstantBuffer<C>::pConstantBuffer;
-	using ConstantBuffer<C>::slot;
-	using Bindable::GetContext;
+	/*!
+	 * \class VertexConstantBuffer
+	 *
+	 * \ingroup Bindables
+	 *
+	 * \brief Responsible class for binding & setting vertex shader constant buffers
+	 *
+	 * \author Yernar Aldabergenov
+	 *
+	 * \date September 2020
+	 *
+	 * Contact: yernar.aa@gmail.com
+	 *
+	 */
+	template<typename C>
+	class VertexConstantBuffer : public ConstantBuffer<C>
+	{
+		using ConstantBuffer<C>::pConstantBuffer;
+		using ConstantBuffer<C>::slot;
+		using Bindable::GetContext;
 
-public:
-	using ConstantBuffer<C>::ConstantBuffer;
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
-};
+	public:
+		using ConstantBuffer<C>::ConstantBuffer;
+		void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
+	};
 
-/*!
- * \class PixelConstantBuffer
- *
- * \ingroup Bindables
- *
- * \brief Responsible class for binding & setting pixel shader constant buffers
- *
- * \author Yernar Aldabergenov
- *
- * \date September 2020
- *
- * Contact: yernar.aa@gmail.com
- *
- */
-template<typename C>
-class PixelConstantBuffer : public ConstantBuffer<C>
-{
-	using ConstantBuffer<C>::pConstantBuffer;
-	using ConstantBuffer<C>::slot;
-	using Bindable::GetContext;
+	/*!
+	 * \class PixelConstantBuffer
+	 *
+	 * \ingroup Bindables
+	 *
+	 * \brief Responsible class for binding & setting pixel shader constant buffers
+	 *
+	 * \author Yernar Aldabergenov
+	 *
+	 * \date September 2020
+	 *
+	 * Contact: yernar.aa@gmail.com
+	 *
+	 */
+	template<typename C>
+	class PixelConstantBuffer : public ConstantBuffer<C>
+	{
+		using ConstantBuffer<C>::pConstantBuffer;
+		using ConstantBuffer<C>::slot;
+		using Bindable::GetContext;
 
-public:
-	using ConstantBuffer<C>::ConstantBuffer;
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
-};
+	public:
+		using ConstantBuffer<C>::ConstantBuffer;
+		void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
+	};
+}
 
 #pragma region implementation
 

@@ -12,27 +12,30 @@
 
 #include "Bindable.h"
 
-/*!
- * \class Texture
- *
- * \ingroup Bindables
- *
- * \brief Responsible class for creating & loading the texture to the GPU
- *
- * \author Yernar Aldabergenov
- *
- * \date September 2020
- *
- * Contact: yernar.aa@gmail.com
- *
- */
-class Texture : public Bindable
+namespace PipelineBindable
 {
-public:
-	Texture( Graphics& gfx, const class Surface& sur, UINT slot = 0u );
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShaderResources( slot, 1u, pTextureView.GetAddressOf() ); }
+	/*!
+	 * \class Texture
+	 *
+	 * \ingroup Bindables
+	 *
+	 * \brief Responsible class for creating & loading the texture to the GPU
+	 *
+	 * \author Yernar Aldabergenov
+	 *
+	 * \date September 2020
+	 *
+	 * Contact: yernar.aa@gmail.com
+	 *
+	 */
+	class Texture : public Bindable
+	{
+	public:
+		Texture( Graphics& gfx, const class Surface& sur, UINT slot = 0u );
+		void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShaderResources( slot, 1u, pTextureView.GetAddressOf() ); }
 
-protected:
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
-	const UINT slot;
-};
+	protected:
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
+		const UINT slot;
+	};
+}
