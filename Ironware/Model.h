@@ -27,7 +27,7 @@ class Node
 {
 	friend class Model;
 public:
-	Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX transform_in ) noexcept( !IS_DEBUG );
+	Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in ) noexcept( !IS_DEBUG );
 	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG );
 
 private:
@@ -46,7 +46,7 @@ class Model
 {
 public:
 	Model( Graphics& gfx, std::string filename );
-	void Draw(Graphics& gfx) const noexcept( !IS_DEBUG ) { pRoot->Draw( gfx, DirectX::XMMatrixIdentity() ); }
+	void Draw( Graphics& gfx, DirectX::FXMMATRIX transform ) const noexcept( !IS_DEBUG ) { pRoot->Draw( gfx, transform ); }
 
 private:
 	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh ) noexcept( !IS_DEBUG );

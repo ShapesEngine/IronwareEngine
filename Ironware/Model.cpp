@@ -44,7 +44,7 @@ void Mesh::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const 
 	Drawable::Draw( gfx );
 }
 
-Node::Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX transform_in ) :
+Node::Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in ) :
 	meshPtrs( std::move( meshPtrs ) )
 {
 	DirectX::XMStoreFloat4x4( &transform, transform_in );
