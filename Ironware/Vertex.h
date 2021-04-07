@@ -9,13 +9,13 @@
 */
 #pragma once
 
+#include "CommonMacros.h"
+
 #include <vector>
 #include <DirectXMath.h>
 #include <dxgiformat.h>
 #include <type_traits>
 #include <d3d11.h>
-
-#define TPACK typename...
 
 // ARGB color struct
 struct BGRAColor
@@ -110,13 +110,13 @@ public:
 		size_t GetSize() const { return SizeOf( type ); }
 		ElementType GetType() const { return type; }
 
-		static constexpr size_t SizeOf( ElementType type ) noexcept( !IS_DEBUG );
+		static constexpr size_t SizeOf( ElementType type ) IFNOEXCEPT;
 
-		D3D11_INPUT_ELEMENT_DESC GetDesc() const noexcept( !IS_DEBUG );		
+		D3D11_INPUT_ELEMENT_DESC GetDesc() const IFNOEXCEPT;		
 
 	private:
 		template<ElementType type>
-		static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc( size_t offset ) noexcept( !IS_DEBUG )
+		static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc( size_t offset ) IFNOEXCEPT
 		{
 			return { Map<type>::semantic, 0u, Map<type>::dxgiFormat, 0u, (UINT)offset, D3D11_INPUT_PER_VERTEX_DATA, 0u };
 		}
@@ -133,23 +133,23 @@ public:
 	 * @return Reference to the element
 	*/
 	template<ElementType ElementType>
-	const Element& Resolve() const noexcept( !IS_DEBUG );
+	const Element& Resolve() const IFNOEXCEPT;
 
 	/**
 	 * @brief Resolves an element in the layout by index
 	 * @param index of the element in a vector
 	 * @return Reference to the element
 	*/
-	const Element& ResolveByIndex( size_t index ) const noexcept( !IS_DEBUG ) { return elements[index]; }
+	const Element& ResolveByIndex( size_t index ) const IFNOEXCEPT { return elements[index]; }
 	/**
 	 * @return size of the elements in bytes
 	*/
-	size_t Size() const noexcept( !IS_DEBUG ) { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
-	size_t GetElementCount() const noexcept( !IS_DEBUG ) { return elements.size(); }
+	size_t Size() const IFNOEXCEPT { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
+	size_t GetElementCount() const IFNOEXCEPT { return elements.size(); }
 
-	VertexLayout& Append(ElementType ElementType) noexcept( !IS_DEBUG );
+	VertexLayout& Append(ElementType ElementType) IFNOEXCEPT;
 
-	std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const noexcept( !IS_DEBUG );	
+	std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const IFNOEXCEPT;	
 
 private:
 	std::vector<Element> elements;
@@ -172,7 +172,7 @@ public:
 	 * @return Reference to appropriate memory data. Reinterpreted as needed type.
 	*/
 	template<ElType Type>
-	auto& Attribute() noexcept( !IS_DEBUG );
+	auto& Attribute() IFNOEXCEPT;
 
 private:
 	Vertex( std::byte* data, const VertexLayout& layout );
@@ -184,7 +184,7 @@ private:
 	 * @param value that will be set
 	*/
 	template<typename T>
-	void SetAttributeByIndex( size_t index, T&& value ) noexcept( !IS_DEBUG );
+	void SetAttributeByIndex( size_t index, T&& value ) IFNOEXCEPT;
 
 	/**
 	 * @brief Sets the attributes with parameter pack
@@ -193,7 +193,7 @@ private:
 	 * @param index only needed for parameter pack recursion, default value is 0
 	*/
 	template<typename First, TPACK Rest>
-	void SetAttributeByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG );
+	void SetAttributeByIndex( size_t index, First&& first, Rest&&... rest ) IFNOEXCEPT;
 
 	/**
 	 * @brief Sets the attribute value
@@ -203,7 +203,7 @@ private:
 	 * @param srcValue that will be set
 	*/
 	template<ElType DestLayoutType, typename SrcType>
-	void SetAttribute( std::byte* dest, SrcType&& srcValue ) noexcept( !IS_DEBUG );
+	void SetAttribute( std::byte* dest, SrcType&& srcValue ) IFNOEXCEPT;
 
 private:
 	std::byte* pData;
@@ -218,12 +218,12 @@ private:
 class ConstVertex
 {
 public:
-	ConstVertex( const Vertex& v ) noexcept( !IS_DEBUG ) :
+	ConstVertex( const Vertex& v ) IFNOEXCEPT :
 		vertex( v )
 	{}
 
 	template<VertexLayout::ElementType Type>
-	const auto& Attribute() const noexcept( !IS_DEBUG ) { return const_cast<Vertex&>( vertex ).Attribute<Type>(); }
+	const auto& Attribute() const IFNOEXCEPT { return const_cast<Vertex&>( vertex ).Attribute<Type>(); }
 
 private:
 	Vertex vertex;
@@ -257,26 +257,26 @@ public:
 	 * @param ...params values as parameter pack
 	*/
 	template<TPACK Params>
-	void EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG );
+	void EmplaceBack( Params&&... params ) IFNOEXCEPT;
 
-	Vertex Back() noexcept( !IS_DEBUG );
-	Vertex Front() noexcept( !IS_DEBUG );
+	Vertex Back() IFNOEXCEPT;
+	Vertex Front() IFNOEXCEPT;
 
 	/**
 	 * @brief Retrieves vertex with appropriate index
 	 * @param index represents the index value with appropriate layout
 	 * @return Vertex instance that will hold all the elements of a single vertex
 	*/
-	Vertex operator[]( size_t index ) noexcept( !IS_DEBUG );
+	Vertex operator[]( size_t index ) IFNOEXCEPT;
 
-	ConstVertex Back() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Back(); }
-	ConstVertex Front() const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer*>( this )->Front(); }
+	ConstVertex Back() const IFNOEXCEPT { return const_cast<VertexByteBuffer*>( this )->Back(); }
+	ConstVertex Front() const IFNOEXCEPT { return const_cast<VertexByteBuffer*>( this )->Front(); }
 	/**
 	 * @brief Retrieves constant vertex with appropriate index
 	 * @param index represents the index value with appropriate layout
 	 * @return ConstVertex instance that will hold all the elements of a single vertex
 	*/
-	ConstVertex operator[]( size_t index ) const noexcept( !IS_DEBUG ) { return const_cast<VertexByteBuffer&>( *this )[index]; }
+	ConstVertex operator[]( size_t index ) const IFNOEXCEPT { return const_cast<VertexByteBuffer&>( *this )[index]; }
 
 private:
 	// buffer has no alignment, so when you will be dealing
@@ -289,7 +289,7 @@ private:
 
 #pragma region layoutImpl
 
-constexpr size_t VertexLayout::Element::SizeOf( ElementType type ) noexcept( !IS_DEBUG )
+constexpr size_t VertexLayout::Element::SizeOf( ElementType type ) IFNOEXCEPT
 {
 	using namespace DirectX;
 	switch( type )
@@ -314,7 +314,7 @@ constexpr size_t VertexLayout::Element::SizeOf( ElementType type ) noexcept( !IS
 }
 
 template<VertexLayout::ElementType Type>
-const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
+const VertexLayout::Element& VertexLayout::Resolve() const IFNOEXCEPT
 {
 	for( const auto& e : elements )
 	{
@@ -332,14 +332,14 @@ const VertexLayout::Element& VertexLayout::Resolve() const noexcept( !IS_DEBUG )
 #pragma region vertexImpl
 
 template<Vertex::ElType Type>
-auto& Vertex::Attribute() noexcept( !IS_DEBUG )
+auto& Vertex::Attribute() IFNOEXCEPT
 {
 	auto pAttribute = pData + layout.Resolve<Type>().GetOffset();
 	return *reinterpret_cast<typename VertexLayout::Map<Type>::SysType*>( pAttribute );
 }
 
 template<typename T>
-void Vertex::SetAttributeByIndex( size_t index, T && value ) noexcept( !IS_DEBUG )
+void Vertex::SetAttributeByIndex( size_t index, T && value ) IFNOEXCEPT
 {
 	const auto& element = layout.ResolveByIndex( index );
 	auto pAttribute = pData + element.GetOffset();
@@ -375,14 +375,14 @@ void Vertex::SetAttributeByIndex( size_t index, T && value ) noexcept( !IS_DEBUG
 }
 
 template<typename First, TPACK Rest>
-void Vertex::SetAttributeByIndex( size_t index, First&& first, Rest&&... rest ) noexcept( !IS_DEBUG )
+void Vertex::SetAttributeByIndex( size_t index, First&& first, Rest&&... rest ) IFNOEXCEPT
 {
 	SetAttributeByIndex( index, std::forward<First>( first ) );
 	SetAttributeByIndex( index + 1u, std::forward<Rest>( rest )... );
 }
 
 template<VertexLayout::ElementType DestLayoutType, typename SrcType>
-void Vertex::SetAttribute( std::byte* dest, SrcType&& srcValue ) noexcept( !IS_DEBUG )
+void Vertex::SetAttribute( std::byte* dest, SrcType&& srcValue ) IFNOEXCEPT
 {
 	using Dest = typename VertexLayout::Map<DestLayoutType>::SysType;
 	if constexpr( std::is_assignable<Dest, SrcType>::value )
@@ -400,7 +400,7 @@ void Vertex::SetAttribute( std::byte* dest, SrcType&& srcValue ) noexcept( !IS_D
 #pragma region bufferImpl
 
 template<TPACK Params>
-void VertexByteBuffer::EmplaceBack( Params&&... params ) noexcept( !IS_DEBUG )
+void VertexByteBuffer::EmplaceBack( Params&&... params ) IFNOEXCEPT
 {
 	assert( sizeof...( params ) == layout.GetElementCount() && "Parameter and layout count is NOT equal!" );
 	const auto layoutSize = layout.Size();

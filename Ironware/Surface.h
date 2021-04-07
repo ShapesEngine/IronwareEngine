@@ -15,6 +15,7 @@
 #pragma once
 
 #include "IronException.h"
+#include "CommonMacros.h"
 
 #include <string>
 #include <cassert>
@@ -107,11 +108,11 @@ public:
 	Surface& operator=( const Surface& ) = delete;
 	~Surface() = default;
 
-	void PutPixel( uint32_t x, uint32_t y, Color c ) noexcept( !IS_DEBUG );
-	Color GetPixel( uint32_t x, uint32_t y ) const noexcept( !IS_DEBUG );
+	void PutPixel( uint32_t x, uint32_t y, Color c ) IFNOEXCEPT;
+	Color GetPixel( uint32_t x, uint32_t y ) const IFNOEXCEPT;
 	static Surface FromFile( const std::wstring& name );
 	void Save( const std::wstring& filename ) const;
-	void Copy( const Surface& src ) noexcept( !IS_DEBUG );
+	void Copy( const Surface& src ) IFNOEXCEPT;
 
 	void Clear( Color fillValue ) noexcept { memset( pBuffer.get(), fillValue.dword, (size_t)width * height * sizeof( Color ) ); }
 	uint32_t GetWidth() const noexcept { return width; }

@@ -13,7 +13,7 @@
 
 #include <cassert>
 
-void Drawable::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
+void Drawable::Draw( Graphics& gfx ) const IFNOEXCEPT
 {
 	for( auto& b : binds )
 	{
@@ -26,14 +26,14 @@ void Drawable::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
 	gfx.DrawIndexed( pIndexBuffer->GetCount() );
 }
 
-void Drawable::AddBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG )
+void Drawable::AddBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT
 {
 	// Check if there was an attempt to bind IndexBuffer without AddIndexBufferBind
 	assert( "*Must* use AddIndexBufferBind to bind index buffer" && typeid( *bind ) != typeid( IndexBuffer ) );
 	binds.push_back( std::move( bind ) );
 }
 
-void Drawable::AddIndexBufferBind( std::unique_ptr<IndexBuffer> ibuf ) noexcept( !IS_DEBUG )
+void Drawable::AddIndexBufferBind( std::unique_ptr<IndexBuffer> ibuf ) IFNOEXCEPT
 {
 	assert( "Attempting to add index buffer a second time" && pIndexBuffer == nullptr );
 	pIndexBuffer = ibuf.get();

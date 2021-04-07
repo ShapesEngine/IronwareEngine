@@ -15,6 +15,7 @@
 
 #include "IronWin.h"
 #include "IronException.h"
+#include "CommonMacros.h"
 #include <DXErr/dxerr.h>
 #include "DxgiInfoManager.h"
 
@@ -84,7 +85,7 @@ public:
 
 	void BeginFrame( float red, float green, float blue ) noexcept;
 	void EndFrame();
-	void DrawIndexed( UINT count ) noexcept( !IS_DEBUG );
+	void DrawIndexed( UINT count ) IFNOEXCEPT;
 
 	void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
 	DirectX::XMMATRIX GetCamera() const noexcept { return camera; }

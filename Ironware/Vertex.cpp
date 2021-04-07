@@ -19,31 +19,31 @@ VertexByteBuffer::VertexByteBuffer( VertexLayout layout ) :
 	layout( std::move( layout ) )
 {}
 
-Vertex VertexByteBuffer::Back() noexcept( !IS_DEBUG )
+Vertex VertexByteBuffer::Back() IFNOEXCEPT
 {
 	assert( !buffer.empty() );
 	return Vertex{ buffer.data() + buffer.size() - layout.Size(), layout };
 }
-Vertex VertexByteBuffer::Front() noexcept( !IS_DEBUG )
+Vertex VertexByteBuffer::Front() IFNOEXCEPT
 {
 	assert( !buffer.empty() );
 	return Vertex{ buffer.data(), layout };
 }
 
-Vertex VertexByteBuffer::operator[]( size_t index ) noexcept( !IS_DEBUG )
+Vertex VertexByteBuffer::operator[]( size_t index ) IFNOEXCEPT
 {
 	assert( index < Size() );
 	return Vertex{ buffer.data() + index * layout.Size(), layout };
 }
 
-VertexLayout& VertexLayout::Append( ElementType Type ) noexcept( !IS_DEBUG )
+VertexLayout& VertexLayout::Append( ElementType Type ) IFNOEXCEPT
 {
 	assert( Type != ElementType::Count );
 	elements.emplace_back( Type, Size() );
 	return *this;
 }
 
-D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const noexcept( !IS_DEBUG )
+D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const IFNOEXCEPT
 {
 	switch( type )
 	{
@@ -66,7 +66,7 @@ D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const noexcept( !IS_DE
 	return { "INVALID", 0u, DXGI_FORMAT_UNKNOWN, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u };
 }
 
-std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const noexcept( !IS_DEBUG )
+std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const IFNOEXCEPT
 {
 	std::vector<D3D11_INPUT_ELEMENT_DESC> desc;
 	desc.reserve( GetElementCount() );

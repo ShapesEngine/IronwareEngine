@@ -38,7 +38,7 @@ Mesh::Mesh( Graphics& gfx, std::vector<std::unique_ptr<Bindable>> bindablePtrs )
 	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
 }
 
-void Mesh::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG )
+void Mesh::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
 {
 	DirectX::XMStoreFloat4x4( &transform, accumulatedTransform );
 	Drawable::Draw( gfx );
@@ -50,7 +50,7 @@ Node::Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in )
 	DirectX::XMStoreFloat4x4( &transform, transform_in );
 }
 
-void Node::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG )
+void Node::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
 {
 	const auto built = DirectX::XMLoadFloat4x4( &transform ) * accumulatedTransform;
 	for( const auto pm : meshPtrs )
@@ -64,7 +64,7 @@ void Node::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const 
 	}
 }
 
-void Node::AddChild( std::unique_ptr<Node> pChild ) noexcept( !IS_DEBUG )
+void Node::AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT
 {
 	assert( pChild );
 	childPtrs.push_back( std::move( pChild ) );
@@ -84,7 +84,7 @@ Model::Model( Graphics & gfx, std::string filename )
 	pRoot = ParseNode( *pModel->mRootNode );
 }
 
-std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh ) noexcept( !IS_DEBUG )
+std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh ) IFNOEXCEPT
 {
 	using ElType = VertexLayout::ElementType;
 	VertexByteBuffer vbuff(
@@ -140,7 +140,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh ) noex
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );
 }
 
-std::unique_ptr<Node> Model::ParseNode( const aiNode& node ) noexcept( !IS_DEBUG )
+std::unique_ptr<Node> Model::ParseNode( const aiNode& node ) IFNOEXCEPT
 {
 	const auto transform = DirectX::XMMatrixTranspose( DirectX::XMLoadFloat4x4( reinterpret_cast<const DirectX::XMFLOAT4X4*>( &node.mTransformation ) ) );
 

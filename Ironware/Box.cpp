@@ -77,7 +77,7 @@ DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 	return dx::XMLoadFloat3x3( &mt ) * ObjectBase::GetTransformXM();
 }
 
-bool Box::SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG )
+bool Box::SpawnControlWindow( uint32_t id, Graphics& gfx ) IFNOEXCEPT
 {
 	bool dirty = false;
 	bool isOpen = true;

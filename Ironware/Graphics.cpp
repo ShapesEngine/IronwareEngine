@@ -193,7 +193,7 @@ void Graphics::EndFrame()
 	}
 }
 
-void Graphics::DrawIndexed( UINT count ) noexcept( !IS_DEBUG )
+void Graphics::DrawIndexed( UINT count ) IFNOEXCEPT
 {
 	GFX_CALL_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0u ) );
 }

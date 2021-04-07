@@ -14,6 +14,7 @@
 
 #include "Graphics.h"
 #include "Bindable.h"
+#include "CommonMacros.h"
 
 #include <DirectXMath.h>
 
@@ -42,10 +43,10 @@ public:
 	virtual ~Drawable() = default;
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
-	void Draw( Graphics& gfx ) const noexcept( !IS_DEBUG );
+	void Draw( Graphics& gfx ) const IFNOEXCEPT;
 	virtual void Update( float dt ) noexcept {};
-	void AddBind( std::unique_ptr<Bindable> bind ) noexcept( !IS_DEBUG );
-	void AddIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept( !IS_DEBUG );
+	void AddBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT;
+	void AddIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) IFNOEXCEPT;
 
 protected:
 	/**

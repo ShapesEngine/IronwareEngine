@@ -9,6 +9,7 @@
 #pragma once
 
 #include "DrawableBase.h"
+#include "CommonMacros.h"
 
 #include <assimp/scene.h>
 
@@ -16,7 +17,7 @@ class Mesh : public DrawableBase<Mesh>
 {
 public:
 	Mesh( Graphics& gfx, std::vector<std::unique_ptr<Bindable>> bindablePtrs );
-	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG );
+	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMLoadFloat4x4( &transform ); }
 
 private:
@@ -27,11 +28,11 @@ class Node
 {
 	friend class Model;
 public:
-	Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in ) noexcept( !IS_DEBUG );
-	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const noexcept( !IS_DEBUG );
+	Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in ) IFNOEXCEPT;
+	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
 
 private:
-	void AddChild( std::unique_ptr<Node> pChild ) noexcept( !IS_DEBUG );
+	void AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT;
 
 private:
 	std::vector<Mesh*> meshPtrs;
@@ -46,11 +47,11 @@ class Model
 {
 public:
 	Model( Graphics& gfx, std::string filename );
-	void Draw( Graphics& gfx, DirectX::FXMMATRIX transform ) const noexcept( !IS_DEBUG ) { pRoot->Draw( gfx, transform ); }
+	void Draw( Graphics& gfx, DirectX::FXMMATRIX transform ) const IFNOEXCEPT { pRoot->Draw( gfx, transform ); }
 
 private:
-	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh ) noexcept( !IS_DEBUG );
-	std::unique_ptr<Node> ParseNode( const aiNode& node ) noexcept( !IS_DEBUG );
+	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh ) IFNOEXCEPT;
+	std::unique_ptr<Node> ParseNode( const aiNode& node ) IFNOEXCEPT;
 
 private:
 	std::vector<std::unique_ptr<Mesh>> meshPtrs;

@@ -13,6 +13,7 @@
 
 #include "ObjectBase.h"
 #include "ConstantBuffers.h"
+#include "CommonMacros.h"
 
 /*!
  * \class Box
@@ -47,7 +48,7 @@ public:
 	 * @param gfx Needed to access pixel constant buffer
 	 * @return window status(open or closed)
 	*/
-	bool SpawnControlWindow( uint32_t id, Graphics& gfx ) noexcept( !IS_DEBUG );
+	bool SpawnControlWindow( uint32_t id, Graphics& gfx ) IFNOEXCEPT;
 
 private:
 	void SyncMaterials( Graphics& gfx );

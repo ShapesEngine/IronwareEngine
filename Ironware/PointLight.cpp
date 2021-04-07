@@ -43,7 +43,7 @@ void PointLight::SpawnControlWindow() noexcept
 	ImGui::End();
 }
 
-void PointLight::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
+void PointLight::Draw( Graphics& gfx ) const IFNOEXCEPT
 {
 	mesh.SetPosition( cbufData.pos );
 	mesh.Draw( gfx );	

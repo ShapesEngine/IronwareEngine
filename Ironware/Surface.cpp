@@ -34,7 +34,7 @@ Surface& Surface::operator=( Surface&& donor ) noexcept
 	return *this;
 }
 
-void Surface::PutPixel( uint32_t x, uint32_t y, Color c ) noexcept( !IS_DEBUG )
+void Surface::PutPixel( uint32_t x, uint32_t y, Color c ) IFNOEXCEPT
 {
 	assert( x >= 0 );
 	assert( y >= 0 );
@@ -43,7 +43,7 @@ void Surface::PutPixel( uint32_t x, uint32_t y, Color c ) noexcept( !IS_DEBUG )
 	pBuffer[(size_t)y * width + x] = c;
 }
 
-Surface::Color Surface::GetPixel( uint32_t x, uint32_t y ) const noexcept( !IS_DEBUG )
+Surface::Color Surface::GetPixel( uint32_t x, uint32_t y ) const IFNOEXCEPT
 {
 	assert( x >= 0 );
 	assert( y >= 0 );
@@ -141,7 +141,7 @@ void Surface::Save( const std::wstring& filename ) const
 	}
 }
 
-void Surface::Copy( const Surface& src ) noexcept( !IS_DEBUG )
+void Surface::Copy( const Surface& src ) IFNOEXCEPT
 {
 	assert( width == src.width );
 	assert( height == src.height );

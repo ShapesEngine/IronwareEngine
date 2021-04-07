@@ -13,6 +13,8 @@
 */
 #pragma once
 
+#include "CommonMacros.h"
+
 #include <vector>
 
 #include <DirectXMath.h>
@@ -52,7 +54,7 @@ public:
 	}
 
 	// asserts face-independent vertices w/ normals cleared to zero
-	void SetNormalsIndependentFlat() noexcept( !IS_DEBUG )
+	void SetNormalsIndependentFlat() IFNOEXCEPT
 	{
 		using namespace DirectX;
 		assert( indices.size() % 3 == 0 && !indices.empty() );
