@@ -13,30 +13,27 @@
 
 #include "Bindable.h"
 
-namespace PipelineBindable
+/*!
+ * \class PixelShader
+ *
+ * \ingroup Bindables
+ *
+ * \brief A PixelShader wrapper class that will be bound in process of graphics pipeline.
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
+class PixelShader : public Bindable
 {
-	/*!
-	 * \class PixelShader
-	 *
-	 * \ingroup Bindables
-	 *
-	 * \brief A PixelShader wrapper class that will be bound in process of graphics pipeline.
-	 *
-	 * \author Yernar Aldabergenov
-	 *
-	 * \date September 2020
-	 *
-	 * Contact: yernar.aa@gmail.com
-	 *
-	 */
-	class PixelShader : public Bindable
-	{
-	public:
-		PixelShader( Graphics& gfx, const std::wstring& path );
+public:
+	PixelShader( Graphics& gfx, const std::wstring& path );
 
-		void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShader( pPixelShader.Get(), nullptr, 0u ); }
+	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShader( pPixelShader.Get(), nullptr, 0u ); }
 
-	protected:
-		Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-	};
-}
+protected:
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
+};

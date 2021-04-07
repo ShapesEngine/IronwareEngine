@@ -15,32 +15,30 @@
 #include "Bindable.h"
 #include <d3dcompiler.h>
 
-namespace PipelineBindable
+/*!
+ * \class VertexShader
+ *
+ * \ingroup Bindables
+ *
+ * \brief A VertexShader wrapper class that will be bound in process of graphics pipeline.
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
+class VertexShader : public Bindable
 {
-	/*!
-	 * \class VertexShader
-	 *
-	 * \ingroup Bindables
-	 *
-	 * \brief A VertexShader wrapper class that will be bound in process of graphics pipeline.
-	 *
-	 * \author Yernar Aldabergenov
-	 *
-	 * \date September 2020
-	 *
-	 * Contact: yernar.aa@gmail.com
-	 *
-	 */
-	class VertexShader : public Bindable
-	{
-	public:
-		VertexShader( Graphics& gfx, const std::wstring& path );
+public:
+	VertexShader( Graphics& gfx, const std::wstring& path );
 
-		void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetShader( pVertexShader.Get(), nullptr, 0u ); }
-		ID3DBlob* GetBytecode() const noexcept { return pBytecodeBlob.Get(); }
+	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetShader( pVertexShader.Get(), nullptr, 0u ); }
+	ID3DBlob* GetBytecode() const noexcept { return pBytecodeBlob.Get(); }
 
-	protected:
-		Microsoft::WRL::ComPtr<ID3DBlob> pBytecodeBlob;
-		Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-	};
-}
+protected:
+	Microsoft::WRL::ComPtr<ID3DBlob> pBytecodeBlob;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
+};
+

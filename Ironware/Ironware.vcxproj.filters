@@ -117,6 +117,9 @@
     <ClCompile Include="SkinnedBox.cpp">
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="Drawable.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
     <ClCompile Include="IronTimer.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
@@ -134,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="Cylinder.cpp">
       <Filter>Source Files\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveTopology.cpp">
+      <Filter>Source Files\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Cone.cpp">
       <Filter>Source Files\Drawable</Filter>
@@ -176,9 +182,6 @@
     </ClCompile>
     <ClCompile Include="AppMess.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawable.cpp">
-      <Filter>Source Files\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

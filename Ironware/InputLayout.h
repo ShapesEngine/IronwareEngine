@@ -12,33 +12,31 @@
 
 #include "Bindable.h"
 
-namespace PipelineBindable
+/*!
+ * \class InputLayout
+ *
+ * \ingroup Bindables
+ *
+ * \brief An InputLayout wrapper class that will be needed and bound in process of graphics pipeline
+ * * and store vertex indices in it.
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
+class InputLayout : public Bindable
 {
-	/*!
-	 * \class InputLayout
-	 *
-	 * \ingroup Bindables
-	 *
-	 * \brief An InputLayout wrapper class that will be needed and bound in process of graphics pipeline
-	 * * and store vertex indices in it.
-	 *
-	 * \author Yernar Aldabergenov
-	 *
-	 * \date September 2020
-	 *
-	 * Contact: yernar.aa@gmail.com
-	 *
-	 */
-	class InputLayout : public Bindable
-	{
-	public:
-		InputLayout( Graphics& gfx,
-			const std::vector<D3D11_INPUT_ELEMENT_DESC>& layouts,
-			ID3DBlob* pVertexShaderBytecode );
+public:
+	InputLayout( Graphics& gfx,
+				 const std::vector<D3D11_INPUT_ELEMENT_DESC>& layouts,
+				 ID3DBlob* pVertexShaderBytecode );
 
-		void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }
+	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }
 
-	protected:
-		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
-	};
-}
+protected:
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+};
+

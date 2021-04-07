@@ -9,8 +9,6 @@
 #include "InputLayout.h"
 #include "GraphicsExceptionMacros.h"
 
-namespace PipelineBindable
-{
 InputLayout::InputLayout( Graphics& gfx, const std::vector<D3D11_INPUT_ELEMENT_DESC>& layouts, ID3DBlob* pVertexShaderBytecode )
 {
 	INFOMAN( gfx );
@@ -21,5 +19,4 @@ InputLayout::InputLayout( Graphics& gfx, const std::vector<D3D11_INPUT_ELEMENT_D
 		pVertexShaderBytecode->GetBufferSize(),
 		&pInputLayout
 	) );
-}
 }

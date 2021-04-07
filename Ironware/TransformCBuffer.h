@@ -18,37 +18,35 @@
 
 #include <DirectXMath.h>
 
-namespace PipelineBindable
+/*!
+ * \class TransformCBuffer
+ *
+ * \ingroup Bindables
+ *
+ * \brief A Transform Constant Buffer wrapper child class that will be bound in process of graphics pipeline.
+ *
+ * \author Yernar Aldabergenov
+ *
+ * \date September 2020
+ *
+ * Contact: yernar.aa@gmail.com
+ *
+ */
+class TransformCBuffer : public Bindable
 {
-	/*!
-	 * \class TransformCBuffer
-	 *
-	 * \ingroup Bindables
-	 *
-	 * \brief A Transform Constant Buffer wrapper child class that will be bound in process of graphics pipeline.
-	 *
-	 * \author Yernar Aldabergenov
-	 *
-	 * \date September 2020
-	 *
-	 * Contact: yernar.aa@gmail.com
-	 *
-	 */
-	class TransformCBuffer : public Bindable
+private:
+	struct Transforms
 	{
-	private:
-		struct Transforms
-		{
-			DirectX::XMMATRIX modelView;
-			DirectX::XMMATRIX modelViewProj;
-		};
-
-	public:
-		TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT slot = 0u );
-		void Bind( Graphics& gfx ) noexcept override;
-
-	private:
-		static std::unique_ptr<VertexConstantBuffer<Transforms>> pVertConstBuffer;
-		const Drawable& parent;
+		DirectX::XMMATRIX modelView;
+		DirectX::XMMATRIX modelViewProj;
 	};
-}
+
+public:
+	TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT slot = 0u );
+	void Bind( Graphics& gfx ) noexcept override;
+
+private:
+	static std::unique_ptr<VertexConstantBuffer<Transforms>> pVertConstBuffer;
+	const Drawable& parent;
+};
+
