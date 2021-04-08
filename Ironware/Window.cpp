@@ -66,7 +66,6 @@ Window::Window( int width_in, int height_in, const wchar_t* name ) :
 	// =======================================================================
 	// calculate window size based on desired client region size
 	// -----------------------------------------------------------------------
-	// TODO: assign 0 to the left and top sides of the rectangle
 	RECT wr;
 	wr.left = 100;
 	wr.right = width + wr.left;

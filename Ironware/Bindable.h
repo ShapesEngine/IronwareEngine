@@ -51,5 +51,5 @@ protected:
 	 * @param gfx Graphics object where the infomanager is stored
 	 * @return Reference to the DXgiInfoManager object from graphics instance
 	*/
-	static DxgiInfoManager& GetInfoManager( Graphics& gfx ) noexcept( IS_DEBUG );
+	static DxgiInfoManager& GetInfoManager( Graphics& gfx );
 };

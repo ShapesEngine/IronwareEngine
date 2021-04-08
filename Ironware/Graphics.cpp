@@ -36,11 +36,15 @@ namespace dx = DirectX;
 
 Graphics::Graphics( HWND hWnd )
 {
+	RECT windowRect;
+	GetClientRect( hWnd, &windowRect );
+	UINT windowWidth = windowRect.right - windowRect.left;
+	UINT windowHeight = windowRect.bottom - windowRect.top;
+
 	DXGI_SWAP_CHAIN_DESC descSwapChain = {};
-	// D3D will automatically deduce width if it is 0
-	descSwapChain.BufferDesc.Width = 0;
-	// the same applies to height; 0 => window.height
-	descSwapChain.BufferDesc.Height = 0;
+	// D3D will automatically deduce width/height if it is 0
+	descSwapChain.BufferDesc.Width = windowWidth;
+	descSwapChain.BufferDesc.Height = windowHeight;
 	descSwapChain.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	descSwapChain.BufferDesc.RefreshRate.Numerator = 0;
 	descSwapChain.BufferDesc.RefreshRate.Denominator = 0;
@@ -102,8 +106,8 @@ Graphics::Graphics( HWND hWnd )
 	// stencil is not applied yet, only depth
 	wrl::ComPtr<ID3D11Texture2D> pDepth;
 	D3D11_TEXTURE2D_DESC descDepth;
-	descDepth.Width = 1280;
-	descDepth.Height = 960;
+	descDepth.Width = windowWidth;
+	descDepth.Height = windowHeight;
 	descDepth.MipLevels = 0u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
@@ -129,8 +133,8 @@ Graphics::Graphics( HWND hWnd )
 
 	// configure viewport
 	D3D11_VIEWPORT vp;
-	vp.Width = 1280.f;
-	vp.Height = 960.f;
+	vp.Width = (FLOAT)windowWidth;
+	vp.Height = (FLOAT)windowHeight;
 	vp.MinDepth = 0.f;
 	vp.MaxDepth = 1.f;
 	vp.TopLeftX = 0.f;
