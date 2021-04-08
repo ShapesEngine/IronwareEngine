@@ -10,6 +10,7 @@
 
 #include "DrawableBase.h"
 #include "CommonMacros.h"
+#include "IronException.h"
 
 #include <assimp/scene.h>
 
@@ -54,6 +55,26 @@ private:
 class Model
 {
 public:
+	/**
+	* @brief Class that manages error checking for the model
+	*/
+	class Exception : public IronException
+	{
+	public:
+		Exception( int line, const wchar_t* filename, const std::string& note ) noexcept :
+			IronException( line, filename ),
+			note( note )
+		{}
+		const wchar_t* GetType() const noexcept override { return type.c_str(); }
+		const std::string& GetNote() const noexcept { return note; }
+		const char* what() const noexcept override;
+
+	private:
+		std::string note;
+		std::wstring type = L"Ironware Model Exception";
+	};
+
+public:
 	Model( Graphics& gfx, std::string filename );
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
 	void ShowWindow( const char* name = "Model" ) const IFNOEXCEPT;
@@ -72,3 +93,4 @@ private:
 	// pImpl
 	std::unique_ptr<class ModelWindow> pModelWindow{ std::make_unique<ModelWindow>() };
 };
+

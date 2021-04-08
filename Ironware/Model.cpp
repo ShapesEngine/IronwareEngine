@@ -16,6 +16,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include <sstream>
 
 namespace dx = DirectX;
 
@@ -177,6 +178,15 @@ void Node::ShowTree( std::optional<uint32_t>& selectedIndex, Node*& pSelectedNod
 	}
 }
 
+const char* Model::Exception::what() const noexcept
+{
+	std::wostringstream woss;
+	woss << IronException::what() << std::endl
+		<< "[Note] " << GetNote().c_str();
+	whatBuffer = woss.str();
+	return CON_CHREINT_CAST( whatBuffer.c_str() );
+}
+
 Model::Model( Graphics& gfx, std::string filename )
 {
 	Assimp::Importer importer;
@@ -187,6 +197,11 @@ Model::Model( Graphics& gfx, std::string filename )
 		aiProcess_ConvertToLeftHanded |
 		aiProcess_GenNormals
 	);
+
+	if( !pModel )
+	{
+		throw Exception( __LINE__, WFILE, importer.GetErrorString() );
+	}
 
 	meshPtrs.reserve( pModel->mNumMeshes );
 	for( size_t i = 0; i < pModel->mNumMeshes; i++ )
