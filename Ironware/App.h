@@ -19,16 +19,6 @@
  */
 class App
 {
-	struct
-	{
-		float roll = 0.0f;
-		float pitch = 0.0f;
-		float yaw = 0.0f;
-		float x = 0.0f;
-		float y = 0.0f;
-		float z = 0.0f;
-	} pos;
-
 public:
 	App();
 
@@ -45,13 +35,12 @@ private:
 	void ProcessFrame();
 
 	void ShowRawMouseWindow();
-	void ShowModelWindow();
 
 private:
 	int x = 0, y = 0;
 	ImguiManager imguim;
 	Camera camera;
-	Window wnd;
+	Window wnd{ 1280, 960, L"Ironware Engine" };
 	PointLight pointLight;
 	Model nano{ wnd.Gfx(), "Models\\nanosuit.obj" };
 };

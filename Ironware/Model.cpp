@@ -11,6 +11,7 @@
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include <imgui/imgui.h>
 
 #include <memory>
 #include <vector>
@@ -44,8 +45,9 @@ void Mesh::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const 
 	Drawable::Draw( gfx );
 }
 
-Node::Node( std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in ) :
-	meshPtrs( std::move( meshPtrs ) )
+Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, const DirectX::XMMATRIX& transform_in ) :
+	meshPtrs( std::move( meshPtrs ) ),
+	name( name )
 {
 	DirectX::XMStoreFloat4x4( &transform, transform_in );
 }
@@ -70,7 +72,19 @@ void Node::AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT
 	childPtrs.push_back( std::move( pChild ) );
 }
 
-Model::Model( Graphics & gfx, std::string filename )
+void Node::ShowTree() const IFNOEXCEPT
+{
+	if( ImGui::TreeNode( name.c_str() ) )
+	{
+		for( const auto& pc : childPtrs )
+		{
+			pc->ShowTree();
+		}
+		ImGui::TreePop();
+	}
+}
+
+Model::Model( Graphics& gfx, std::string filename )
 {
 	Assimp::Importer importer;
 	auto pModel = importer.ReadFile( filename, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices );
@@ -82,6 +96,37 @@ Model::Model( Graphics & gfx, std::string filename )
 	}
 
 	pRoot = ParseNode( *pModel->mRootNode );
+}
+
+void Model::Draw( Graphics& gfx ) const IFNOEXCEPT
+{
+	const auto transform = DirectX::XMMatrixRotationRollPitchYaw( pos.pitch, pos.yaw, pos.roll ) *
+		DirectX::XMMatrixTranslation( pos.x, pos.y, pos.z );
+	pRoot->Draw( gfx, transform );
+}
+
+void Model::ShowWindow( const char* name ) const IFNOEXCEPT
+{
+	if( ImGui::Begin( name ) )
+	{
+		ImGui::Columns( 2, nullptr, true );
+		//1st column
+		pRoot->ShowTree();
+
+		ImGui::NextColumn();
+		//2nd column
+		ImGui::Text( "Orientation" );
+		ImGui::SliderAngle( "Roll", &pos.roll, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Pitch", &pos.pitch, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Yaw", &pos.yaw, -180.0f, 180.0f );
+
+		ImGui::Text( "Position" );
+		ImGui::SliderFloat( "X", &pos.x, -20.0f, 20.0f );
+		ImGui::SliderFloat( "Y", &pos.y, -20.0f, 20.0f );
+		ImGui::SliderFloat( "Z", &pos.z, -20.0f, 20.0f );
+		//==========
+	}
+	ImGui::End();
 }
 
 std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh ) IFNOEXCEPT
@@ -152,7 +197,7 @@ std::unique_ptr<Node> Model::ParseNode( const aiNode& node ) IFNOEXCEPT
 		curMeshPtrs.push_back( meshPtrs.at( meshIdx ).get() );
 	}
 
-	auto pNode = std::make_unique<Node>( std::move( curMeshPtrs ), transform );
+	auto pNode = std::make_unique<Node>( std::move( curMeshPtrs ), node.mName.C_Str(), transform );
 
 	for( uint32_t i = 0; i < node.mNumChildren; i++ )
 	{

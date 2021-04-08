@@ -664,5 +664,6 @@
     <None Include="GDIPlusStd.h">
       <Filter>Header Files\Utils</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

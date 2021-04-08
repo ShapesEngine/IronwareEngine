@@ -375,6 +375,7 @@
     <None Include="..\External\Includes\DXErr\DXGetErrorDescription.inl" />
     <None Include="..\External\Includes\DXErr\DXGetErrorString.inl" />
     <None Include="..\External\Includes\DXErr\DXTrace.inl" />
+    <None Include="cpp.hint" />
     <None Include="GDIPlusStd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
