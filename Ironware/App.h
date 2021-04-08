@@ -42,5 +42,5 @@ private:
 	Camera camera;
 	Window wnd{ 1280, 960, L"Ironware Engine" };
 	PointLight pointLight;
-	Model nano{ wnd.Gfx(), "Models\\nanosuit.obj" };
+	Model nano{ wnd.Gfx(), "Models\\nanosuit.gltf" };
 };

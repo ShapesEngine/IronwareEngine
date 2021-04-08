@@ -36,14 +36,16 @@ public:
 
 private:
 	void AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT;
-	void ShowTree( std::optional<uint32_t>& selectedIndex ) const IFNOEXCEPT;
+	void ShowTree( std::optional<uint32_t>& selectedIndex, Node*& pSelectedNode ) const IFNOEXCEPT;
+	void SetAppliedTransform( DirectX::FXMMATRIX transform ) noexcept;
 
 private:
 	std::string name;
 	uint32_t index;
 	std::vector<Mesh*> meshPtrs;
 	std::vector<std::unique_ptr<Node>> childPtrs;
-	DirectX::XMFLOAT4X4 transform;
+	DirectX::XMFLOAT4X4 parentTransform;
+	DirectX::XMFLOAT4X4 appliedTransform;
 };
 
 /**
