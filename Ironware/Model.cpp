@@ -45,9 +45,66 @@ void Mesh::Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const 
 	Drawable::Draw( gfx );
 }
 
-Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, const DirectX::XMMATRIX& transform_in ) :
+/*!
+ * \class Model
+ *
+ * \brief pImpl idiom class that controls window of a model
+ *
+ * \author Yernar Aldabergenov
+ * \date April 2021
+ */
+class ModelWindow
+{
+public:
+	void ShowWindow( const char* name, const Node& root ) IFNOEXCEPT
+	{
+		if( ImGui::Begin( name ) )
+		{
+			ImGui::Columns( 2, nullptr, true );
+			//1st column
+			root.ShowTree( selectedIndex );
+
+			ImGui::NextColumn();
+			//2nd column
+			ImGui::Text( "Orientation" );
+			ImGui::SliderAngle( "Roll", &pos.roll, -180.0f, 180.0f );
+			ImGui::SliderAngle( "Pitch", &pos.pitch, -180.0f, 180.0f );
+			ImGui::SliderAngle( "Yaw", &pos.yaw, -180.0f, 180.0f );
+
+			ImGui::Text( "Position" );
+			ImGui::SliderFloat( "X", &pos.x, -20.0f, 20.0f );
+			ImGui::SliderFloat( "Y", &pos.y, -20.0f, 20.0f );
+			ImGui::SliderFloat( "Z", &pos.z, -20.0f, 20.0f );
+			//==========
+		}
+		ImGui::End();
+	}
+
+	auto GetXMMatrix() const noexcept
+	{
+		return DirectX::XMMatrixRotationRollPitchYaw( pos.pitch, pos.yaw, pos.roll ) * DirectX::XMMatrixTranslation( pos.x, pos.y, pos.z );
+	}
+
+public:
+	static constexpr uint32_t UNUSED_INDEX = 9999;
+
+private:
+	struct
+	{
+		float roll = 0.0f;
+		float pitch = 0.0f;
+		float yaw = 0.0f;
+		float x = 0.0f;
+		float y = 0.0f;
+		float z = 0.0f;
+	} mutable pos;
+	std::optional<uint32_t> selectedIndex;
+};
+
+Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const DirectX::XMMATRIX& transform_in ) :
 	meshPtrs( std::move( meshPtrs ) ),
-	name( name )
+	name( name ),
+	index( index )
 {
 	DirectX::XMStoreFloat4x4( &transform, transform_in );
 }
@@ -72,13 +129,18 @@ void Node::AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT
 	childPtrs.push_back( std::move( pChild ) );
 }
 
-void Node::ShowTree() const IFNOEXCEPT
+void Node::ShowTree( std::optional<uint32_t>& selectedIndex ) const IFNOEXCEPT
 {
-	if( ImGui::TreeNode( name.c_str() ) )
+	const auto node_flags = 
+		( selectedIndex.has_value() && index == *selectedIndex ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) | 
+		( childPtrs.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow );
+
+	if( ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, name.c_str() ) )
 	{
+		selectedIndex = ImGui::IsItemClicked() ? index : selectedIndex;
 		for( const auto& pc : childPtrs )
 		{
-			pc->ShowTree();
+			pc->ShowTree( selectedIndex );
 		}
 		ImGui::TreePop();
 	}
@@ -98,38 +160,19 @@ Model::Model( Graphics& gfx, std::string filename )
 	pRoot = ParseNode( *pModel->mRootNode );
 }
 
-void Model::Draw( Graphics& gfx ) const IFNOEXCEPT
+void Model::Draw( Graphics & gfx ) const noexcept( !IS_DEBUG )
 {
-	const auto transform = DirectX::XMMatrixRotationRollPitchYaw( pos.pitch, pos.yaw, pos.roll ) *
-		DirectX::XMMatrixTranslation( pos.x, pos.y, pos.z );
-	pRoot->Draw( gfx, transform );
+	pRoot->Draw( gfx, pModelWindow->GetXMMatrix() );
 }
 
-void Model::ShowWindow( const char* name ) const IFNOEXCEPT
+void Model::ShowWindow( const char * name ) const noexcept( !IS_DEBUG )
 {
-	if( ImGui::Begin( name ) )
-	{
-		ImGui::Columns( 2, nullptr, true );
-		//1st column
-		pRoot->ShowTree();
-
-		ImGui::NextColumn();
-		//2nd column
-		ImGui::Text( "Orientation" );
-		ImGui::SliderAngle( "Roll", &pos.roll, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Pitch", &pos.pitch, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Yaw", &pos.yaw, -180.0f, 180.0f );
-
-		ImGui::Text( "Position" );
-		ImGui::SliderFloat( "X", &pos.x, -20.0f, 20.0f );
-		ImGui::SliderFloat( "Y", &pos.y, -20.0f, 20.0f );
-		ImGui::SliderFloat( "Z", &pos.z, -20.0f, 20.0f );
-		//==========
-	}
-	ImGui::End();
+	pModelWindow->ShowWindow( name, *pRoot );
 }
 
-std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh ) IFNOEXCEPT
+Model::~Model() noexcept = default;
+
+std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh ) IFNOEXCEPT
 {
 	using ElType = VertexLayout::ElementType;
 	VertexByteBuffer vbuff(
@@ -185,7 +228,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh ) IFNO
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );
 }
 
-std::unique_ptr<Node> Model::ParseNode( const aiNode& node ) IFNOEXCEPT
+std::unique_ptr<Node> Model::ParseNode( const aiNode & node ) IFNOEXCEPT
 {
 	const auto transform = DirectX::XMMatrixTranspose( DirectX::XMLoadFloat4x4( reinterpret_cast<const DirectX::XMFLOAT4X4*>( &node.mTransformation ) ) );
 
@@ -197,7 +240,9 @@ std::unique_ptr<Node> Model::ParseNode( const aiNode& node ) IFNOEXCEPT
 		curMeshPtrs.push_back( meshPtrs.at( meshIdx ).get() );
 	}
 
-	auto pNode = std::make_unique<Node>( std::move( curMeshPtrs ), node.mName.C_Str(), transform );
+	static uint32_t i = 0;
+
+	auto pNode = std::make_unique<Node>( std::move( curMeshPtrs ), node.mName.C_Str(), i++, transform );
 
 	for( uint32_t i = 0; i < node.mNumChildren; i++ )
 	{

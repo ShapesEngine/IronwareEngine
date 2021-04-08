@@ -13,6 +13,8 @@
 
 #include <assimp/scene.h>
 
+#include <optional>
+
 class Mesh : public DrawableBase<Mesh>
 {
 public:
@@ -27,16 +29,18 @@ private:
 class Node
 {
 	friend class Model;
+	friend class ModelWindow;
 public:
-	Node( std::vector<Mesh*> meshPtrs, const std::string& name, const DirectX::XMMATRIX& transform_in ) IFNOEXCEPT;
+	Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const DirectX::XMMATRIX& transform_in ) IFNOEXCEPT;
 	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
 
 private:
 	void AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT;
-	void ShowTree() const IFNOEXCEPT;
+	void ShowTree( std::optional<uint32_t>& selectedIndex ) const IFNOEXCEPT;
 
 private:
 	std::string name;
+	uint32_t index;
 	std::vector<Mesh*> meshPtrs;
 	std::vector<std::unique_ptr<Node>> childPtrs;
 	DirectX::XMFLOAT4X4 transform;
@@ -51,6 +55,7 @@ public:
 	Model( Graphics& gfx, std::string filename );
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
 	void ShowWindow( const char* name = "Model" ) const IFNOEXCEPT;
+	~Model() noexcept;
 
 private:
 	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh ) IFNOEXCEPT;
@@ -62,14 +67,6 @@ private:
 	// other nodes are used when the draw 
 	// has been called
 	std::unique_ptr<Node> pRoot;
-
-	struct
-	{
-		float roll = 0.0f;
-		float pitch = 0.0f;
-		float yaw = 0.0f;
-		float x = 0.0f;
-		float y = 0.0f;
-		float z = 0.0f;
-	} mutable pos;
+	// pImpl
+	std::unique_ptr<class ModelWindow> pModelWindow{ std::make_unique<ModelWindow>() };
 };
