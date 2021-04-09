@@ -20,8 +20,12 @@ Camera::Camera()
 
 DirectX::XMMATRIX Camera::GetMatrix() const noexcept
 {
-	return dx::XMMatrixTranslation( -pos.x, -pos.y, -pos.z ) *
-		dx::XMMatrixRotationRollPitchYaw( -pitch, -yaw, 0.f );
+	const auto forwardVector = dx::XMVector3Transform( dx::XMVectorSet( 0.f, 0.f, 1.f, 0.f ), // world forward vec
+		dx::XMMatrixRotationRollPitchYaw( pitch, yaw, 0.f ) );
+
+	const auto camPosition = dx::XMLoadFloat3( &pos );
+	const auto camTarget = dx::XMVectorAdd( camPosition, forwardVector );
+	return dx::XMMatrixLookAtLH( camPosition, camTarget, dx::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f ) );
 }
 
 void Camera::SpawnControlWindow() noexcept
@@ -33,7 +37,7 @@ void Camera::SpawnControlWindow() noexcept
 		ImGui::SliderFloat( "Y", &pos.y, -80.f, 80.f );
 		ImGui::SliderFloat( "Z", &pos.z, -80.f, 80.f );
 		ImGui::Text( "Orientation" );
-		ImGui::SliderAngle( "Pitch", &pitch, -90.f, 90.f );
+		ImGui::SliderAngle( "Pitch", &pitch, 0.995f * -90.f, 0.995f * 90.f );
 		ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f );
 		if( ImGui::Button( "Reset" ) )
 		{
@@ -45,7 +49,7 @@ void Camera::SpawnControlWindow() noexcept
 
 void Camera::Rotate( float dx, float dy ) noexcept
 {
-	pitch = std::clamp( pitch + dy * rotationSpeed, -PI / 2.f, PI / 2.f );
+	pitch = std::clamp( pitch + dy * rotationSpeed, 0.995f * -PI / 2.f, 0.995f * PI / 2.f );
 	yaw = wrap_angle( yaw + dx * rotationSpeed );
 }
 

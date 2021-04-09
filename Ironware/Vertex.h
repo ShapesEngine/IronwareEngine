@@ -112,7 +112,7 @@ public:
 
 		static constexpr size_t SizeOf( ElementType type ) IFNOEXCEPT;
 
-		D3D11_INPUT_ELEMENT_DESC GetDesc() const IFNOEXCEPT;		
+		D3D11_INPUT_ELEMENT_DESC GetDesc() const IFNOEXCEPT;
 
 	private:
 		template<ElementType type>
@@ -147,9 +147,9 @@ public:
 	size_t Size() const IFNOEXCEPT { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
 	size_t GetElementCount() const IFNOEXCEPT { return elements.size(); }
 
-	VertexLayout& Append(ElementType ElementType) IFNOEXCEPT;
+	VertexLayout& Append( ElementType ElementType ) IFNOEXCEPT;
 
-	std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const IFNOEXCEPT;	
+	std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const IFNOEXCEPT;
 
 private:
 	std::vector<Element> elements;
