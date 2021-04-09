@@ -10,6 +10,7 @@
 
 #include "Window.h"
 #include "ImGuiManager.h"
+#include "IronTimer.h"
 #include "Camera.h"
 #include "PointLight.h"
 #include "Model.h"
@@ -34,7 +35,6 @@ private:
 	*/
 	void ProcessFrame();
 	void HandleInput();
-	void ShowRawMouseWindow();
 	void ToggleCursor() { wnd.IsCursorEnabled() ? wnd.DisableMouseCursor() : wnd.EnableMouseCursor(); }
 
 private:
@@ -44,4 +44,5 @@ private:
 	Window wnd{ 1280, 720, L"Ironware Engine" };
 	PointLight pointLight;
 	Model nano{ wnd.Gfx(), "Models\\nanosuit.gltf" };
+	IronTimer timer;
 };

@@ -29,14 +29,15 @@ public:
 	Camera();	
 	DirectX::XMMATRIX GetMatrix() const noexcept;
 	void SpawnControlWindow() noexcept;
+	void Rotate( float dx, float dy ) noexcept;
+	void Translate( DirectX::XMFLOAT3 translation ) noexcept;
 	void Reset() noexcept;
 
 private:
-	float zOffset;
-	float theta;
-	float phi;
+	float translationSpeed = 15.f;
+	float rotationSpeed = 0.004f;
+	DirectX::XMFLOAT3 pos;
 	float pitch;
 	float yaw;
-	float roll;
 };
 

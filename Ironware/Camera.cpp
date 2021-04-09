@@ -7,6 +7,8 @@
  *
  */
 #include "Camera.h"
+#include "IronMath.h"
+
 #include <imgui/imgui.h>
 
 namespace dx = DirectX;
@@ -18,14 +20,8 @@ Camera::Camera()
 
 DirectX::XMMATRIX Camera::GetMatrix() const noexcept
 {
-	const auto position = dx::XMVector3Transform(
-		dx::XMVectorSet( 0.f, 0.f, -zOffset, 0.f ),
-		dx::XMMatrixRotationRollPitchYaw( phi, -theta, 0.f )
-	);
-	return dx::XMMatrixLookAtLH( position, dx::XMVectorZero(),
-		// world up vector
-		dx::XMVectorSet( 0.f, 1.f, 0.f, 0.f ) ) *
-		dx::XMMatrixRotationRollPitchYaw( pitch, -yaw, roll );
+	return dx::XMMatrixTranslation( -pos.x, -pos.y, -pos.z ) *
+		dx::XMMatrixRotationRollPitchYaw( -pitch, -yaw, 0.f );
 }
 
 void Camera::SpawnControlWindow() noexcept
@@ -33,12 +29,11 @@ void Camera::SpawnControlWindow() noexcept
 	if( ImGui::Begin( "Camera" ) )
 	{
 		ImGui::Text( "Position" );
-		ImGui::SliderFloat( "Z Offset", &zOffset, FLT_EPSILON, 80.f, "%.1f" );
-		ImGui::SliderAngle( "Y Rotation", &theta, -180.f, 180.f );
-		ImGui::SliderAngle( "X Rotation", &phi, -89.f, 89.f );
+		ImGui::SliderFloat( "X", &pos.x, -80.f, 80.f );
+		ImGui::SliderFloat( "Y", &pos.y, -80.f, 80.f );
+		ImGui::SliderFloat( "Z", &pos.z, -80.f, 80.f );
 		ImGui::Text( "Orientation" );
-		ImGui::SliderAngle( "Roll", &roll, -180.f, 180.f );
-		ImGui::SliderAngle( "Pitch", &pitch, -180.f, 180.f );
+		ImGui::SliderAngle( "Pitch", &pitch, -90.f, 90.f );
 		ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f );
 		if( ImGui::Button( "Reset" ) )
 		{
@@ -46,21 +41,34 @@ void Camera::SpawnControlWindow() noexcept
 		}
 	}
 	ImGui::End();
+}
 
-	// zOffset = epsilon, otherwise it will assert
-	// because zOffset is eq to the vector that was set from XMMatrixLookAtLH
-	if( zOffset <= 0.f )
-	{
-		zOffset = FLT_EPSILON;
-	}
+void Camera::Rotate( float dx, float dy ) noexcept
+{
+	pitch = std::clamp( pitch + dy * rotationSpeed, -PI / 2.f, PI / 2.f );
+	yaw = wrap_angle( yaw + dx * rotationSpeed );
+}
+
+void Camera::Translate( DirectX::XMFLOAT3 translation ) noexcept
+{
+	dx::XMStoreFloat3( &translation,
+		dx::XMVector3Transform(
+			dx::XMLoadFloat3( &translation ),
+			dx::XMMatrixRotationRollPitchYaw( pitch, yaw, 0.f ) *
+			dx::XMMatrixScaling( translationSpeed, translationSpeed, translationSpeed )
+		)
+	);
+
+	pos = {
+		pos.x + translation.x,
+		pos.y + translation.y,
+		pos.z + translation.z
+	};
 }
 
 void Camera::Reset() noexcept
 {
-	zOffset = 20.f;
-	theta = 0.f;
-	phi = 0.f;
+	pos = { 0.f, 0.f, -20.f };
 	pitch = 0.f;
 	yaw = 0.f;
-	roll = 0.f;
 }

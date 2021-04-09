@@ -45,8 +45,6 @@ void App::ProcessFrame()
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-
-	ShowRawMouseWindow();
 	nano.ShowWindow( "Nanosuit" );
 
 	// present frame
@@ -55,6 +53,33 @@ void App::ProcessFrame()
 
 void App::HandleInput()
 {
+	const float dt = timer.Mark();
+
+	if( wnd.kbd.KeyIsPressed( 'W' ) )
+	{
+		camera.Translate( { 0.f, 0.f, dt } );
+	}
+	if( wnd.kbd.KeyIsPressed( 'S' ) )
+	{
+		camera.Translate( { 0.f, 0.f, -dt } );
+	}
+	if( wnd.kbd.KeyIsPressed( 'D' ) )
+	{
+		camera.Translate( { dt, 0.f, 0.f } );
+	}
+	if( wnd.kbd.KeyIsPressed( 'A' ) )
+	{
+		camera.Translate( { -dt, 0.f, 0.f } );
+	}
+	if( wnd.kbd.KeyIsPressed( 'E' ) )
+	{
+		camera.Translate( { 0.f, dt, 0.f } );
+	}
+	if( wnd.kbd.KeyIsPressed( 'Q' ) )
+	{
+		camera.Translate( { 0.f, -dt, 0.f } );
+	}
+
 	if( !wnd.kbd.KeyIsEmpty() )
 	{
 		const auto e = wnd.kbd.ReadKey();
@@ -64,33 +89,16 @@ void App::HandleInput()
 		}
 	}
 
-	if( !wnd.mouse.IsEmpty() )
+	while( const auto e = wnd.mouse.Read() )
 	{
-		const auto e = wnd.mouse.Read();
+		if( e->GetType() == Mouse::Event::Type::RAWMOVE )
+		{
+			camera.Rotate( (float)e->GetRawDeltaX(), (float)e->GetRawDeltaY() );
+		}
+
 		if( e->GetType() == Mouse::Event::Type::RPRESS )
 		{
 			ToggleCursor();
 		}
 	}
-}
-
-
-
-void App::ShowRawMouseWindow()
-{
-	while( const auto e = wnd.mouse.Read() )
-	{
-		if( e->GetType() == Mouse::Event::Type::RAWMOVE )
-		{
-			x += e->GetRawDeltaX();
-			y += e->GetRawDeltaY();
-		}
-	}
-	/*x = wnd.mouse.GetPosX();
-	y = wnd.mouse.GetPosY();*/
-	if( ImGui::Begin( "Raw Input" ) )
-	{
-		ImGui::Text( "Tally: (%d,%d)", x, y );
-	}
-	ImGui::End();
 }
