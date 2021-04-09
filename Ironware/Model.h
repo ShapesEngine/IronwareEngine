@@ -37,7 +37,7 @@ public:
 
 private:
 	void AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT;
-	void ShowTree( std::optional<uint32_t>& selectedIndex, Node*& pSelectedNode ) const IFNOEXCEPT;
+	void ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT;
 	void SetAppliedTransform( DirectX::FXMMATRIX transform ) noexcept;
 
 private:
@@ -78,6 +78,7 @@ public:
 	Model( Graphics& gfx, std::string filename );
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
 	void ShowWindow( const char* name = "Model" ) const IFNOEXCEPT;
+	size_t GetNodeSize() const noexcept;
 	~Model() noexcept;
 
 private:
@@ -92,5 +93,5 @@ private:
 	std::unique_ptr<Node> pRoot;
 	// pImpl
 	std::unique_ptr<class ModelWindow> pModelWindow{ std::make_unique<ModelWindow>() };
+	size_t nodeNum = 0;
 };
-

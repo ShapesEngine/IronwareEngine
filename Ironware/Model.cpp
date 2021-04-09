@@ -66,13 +66,13 @@ public:
 		{
 			ImGui::Columns( 2, nullptr, true );
 			//1st column
-			root.ShowTree( selectedIndex, pSelectedNode );
+			root.ShowTree( pSelectedNode );
 
 			ImGui::NextColumn();
 			//2nd column
-			if( const auto i = selectedIndex )
+			if( pSelectedNode )
 			{
-				auto& transform = transforms[*i];
+				auto& transform = transforms[pSelectedNode->index];
 				ImGui::Text( "Orientation" );
 				ImGui::SliderAngle( "Roll", &transform.roll, -180.0f, 180.0f );
 				ImGui::SliderAngle( "Pitch", &transform.pitch, -180.0f, 180.0f );
@@ -90,7 +90,7 @@ public:
 
 	auto GetTransform() const noexcept
 	{
-		const auto& transform = transforms.at( *selectedIndex );
+		const auto& transform = transforms.at( pSelectedNode->index );
 		return dx::XMMatrixRotationRollPitchYaw( transform.pitch, transform.yaw, transform.roll ) *
 			dx::XMMatrixTranslation( transform.x, transform.y, transform.z );
 	}
@@ -99,9 +99,6 @@ public:
 	{
 		return pSelectedNode;
 	}
-
-public:
-	static constexpr uint32_t UNUSED_INDEX = 9999;
 
 private:
 	struct TransformationParams
@@ -115,7 +112,6 @@ private:
 	};
 	std::unordered_map<uint32_t, TransformationParams> transforms;
 	Node* pSelectedNode = nullptr;
-	std::optional<uint32_t> selectedIndex;
 };
 
 Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const dx::XMMATRIX& transform_in ) :
@@ -155,16 +151,15 @@ void Node::SetAppliedTransform( dx::FXMMATRIX transform ) noexcept
 	dx::XMStoreFloat4x4( &appliedTransform, transform );
 }
 
-void Node::ShowTree( std::optional<uint32_t>& selectedIndex, Node*& pSelectedNode ) const IFNOEXCEPT
+void Node::ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT
 {
 	const auto node_flags =
-		( selectedIndex.has_value() && index == *selectedIndex ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) |
+		( pSelectedNode != nullptr && index == pSelectedNode->index ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) |
 		( childPtrs.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow );
 
 	const bool isExpanded = ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, name.c_str() );
 	if( ImGui::IsItemClicked() )
 	{
-		selectedIndex = index;
 		pSelectedNode = const_cast<Node*>( this );
 	}
 
@@ -172,7 +167,7 @@ void Node::ShowTree( std::optional<uint32_t>& selectedIndex, Node*& pSelectedNod
 	{
 		for( const auto& pc : childPtrs )
 		{
-			pc->ShowTree( selectedIndex, pSelectedNode );
+			pc->ShowTree( pSelectedNode );
 		}
 		ImGui::TreePop();
 	}
@@ -224,6 +219,11 @@ void Model::Draw( Graphics & gfx ) const noexcept( !IS_DEBUG )
 void Model::ShowWindow( const char * name ) const noexcept( !IS_DEBUG )
 {
 	pModelWindow->ShowWindow( name, *pRoot );
+}
+
+size_t Model::GetNodeSize() const noexcept
+{
+	return nodeNum;
 }
 
 Model::~Model() noexcept = default;
@@ -296,9 +296,7 @@ std::unique_ptr<Node> Model::ParseNode( const aiNode & node ) IFNOEXCEPT
 		curMeshPtrs.push_back( meshPtrs.at( meshIdx ).get() );
 	}
 
-	static uint32_t i = 0;
-
-	auto pNode = std::make_unique<Node>( std::move( curMeshPtrs ), node.mName.C_Str(), i++, parentTransform );
+	auto pNode = std::make_unique<Node>( std::move( curMeshPtrs ), node.mName.C_Str(), (uint32_t)nodeNum++, parentTransform );
 
 	for( uint32_t i = 0; i < node.mNumChildren; i++ )
 	{
