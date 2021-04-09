@@ -33,14 +33,15 @@ private:
 	 * @brief Processes main application frame
 	*/
 	void ProcessFrame();
-
+	void HandleInput();
 	void ShowRawMouseWindow();
+	void ToggleCursor() { wnd.IsCursorEnabled() ? wnd.DisableMouseCursor() : wnd.EnableMouseCursor(); }
 
 private:
 	int x = 0, y = 0;
 	ImguiManager imguim;
 	Camera camera;
-	Window wnd{ 1280, 960, L"Ironware Engine" };
+	Window wnd{ 1280, 720, L"Ironware Engine" };
 	PointLight pointLight;
 	Model nano{ wnd.Gfx(), "Models\\nanosuit.gltf" };
 };

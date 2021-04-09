@@ -11,8 +11,8 @@
 App::App() :
 	pointLight( wnd.Gfx() )
 {
-	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 3.f / 4.f, 0.5f, 40.f ) );
-	wnd.EnableMouseCursor();
+	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
+	wnd.DisableMouseCursor();
 }
 
 int App::BeginFrame()
@@ -27,6 +27,7 @@ int App::BeginFrame()
 			return *ecode;
 		}
 
+		HandleInput();
 		ProcessFrame();
 	}
 }
@@ -51,6 +52,29 @@ void App::ProcessFrame()
 	// present frame
 	wnd.Gfx().EndFrame();
 }
+
+void App::HandleInput()
+{
+	if( !wnd.kbd.KeyIsEmpty() )
+	{
+		const auto e = wnd.kbd.ReadKey();
+		if( e->GetCode() == VK_ESCAPE )
+		{
+			PostQuitMessage( 0 );
+		}
+	}
+
+	if( !wnd.mouse.IsEmpty() )
+	{
+		const auto e = wnd.mouse.Read();
+		if( e->GetType() == Mouse::Event::Type::RPRESS )
+		{
+			ToggleCursor();
+		}
+	}
+}
+
+
 
 void App::ShowRawMouseWindow()
 {

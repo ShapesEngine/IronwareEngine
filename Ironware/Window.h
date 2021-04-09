@@ -178,7 +178,7 @@ private:
 	std::unique_ptr<Graphics> pGfx;
 	std::vector<std::byte> rawData;
 	// state that is set manually
-	bool cursorIsEnabled;
+	bool cursorIsEnabled = true;
 	// state that is updated every frame
 	bool cursorIsShown;
 };

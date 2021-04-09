@@ -211,9 +211,11 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		return true;
 	}
 
-	const auto imio = ImGui::GetIO();
+	const auto& imio = ImGui::GetIO();
+	const bool imioKbd = ImGui::GetIO().WantCaptureKeyboard;
+	const bool imioMouse= ImGui::GetIO().WantCaptureMouse;
 
-	switch( bool imGuiKbdCapture = ImGui::GetIO().WantCaptureKeyboard; msg )
+	switch( msg )
 	{
 	case WM_CLOSE:
 		PostQuitMessage( 0 );
@@ -226,41 +228,59 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	case WM_KILLFOCUS:
 		kbd.ClearState();
 		break;
-		// =======================================================================
-		// Keyboard Messages Handling
-		// -----------------------------------------------------------------------	
+	case WM_ACTIVATE:
+	{
+		// confine/free cursor on window to foreground/background if cursor disabled
+		if( !cursorIsEnabled )
+		{
+			if( wParam & WA_ACTIVE )
+			{
+				ConfineCursor();
+				HideMouseCursor();
+			}
+			else // wParam = deactivate
+			{
+				FreeCursor();
+				ShowMouseCursor();
+			}
+		}
+		break;
+	}
+	// =======================================================================
+	// Keyboard Messages Handling
+	// -----------------------------------------------------------------------	
 	case WM_KEYDOWN:
 		// SYSKEY messages need to be handled to track system keys such as ALT, F10, etc.
 		// Basic KEYDOWN messages applies also to system keys
 	case WM_SYSKEYDOWN:
 		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		if( imioKbd )
 		{
 			break;
 		}
 		// filter autorepeat		
 		if( !( lParam & 0x40000000 ) || kbd.AutorepeatIsEnabled() ) // 30 bits holds the previous key state
 		{
-			kbd.OnKeyPressed( static_cast<uint8_t>( wParam ) );
+			kbd.OnKeyPressed( uint8_t( wParam ) );
 		}
 		break;
 	case WM_KEYUP:
 		// Basic KEYUP messages applies also to system keys
 	case WM_SYSKEYUP:
 		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		if( imioKbd )
 		{
 			break;
 		}
-		kbd.OnKeyReleased( static_cast<uint8_t>( wParam ) );
+		kbd.OnKeyReleased( uint8_t( wParam ) );
 		break;
 	case WM_CHAR:
 		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		if( imioKbd )
 		{
 			break;
 		}
-		kbd.OnChar( static_cast<wchar_t>( wParam ) );
+		kbd.OnChar( wchar_t( wParam ) );
 		break;
 		// =======================================================================
 
@@ -269,12 +289,23 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	// -----------------------------------------------------------------------
 	case WM_MOUSEMOVE:
 	{
-		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		const POINTS pt = MAKEPOINTS( lParam );
+		// cursorless exclusive gets first dibs
+		if( !cursorIsEnabled )
+		{
+			if( !mouse.IsInWindow() )
+			{
+				SetCapture( hWnd );
+				mouse.OnMouseEnter();
+				HideMouseCursor();
+			}
+			break;
+		}
+		// stifle this mouse message if imgui wants to capture
+		if( imioMouse )
 		{
 			break;
 		}
-		const POINTS pt = MAKEPOINTS( lParam );
 		// in client region -> log move, and log enter + capture mouse (if not previously in window)
 		if( pt.x >= 0 && pt.x < (SHORT)width && pt.y >= 0 && pt.y < (SHORT)height )
 		{
@@ -309,8 +340,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 			HideMouseCursor();
 			ConfineCursor();
 		}
-		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		// stifle other mouse messages if imgui wants to get full keyboard control
+		if( imioMouse )
 		{
 			break;
 		}
@@ -320,8 +351,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_RBUTTONDOWN:
 	{
-		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		// stifle other mouse messages if imgui wants to get full keyboard control
+		if( imioMouse )
 		{
 			break;
 		}
@@ -331,8 +362,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_LBUTTONUP:
 	{
-		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		// stifle other mouse messages if imgui wants to get full keyboard control
+		if( imioMouse )
 		{
 			break;
 		}
@@ -342,8 +373,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_MBUTTONDOWN:
 	{
-		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		// stifle other mouse messages if imgui wants to get full keyboard control
+		if( imioMouse )
 		{
 			break;
 		}
@@ -353,8 +384,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_RBUTTONUP:
 	{
-		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		// stifle other mouse messages if imgui wants to get full keyboard control
+		if( imioMouse )
 		{
 			break;
 		}
@@ -364,8 +395,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_MBUTTONUP:
 	{
-		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		// stifle other mouse messages if imgui wants to get full keyboard control
+		if( imioMouse )
 		{
 			break;
 		}
@@ -375,8 +406,8 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_MOUSEWHEEL:
 	{
-		// stifle other keyboard messages if imgui wants to get full keyboard control
-		if( imGuiKbdCapture )
+		// stifle other mouse messages if imgui wants to get full keyboard control
+		if( imioMouse )
 		{
 			break;
 		}
@@ -415,24 +446,6 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 		}
 		break;
 	}
-	case WM_ACTIVATE:
-	{
-		// confine/free cursor on window to foreground/background if cursor disabled
-		if( !cursorIsEnabled )
-		{
-			if( wParam & WA_ACTIVE )
-			{
-				HideMouseCursor();
-				ConfineCursor();
-			}
-			else // wParam = deactivate
-			{
-				ShowMouseCursor();
-				FreeCursor();
-			}
-		}
-		break;
-	}
 	}
 	// =======================================================================
 
@@ -457,15 +470,15 @@ void Window::HideMouseCursor() noexcept
 
 void Window::ConfineCursor( bool isMouseConfinedToWindow ) const noexcept
 {
-	std::unique_ptr<RECT> rc = nullptr;
 	RECT* pRectTemp = nullptr;
 	if( isMouseConfinedToWindow )
 	{
-		rc = std::make_unique<RECT>();
-		pRectTemp = rc.get();
-		GetWindowRect( hWnd, pRectTemp );
+		pRectTemp = new RECT;
+		GetClientRect( hWnd, pRectTemp );
+		MapWindowPoints( hWnd, nullptr, reinterpret_cast<POINT*>( pRectTemp ), 2u );
 	}
 	ClipCursor( pRectTemp );
+	delete pRectTemp;
 }
 
 void Window::RegisterRawMouseInput() const
