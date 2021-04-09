@@ -78,16 +78,16 @@ void App::HandleInput()
 
 void App::ShowRawMouseWindow()
 {
-	/*while( const auto e = wnd.mouse.Read() )
+	while( const auto e = wnd.mouse.Read() )
 	{
 		if( e->GetType() == Mouse::Event::Type::RAWMOVE )
 		{
 			x += e->GetRawDeltaX();
 			y += e->GetRawDeltaY();
 		}
-	}*/
-	x = wnd.mouse.GetPosX();
-	y = wnd.mouse.GetPosY();
+	}
+	/*x = wnd.mouse.GetPosX();
+	y = wnd.mouse.GetPosY();*/
 	if( ImGui::Begin( "Raw Input" ) )
 	{
 		ImGui::Text( "Tally: (%d,%d)", x, y );

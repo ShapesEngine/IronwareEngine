@@ -475,7 +475,7 @@ void Window::ConfineCursor( bool isMouseConfinedToWindow ) const noexcept
 	{
 		pRectTemp = new RECT;
 		GetClientRect( hWnd, pRectTemp );
-		MapWindowPoints( hWnd, nullptr, reinterpret_cast<POINT*>( pRectTemp ), 2u );
+		MapWindowPoints( hWnd, nullptr, reinterpret_cast<LPPOINT>( pRectTemp ), 2u );
 	}
 	ClipCursor( pRectTemp );
 	delete pRectTemp;
