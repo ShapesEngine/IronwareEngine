@@ -213,7 +213,7 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 
 	const auto& imio = ImGui::GetIO();
 	const bool imioKbd = ImGui::GetIO().WantCaptureKeyboard;
-	const bool imioMouse= ImGui::GetIO().WantCaptureMouse;
+	const bool imioMouse = ImGui::GetIO().WantCaptureMouse;
 
 	switch( msg )
 	{
@@ -418,17 +418,15 @@ LRESULT Window::HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) n
 	}
 	case WM_INPUT:
 	{
-		UINT size = 0u;
-		if( GetRawInputData( reinterpret_cast<HRAWINPUT>( lParam ),
-			RID_HEADER, nullptr,
-			&size, sizeof( RAWINPUTHEADER ) ) == -1 )
+		if( IsCursorEnabled() )
 		{
 			break;
 		}
 
-		rawData.resize( size );
+		UINT size = sizeof( RAWINPUT );
+		rawData.resize( (size_t)size );
 		if( GetRawInputData( reinterpret_cast<HRAWINPUT>( lParam ),
-			RID_HEADER, rawData.data(),
+			RID_INPUT, rawData.data(),
 			&size, sizeof( RAWINPUTHEADER ) ) != size )
 		{
 			break;
