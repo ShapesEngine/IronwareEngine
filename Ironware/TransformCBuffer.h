@@ -49,4 +49,3 @@ private:
 	static std::unique_ptr<VertexConstantBuffer<Transforms>> pVertConstBuffer;
 	const Drawable& parent;
 };
-

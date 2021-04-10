@@ -45,8 +45,8 @@ public:
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
 	virtual void Update( float dt ) noexcept {};
-	void AddBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT;
-	void AddIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) IFNOEXCEPT;
+	Bindable* AddBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT;
+	Bindable* AddIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) IFNOEXCEPT;
 
 protected:
 	/**

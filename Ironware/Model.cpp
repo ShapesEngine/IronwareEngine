@@ -185,7 +185,7 @@ const char* Model::Exception::what() const noexcept
 Model::Model( Graphics& gfx, std::string filename )
 {
 	Assimp::Importer importer;
-	auto pModel = importer.ReadFile(
+	auto pScene = importer.ReadFile(
 		filename,
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
@@ -193,18 +193,18 @@ Model::Model( Graphics& gfx, std::string filename )
 		aiProcess_GenNormals
 	);
 
-	if( !pModel )
+	if( !pScene )
 	{
 		throw Exception( __LINE__, WFILE, importer.GetErrorString() );
 	}
 
-	meshPtrs.reserve( pModel->mNumMeshes );
-	for( size_t i = 0; i < pModel->mNumMeshes; i++ )
+	meshPtrs.reserve( pScene->mNumMeshes );
+	for( size_t i = 0; i < pScene->mNumMeshes; i++ )
 	{
-		meshPtrs.push_back( ParseMesh( gfx, *pModel->mMeshes[i] ) );
+		meshPtrs.push_back( ParseMesh( gfx, *pScene->mMeshes[i], pScene->mMaterials ) );
 	}
 
-	pRoot = ParseNode( *pModel->mRootNode );
+	pRoot = ParseNode( *pScene->mRootNode );
 }
 
 void Model::Draw( Graphics & gfx ) const noexcept( !IS_DEBUG )
@@ -228,7 +228,7 @@ size_t Model::GetNodeSize() const noexcept
 
 Model::~Model() noexcept = default;
 
-std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh ) IFNOEXCEPT
+std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, const aiMaterial* const* pMaterials ) IFNOEXCEPT
 {
 	using ElType = VertexLayout::ElementType;
 	VertexByteBuffer vbuff(
@@ -244,6 +244,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh ) IF
 			*reinterpret_cast<dx::XMFLOAT3*>( &mesh.mNormals[i] )
 		);
 	}
+
+	const auto& material = *pMaterials[mesh.mMaterialIndex];
 
 	std::vector<uint16_t> indices;
 	indices.reserve( (size_t)mesh.mNumFaces * 3u );

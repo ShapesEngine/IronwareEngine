@@ -45,12 +45,14 @@ void PointLight::SpawnControlWindow() noexcept
 
 void PointLight::Draw( Graphics& gfx ) const IFNOEXCEPT
 {
+	const DirectX::XMFLOAT3A color = { cbufData.diffuseColor.x, cbufData.diffuseColor.y, cbufData.diffuseColor.z };
+	mesh.UpdateColor( gfx, color );
 	mesh.SetPosition( cbufData.pos );
-	mesh.Draw( gfx );	
+	mesh.Draw( gfx );
 }
 
 void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept
-{ 
+{
 	// We have to first transform the pos to the view pos, 
 	// as all of our computations are being computed relative to the camera
 	// ==============================================================================

@@ -40,8 +40,8 @@ protected:
 	*/
 	static bool IsStaticInitialized() { return !staticBinds.empty(); }
 
-	static void AddStaticBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT;
-	void AddStaticIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept;
+	static Bindable* AddStaticBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT;
+	Bindable* AddStaticIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept;
 
 	/**
 	 * @brief Sets index buffer from staticbinds. It's needed when you're going to draw
@@ -62,18 +62,20 @@ template<class T>
 std::vector<std::unique_ptr<Bindable>> DrawableBase<T>::staticBinds;
 
 template<typename T>
-void DrawableBase<T>::AddStaticBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT
+Bindable* DrawableBase<T>::AddStaticBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT
 {
 	assert( "*Must* use AddStaticIndexBuffer to bind index buffer" && typeid( *bind ) != typeid( IndexBuffer ) );
 	staticBinds.push_back( std::move( bind ) );
+	return staticBinds.back().get();
 }
 
 template<typename T>
-void DrawableBase<T>::AddStaticIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept
+Bindable* DrawableBase<T>::AddStaticIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) noexcept
 {
 	assert( "Attempting to add index buffer a second time" && pIndexBuffer == nullptr );
 	pIndexBuffer = ibuf.get();
 	staticBinds.push_back( std::move( ibuf ) );
+	return staticBinds.back().get();
 }
 
 template<typename T>

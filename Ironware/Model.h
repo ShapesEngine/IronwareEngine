@@ -82,7 +82,7 @@ public:
 	~Model() noexcept;
 
 private:
-	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh ) IFNOEXCEPT;
+	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials ) IFNOEXCEPT;
 	std::unique_ptr<Node> ParseNode( const aiNode& node ) IFNOEXCEPT;
 
 private:

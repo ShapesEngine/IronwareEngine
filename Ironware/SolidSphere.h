@@ -5,12 +5,13 @@
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief A class that is responsible for creating & updating the sphere 
+ * \brief A class that is responsible for creating & updating the sphere
  *
 */
 #pragma once
 
 #include "DrawableBase.h"
+#include "ConstantBuffers.h"
 
 /*!
  * \class SolidSphere
@@ -32,9 +33,14 @@ public:
 	SolidSphere( Graphics& gfx, float radius );
 
 	void Update( float dt ) noexcept override {}
+	void UpdateColor( Graphics& gfx, const DirectX::XMFLOAT3A& col ) noexcept;
 	void SetPosition( DirectX::XMFLOAT3 pos ) noexcept { position = pos; }
 	DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMMatrixTranslation( position.x, position.y, position.z ); }
 
 private:
-	DirectX::XMFLOAT3 position = { 1.f, 1.f, 1.f };
+	// position's proper value is set when the draw call has been called
+	DirectX::XMFLOAT3 position;
+	// color's proper value is set when the draw call has been called
+	DirectX::XMFLOAT3A color;
+	PixelConstantBuffer<DirectX::XMFLOAT3A>* pPixelCBuff;
 };

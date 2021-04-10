@@ -26,16 +26,18 @@ void Drawable::Draw( Graphics& gfx ) const IFNOEXCEPT
 	gfx.DrawIndexed( pIndexBuffer->GetCount() );
 }
 
-void Drawable::AddBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT
+Bindable* Drawable::AddBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT
 {
 	// Check if there was an attempt to bind IndexBuffer without AddIndexBufferBind
 	assert( "*Must* use AddIndexBufferBind to bind index buffer" && typeid( *bind ) != typeid( IndexBuffer ) );
 	binds.push_back( std::move( bind ) );
+	return binds.back().get();
 }
 
-void Drawable::AddIndexBufferBind( std::unique_ptr<IndexBuffer> ibuf ) IFNOEXCEPT
+Bindable* Drawable::AddIndexBufferBind( std::unique_ptr<IndexBuffer> ibuf ) IFNOEXCEPT
 {
 	assert( "Attempting to add index buffer a second time" && pIndexBuffer == nullptr );
 	pIndexBuffer = ibuf.get();
 	binds.push_back( std::move( ibuf ) );
+	return binds.back().get();
 }
