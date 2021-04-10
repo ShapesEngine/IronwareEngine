@@ -1046,7 +1046,7 @@ dkms.conf
 *.cso
 
 # Our Directory where meshes are placed
-!Ironware/Models/*.obj
+!Ironware/Models/**/*.obj
 
 # Libs dir
 !External/Libs/Debug/*
