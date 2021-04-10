@@ -4,11 +4,12 @@
  * \author Yernar Aldabergenov
  * \date November 2020
  *
- * 
+ *
  */
 #include "SolidSphere.h"
 #include "BindableCommon.h"
 #include "GraphicsExceptionMacros.h"
+#include "Vertex.h"
 #include "Sphere.h"
 
 SolidSphere::SolidSphere( Graphics& gfx, float radius )
@@ -23,7 +24,15 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 		};
 		auto model = Sphere::Make<Vertex>();
 		model.Transform( dx::XMMatrixScaling( radius, radius, radius ) );
-		AddBind( std::make_unique<VertexBuffer>( gfx, model.vertices ) );
+		VertexByteBuffer vbuff(
+			VertexLayout{}
+			.Append( VertexLayout::ElementType::Position3D )
+		);
+		for( auto& v : model.vertices )
+		{
+			vbuff.EmplaceBack( v.pos );
+		}
+		AddBind( std::make_unique<VertexBuffer>( gfx, vbuff ) );
 		AddIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
 		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"SolidVS.cso" );
@@ -34,8 +43,7 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 
 		struct PSColorConstant
 		{
-			dx::XMFLOAT3 color = { 1.f, 1.f, 1.f };
-			float padding;
+			dx::XMFLOAT3A color = { 1.f, 1.f, 1.f };
 		} colorConst;
 		AddStaticBind( std::make_unique<PixelConstantBuffer<PSColorConstant>>( gfx, colorConst ) );
 
