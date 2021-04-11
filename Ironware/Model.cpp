@@ -116,10 +116,10 @@ private:
 	Node* pSelectedNode = nullptr;
 };
 
-Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const dx::XMMATRIX& transform_in ) :
-	meshPtrs( std::move( meshPtrs ) ),
-	name( name ),
-	index( index )
+Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const dx::XMMATRIX& transform_in ) IFNOEXCEPT :
+meshPtrs( std::move( meshPtrs ) ),
+name( name ),
+index( index )
 {
 	dx::XMStoreFloat4x4( &parentTransform, transform_in );
 	dx::XMStoreFloat4x4( &appliedTransform, dx::XMMatrixIdentity() );
@@ -270,6 +270,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 	bindablePtrs.push_back( std::move( pVertShader ) );
 
 	bool hasSpecMap = false;
+	float shininess = 40.f;
 
 	// index should be -1 if there is no material assigned to the mesh
 	if( mesh.mMaterialIndex >= 0 )
@@ -287,6 +288,10 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 			bindablePtrs.push_back( std::make_unique<Texture>( gfx, Surface::FromFile( wTexPath ), 1u ) );
 			hasSpecMap = true;
 		}
+		else
+		{
+			material.Get( AI_MATKEY_SHININESS, shininess );
+		}
 
 		bindablePtrs.push_back( std::make_unique<Sampler>( gfx ) );
 	}
@@ -300,9 +305,11 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		struct PSMaterialConstant
 		{
 			float specularIntensity = 0.9f;
-			float specularPower = 50.0f;
+			float specularPower;
 			alignas( 8 ) float padding;
 		} pMc;
+
+		pMc.specularPower = shininess;
 
 		bindablePtrs.push_back( std::make_unique<PixelConstantBuffer<PSMaterialConstant>>( gfx, pMc, 1u ) );
 		bindablePtrs.push_back( std::make_unique<PixelShader>( gfx, L"TexturedPhongPS.cso" ) );

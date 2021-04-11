@@ -12,7 +12,7 @@ App::App() :
 	pointLight( wnd.Gfx() )
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
-	wnd.DisableMouseCursor();
+	wnd.EnableMouseCursor();
 }
 
 int App::BeginFrame()
@@ -55,50 +55,53 @@ void App::HandleInput()
 {
 	const float dt = timer.Mark();
 
-	if( wnd.kbd.KeyIsPressed( 'W' ) )
+	if( wnd.mouse.RightIsPressed() )
 	{
-		camera.Translate( { 0.f, 0.f, dt } );
+		wnd.DisableMouseCursor();
 	}
-	if( wnd.kbd.KeyIsPressed( 'S' ) )
+	else
 	{
-		camera.Translate( { 0.f, 0.f, -dt } );
-	}
-	if( wnd.kbd.KeyIsPressed( 'D' ) )
-	{
-		camera.Translate( { dt, 0.f, 0.f } );
-	}
-	if( wnd.kbd.KeyIsPressed( 'A' ) )
-	{
-		camera.Translate( { -dt, 0.f, 0.f } );
-	}
-	if( wnd.kbd.KeyIsPressed( 'E' ) )
-	{
-		camera.Translate( { 0.f, dt, 0.f } );
-	}
-	if( wnd.kbd.KeyIsPressed( 'Q' ) )
-	{
-		camera.Translate( { 0.f, -dt, 0.f } );
+		wnd.EnableMouseCursor();
 	}
 
-	if( !wnd.kbd.KeyIsEmpty() )
+	if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
 	{
-		const auto e = wnd.kbd.ReadKey();
-		if( e->GetCode() == VK_ESCAPE )
+		PostQuitMessage( 0 );
+	}
+
+	if( !wnd.IsCursorEnabled() )
+	{
+		if( wnd.kbd.KeyIsPressed( 'W' ) )
 		{
-			PostQuitMessage( 0 );
+			camera.Translate( { 0.f, 0.f, dt } );
 		}
-	}
-
-	while( const auto e = wnd.mouse.Read() )
-	{
-		if( e->GetType() == Mouse::Event::Type::RAWMOVE )
+		if( wnd.kbd.KeyIsPressed( 'S' ) )
 		{
-			camera.Rotate( (float)e->GetRawDeltaX(), (float)e->GetRawDeltaY() );
+			camera.Translate( { 0.f, 0.f, -dt } );
+		}
+		if( wnd.kbd.KeyIsPressed( 'D' ) )
+		{
+			camera.Translate( { dt, 0.f, 0.f } );
+		}
+		if( wnd.kbd.KeyIsPressed( 'A' ) )
+		{
+			camera.Translate( { -dt, 0.f, 0.f } );
+		}
+		if( wnd.kbd.KeyIsPressed( 'E' ) )
+		{
+			camera.Translate( { 0.f, dt, 0.f } );
+		}
+		if( wnd.kbd.KeyIsPressed( 'Q' ) )
+		{
+			camera.Translate( { 0.f, -dt, 0.f } );
 		}
 
-		if( e->GetType() == Mouse::Event::Type::RPRESS )
+		while( const auto e = wnd.mouse.Read() )
 		{
-			ToggleCursor();
+			if( e->GetType() == Mouse::Event::Type::RAWMOVE )
+			{
+				camera.Rotate( (float)e->GetRawDeltaX(), (float)e->GetRawDeltaY() );
+			}
 		}
 	}
 }

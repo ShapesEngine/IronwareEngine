@@ -36,10 +36,8 @@ private:
 	*/
 	void ProcessFrame();
 	void HandleInput();
-	void ToggleCursor() { wnd.IsCursorEnabled() ? wnd.DisableMouseCursor() : wnd.EnableMouseCursor(); }
 
 private:
-	int x = 0, y = 0;
 	GDIPlusManager gdipm;
 	ImguiManager imguim;
 	Camera camera;

@@ -33,9 +33,8 @@ float4 main( float3 viewPos : Position, float3 n : Normal, float2 tc : TexCoord 
     // multiplying by luminosity because we are using point light here
     float4 sampledSpec = specTex.Sample( splr, tc );
     float3 specularColor = sampledSpec.rgb;
-    float specularPower = sampledSpec.a;
-    // * ( diffuseColor * diffuseIntensity ) 
-    const float3 specular = luminosity * specularColor * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularPower );
+    float specularExpPower = pow( 2.f, sampledSpec.a * 13.f );
+    const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularExpPower );
 	// final color
-    return float4( saturate( ( diffuse + ambient + specular ) ), 1.f ) * tex.Sample( splr, tc );
+    return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular * specularColor ), 1.f );
 }
