@@ -7,7 +7,9 @@
  *
  */
 #include "Model.h"
+#define IR_INCLUDE_TEXTURE
 #include "BindableCommon.h"
+#include "IronUtils.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -235,17 +237,17 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		VertexLayout{}
 		.Append( ElType::Position3D )
 		.Append( ElType::Normal )
+		.Append( ElType::Texture2D )
 	);
 
 	for( uint32_t i = 0; i < mesh.mNumVertices; i++ )
 	{
 		vbuff.EmplaceBack(
 			*reinterpret_cast<dx::XMFLOAT3*>( &mesh.mVertices[i] ), // mVertices is vertex positions
-			*reinterpret_cast<dx::XMFLOAT3*>( &mesh.mNormals[i] )
+			*reinterpret_cast<dx::XMFLOAT3*>( &mesh.mNormals[i] ),
+			*reinterpret_cast<dx::XMFLOAT2*>( &mesh.mTextureCoords[0][i] )
 		);
 	}
-
-	const auto& material = *pMaterials[mesh.mMaterialIndex];
 
 	std::vector<uint16_t> indices;
 	indices.reserve( (size_t)mesh.mNumFaces * 3u );
@@ -262,12 +264,24 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 
 	bindablePtrs.push_back( std::make_unique<VertexBuffer>( gfx, vbuff ) );
 
-	auto pVertShader = std::make_unique<VertexShader>( gfx, L"PhongVS.cso" );
+	auto pVertShader = std::make_unique<VertexShader>( gfx, L"TexturedPhongVS.cso" );
 	// save bytecode, as it will be needed in input layout
 	auto pVertShaderBytecode = pVertShader->GetBytecode();
 	bindablePtrs.push_back( std::move( pVertShader ) );
 
-	bindablePtrs.push_back( std::make_unique<PixelShader>( gfx, L"PhongPS.cso" ) );
+	bindablePtrs.push_back( std::make_unique<PixelShader>( gfx, L"TexturedPhongPS.cso" ) );
+
+	// index should be -1 if there is no material assigned to the mesh
+	if( mesh.mMaterialIndex >= 0 )
+	{
+		using namespace std::string_literals;
+		const auto& material = *pMaterials[mesh.mMaterialIndex];
+		aiString texPath;
+		material.GetTexture( aiTextureType_DIFFUSE, 0u, &texPath );
+		std::wstring wTexPath = L"Models\\nanosuit_textured\\" + ToWide( std::string( texPath.C_Str() ) );
+		bindablePtrs.push_back( std::make_unique<Texture>( gfx, Surface::FromFile( wTexPath ) ) );
+		bindablePtrs.push_back( std::make_unique<Sampler>( gfx ) );
+	}
 
 	bindablePtrs.push_back( std::make_unique<IndexBuffer>( gfx, indices ) );
 
@@ -275,10 +289,9 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 
 	struct PSMaterialConstant
 	{
-		dx::XMFLOAT3 color = { 0.6f, 0.6f, 0.8f };
 		float specularIntensity = 0.6f;
 		float specularPower = 30.0f;
-		float padding[3];
+		alignas( 8 ) float padding;
 	} pMc;
 
 	bindablePtrs.push_back( std::make_unique<PixelConstantBuffer<PSMaterialConstant>>( gfx, pMc, 1u ) );

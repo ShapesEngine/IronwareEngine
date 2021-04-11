@@ -18,3 +18,10 @@
 #include "TransformCBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexShader.h"
+
+#ifdef IR_INCLUDE_TEXTURE
+#include "Texture.h"
+#include "Sampler.h"
+// needed to import textures
+#include "Surface.h"
+#endif

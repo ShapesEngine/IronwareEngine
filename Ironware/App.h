@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "PointLight.h"
 #include "Model.h"
+#include "GDIPlusManager.h"
 
  /**
   * @brief Base class that controls scene
@@ -39,10 +40,11 @@ private:
 
 private:
 	int x = 0, y = 0;
+	GDIPlusManager gdipm;
 	ImguiManager imguim;
 	Camera camera;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
 	PointLight pointLight;
-	Model nano{ wnd.Gfx(), "Models\\nanosuit_h.gltf" };
+	Model nano{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
 	IronTimer timer;
 };
