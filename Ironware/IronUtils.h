@@ -14,6 +14,7 @@
 #pragma once
 
 #include <string>
+#include <typeinfo>
 
 // default buffer size
 constexpr size_t DEFAULT_BUFFER_SIZE = 512;
@@ -30,7 +31,7 @@ constexpr size_t DEFAULT_BUFFER_SIZE = 512;
 
 /**
  * @brief Convert Narrow string to Wide string
- * @param narrow input string 
+ * @param narrow input string
  * @return wide output string
 */
 std::wstring to_wide( const std::string& narrow );
@@ -44,7 +45,7 @@ std::string to_narrow( const std::wstring& wide );
 
 /**
  * @brief Convert Narrow char array to Wide string
- * @param narrow input string 
+ * @param narrow input string
  * @return wide output string
 */
 std::wstring to_wide( const char* narrow );
@@ -55,3 +56,5 @@ std::wstring to_wide( const char* narrow );
  * @return narrow output string
 */
 std::string to_narrow( const wchar_t* wide );
+
+#define GET_CLASS_WNAME(class) to_wide( typeid( class ).name() )

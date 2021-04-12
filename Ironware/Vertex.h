@@ -11,6 +11,7 @@
 
 #include "CommonMacros.h"
 
+#include <string>
 #include <vector>
 #include <DirectXMath.h>
 #include <dxgiformat.h>
@@ -50,42 +51,49 @@ public:
 		using SysType = DirectX::XMFLOAT2;
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 		static constexpr const char* semantic = "Position";
+		static constexpr const wchar_t* code = L"P2";
 	};
 	template<> struct Map<ElementType::Position3D>
 	{
 		using SysType = DirectX::XMFLOAT3;
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Position";
+		static constexpr const wchar_t* code = L"P3";
 	};
 	template<> struct Map<ElementType::Texture2D>
 	{
 		using SysType = DirectX::XMFLOAT2;
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 		static constexpr const char* semantic = "TexCoord";
+		static constexpr const wchar_t* code = L"T2";
 	};
 	template<> struct Map<ElementType::Normal>
 	{
 		using SysType = DirectX::XMFLOAT3;
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Normal";
+		static constexpr const wchar_t* code = L"N";
 	};
 	template<> struct Map<ElementType::Float3Color>
 	{
 		using SysType = DirectX::XMFLOAT3;
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Color";
+		static constexpr const wchar_t* code = L"CF3";
 	};
 	template<> struct Map<ElementType::Float4Color>
 	{
 		using SysType = DirectX::XMFLOAT4;
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		static constexpr const char* semantic = "Color";
+		static constexpr const wchar_t* code = L"CF4";
 	};
 	template<> struct Map<ElementType::BGRAColor>
 	{
 		using SysType = BGRAColor;
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 		static constexpr const char* semantic = "Color";
+		static constexpr const wchar_t* code = L"CU4";
 	};
 
 	class Element
@@ -113,10 +121,11 @@ public:
 		static constexpr size_t SizeOf( ElementType type ) IFNOEXCEPT;
 
 		D3D11_INPUT_ELEMENT_DESC GetDesc() const IFNOEXCEPT;
+		const wchar_t* GetCode() const noexcept;
 
 	private:
 		template<ElementType type>
-		static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc( size_t offset ) IFNOEXCEPT
+		static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc( size_t offset ) noexcept
 		{
 			return { Map<type>::semantic, 0u, Map<type>::dxgiFormat, 0u, (UINT)offset, D3D11_INPUT_PER_VERTEX_DATA, 0u };
 		}
@@ -150,6 +159,7 @@ public:
 	VertexLayout& Append( ElementType ElementType ) IFNOEXCEPT;
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const IFNOEXCEPT;
+	std::wstring GetCode() const IFNOEXCEPT;
 
 private:
 	std::vector<Element> elements;

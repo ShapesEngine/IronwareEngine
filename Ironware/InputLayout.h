@@ -11,6 +11,9 @@
 #pragma once
 
 #include "Bindable.h"
+#include "BindableCollection.h"
+#include "IronUtils.h"
+#include "Vertex.h"
 
 /*!
  * \class InputLayout
@@ -31,12 +34,15 @@ class InputLayout : public Bindable
 {
 public:
 	InputLayout( Graphics& gfx,
-				 const std::vector<D3D11_INPUT_ELEMENT_DESC>& layouts,
-				 ID3DBlob* pVertexShaderBytecode );
+		const class VertexLayout& layout_in,
+		ID3DBlob* pVertexShaderBytecode );
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const VertexLayout& layout, ID3DBlob* pVSB ) { return BindableCollection::Resolve<InputLayout>( gfx, layout, pVSB ); }
+	static std::wstring GenerateUID( const VertexLayout& layout, ID3DBlob* = nullptr ) { return GET_CLASS_WNAME( InputLayout ) + L"#" + layout.GetCode(); }
+	std::wstring GetUID() const noexcept override { return GenerateUID( layout ); }
 
 protected:
+	VertexLayout layout;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
 };
-

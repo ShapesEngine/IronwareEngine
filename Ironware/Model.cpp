@@ -307,7 +307,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 
 	bindablePtrs.push_back( std::make_shared<IndexBuffer>( gfx, indices ) );
 
-	bindablePtrs.push_back( std::make_shared<InputLayout>( gfx, vbuff.GetLayout().GetD3DLayout(), pVertShaderBytecode ) );
+	bindablePtrs.push_back( std::make_shared<InputLayout>( gfx, vbuff.GetLayout(), pVertShaderBytecode ) );
 
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );
 }
