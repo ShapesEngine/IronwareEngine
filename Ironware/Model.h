@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include "DrawableBase.h"
+#include "Drawable.h"
 #include "CommonMacros.h"
 #include "IronException.h"
 
@@ -16,10 +16,10 @@
 
 #include <optional>
 
-class Mesh : public DrawableBase<Mesh>
+class Mesh : public Drawable
 {
 public:
-	Mesh( Graphics& gfx, std::vector<std::unique_ptr<Bindable>> bindablePtrs );
+	Mesh( Graphics& gfx, std::vector<std::shared_ptr<Bindable>> bindablePtrs );
 	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMLoadFloat4x4( &transform ); }
 

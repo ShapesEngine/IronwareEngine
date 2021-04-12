@@ -10,7 +10,7 @@
 */
 #pragma once
 
-#include "DrawableBase.h"
+#include "Drawable.h"
 #include "ConstantBuffers.h"
 
 /*!
@@ -27,13 +27,12 @@
  * Contact: yernar.aa@gmail.com
  *
  */
-class SolidSphere : public DrawableBase<SolidSphere>
+class SolidSphere : public Drawable
 {
 public:
 	SolidSphere( Graphics& gfx, float radius );
-
-	void Update( float dt ) noexcept override {}
 	void UpdateColor( Graphics& gfx, const DirectX::XMFLOAT3A& col ) noexcept;
+
 	void SetPosition( DirectX::XMFLOAT3 pos ) noexcept { position = pos; }
 	DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMMatrixTranslation( position.x, position.y, position.z ); }
 

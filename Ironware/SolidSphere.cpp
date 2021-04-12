@@ -16,49 +16,42 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 {
 	namespace dx = DirectX;
 
-	if( !IsStaticInitialized() )
+	struct Vertex
 	{
-		struct Vertex
-		{
-			dx::XMFLOAT3 pos;
-		};
-		auto model = Sphere::Make<Vertex>();
-		model.Transform( dx::XMMatrixScaling( radius, radius, radius ) );
-		VertexByteBuffer vbuff(
-			VertexLayout{}
-			.Append( VertexLayout::ElementType::Position3D )
+		dx::XMFLOAT3 pos;
+	};
+	auto model = Sphere::Make<Vertex>();
+	model.Transform( dx::XMMatrixScaling( radius, radius, radius ) );
+	VertexByteBuffer vbuff(
+		VertexLayout{}
+		.Append( VertexLayout::ElementType::Position3D )
+	);
+	for( auto& v : model.vertices )
+	{
+		vbuff.EmplaceBack( v.pos );
+	}
+	AddBind( std::make_shared<VertexBuffer>( gfx, vbuff ) );
+	AddBind( std::make_shared<IndexBuffer>( gfx, model.indices ) );
+
+	auto pVertexShader = std::make_shared<VertexShader>( gfx, L"SolidVS.cso" );
+	auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+	AddBind( std::move( pVertexShader ) );
+
+	AddBind( std::make_shared<PixelShader>( gfx, L"SolidPS.cso" ) );
+
+	pPixelCBuff = dynamic_cast<PixelConstantBuffer<dx::XMFLOAT3A>*>(
+		AddBind( std::make_shared<PixelConstantBuffer<dx::XMFLOAT3A>>( gfx, color ) )
 		);
-		for( auto& v : model.vertices )
-		{
-			vbuff.EmplaceBack( v.pos );
-		}
-		AddBind( std::make_unique<VertexBuffer>( gfx, vbuff ) );
-		AddIndexBufferBind( std::make_unique<IndexBuffer>( gfx, model.indices ) );
 
-		auto pVertexShader = std::make_unique<VertexShader>( gfx, L"SolidVS.cso" );
-		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
-		AddStaticBind( std::move( pVertexShader ) );
-
-		AddStaticBind( std::make_unique<PixelShader>( gfx, L"SolidPS.cso" ) );
-
-		pPixelCBuff = dynamic_cast<PixelConstantBuffer<dx::XMFLOAT3A>*>(
-			AddStaticBind( std::make_unique<PixelConstantBuffer<dx::XMFLOAT3A>>( gfx, color ) )
-			);
-
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElem =
-		{
-			{ "Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
-		};
-		AddStaticBind( std::make_unique<InputLayout>( gfx, descInputElem, pVertexShaderBytecode ) );
-
-		AddStaticBind( std::make_unique<PrimitiveTopology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
-	}
-	else
+	const std::vector<D3D11_INPUT_ELEMENT_DESC> descInputElem =
 	{
-		SetIndexFromStatic();
-	}
+		{ "Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
+	};
+	AddBind( std::make_shared<InputLayout>( gfx, descInputElem, pVertexShaderBytecode ) );
 
-	AddBind( std::make_unique<TransformCBuffer>( gfx, *this ) );
+	AddBind( std::make_shared<PrimitiveTopology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
+
+	AddBind( std::make_shared<TransformCBuffer>( gfx, *this ) );
 }
 
 void SolidSphere::UpdateColor( Graphics& gfx, const DirectX::XMFLOAT3A& col ) noexcept

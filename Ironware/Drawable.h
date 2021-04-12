@@ -44,9 +44,7 @@ public:
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
-	virtual void Update( float dt ) noexcept {};
-	Bindable* AddBind( std::unique_ptr<Bindable> bind ) IFNOEXCEPT;
-	Bindable* AddIndexBufferBind( std::unique_ptr<class IndexBuffer> ibuf ) IFNOEXCEPT;
+	Bindable* AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT;
 
 protected:
 	/**
@@ -57,14 +55,11 @@ protected:
 	template<typename T>
 	T* QueryBindable() const;
 
-private:
-	virtual const std::vector<std::unique_ptr<Bindable>>& GetStaticBinds() const noexcept = 0;
-
 protected:
 	const class IndexBuffer* pIndexBuffer = nullptr;
 
 private:
-	std::vector<std::unique_ptr<Bindable>> binds;
+	std::vector<std::shared_ptr<Bindable>> binds;
 };
 
 template<typename T>

@@ -117,9 +117,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Bindable.cpp" />
-    <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="GDIPlusManager.cpp" />
@@ -135,9 +133,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Sampler.cpp" />
-    <ClCompile Include="SkinnedBox.cpp" />
     <ClInclude Include="..\External\Includes\assimp\aabb.h" />
     <ClInclude Include="..\External\Includes\assimp\ai_assert.h" />
     <ClInclude Include="..\External\Includes\assimp\anim.h" />
@@ -223,17 +219,14 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonMacros.h" />
-    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SkinnedBox.h" />
     <ClCompile Include="SolidSphere.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="PrimitiveTopology.cpp" />
-    <ClCompile Include="TexturedBox.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -246,12 +239,10 @@
     <ClInclude Include="AppMess.h" />
     <ClInclude Include="Bindable.h" />
     <ClInclude Include="BindableCommon.h" />
-    <ClInclude Include="Box.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Drawable.h" />
-    <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="Graphics.h" />
@@ -269,7 +260,6 @@
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Prism.h" />
-    <ClInclude Include="Cone.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="SolidSphere.h" />
@@ -277,7 +267,6 @@
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="PrimitiveTopology.h" />
-    <ClInclude Include="TexturedBox.h" />
     <ClInclude Include="TransformCBuffer.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />
