@@ -25,3 +25,5 @@
 // needed to import textures
 #include "Surface.h"
 #endif
+
+#include "BindableCollection.h"

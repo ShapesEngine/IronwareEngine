@@ -13,6 +13,7 @@
 #pragma once
 
 #include "Bindable.h"
+#include "BindableCollection.h"
 #include "IronUtils.h"
 
 #include <d3dcompiler.h>
@@ -40,14 +41,12 @@ public:
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetShader( pVertexShader.Get(), nullptr, 0u ); }
 	ID3DBlob* GetBytecode() const noexcept { return pBytecodeBlob.Get(); }
-	std::wstring GetUID() const noexcept override { return GenerateUID( path ); }
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::wstring& path ) noexcept { return BindableCollection::Resolve<VertexShader>( gfx, path ); }
 	static std::wstring GenerateUID( const std::wstring path ) noexcept { return to_wide( typeid( VertexShader ).name() ) + L"#" + path; }
-
-	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::wstring& path ) noexcept;
+	std::wstring GetUID() const noexcept override { return GenerateUID( path ); }
 
 protected:
 	std::wstring path;
 	Microsoft::WRL::ComPtr<ID3DBlob> pBytecodeBlob;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
 };
-

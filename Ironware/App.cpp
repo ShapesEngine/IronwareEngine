@@ -7,6 +7,7 @@
  *
  */
 #include "App.h"
+#define IR_INCLUDE_TEXTURE
 #include "BindableCommon.h"
 #include "BindableCollection.h"
 
@@ -17,7 +18,8 @@ App::App() :
 	wnd.EnableMouseCursor();
 
 	auto a = VertexShader::Resolve( wnd.Gfx(), L"PhongVS.cso" );
-	auto b = VertexShader::Resolve( wnd.Gfx(), L"PhongVS.cso" );
+	auto b = Sampler::Resolve( wnd.Gfx() );
+	auto c = Sampler::Resolve( wnd.Gfx() );
 }
 
 int App::BeginFrame()

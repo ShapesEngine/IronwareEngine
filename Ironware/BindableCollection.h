@@ -21,38 +21,54 @@
 class BindableCollection
 {
 public:
-	static std::shared_ptr<Bindable> Resolve( const std::wstring& key )
-	{
-		return Get().Resolve_( key );
-	}
-
-	static void Store( std::shared_ptr<Bindable> bindable )
-	{
-		Get().Store_( bindable );
-	}
+	/**
+	 * @brief Function that resolves bindable type and either stores some value
+	 * * or gets the existing value from the container
+	 * @tparam T Type of the Bindable
+	 * @tparam TPACK Parameter pack value
+	 * @param gfx Needed to instantiate T
+	 * @return shared_ptr to the resolved type
+	*/
+	template<class T, TPACK Params>
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, Params&&... p ) IFNOEXCEPT;
 
 private:
-	std::shared_ptr<Bindable> Resolve_( const std::wstring& key ) const IFNOEXCEPT
-	{
-		const auto i = bindables.find( key );
-		if( i != bindables.cend() )
-		{
-			return i->second;
-		}
-		return{};
-	}
-
-	void Store_( std::shared_ptr<Bindable> bindable ) IFNOEXCEPT
-	{
-		bindables[bindable->GetUID()] = std::move( bindable );
-	}
-
-	static BindableCollection& Get() noexcept
-	{
-		static BindableCollection collection;
-		return collection;
-	}
+	template<class T, TPACK Params>
+	std::shared_ptr<Bindable> Resolve_( Graphics& gfx, Params&&... p ) IFNOEXCEPT;
+	static BindableCollection& Get() noexcept;
 
 private:
 	std::unordered_map<std::wstring, std::shared_ptr<Bindable>> bindables;
 };
+
+#pragma region implementation
+
+template<class T, TPACK Params>
+std::shared_ptr<Bindable> BindableCollection::Resolve( Graphics & gfx, Params && ...p ) noexcept( !IS_DEBUG )
+{
+	static_assert( std::is_base_of<Bindable, T>::value, "Can only resolve classes derived from Bindable" );
+	return Get().Resolve_<T>( gfx, std::forward<Params>( p )... );
+}
+
+template<class T, TPACK Params>
+std::shared_ptr<Bindable> BindableCollection::Resolve_( Graphics & gfx, Params && ...p ) noexcept( !IS_DEBUG )
+{
+	const auto key = T::GenerateUID( std::forward<Params>( p )... );
+	const auto i = bindables.find( key );
+	if( i != bindables.cend() )
+	{
+		return i->second;
+	}
+	auto bind = std::make_shared<T>( gfx, std::forward<Params>( p )... );
+	bindables[key] = bind;
+
+	return bind;
+}
+
+inline BindableCollection& BindableCollection::Get() noexcept
+{
+	static BindableCollection collection;
+	return collection;
+}
+
+#pragma endregion implementation
