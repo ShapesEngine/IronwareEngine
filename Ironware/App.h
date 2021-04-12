@@ -42,7 +42,7 @@ private:
 	ImguiManager imguim;
 	Camera camera;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
-	PointLight pointLight;
-	Model nano{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
+	PointLight pointLight{ wnd.Gfx() };
+	//Model nano{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
 	IronTimer timer;
 };

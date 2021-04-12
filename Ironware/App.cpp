@@ -11,8 +11,7 @@
 #include "BindableCommon.h"
 #include "BindableCollection.h"
 
-App::App() :
-	pointLight( wnd.Gfx() )
+App::App()
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
 	wnd.EnableMouseCursor();
@@ -46,13 +45,13 @@ void App::ProcessFrame()
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
-	nano.Draw( wnd.Gfx() );
+	//nano.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	nano.ShowWindow( "Nanosuit" );
+	//nano.ShowWindow( "Nanosuit" );
 
 	// present frame
 	wnd.Gfx().EndFrame();

@@ -7,6 +7,7 @@
  *
  */
 #include "VertexBuffer.h"
+#include "GraphicsExceptionMacros.h"
 
 VertexBuffer::VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, const std::wstring& tag, UINT offset ) :
 	tag( tag ),

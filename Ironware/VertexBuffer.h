@@ -13,7 +13,6 @@
 #include "Bindable.h"
 #include "BindableCollection.h"
 #include "IronUtils.h"
-#include "GraphicsExceptionMacros.h"
 #include "Vertex.h"
 
 /*!
