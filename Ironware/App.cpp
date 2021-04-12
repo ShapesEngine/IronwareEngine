@@ -7,12 +7,17 @@
  *
  */
 #include "App.h"
+#include "BindableCommon.h"
+#include "BindableCollection.h"
 
 App::App() :
 	pointLight( wnd.Gfx() )
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
 	wnd.EnableMouseCursor();
+
+	auto a = VertexShader::Resolve( wnd.Gfx(), L"PhongVS.cso" );
+	auto b = VertexShader::Resolve( wnd.Gfx(), L"PhongVS.cso" );
 }
 
 int App::BeginFrame()

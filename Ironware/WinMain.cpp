@@ -25,7 +25,7 @@ int WINAPI wWinMain(
 		// check if the exception is type of IronException
 		const IronException* pIE = dynamic_cast<const IronException*>( &e );
 		/** GET THE APPROPRIATE EXCEPTION INFO */
-		const std::wstring theErrorMSG = ( pIE ? CON_WCHREINT_CAST( pIE->what() ) : ToWide( e.what() ) );
+		const std::wstring theErrorMSG = ( pIE ? CON_WCHREINT_CAST( pIE->what() ) : to_wide( e.what() ) );
 		const wchar_t* theErrorType = ( pIE ? pIE->GetType() : L"Standard Exception" );
 		/*===================================*/
 		Window::ShowMessageBox( nullptr, theErrorMSG.c_str(), theErrorType, MB_OK | MB_ICONERROR );

@@ -65,7 +65,7 @@ std::vector<std::wstring> DxgiInfoManager::GetMessages() const
 		auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>( bytes.get() );
 		// get the message and push its description into the vector
 		GFX_CALL_THROW_NOINFO( pDxgiInfoQueue->GetMessage( DXGI_DEBUG_ALL, i, pMessage, &messageLength ) );
-		messages.emplace_back( ToWide( pMessage->pDescription ) );
+		messages.emplace_back( to_wide( pMessage->pDescription ) );
 	}
 	return messages;
 }

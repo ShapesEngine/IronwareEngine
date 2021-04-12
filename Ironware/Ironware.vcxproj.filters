@@ -551,6 +551,9 @@
     <ClInclude Include="CommonMacros.h">
       <Filter>Header Files\Utils\Macros</Filter>
     </ClInclude>
+    <ClInclude Include="BindableCollection.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ironware.rc">

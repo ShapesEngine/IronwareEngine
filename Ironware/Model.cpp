@@ -268,12 +268,12 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		const auto& material = *pMaterials[mesh.mMaterialIndex];
 		aiString texPath;
 		material.GetTexture( aiTextureType_DIFFUSE, 0u, &texPath );
-		std::wstring wTexPath = L"Models\\nanosuit_textured\\" + ToWide( std::string( texPath.C_Str() ) );
+		std::wstring wTexPath = L"Models\\nanosuit_textured\\" + to_wide( std::string( texPath.C_Str() ) );
 		bindablePtrs.push_back( std::make_shared<Texture>( gfx, Surface::FromFile( wTexPath ) ) );
 
 		if( material.GetTexture( aiTextureType_SPECULAR, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
-			std::wstring wTexPath = L"Models\\nanosuit_textured\\" + ToWide( std::string( texPath.C_Str() ) );
+			std::wstring wTexPath = L"Models\\nanosuit_textured\\" + to_wide( std::string( texPath.C_Str() ) );
 			bindablePtrs.push_back( std::make_shared<Texture>( gfx, Surface::FromFile( wTexPath ), 1u ) );
 			hasSpecMap = true;
 		}

@@ -217,6 +217,7 @@
     <ClInclude Include="..\External\Includes\imgui\imstb_textedit.h" />
     <ClInclude Include="..\External\Includes\imgui\imstb_truetype.h" />
     <ClInclude Include="App.h" />
+    <ClInclude Include="BindableCollection.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonMacros.h" />
     <ClInclude Include="ImGuiManager.h" />

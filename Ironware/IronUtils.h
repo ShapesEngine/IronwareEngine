@@ -33,11 +33,25 @@ constexpr size_t DEFAULT_BUFFER_SIZE = 512;
  * @param narrow input string 
  * @return wide output string
 */
-std::wstring ToWide( const std::string& narrow );
+std::wstring to_wide( const std::string& narrow );
 
 /**
  * @brief Convert Wide string to Narrow string
  * @param wide input string
  * @return narrow output string
 */
-std::string ToNarrow( const std::wstring& wide );
+std::string to_narrow( const std::wstring& wide );
+
+/**
+ * @brief Convert Narrow char array to Wide string
+ * @param narrow input string 
+ * @return wide output string
+*/
+std::wstring to_wide( const char* narrow );
+
+/**
+ * @brief Convert Wide char array to Narrow string
+ * @param wide input string
+ * @return narrow output string
+*/
+std::string to_narrow( const wchar_t* wide );
