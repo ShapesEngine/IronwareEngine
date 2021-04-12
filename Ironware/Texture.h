@@ -11,6 +11,7 @@
 #pragma once
 
 #include "Bindable.h"
+#include "BindableCollection.h"
 
 /*!
  * \class Texture
@@ -29,10 +30,14 @@
 class Texture : public Bindable
 {
 public:
-	Texture( Graphics& gfx, const class Surface& sur, UINT slot = 0u );
+	Texture( Graphics& gfx, const std::wstring& path, UINT slot = 0u );
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShaderResources( slot, 1u, pTextureView.GetAddressOf() ); }
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, std::wstring& path, UINT slot = 0u ) { return BindableCollection::Resolve<Texture>( gfx, path, slot ); }
+	static std::wstring GenerateUID( const std::wstring& path, UINT slot = 0u ) { return GET_CLASS_WNAME( Texture ) + L"#" + path + L"#" + std::to_wstring( slot ); }
+	std::wstring GetUID() const noexcept override { return GenerateUID( path, slot ); }
 
 protected:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
+	const std::wstring& path;
 	const UINT slot;
 };

@@ -4,14 +4,15 @@
  * \author Yernar Aldabergenov
  * \date September 2020
  *
- * 
+ *
  */
 #include "PixelShader.h"
 #include "GraphicsExceptionMacros.h"
 
 #include <d3dcompiler.h>
 
-PixelShader::PixelShader( Graphics& gfx, const std::wstring& path )
+PixelShader::PixelShader( Graphics& gfx, const std::wstring& path ) :
+	path( path )
 {
 	INFOMAN( gfx );
 

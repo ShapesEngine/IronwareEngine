@@ -4,12 +4,13 @@
  * \author Yernar Aldabergenov
  * \date September 2020
  *
- * 
+ *
  */
 #include "IndexBuffer.h"
 #include "GraphicsExceptionMacros.h"
 
-IndexBuffer::IndexBuffer( Graphics& gfx, const std::vector<uint16_t>& indices ) :
+IndexBuffer::IndexBuffer( Graphics& gfx, const std::vector<uint16_t>& indices, const std::wstring& tag ) :
+	tag( tag ),
 	count( (UINT)indices.size() )
 {
 	INFOMAN( gfx );

@@ -8,7 +8,8 @@
  */
 #include "VertexBuffer.h"
 
-VertexBuffer::VertexBuffer( Graphics & gfx, const VertexByteBuffer& vbuff, UINT offset ) :
+VertexBuffer::VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, const std::wstring& tag, UINT offset ) :
+	tag( tag ),
 	stride( (UINT)vbuff.GetLayout().Size() ),
 	offset( offset )
 {

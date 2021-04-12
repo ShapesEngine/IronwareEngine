@@ -10,10 +10,13 @@
 #include "Surface.h"
 #include "GraphicsExceptionMacros.h"
 
-Texture::Texture( Graphics& gfx, const Surface& sur, UINT slot ) :
+Texture::Texture( Graphics& gfx, const std::wstring& path, UINT slot ) :
+	path( path ),
 	slot( slot )
 {
 	INFOMAN( gfx );
+
+	const auto sur = Surface::FromFile( path );
 
 	auto width = sur.GetWidth();
 	auto height = sur.GetHeight();

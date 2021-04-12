@@ -251,12 +251,13 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 	}
 
 	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
+	const std::wstring base = L"Models\\nanosuit_textured\\";
 
-	bindablePtrs.push_back( std::make_shared<VertexBuffer>( gfx, vbuff ) );
+	bindablePtrs.push_back( VertexBuffer::Resolve( gfx, vbuff ) );
 
-	auto pVertShader = std::make_shared<VertexShader>( gfx, L"TexturedPhongVS.cso" );
+	auto pVertShader = VertexShader::Resolve( gfx, L"TexturedPhongVS.cso" );
 	// save bytecode, as it will be needed in input layout
-	auto pVertShaderBytecode = pVertShader->GetBytecode();
+	auto pVertShaderBytecode = static_cast<VertexShader&>( *pVertShader ).GetBytecode();
 	bindablePtrs.push_back( std::move( pVertShader ) );
 
 	bool hasSpecMap = false;
@@ -268,13 +269,13 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		const auto& material = *pMaterials[mesh.mMaterialIndex];
 		aiString texPath;
 		material.GetTexture( aiTextureType_DIFFUSE, 0u, &texPath );
-		std::wstring wTexPath = L"Models\\nanosuit_textured\\" + to_wide( std::string( texPath.C_Str() ) );
-		bindablePtrs.push_back( std::make_shared<Texture>( gfx, Surface::FromFile( wTexPath ) ) );
+		std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
+		bindablePtrs.push_back( Texture::Resolve( gfx, wTexPath ) );
 
 		if( material.GetTexture( aiTextureType_SPECULAR, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
-			std::wstring wTexPath = L"Models\\nanosuit_textured\\" + to_wide( std::string( texPath.C_Str() ) );
-			bindablePtrs.push_back( std::make_shared<Texture>( gfx, Surface::FromFile( wTexPath ), 1u ) );
+			std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
+			bindablePtrs.push_back( Texture::Resolve( gfx, wTexPath, 1u ) );
 			hasSpecMap = true;
 		}
 		else
@@ -282,12 +283,12 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 			material.Get( AI_MATKEY_SHININESS, shininess );
 		}
 
-		bindablePtrs.push_back( std::make_shared<Sampler>( gfx ) );
+		bindablePtrs.push_back( Sampler::Resolve( gfx ) );
 	}
 
 	if( hasSpecMap )
 	{
-		bindablePtrs.push_back( std::make_shared<PixelShader>( gfx, L"PhongSpecMapPS.cso" ) );
+		bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongSpecMapPS.cso" ) );
 	}
 	else
 	{
@@ -300,14 +301,15 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 
 		pMc.specularPower = shininess;
 
-		bindablePtrs.push_back( std::make_shared<PixelConstantBuffer<PSMaterialConstant>>( gfx, pMc, 1u ) );
-		bindablePtrs.push_back( std::make_shared<PixelShader>( gfx, L"TexturedPhongPS.cso" ) );
+		bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstant>::Resolve( gfx, pMc, 1u ) );
+		bindablePtrs.push_back( PixelShader::Resolve( gfx, L"TexturedPhongPS.cso" ) );
 	}
 
+	const auto meshTag = base + L"$" + to_wide( mesh.mName.C_Str() );
 
-	bindablePtrs.push_back( std::make_shared<IndexBuffer>( gfx, indices ) );
+	bindablePtrs.push_back( IndexBuffer::Resolve( gfx, indices, meshTag ) );
 
-	bindablePtrs.push_back( std::make_shared<InputLayout>( gfx, vbuff.GetLayout(), pVertShaderBytecode ) );
+	bindablePtrs.push_back( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertShaderBytecode ) );
 
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );
 }

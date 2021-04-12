@@ -30,22 +30,21 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 	{
 		vbuff.EmplaceBack( v.pos );
 	}
-	AddBind( std::make_shared<VertexBuffer>( gfx, vbuff ) );
-	AddBind( std::make_shared<IndexBuffer>( gfx, model.indices ) );
+	const std::wstring& sphereTag = L"$sphere." + std::to_wstring( radius );
+	AddBind( VertexBuffer::Resolve( gfx, vbuff ) );
+	AddBind( IndexBuffer::Resolve( gfx, model.indices, sphereTag ) );
 
-	auto pVertexShader = std::make_shared<VertexShader>( gfx, L"SolidVS.cso" );
-	auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+	auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+	auto pVertexShaderBytecode = static_cast<VertexShader&>( *pVertexShader.get() ).GetBytecode();
 	AddBind( std::move( pVertexShader ) );
 
-	AddBind( std::make_shared<PixelShader>( gfx, L"SolidPS.cso" ) );
+	AddBind( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
 
-	pPixelCBuff = dynamic_cast<PixelConstantBuffer<dx::XMFLOAT3A>*>(
-		AddBind( std::make_shared<PixelConstantBuffer<dx::XMFLOAT3A>>( gfx, color ) )
-		);
+	pPixelCBuff = static_cast<PixelConstantBuffer<dx::XMFLOAT3A>*>( PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color ).get() );
 
-	AddBind( std::make_shared<InputLayout>( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+	AddBind( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
-	AddBind( std::make_shared<PrimitiveTopology>( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
+	AddBind( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 
 	AddBind( std::make_shared<TransformCBuffer>( gfx, *this ) );
 }

@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Bindable.h"
+#include "BindableCollection.h"
 
 /*!
  * \class PixelShader
@@ -33,7 +34,11 @@ public:
 	PixelShader( Graphics& gfx, const std::wstring& path );
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShader( pPixelShader.Get(), nullptr, 0u ); }
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::wstring& path ) { return BindableCollection::Resolve<PixelShader>( gfx, path ); }
+	static std::wstring GenerateUID( const std::wstring& path ) { return GET_CLASS_WNAME( PixelShader ) + L"#" + path; }
+	std::wstring GetUID() const noexcept override { return GenerateUID( path ); }
 
 protected:
+	std::wstring path;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
 };

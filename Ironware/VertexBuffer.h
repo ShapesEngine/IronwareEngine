@@ -11,6 +11,8 @@
 #pragma once
 
 #include "Bindable.h"
+#include "BindableCollection.h"
+#include "IronUtils.h"
 #include "GraphicsExceptionMacros.h"
 #include "Vertex.h"
 
@@ -31,30 +33,21 @@
 class VertexBuffer : public Bindable
 {
 public:
-	template<class V>
-	VertexBuffer( Graphics& gfx, const std::vector<V>& vertices, UINT offset = 0 ) :
-		stride( sizeof( V ) ),
-		offset( offset )
-	{
-		INFOMAN( gfx );
-
-		D3D11_BUFFER_DESC descVertexBuffer = {};
-		descVertexBuffer.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		descVertexBuffer.Usage = D3D11_USAGE_DEFAULT;
-		descVertexBuffer.CPUAccessFlags = 0u;
-		descVertexBuffer.MiscFlags = 0u;
-		descVertexBuffer.ByteWidth = UINT( sizeof( V ) * vertices.size() );
-		descVertexBuffer.StructureByteStride = stride;
-		D3D11_SUBRESOURCE_DATA subresVertexData = {};
-		subresVertexData.pSysMem = vertices.data();
-		GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descVertexBuffer, &subresVertexData, &pVertexBuffer ) );
-	}
-
-	VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, UINT offset = 0 );
+	VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, const std::wstring& tag = L"?", UINT offset = 0u );
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
 
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const VertexByteBuffer& vbuff, UINT offset = 0u ) { return BindableCollection::Resolve<VertexBuffer>( gfx, vbuff, offset ); }
+	std::wstring GetUID() const noexcept override { return GenerateUID_( tag ); }
+
+	template<TPACK Ignore>
+	static std::string GenerateUID( const std::string& tag, Ignore&&... ignore ) { return GenerateUID_( tag ); }
+
 private:
+	static std::wstring GenerateUID_( const std::wstring& tag ) noexcept { return GET_CLASS_WNAME( VertexBuffer ) + L"#" + tag; }
+
+private:
+	const std::wstring tag;
 	const UINT stride;
 	const UINT offset;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
