@@ -44,14 +44,14 @@ private:
 #pragma region implementation
 
 template<class T, TPACK Params>
-std::shared_ptr<Bindable> BindableCollection::Resolve( Graphics& gfx, Params&&... p ) noexcept( !IS_DEBUG )
+std::shared_ptr<Bindable> BindableCollection::Resolve( Graphics& gfx, Params&&... p ) IFNOEXCEPT
 {
 	static_assert( std::is_base_of<Bindable, T>::value, "Can only resolve classes derived from Bindable" );
 	return Get().Resolve_<T>( gfx, std::forward<Params>( p )... );
 }
 
 template<class T, TPACK Params>
-std::shared_ptr<Bindable> BindableCollection::Resolve_( Graphics& gfx, Params&&... p ) noexcept( !IS_DEBUG )
+std::shared_ptr<Bindable> BindableCollection::Resolve_( Graphics& gfx, Params&&... p ) IFNOEXCEPT
 {
 	const auto key = T::GenerateUID( std::forward<Params>( p )... );
 	const auto i = bindables.find( key );

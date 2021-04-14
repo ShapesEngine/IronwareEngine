@@ -9,7 +9,11 @@
 #include "IndexBuffer.h"
 #include "GraphicsExceptionMacros.h"
 
-IndexBuffer::IndexBuffer( Graphics& gfx, const std::vector<uint16_t>& indices, const std::wstring& tag ) :
+IndexBuffer::IndexBuffer( Graphics & gfx, const std::vector<uint16_t>& indices ) :
+	IndexBuffer( gfx, L"?", indices )
+{}
+
+IndexBuffer::IndexBuffer( Graphics& gfx, const std::wstring& tag, const std::vector<uint16_t>& indices ) :
 	tag( tag ),
 	count( (UINT)indices.size() )
 {

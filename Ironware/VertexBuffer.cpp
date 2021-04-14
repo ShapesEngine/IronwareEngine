@@ -9,7 +9,12 @@
 #include "VertexBuffer.h"
 #include "GraphicsExceptionMacros.h"
 
-VertexBuffer::VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, const std::wstring& tag, UINT offset ) :
+VertexBuffer::VertexBuffer( Graphics & gfx, const VertexByteBuffer & vbuff, UINT offset ) :
+	VertexBuffer( gfx, L"?", vbuff, offset )
+{
+}
+
+VertexBuffer::VertexBuffer( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset ) :
 	tag( tag ),
 	stride( (UINT)vbuff.GetLayout().Size() ),
 	offset( offset )

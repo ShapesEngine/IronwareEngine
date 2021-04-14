@@ -32,15 +32,16 @@
 class IndexBuffer : public Bindable
 {
 public:
-	IndexBuffer( Graphics& gfx, const std::vector<uint16_t>& indices, const std::wstring& tag = L"?" );
+	IndexBuffer( Graphics& gfx, const std::vector<uint16_t>& indices );
+	IndexBuffer( Graphics& gfx, const std::wstring& tag, const std::vector<uint16_t>& indices );
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetIndexBuffer( pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u ); }
 	UINT GetCount() const noexcept { return count; }
-	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::vector<uint16_t>& indices, const std::wstring& tag ) { return BindableCollection::Resolve<IndexBuffer>( gfx, indices, tag ); }
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::wstring& tag, const std::vector<uint16_t>& indices ) { return BindableCollection::Resolve<IndexBuffer>( gfx, tag, indices ); }
 	std::wstring GetUID() const noexcept override { return GenerateUID_( tag ); }
 
 	template<TPACK Ignore>
-	static std::string GenerateUID( const std::string& tag, Ignore&&... ignore )
+	static std::wstring GenerateUID( const std::wstring& tag, Ignore&&... ignore )
 	{
 		return GenerateUID_( tag );
 	}

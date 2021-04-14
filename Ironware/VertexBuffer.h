@@ -32,15 +32,16 @@
 class VertexBuffer : public Bindable
 {
 public:
-	VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, const std::wstring& tag = L"?", UINT offset = 0u );
+	VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, UINT offset = 0u );
+	VertexBuffer( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset = 0u );
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
 
-	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const VertexByteBuffer& vbuff, UINT offset = 0u ) { return BindableCollection::Resolve<VertexBuffer>( gfx, vbuff, offset ); }
-	std::wstring GetUID() const noexcept override { return GenerateUID_( tag ); }
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset = 0u ) { return BindableCollection::Resolve<VertexBuffer>( gfx, tag, vbuff, offset ); }
+	std::wstring GetUID() const noexcept override { return GenerateUID( tag ); }
 
 	template<TPACK Ignore>
-	static std::string GenerateUID( const std::string& tag, Ignore&&... ignore ) { return GenerateUID_( tag ); }
+	static std::wstring GenerateUID( const std::wstring& tag, Ignore&&... ignore ) { return GenerateUID_( tag ); }
 
 private:
 	static std::wstring GenerateUID_( const std::wstring& tag ) noexcept { return GET_CLASS_WNAME( VertexBuffer ) + L"#" + tag; }

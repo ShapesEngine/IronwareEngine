@@ -40,15 +40,10 @@ public:
 	*/
 	virtual void Bind( Graphics& gfx ) noexcept = 0;
 	virtual ~Bindable() = default;
-
-	virtual std::wstring GenerateUID() const noexcept
-	{
-		assert( "HMM" );
-		return L"";
-	}
 	virtual std::wstring GetUID() const noexcept
 	{
-		return GenerateUID();
+		assert( false );
+		return L"";
 	}
 
 protected:

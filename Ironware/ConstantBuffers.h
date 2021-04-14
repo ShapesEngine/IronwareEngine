@@ -91,7 +91,8 @@ public:
 	using ConstantBuffer<C>::ConstantBuffer;
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
 	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const C& consts, UINT slot = 0u ) { return BindableCollection::Resolve<VertexConstantBuffer>( gfx, consts, slot ); }
-	static std::string GenerateUID( const C&, UINT slot ) { return GenerateUID( slot ); }
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, UINT slot = 0u ) { return BindableCollection::Resolve<VertexConstantBuffer>( gfx, slot ); }
+	static std::wstring GenerateUID( const C& consts, UINT slot ) { return GenerateUID( slot ); }
 	static std::wstring GenerateUID( UINT slot = 0u ) { return GET_CLASS_WNAME( VertexConstantBuffer ) + L"#" + std::to_wstring( slot ); }
 	std::wstring GetUID() const noexcept override { return GenerateUID( slot ); }
 };
@@ -120,10 +121,11 @@ class PixelConstantBuffer : public ConstantBuffer<C>
 public:
 	using ConstantBuffer<C>::ConstantBuffer;
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
-	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const C& consts, UINT slot = 0u ) { return BindableCollection::Resolve<PixelConstantBuffer>( gfx, consts, slot ); }
-	static std::string GenerateUID( const C&, UINT slot ) { return GenerateUID( slot ); }
+	/*static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const C& consts, UINT slot = 0u ) { return BindableCollection::Resolve<PixelConstantBuffer<C>>( gfx, consts, slot ); }
+	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, UINT slot = 0u ) { return BindableCollection::Resolve<PixelConstantBuffer<C>>( gfx, slot ); }
+	static std::wstring GenerateUID( const C& consts, UINT slot ) { return GenerateUID( slot ); }
 	static std::wstring GenerateUID( UINT slot = 0u ) { return GET_CLASS_WNAME( PixelConstantBuffer ) + L"#" + std::to_wstring( slot ); }
-	std::wstring GetUID() const noexcept override { return GenerateUID( slot ); }
+	std::wstring GetUID() const noexcept override { return GenerateUID( slot ); }*/
 };
 
 #pragma region implementation
