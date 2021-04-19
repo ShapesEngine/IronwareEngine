@@ -15,10 +15,6 @@ App::App()
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
 	wnd.EnableMouseCursor();
-
-	/*auto a = VertexShader::Resolve( wnd.Gfx(), L"PhongVS.cso" );
-	auto b = Sampler::Resolve( wnd.Gfx() );
-	auto c = Sampler::Resolve( wnd.Gfx() );*/
 }
 
 int App::BeginFrame()
@@ -46,12 +42,14 @@ void App::ProcessFrame()
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
 	nano.Draw( wnd.Gfx() );
+	nano2.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
 	nano.ShowWindow( "Nanosuit" );
+	nano2.ShowWindow( "Nanosuit - 2" );
 
 	// present frame
 	wnd.Gfx().EndFrame();
