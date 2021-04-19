@@ -252,7 +252,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
 	const std::wstring base = L"Models\\nanosuit_textured\\";
 
-	auto pVertShader = VertexShader::Resolve( gfx, L"TexturedPhongVS.cso" );
+	auto pVertShader = VertexShader::Resolve( gfx, L"PhongDiffuseMapVS.cso" );
 	// save bytecode, as it will be needed in input layout
 	auto pVertShaderBytecode = static_cast<VertexShader&>( *pVertShader ).GetBytecode();
 	bindablePtrs.push_back( std::move( pVertShader ) );
@@ -299,7 +299,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		pMc.specularPower = shininess;
 
 		bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstant>::Resolve( gfx, pMc, 1u ) );
-		bindablePtrs.push_back( PixelShader::Resolve( gfx, L"TexturedPhongPS.cso" ) );
+		bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
 	}
 
 	const auto meshTag = base + L"$" + to_wide( mesh.mName.C_Str() );

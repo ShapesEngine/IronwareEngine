@@ -30,7 +30,7 @@ class Sphere
 {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated( int latDiv, int longDiv )
+	static IndexedTriangleList<V> MakeTesselatedTextured( int latDiv, int longDiv )
 	{
 		namespace dx = DirectX;
 		assert( latDiv >= 3 );
@@ -132,5 +132,5 @@ public:
 	}
 
 	template<class V>
-	__forceinline static IndexedTriangleList<V> Make() { return MakeTesselated<V>( 12, 24 ); }
+	__forceinline static IndexedTriangleList<V> Make() { return MakeTesselatedTextured<V>( 12, 24 ); }
 };

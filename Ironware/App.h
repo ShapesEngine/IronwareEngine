@@ -15,6 +15,7 @@
 #include "PointLight.h"
 #include "Model.h"
 #include "GDIPlusManager.h"
+#include "Sheet.h"
 
  /**
   * @brief Base class that controls scene
@@ -45,5 +46,6 @@ private:
 	PointLight pointLight{ wnd.Gfx() };
 	Model nano{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
 	Model nano2{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
+	Sheet wall{ wnd.Gfx(), 3.f };
 	IronTimer timer;
 };

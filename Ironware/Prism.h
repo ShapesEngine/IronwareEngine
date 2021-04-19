@@ -30,7 +30,7 @@ class Prism
 {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated( int longDiv )
+	static IndexedTriangleList<V> MakeTesselatedTextured( int longDiv )
 	{
 		namespace dx = DirectX;
 
@@ -219,5 +219,5 @@ public:
 	}
 
 	template<class V>
-	__forceinline static IndexedTriangleList<V> Make() { return MakeTesselated<V>( 24 ); }
+	__forceinline static IndexedTriangleList<V> Make() { return MakeTesselatedTextured<V>( 24 ); }
 };

@@ -8,6 +8,8 @@
  */
 #pragma once
 
+// conditional noexception qualifier 
 #define IFNOEXCEPT noexcept( !IS_DEBUG )
 
+// parameter pack
 #define TPACK typename...

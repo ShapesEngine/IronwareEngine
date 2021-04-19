@@ -15,6 +15,7 @@ App::App()
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
 	wnd.EnableMouseCursor();
+	wall.SetPos( { 10.f, 10.f, 10.f } );
 }
 
 int App::BeginFrame()
@@ -44,6 +45,7 @@ void App::ProcessFrame()
 	nano.Draw( wnd.Gfx() );
 	nano2.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
+	wall.Draw( wnd.Gfx() );
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();

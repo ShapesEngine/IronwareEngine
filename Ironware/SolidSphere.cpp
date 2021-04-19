@@ -40,7 +40,7 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 
 	AddBind( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
 
-	const auto pixCBuff = PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color );
+	const auto pixCBuff = PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color, 1u );
 	pPixelCBuff = pixCBuff.get();
 	AddBind( pixCBuff );
 

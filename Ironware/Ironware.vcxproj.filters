@@ -123,9 +123,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PointLight.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SolidSphere.cpp">
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
@@ -166,6 +163,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Sheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
@@ -554,6 +557,9 @@
     <ClInclude Include="BindableCollection.h">
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="Sheet.h">
+      <Filter>Header Files\Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ironware.rc">
@@ -578,7 +584,7 @@
     <FxCompile Include="ColorBlendPhongPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="TexturedPhongVS.hlsl">
+    <FxCompile Include="PhongDiffuseMapVS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="IndexedPhongPS.hlsl">
@@ -590,7 +596,7 @@
     <FxCompile Include="PhongVS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="TexturedPhongPS.hlsl">
+    <FxCompile Include="PhongDiffuseMapPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="PhongSpecMapPS.hlsl">

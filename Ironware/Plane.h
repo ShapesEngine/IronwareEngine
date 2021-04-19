@@ -31,7 +31,7 @@ class Plane
 {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated( int divisions_x, int divisions_y )
+	static IndexedTriangleList<V> MakeTesselatedTextured( int divisions_x, int divisions_y )
 	{
 		namespace dx = DirectX;
 
@@ -42,31 +42,38 @@ public:
 		constexpr float height = 2.f;
 		const int nVertices_x = divisions_x + 1;
 		const int nVertices_y = divisions_y + 1;
-		std::vector<V> vertices( nVertices_x * nVertices_y );
+		std::vector<V> vertices( (size_t)nVertices_x * nVertices_y );
 
 		{
 			const float side_x = width / 2.f;
 			const float side_y = height / 2.f;
 			const float divisionSize_x = width / float( divisions_x );
 			const float divisionSize_y = height / float( divisions_y );
+			const float divisionSize_tex_x = 1.f / float( divisions_x );
+			const float divisionSize_tex_y = 1.f / float( divisions_y );
 			const auto bottomLeft = dx::XMVectorSet( -side_x, -side_y, 0.f, 0.f );
 
 			for( int y = 0, i = 0; y < nVertices_y; y++ )
 			{
 				const float y_pos = float( y ) * divisionSize_y;
+				const float y_tex_pos = float( y ) * divisionSize_tex_y;
 				for( int x = 0; x < nVertices_x; x++, i++ )
 				{
 					const auto v = dx::XMVectorAdd(
 						bottomLeft,
 						dx::XMVectorSet( float( x ) * divisionSize_x, y_pos, 0.f, 0.f )
 					);
+					const auto x_tex_pos = float( x ) * divisionSize_tex_x;
+
 					dx::XMStoreFloat3( &vertices[i].pos, v );
+					vertices[i].n = { 0.f, 0.f, -1.f };
+					vertices[i].tex = { x_tex_pos, y_tex_pos };
 				}
 			}
 		}
 
 		std::vector<uint16_t> indices;
-		indices.reserve( sq( divisions_x * divisions_y ) * 6 );
+		indices.reserve( (size_t)sq( divisions_x * divisions_y ) * 6 );
 		{
 			// vertex x and y to index
 			const auto vxy2i = [nVertices_x]( size_t x, size_t y )
@@ -93,5 +100,5 @@ public:
 	}
 
 	template<class V>
-	__forceinline static IndexedTriangleList<V> Make() { return MakeTesselated<V>( 1, 1 ); }
+	static IndexedTriangleList<V> Make() { return MakeTesselatedTextured<V>( 1, 1 ); }
 };
