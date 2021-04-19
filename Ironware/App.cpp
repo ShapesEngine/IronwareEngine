@@ -45,13 +45,13 @@ void App::ProcessFrame()
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
-	//nano.Draw( wnd.Gfx() );
+	nano.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	//nano.ShowWindow( "Nanosuit" );
+	nano.ShowWindow( "Nanosuit" );
 
 	// present frame
 	wnd.Gfx().EndFrame();

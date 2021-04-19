@@ -24,8 +24,7 @@ namespace dx = DirectX;
 
 Mesh::Mesh( Graphics& gfx, std::vector<std::shared_ptr<Bindable>> bindablePtrs )
 {
-
-	AddBind( std::make_shared<PrimitiveTopology>( gfx ) );
+	AddBind( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 
 	for( auto& pb : bindablePtrs )
 	{
@@ -253,8 +252,6 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
 	const std::wstring base = L"Models\\nanosuit_textured\\";
 
-	bindablePtrs.push_back( VertexBuffer::Resolve( gfx, vbuff ) );
-
 	auto pVertShader = VertexShader::Resolve( gfx, L"TexturedPhongVS.cso" );
 	// save bytecode, as it will be needed in input layout
 	auto pVertShaderBytecode = static_cast<VertexShader&>( *pVertShader ).GetBytecode();
@@ -307,8 +304,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 
 	const auto meshTag = base + L"$" + to_wide( mesh.mName.C_Str() );
 
-	bindablePtrs.push_back( IndexBuffer::Resolve( gfx, indices, meshTag ) );
-
+	bindablePtrs.push_back( IndexBuffer::Resolve( gfx, meshTag, indices ) );
+	bindablePtrs.push_back( VertexBuffer::Resolve( gfx, meshTag, vbuff ) );
 	bindablePtrs.push_back( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertShaderBytecode ) );
 
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );

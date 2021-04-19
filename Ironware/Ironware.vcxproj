@@ -129,10 +129,7 @@
     <ClCompile Include="IronException.cpp" />
     <ClCompile Include="IronUtils.cpp" />
     <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="Model.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
