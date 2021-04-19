@@ -30,3 +30,9 @@ IndexBuffer::IndexBuffer( Graphics& gfx, const std::wstring& tag, const std::vec
 	subresInputData.pSysMem = indices.data();
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descInputBuffer, &subresInputData, &pIndexBuffer ) );
 }
+
+std::shared_ptr<IndexBuffer> IndexBuffer::Resolve( Graphics& gfx, const std::wstring& tag, const std::vector<uint16_t>& indices )
+{
+	assert( tag != L"?" );
+	return BindableCollection::Resolve<IndexBuffer>( gfx, tag, indices );
+}

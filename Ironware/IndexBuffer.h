@@ -37,7 +37,7 @@ public:
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetIndexBuffer( pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u ); }
 	UINT GetCount() const noexcept { return count; }
-	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::wstring& tag, const std::vector<uint16_t>& indices ) { return BindableCollection::Resolve<IndexBuffer>( gfx, tag, indices ); }
+	static std::shared_ptr<IndexBuffer> Resolve( Graphics& gfx, const std::wstring& tag, const std::vector<uint16_t>& indices );
 	std::wstring GetUID() const noexcept override { return GenerateUID_( tag ); }
 
 	template<TPACK Ignore>

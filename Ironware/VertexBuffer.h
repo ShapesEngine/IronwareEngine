@@ -37,7 +37,7 @@ public:
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
 
-	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset = 0u ) { return BindableCollection::Resolve<VertexBuffer>( gfx, tag, vbuff, offset ); }
+	static std::shared_ptr<VertexBuffer> Resolve( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset = 0u );
 	std::wstring GetUID() const noexcept override { return GenerateUID( tag ); }
 
 	template<TPACK Ignore>

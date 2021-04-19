@@ -30,11 +30,11 @@ public:
 	 * @return shared_ptr to the resolved type
 	*/
 	template<class T, TPACK Params>
-	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, Params&&... p ) IFNOEXCEPT;
+	static std::shared_ptr<T> Resolve( Graphics& gfx, Params&&... p ) IFNOEXCEPT;
 
 private:
 	template<class T, TPACK Params>
-	std::shared_ptr<Bindable> Resolve_( Graphics& gfx, Params&&... p ) IFNOEXCEPT;
+	std::shared_ptr<T> Resolve_( Graphics& gfx, Params&&... p ) IFNOEXCEPT;
 	static BindableCollection& Get() noexcept;
 
 private:
@@ -44,20 +44,20 @@ private:
 #pragma region implementation
 
 template<class T, TPACK Params>
-std::shared_ptr<Bindable> BindableCollection::Resolve( Graphics& gfx, Params&&... p ) IFNOEXCEPT
+std::shared_ptr<T> BindableCollection::Resolve( Graphics& gfx, Params&&... p ) IFNOEXCEPT
 {
 	static_assert( std::is_base_of<Bindable, T>::value, "Can only resolve classes derived from Bindable" );
 	return Get().Resolve_<T>( gfx, std::forward<Params>( p )... );
 }
 
 template<class T, TPACK Params>
-std::shared_ptr<Bindable> BindableCollection::Resolve_( Graphics& gfx, Params&&... p ) IFNOEXCEPT
+std::shared_ptr<T> BindableCollection::Resolve_( Graphics& gfx, Params&&... p ) IFNOEXCEPT
 {
 	const auto key = T::GenerateUID( std::forward<Params>( p )... );
 	const auto i = bindables.find( key );
 	if( i != bindables.cend() )
 	{
-		return i->second;
+		return std::static_pointer_cast<T>( i->second );
 	}
 	auto bind = std::make_shared<T>( gfx, std::forward<Params>( p )... );
 	bindables[key] = bind;

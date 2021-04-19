@@ -35,12 +35,14 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 	AddBind( IndexBuffer::Resolve( gfx, sphereTag, model.indices ) );
 
 	auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
-	auto pVertexShaderBytecode = static_cast<VertexShader&>( *pVertexShader.get() ).GetBytecode();
+	auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 	AddBind( std::move( pVertexShader ) );
 
 	AddBind( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
 
-	pPixelCBuff = static_cast<PixelConstantBuffer<dx::XMFLOAT3A>*>( AddBind( PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color ) ) );
+	const auto pixCBuff = PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color );
+	pPixelCBuff = pixCBuff.get();
+	AddBind( pixCBuff );
 
 	AddBind( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 

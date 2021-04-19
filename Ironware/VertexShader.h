@@ -41,7 +41,7 @@ public:
 
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetShader( pVertexShader.Get(), nullptr, 0u ); }
 	ID3DBlob* GetBytecode() const noexcept { return pBytecodeBlob.Get(); }
-	static std::shared_ptr<Bindable> Resolve( Graphics& gfx, const std::wstring& path ) noexcept { return BindableCollection::Resolve<VertexShader>( gfx, path ); }
+	static std::shared_ptr<VertexShader> Resolve( Graphics& gfx, const std::wstring& path ) noexcept { return BindableCollection::Resolve<VertexShader>( gfx, path ); }
 	static std::wstring GenerateUID( const std::wstring path ) noexcept { return to_wide( typeid( VertexShader ).name() ) + L"#" + path; }
 	std::wstring GetUID() const noexcept override { return GenerateUID( path ); }
 

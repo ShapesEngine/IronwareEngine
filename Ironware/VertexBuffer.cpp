@@ -32,3 +32,9 @@ VertexBuffer::VertexBuffer( Graphics& gfx, const std::wstring& tag, const Vertex
 	subresVertexData.pSysMem = vbuff.GetData();
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBuffer( &descVertexBuffer, &subresVertexData, &pVertexBuffer ) );
 }
+
+std::shared_ptr<VertexBuffer> VertexBuffer::Resolve( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset )
+{
+	assert( tag != L"?" );
+	return BindableCollection::Resolve<VertexBuffer>( gfx, tag, vbuff, offset );
+}
