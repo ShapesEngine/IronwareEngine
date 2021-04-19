@@ -43,15 +43,16 @@ Sheet::Sheet( Graphics& gfx, float size )
 	auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 	AddBind( std::move( pVertexShader ) );
 
-	AddBind( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
+	AddBind( PixelShader::Resolve( gfx, L"PhongNormalMapPS.cso" ) );
 
 	AddBind( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
+	AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );
 	AddBind( Sampler::Resolve( gfx ) );
 
 	struct SpecularCBuff
 	{
-		float intensity = 0.5f;
-		float power = 50.f;
+		float intensity = 0.1f;
+		float power = 22.f;
 		alignas( 8 ) float padding;
 	}spec;
 
