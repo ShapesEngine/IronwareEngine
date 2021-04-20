@@ -43,7 +43,6 @@ void App::ProcessFrame()
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
 	nano.Draw( wnd.Gfx() );
-	nano2.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
 	wall.Draw( wnd.Gfx() );
 
@@ -51,7 +50,7 @@ void App::ProcessFrame()
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
 	nano.ShowWindow( "Nanosuit" );
-	nano2.ShowWindow( "Nanosuit - 2" );
+	wall.SpawnControlWindow( wnd.Gfx() );
 
 	// present frame
 	wnd.Gfx().EndFrame();

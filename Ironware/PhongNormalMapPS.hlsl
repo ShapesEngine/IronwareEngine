@@ -20,11 +20,15 @@ cbuffer SpecularCBuf
 {
     float specularIntensity;
     float specularPower;
+    bool isNMapEnabled;
 };
 
 float4 main( float3 viewPos : Position, float3 n : Normal, float2 tc : TexCoord ) : SV_Target
 {
-    n = -nmap.Sample( splr, tc ).xyz;
+    if( isNMapEnabled )
+    {
+        n = -nmap.Sample( splr, tc ).xyz;
+    }
     // fragment to light vector data
     const float3 vToL = lightPos - viewPos;
     const float distToL = length( vToL );

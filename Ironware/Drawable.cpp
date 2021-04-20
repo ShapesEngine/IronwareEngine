@@ -22,12 +22,11 @@ void Drawable::Draw( Graphics& gfx ) const IFNOEXCEPT
 	gfx.DrawIndexed( pIndexBuffer->GetCount() );
 }
 
-Bindable* Drawable::AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT
+void Drawable::AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT
 {
 	if( const auto pi = dynamic_cast<IndexBuffer*>( bind.get() ) )
 	{
 		pIndexBuffer = pi;
 	}
 	binds.push_back( std::move( bind ) );
-	return binds.back().get();
 }

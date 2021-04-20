@@ -44,6 +44,7 @@ private:
 public:
 	TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT slot = 0u );
 	void Bind( Graphics& gfx ) noexcept override;
+	std::wstring GetUID() const noexcept;
 
 private:
 	static std::unique_ptr<VertexConstantBuffer<Transforms>> pVertConstBuffer;

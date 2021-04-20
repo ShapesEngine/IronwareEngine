@@ -45,7 +45,6 @@ private:
 	Window wnd{ 1280, 720, L"Ironware Engine" };
 	PointLight pointLight{ wnd.Gfx() };
 	Model nano{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
-	Model nano2{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
 	Sheet wall{ wnd.Gfx(), 3.f };
 	IronTimer timer;
 };

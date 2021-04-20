@@ -44,7 +44,7 @@ public:
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
-	Bindable* AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT;
+	void AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT;
 
 protected:
 	/**

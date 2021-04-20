@@ -41,5 +41,4 @@ private:
 	DirectX::XMFLOAT3 position;
 	// color's proper value is set when the draw call has been called
 	DirectX::XMFLOAT3A color;
-	PixelConstantBuffer<DirectX::XMFLOAT3A>* pPixelCBuff;
 };

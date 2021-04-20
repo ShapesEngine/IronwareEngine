@@ -40,11 +40,7 @@ public:
 	*/
 	virtual void Bind( Graphics& gfx ) noexcept = 0;
 	virtual ~Bindable() = default;
-	virtual std::wstring GetUID() const noexcept
-	{
-		assert( false );
-		return L"";
-	}
+	virtual std::wstring GetUID() const noexcept = 0;
 
 protected:
 	static ID3D11DeviceContext* GetContext( Graphics& gfx ) noexcept { return gfx.pImmediateContext.Get(); }

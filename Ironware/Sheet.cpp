@@ -10,6 +10,7 @@
 #include "Vertex.h"
 #define IR_INCLUDE_TEXTURE
 #include "BindableCommon.h"
+#include <imgui/imgui.h>
 #include "Plane.h"
 
 Sheet::Sheet( Graphics& gfx, float size )
@@ -49,14 +50,7 @@ Sheet::Sheet( Graphics& gfx, float size )
 	AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );
 	AddBind( Sampler::Resolve( gfx ) );
 
-	struct SpecularCBuff
-	{
-		float intensity = 0.1f;
-		float power = 22.f;
-		alignas( 8 ) float padding;
-	}spec;
-
-	AddBind( PixelConstantBuffer<SpecularCBuff>::Resolve( gfx, spec, 1u ) );
+	AddBind( PixelConstantBuffer<SheetCBuff>::Resolve( gfx, cbuff, 1u ) );
 
 	AddBind( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
@@ -69,4 +63,45 @@ DirectX::XMMATRIX Sheet::GetTransformXM() const noexcept
 {
 	return DirectX::XMMatrixRotationRollPitchYaw( orientation.x, orientation.y, orientation.z ) *
 		DirectX::XMMatrixTranslation( pos.x, pos.y, pos.z );
+}
+
+void Sheet::SpawnControlWindow( Graphics& gfx ) noexcept
+{
+	if( ImGui::Begin( "Sheet" ) )
+	{
+		ImGui::Text( "Position" );
+		ImGui::SliderFloat( "X", &pos.x, -60.f, 60.f, "%.1f" );
+		ImGui::SliderFloat( "Y", &pos.y, -60.f, 60.f, "%.1f" );
+		ImGui::SliderFloat( "Z", &pos.z, -60.f, 60.f, "%.1f" );
+
+		ImGui::Text( "Orientation" );
+		ImGui::SliderAngle( "Pitch", &orientation.x, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Yaw", &orientation.y, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Roll", &orientation.z, -180.0f, 180.0f );
+
+		ImGui::Text( "Properties" );
+		const bool bi = ImGui::SliderFloat( "Specular Intensity", &cbuff.specularIntensity, 0.01f, 1.f, "%.2f", 2 );
+		const bool bp = ImGui::SliderFloat( "Specular Power", &cbuff.specularPower, 10.f, 50.f, "%.f", 2 );
+		const bool bnm = ImGui::Checkbox( "Enable Normal Mapping", reinterpret_cast<bool*>( &cbuff.isNormalMappingEnabled ) );
+
+		if( bi || bp || bnm )
+		{
+			QueryBindable<PixelConstantBuffer<SheetCBuff>>()->Update( gfx, cbuff );
+		}
+
+		if( ImGui::Button( "Reset" ) )
+		{
+			Reset();
+		}
+	}
+	ImGui::End();
+}
+
+void Sheet::Reset() noexcept
+{
+	pos = { 10.f, 10.f, 10.f };
+	orientation = { 0.f, 0.f, 0.f };
+	cbuff.specularIntensity = 0.1f;
+	cbuff.specularPower = 22.f;
+	cbuff.isNormalMappingEnabled = TRUE;
 }

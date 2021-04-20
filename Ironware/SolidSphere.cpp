@@ -40,9 +40,7 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 
 	AddBind( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
 
-	const auto pixCBuff = PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color, 1u );
-	pPixelCBuff = pixCBuff.get();
-	AddBind( pixCBuff );
+	AddBind( PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color, 1u ) );
 
 	AddBind( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
@@ -54,5 +52,5 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 void SolidSphere::UpdateColor( Graphics& gfx, const DirectX::XMFLOAT3A& col ) noexcept
 {
 	color = col;
-	pPixelCBuff->Update( gfx, color );
+	QueryBindable<PixelConstantBuffer<DirectX::XMFLOAT3A>>()->Update( gfx, color );
 }

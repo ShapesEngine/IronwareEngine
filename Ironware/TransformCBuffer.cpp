@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date September 2020
  *
- * 
+ *
  */
 #include "TransformCBuffer.h"
 
@@ -19,7 +19,7 @@ TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT 
 	}
 }
 
- void TransformCBuffer::Bind( Graphics & gfx ) noexcept
+void TransformCBuffer::Bind( Graphics & gfx ) noexcept
 {
 	const auto modelView = parent.GetTransformXM() * gfx.GetCamera();
 	const Transforms transforms =
@@ -33,4 +33,10 @@ TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT 
 	// M * V * P => model * view * projection
 	pVertConstBuffer->Update( gfx, transforms );
 	pVertConstBuffer->Bind( gfx );
+}
+
+std::wstring TransformCBuffer::GetUID() const noexcept
+{
+	assert( "Please don't use bindable collection system with this class" );
+	return L"?";
 }
