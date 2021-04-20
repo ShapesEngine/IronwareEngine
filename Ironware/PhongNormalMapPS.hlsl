@@ -27,7 +27,10 @@ float4 main( float3 viewPos : Position, float3 n : Normal, float2 tc : TexCoord 
 {
     if( isNMapEnabled )
     {
-        n = -nmap.Sample( splr, tc ).xyz;
+        const float3 sampledNMap = (float3)nmap.Sample( splr, tc );
+        n.x = 2.f * sampledNMap.x - 1.f;
+        n.y = 2.f * sampledNMap.y - 1.f;
+        n.z = -sampledNMap.z;
     }
     // fragment to light vector data
     const float3 vToL = lightPos - viewPos;
