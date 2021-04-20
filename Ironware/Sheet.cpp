@@ -58,7 +58,7 @@ Sheet::Sheet( Graphics& gfx, float size )
 
 	AddBind( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 
-	AddBind( std::make_shared<TransformCBuffer>( gfx, *this ) );
+	AddBind( std::make_shared<TransformCBufferEx>( gfx, *this, 0u, 2u ) );
 }
 
 DirectX::XMMATRIX Sheet::GetTransformXM() const noexcept
@@ -101,7 +101,7 @@ void Sheet::SpawnControlWindow( Graphics& gfx ) noexcept
 
 void Sheet::Reset() noexcept
 {
-	pos = { 10.f, 10.f, 2.f };
+	pos = { 10.f, 10.f, 0.f };
 	orientation = { 0.f, 0.f, 0.f };
 	cbuff.specularIntensity = 0.1f;
 	cbuff.specularPower = 22.f;

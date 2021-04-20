@@ -15,7 +15,7 @@ App::App()
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
 	wnd.EnableMouseCursor();
-	wall.SetPos( { 10.f, 10.f, 10.f } );
+	wall.SetPos( { 10.f, 10.f, 0.f } );
 }
 
 int App::BeginFrame()

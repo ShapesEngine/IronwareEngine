@@ -19,24 +19,28 @@ TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT 
 	}
 }
 
-void TransformCBuffer::Bind( Graphics & gfx ) noexcept
+void TransformCBuffer::UpdateBind( Graphics& gfx, const Transforms& transforms ) noexcept
+{
+	pVertConstBuffer->Update( gfx, transforms );
+	pVertConstBuffer->Bind( gfx );
+}
+
+TransformCBuffer::Transforms TransformCBuffer::GetTransform( Graphics& gfx ) const noexcept
 {
 	const auto modelView = parent.GetTransformXM() * gfx.GetCamera();
-	const Transforms transforms =
-	{
+	return	{
+		// M * V => model * view
 		DirectX::XMMatrixTranspose( modelView ),
+		// MV * P => modelview * projection
 		DirectX::XMMatrixTranspose(
 			modelView *
 			gfx.GetProjection()
 		)
 	};
-	// M * V * P => model * view * projection
-	pVertConstBuffer->Update( gfx, transforms );
-	pVertConstBuffer->Bind( gfx );
 }
 
 std::wstring TransformCBuffer::GetUID() const noexcept
 {
-	assert( "Please don't use bindable collection system with this class" );
+	static_assert( "Please don't use bindable collection system with this class" );
 	return L"?";
 }

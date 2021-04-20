@@ -34,7 +34,7 @@
  */
 class TransformCBuffer : public Bindable
 {
-private:
+protected:
 	struct Transforms
 	{
 		DirectX::XMMATRIX modelView;
@@ -43,10 +43,16 @@ private:
 
 public:
 	TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT slot = 0u );
-	void Bind( Graphics& gfx ) noexcept override;
-	std::wstring GetUID() const noexcept;
+	void Bind( Graphics& gfx ) noexcept override { UpdateBind( gfx, GetTransform( gfx ) ); }
+
+protected:
+	void UpdateBind( Graphics& gfx, const Transforms &transforms ) noexcept;
+	Transforms GetTransform( Graphics & gfx ) const noexcept;
 
 private:
+	std::wstring GetUID() const noexcept override;
+
+protected:
 	static std::unique_ptr<VertexConstantBuffer<Transforms>> pVertConstBuffer;
 	const Drawable& parent;
 };

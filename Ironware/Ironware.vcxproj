@@ -231,6 +231,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="PrimitiveTopology.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
+    <ClCompile Include="TransformCBufferEx.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="PrimitiveTopology.h" />
     <ClInclude Include="TransformCBuffer.h" />
+    <ClInclude Include="TransformCBufferEx.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />

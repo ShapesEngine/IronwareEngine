@@ -23,6 +23,12 @@ cbuffer SpecularCBuf
     bool isNMapEnabled;
 };
 
+cbuffer CBuffer
+{
+    matrix modelView;
+    matrix modelViewProjection;
+};
+
 float4 main( float3 viewPos : Position, float3 n : Normal, float2 tc : TexCoord ) : SV_Target
 {
     if( isNMapEnabled )
@@ -31,6 +37,7 @@ float4 main( float3 viewPos : Position, float3 n : Normal, float2 tc : TexCoord 
         n.x = 2.f * sampledNMap.x - 1.f;
         n.y = 2.f * sampledNMap.y - 1.f;
         n.z = -sampledNMap.z;
+        n = mul( n, (float3x3)modelView );
     }
     // fragment to light vector data
     const float3 vToL = lightPos - viewPos;
