@@ -162,30 +162,30 @@ public:
 	{
 		auto itl = MakeIndependent<V>();
 
-		itl.vertices[0].tc = { 0.f,0.f };
-		itl.vertices[1].tc = { 1.f,0.f };
-		itl.vertices[2].tc = { 0.f,1.f };
-		itl.vertices[3].tc = { 1.f,1.f };
-		itl.vertices[4].tc = { 0.f,0.f };
-		itl.vertices[5].tc = { 1.f,0.f };
-		itl.vertices[6].tc = { 0.f,1.f };
-		itl.vertices[7].tc = { 1.f,1.f };
-		itl.vertices[8].tc = { 0.f,0.f };
-		itl.vertices[9].tc = { 1.f,0.f };
-		itl.vertices[10].tc = { 0.f,1.f };
-		itl.vertices[11].tc = { 1.f,1.f };
-		itl.vertices[12].tc = { 0.f,0.f };
-		itl.vertices[13].tc = { 1.f,0.f };
-		itl.vertices[14].tc = { 0.f,1.f };
-		itl.vertices[15].tc = { 1.f,1.f };
-		itl.vertices[16].tc = { 0.f,0.f };
-		itl.vertices[17].tc = { 1.f,0.f };
-		itl.vertices[18].tc = { 0.f,1.f };
-		itl.vertices[19].tc = { 1.f,1.f };
-		itl.vertices[20].tc = { 0.f,0.f };
-		itl.vertices[21].tc = { 1.f,0.f };
-		itl.vertices[22].tc = { 0.f,1.f };
-		itl.vertices[23].tc = { 1.f,1.f };
+		itl.vertices[0].tex = { 0.f,0.f };
+		itl.vertices[1].tex = { 1.f,0.f };
+		itl.vertices[2].tex = { 0.f,1.f };
+		itl.vertices[3].tex = { 1.f,1.f };
+		itl.vertices[4].tex = { 0.f,0.f };
+		itl.vertices[5].tex = { 1.f,0.f };
+		itl.vertices[6].tex = { 0.f,1.f };
+		itl.vertices[7].tex = { 1.f,1.f };
+		itl.vertices[8].tex = { 0.f,0.f };
+		itl.vertices[9].tex = { 1.f,0.f };
+		itl.vertices[10].tex = { 0.f,1.f };
+		itl.vertices[11].tex = { 1.f,1.f };
+		itl.vertices[12].tex = { 0.f,0.f };
+		itl.vertices[13].tex = { 1.f,0.f };
+		itl.vertices[14].tex = { 0.f,1.f };
+		itl.vertices[15].tex = { 1.f,1.f };
+		itl.vertices[16].tex = { 0.f,0.f };
+		itl.vertices[17].tex = { 1.f,0.f };
+		itl.vertices[18].tex = { 0.f,1.f };
+		itl.vertices[19].tex = { 1.f,1.f };
+		itl.vertices[20].tex = { 0.f,0.f };
+		itl.vertices[21].tex = { 1.f,0.f };
+		itl.vertices[22].tex = { 0.f,1.f };
+		itl.vertices[23].tex = { 1.f,1.f };
 
 		return itl;
 	}
