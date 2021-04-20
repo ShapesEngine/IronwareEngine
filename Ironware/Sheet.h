@@ -24,12 +24,12 @@ public:
 	void Reset() noexcept;
 
 private:
-	DirectX::XMFLOAT3 pos = { 0.f, 0.f, 0.f };
-	DirectX::XMFLOAT3 orientation = { 0.f, 0.f, 0.f };
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 orientation;
 	struct SheetCBuff
 	{
-		float specularIntensity = 0.1f;
-		float specularPower = 22.f;
-		alignas( 8 ) BOOL isNormalMappingEnabled = TRUE;
+		float specularIntensity;
+		float specularPower;
+		alignas( 8 ) BOOL isNormalMappingEnabled;
 	}cbuff;
 };

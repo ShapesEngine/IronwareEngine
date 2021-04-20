@@ -15,6 +15,8 @@
 
 Sheet::Sheet( Graphics& gfx, float size )
 {
+	Reset();
+
 	namespace dx = DirectX;
 
 	struct Vertex
@@ -99,7 +101,7 @@ void Sheet::SpawnControlWindow( Graphics& gfx ) noexcept
 
 void Sheet::Reset() noexcept
 {
-	pos = { 10.f, 10.f, 10.f };
+	pos = { 10.f, 10.f, 2.f };
 	orientation = { 0.f, 0.f, 0.f };
 	cbuff.specularIntensity = 0.1f;
 	cbuff.specularPower = 22.f;
