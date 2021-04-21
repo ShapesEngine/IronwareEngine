@@ -55,6 +55,10 @@ D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const IFNOEXCEPT
 		return GenerateDesc<ElementType::Texture2D>( GetOffset() );
 	case ElementType::Normal:
 		return GenerateDesc<ElementType::Normal>( GetOffset() );
+	case ElementType::Tangent:
+		return GenerateDesc<ElementType::Tangent>( GetOffset() );
+	case ElementType::Bitangent:
+		return GenerateDesc<ElementType::Bitangent>( GetOffset() );
 	case ElementType::Float3Color:
 		return GenerateDesc<ElementType::Float3Color>( GetOffset() );
 	case ElementType::Float4Color:
@@ -78,6 +82,10 @@ const wchar_t* VertexLayout::Element::GetCode() const noexcept
 		return Map<ElementType::Texture2D>::code;
 	case ElementType::Normal:
 		return Map<ElementType::Normal>::code;
+	case ElementType::Tangent:
+		return Map<ElementType::Tangent>::code;
+	case ElementType::Bitangent:
+		return Map<ElementType::Bitangent>::code;
 	case ElementType::Float3Color:
 		return Map<ElementType::Float3Color>::code;
 	case ElementType::Float4Color:

@@ -75,7 +75,7 @@ public:
 	};
 
 public:
-	Model( Graphics& gfx, std::string filename );
+	Model( Graphics& gfx, std::string filename, DirectX::XMFLOAT3 startingPos = { 0.f, 0.f, 0.f } );
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
 	void ShowWindow( const char* name = "Model" ) const IFNOEXCEPT;
 	size_t GetNodeSize() const noexcept;

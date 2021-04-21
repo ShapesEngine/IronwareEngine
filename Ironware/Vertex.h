@@ -39,6 +39,8 @@ public:
 		Position3D,
 		Texture2D,
 		Normal,
+		Tangent,
+		Bitangent,
 		Float3Color,
 		Float4Color,
 		BGRAColor,
@@ -73,6 +75,20 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Normal";
 		static constexpr const wchar_t* code = L"N";
+	};
+	template<> struct Map<ElementType::Tangent>
+	{
+		using SysType = DirectX::XMFLOAT3;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+		static constexpr const char* semantic = "Tangent";
+		static constexpr const wchar_t* code = L"T";
+	};
+	template<> struct Map<ElementType::Bitangent>
+	{
+		using SysType = DirectX::XMFLOAT3;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+		static constexpr const char* semantic = "Bitangent";
+		static constexpr const wchar_t* code = L"B";
 	};
 	template<> struct Map<ElementType::Float3Color>
 	{
@@ -312,6 +328,10 @@ constexpr size_t VertexLayout::Element::SizeOf( ElementType type ) IFNOEXCEPT
 		return sizeof( Map<ElementType::Texture2D>::SysType );
 	case ElementType::Normal:
 		return sizeof( Map<ElementType::Normal>::SysType );
+	case ElementType::Tangent:
+		return sizeof( Map<ElementType::Tangent>::SysType );
+	case ElementType::Bitangent:
+		return sizeof( Map<ElementType::Bitangent>::SysType );
 	case ElementType::Float3Color:
 		return sizeof( Map<ElementType::Float3Color>::SysType );
 	case ElementType::Float4Color:
@@ -366,6 +386,10 @@ void Vertex::SetAttributeByIndex( size_t index, T && value ) IFNOEXCEPT
 		break;
 	case ElType::Normal:
 		SetAttribute<ElType::Normal>( pAttribute, std::forward<T>( value ) );
+	case ElType::Tangent:
+		SetAttribute<ElType::Tangent>( pAttribute, std::forward<T>( value ) );
+	case ElType::Bitangent:
+		SetAttribute<ElType::Bitangent>( pAttribute, std::forward<T>( value ) );
 		break;
 	case ElType::Float3Color:
 		SetAttribute<ElType::Float3Color>( pAttribute, std::forward<T>( value ) );

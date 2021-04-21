@@ -7,7 +7,7 @@ cbuffer CBuffer
 struct VSOut
 {
     float3 viewPos : Position;
-    float3 n : Normal;
+    float3 viewN : Normal;
     float3 color : Color;    
     float4 pos : SV_Position;
 };
@@ -18,7 +18,7 @@ VSOut main( float3 pos : Position, float3 n : Normal, float3 color : Color )
     
     VSOut vso;
     vso.viewPos = mul( pos4, modelView );
-    vso.n = n;
+    vso.viewN = n;
     vso.color = color;    
     vso.pos = mul( pos4, modelViewProjection );
     

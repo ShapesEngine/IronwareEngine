@@ -15,7 +15,7 @@
 #include "PointLight.h"
 #include "Model.h"
 #include "GDIPlusManager.h"
-#include "Box.h"
+#include "Sheet.h"
 
  /**
   * @brief Base class that controls scene
@@ -44,7 +44,8 @@ private:
 	Camera camera;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
 	PointLight pointLight{ wnd.Gfx() };
-	Model nano{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
-	Box wall{ wnd.Gfx(), 3.f };
+	Model wallObj{ wnd.Gfx(), "Models\\brickwall\\brickwall.obj", { 4.f, 10.f, -6.f } };
+	//Model nano{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
+	Sheet wall{ wnd.Gfx(), 3.f };
 	IronTimer timer;
 };

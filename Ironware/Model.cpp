@@ -174,7 +174,7 @@ const char* Model::Exception::what() const noexcept
 	return CON_CHREINT_CAST( whatBuffer.c_str() );
 }
 
-Model::Model( Graphics& gfx, std::string filename )
+Model::Model( Graphics& gfx, std::string filename, DirectX::XMFLOAT3 startingPos )
 {
 	Assimp::Importer importer;
 	auto pScene = importer.ReadFile(
@@ -182,7 +182,8 @@ Model::Model( Graphics& gfx, std::string filename )
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ConvertToLeftHanded |
-		aiProcess_GenNormals
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
 	);
 
 	if( !pScene )
@@ -197,9 +198,10 @@ Model::Model( Graphics& gfx, std::string filename )
 	}
 
 	pRoot = ParseNode( *pScene->mRootNode );
+	pRoot->SetAppliedTransform( DirectX::XMMatrixTranslationFromVector( DirectX::XMLoadFloat3( &startingPos ) ) );
 }
 
-void Model::Draw( Graphics & gfx ) const noexcept( !IS_DEBUG )
+void Model::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
 {
 	if( auto node = pModelWindow->GetSelectedNode() )
 	{
@@ -208,7 +210,7 @@ void Model::Draw( Graphics & gfx ) const noexcept( !IS_DEBUG )
 	pRoot->Draw( gfx, dx::XMMatrixIdentity() );
 }
 
-void Model::ShowWindow( const char * name ) const noexcept( !IS_DEBUG )
+void Model::ShowWindow( const char* name ) const noexcept( !IS_DEBUG )
 {
 	pModelWindow->ShowWindow( name, *pRoot );
 }
@@ -228,6 +230,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		.Append( ElType::Position3D )
 		.Append( ElType::Normal )
 		.Append( ElType::Texture2D )
+		.Append( VertexLayout::ElementType::Tangent )
+		.Append( VertexLayout::ElementType::Bitangent )
 	);
 
 	for( uint32_t i = 0; i < mesh.mNumVertices; i++ )
@@ -235,7 +239,9 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		vbuff.EmplaceBack(
 			*reinterpret_cast<dx::XMFLOAT3*>( &mesh.mVertices[i] ), // mVertices is vertex positions
 			*reinterpret_cast<dx::XMFLOAT3*>( &mesh.mNormals[i] ),
-			*reinterpret_cast<dx::XMFLOAT2*>( &mesh.mTextureCoords[0][i] )
+			*reinterpret_cast<dx::XMFLOAT2*>( &mesh.mTextureCoords[0][i] ),
+			*reinterpret_cast<dx::XMFLOAT3*>( &mesh.mTangents[i] ),
+			*reinterpret_cast<dx::XMFLOAT3*>( &mesh.mBitangents[i] )
 		);
 	}
 
@@ -251,9 +257,9 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 	}
 
 	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
-	const std::wstring base = L"Models\\nanosuit_textured\\";
+	const std::wstring base = L"Models\\brickwall\\";
 
-	auto pVertShader = VertexShader::Resolve( gfx, L"PhongDiffuseMapVS.cso" );
+	auto pVertShader = VertexShader::Resolve( gfx, L"PhongNormalMapVS.cso" );
 	// save bytecode, as it will be needed in input layout
 	auto pVertShaderBytecode = static_cast<VertexShader&>( *pVertShader ).GetBytecode();
 	bindablePtrs.push_back( std::move( pVertShader ) );
@@ -270,6 +276,11 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
 		bindablePtrs.push_back( Texture::Resolve( gfx, wTexPath ) );
 
+		if( material.GetTexture( aiTextureType_NORMALS, 0u, &texPath ) == aiReturn_SUCCESS )
+		{
+			std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
+			bindablePtrs.push_back( Texture::Resolve( gfx, wTexPath, 2u ) );
+		}
 		if( material.GetTexture( aiTextureType_SPECULAR, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
 			std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
@@ -286,7 +297,12 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 
 	if( hasSpecMap )
 	{
-		bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongSpecMapPS.cso" ) );
+		bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongSpecNormalMapPS.cso" ) );
+		struct PSMaterialConstant
+		{
+			alignas( 16 ) BOOL normalMapEnabled = TRUE;
+		} pMc;
+		bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstant>::Resolve( gfx, pMc, 1u ) );
 	}
 	else
 	{
@@ -294,13 +310,13 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		{
 			float specularIntensity = 0.9f;
 			float specularPower;
-			alignas( 8 ) float padding;
+			alignas( 8 ) BOOL normalMapEnabled = TRUE;
 		} pMc;
 
 		pMc.specularPower = shininess;
 
 		bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstant>::Resolve( gfx, pMc, 1u ) );
-		bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
+		bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongNormalMapPS.cso" ) );
 	}
 
 	const auto meshTag = base + L"$" + to_wide( mesh.mName.C_Str() );

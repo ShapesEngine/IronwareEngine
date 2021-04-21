@@ -1,5 +1,6 @@
 Texture2D tex;
-Texture2D nmap : register( t2 );
+Texture2D specTex;
+Texture2D nmap;
 
 SamplerState splr;
 
@@ -16,10 +17,8 @@ cbuffer LightCBuf
 };
 
 // for object color
-cbuffer SpecularCBuf
+cbuffer NMapCbuf
 {
-    float specularIntensity;
-    float specularPower;
     bool isNMapEnabled;
 };
 
@@ -53,14 +52,16 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
     const float att = attConst + attLin * distToL + attQuad * ( distToL * distToL );
     const float luminosity = 1.f / att;
 	// diffuse intensity
-    const float3 diffuse = diffuseColor * diffuseIntensity * luminosity * max( 0.f, dot( dirToL, viewN ) );
+    const float3 diffuse = diffuseColor * diffuseIntensity * luminosity * max( 0.f, dot( dirToL, viewN ) ) * (float3)tex.Sample( splr, tc );
     // reflected light vector
     const float3 w = viewN * dot( vToL, viewN );
     const float3 r = w * 2.f - vToL;
 	// calculate specular intensity based on angle between viewing vector and reflection vector, narrow with power function
     // multiplying by luminosity because we are using point light here
-    const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) *
-                            specularIntensity * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularPower );
+    float4 sampledSpec = specTex.Sample( splr, tc );
+    float3 specularColor = sampledSpec.rgb;
+    float specularExpPower = pow( 2.f, sampledSpec.a * 13.f );
+    const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularExpPower );
 	// final color
-    return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular ), 1.f );
+    return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular * specularColor ), 1.f );
 }
