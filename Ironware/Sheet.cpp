@@ -46,7 +46,7 @@ Sheet::Sheet( Graphics& gfx, float size )
 	auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 	AddBind( std::move( pVertexShader ) );
 
-	AddBind( PixelShader::Resolve( gfx, L"PhongNormalMapPS.cso" ) );
+	AddBind( PixelShader::Resolve( gfx, L"PhongNormalMapProcPS.cso" ) );
 
 	AddBind( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
 	AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );

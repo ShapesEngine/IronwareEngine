@@ -44,13 +44,13 @@ void App::ProcessFrame()
 
 	wallObj.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
-	//wall.Draw( wnd.Gfx() );
+	wall.Draw( wnd.Gfx() );
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
 	wallObj.ShowWindow();
-	//wall.SpawnControlWindow( wnd.Gfx() );
+	wall.SpawnControlWindow( wnd.Gfx() );
 
 	// present frame
 	wnd.Gfx().EndFrame();

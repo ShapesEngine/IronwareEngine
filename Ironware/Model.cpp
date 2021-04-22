@@ -107,9 +107,9 @@ private:
 };
 
 Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const dx::XMMATRIX& transform_in ) IFNOEXCEPT :
-meshPtrs( std::move( meshPtrs ) ),
-name( name ),
-index( index )
+	meshPtrs( std::move( meshPtrs ) ),
+	name( name ),
+	index( index )
 {
 	dx::XMStoreFloat4x4( &parentTransform, transform_in );
 	dx::XMStoreFloat4x4( &appliedTransform, dx::XMMatrixIdentity() );
@@ -198,7 +198,10 @@ Model::Model( Graphics& gfx, std::string filename, DirectX::XMFLOAT3 startingPos
 	}
 
 	pRoot = ParseNode( *pScene->mRootNode );
-	pRoot->SetAppliedTransform( DirectX::XMMatrixTranslationFromVector( DirectX::XMLoadFloat3( &startingPos ) ) );
+	pRoot->SetAppliedTransform(
+		DirectX::XMMatrixScaling( 3.f, 3.f, 1.f ) *
+		DirectX::XMMatrixTranslationFromVector( DirectX::XMLoadFloat3( &startingPos ) )
+	);
 }
 
 void Model::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
@@ -308,7 +311,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 	{
 		struct PSMaterialConstant
 		{
-			float specularIntensity = 0.9f;
+			float specularIntensity = 0.2f;
 			float specularPower;
 			alignas( 8 ) BOOL normalMapEnabled = TRUE;
 		} pMc;

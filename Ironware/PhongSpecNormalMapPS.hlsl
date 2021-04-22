@@ -32,16 +32,15 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
 {
     if( isNMapEnabled )
     {
-        const float3 sampledNMap = (float3)nmap.Sample( splr, tc );
         const float3x3 tanToView = float3x3(
             normalize( viewTan ),
             normalize( viewBitan ),
             normalize( viewN )
         );
         
-        viewN.x = 2.f * sampledNMap.x - 1.f;
-        viewN.y = -2.f * sampledNMap.y + 1.f;
-        viewN.z = sampledNMap.z;
+        const float3 sampledNMap = (float3)nmap.Sample( splr, tc );
+        viewN = 2.0f * sampledNMap - 1.0f;
+        viewN.y = -viewN.y;
         viewN = mul( viewN, tanToView );
     }
     // fragment to light vector data
