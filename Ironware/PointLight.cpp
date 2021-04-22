@@ -67,7 +67,7 @@ void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept
 void PointLight::Reset() noexcept
 {
 	cbufData = {
-		{ 4.f, 10.f, -10.f },
+		{ 4.f, 5.f, -10.f },
 		{ 0.05f, 0.05f, 0.05f },
 		{ 1.f, 1.f, 1.f },
 		1.f,

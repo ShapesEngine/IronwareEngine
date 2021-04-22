@@ -623,6 +623,9 @@
     <FxCompile Include="PhongSpecNormalMapPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="PhongPS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\External\Includes\DXErr\DXGetErrorDescription.inl">

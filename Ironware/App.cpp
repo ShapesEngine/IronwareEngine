@@ -15,7 +15,7 @@ App::App()
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
 	wnd.EnableMouseCursor();
-	wall.SetPos( { 10.f, 10.f, 0.f } );
+	//wall.SetPos( { 10.f, 10.f, 0.f } );
 }
 
 int App::BeginFrame()
@@ -42,15 +42,15 @@ void App::ProcessFrame()
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
-	wallObj.Draw( wnd.Gfx() );
+	goblin.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
-	wall.Draw( wnd.Gfx() );
+	//wall.Draw( wnd.Gfx() );
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	wallObj.ShowWindow();
-	wall.SpawnControlWindow( wnd.Gfx() );
+	goblin.ShowWindow();
+	//wall.SpawnControlWindow( wnd.Gfx() );
 
 	// present frame
 	wnd.Gfx().EndFrame();
