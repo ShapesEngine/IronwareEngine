@@ -249,6 +249,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 	bool hasDiffMap = false;
 	bool hasSpecMap = false;
 	bool hasNormalMap = false;
+	bool hasAlphaGloss = false;
 
 	float shininess = 40.f;
 
@@ -268,16 +269,20 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		if( material.GetTexture( aiTextureType_NORMALS, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
 			std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
-			bindablePtrs.push_back( Texture::Resolve( gfx, wTexPath, 2u ) );
+			auto tex = Texture::Resolve( gfx, wTexPath, 2u );
+			hasAlphaGloss = tex->HasAlpha();
 			hasNormalMap = true;
+			bindablePtrs.push_back( std::move( tex ) );
 		}
 		if( material.GetTexture( aiTextureType_SPECULAR, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
 			std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
-			bindablePtrs.push_back( Texture::Resolve( gfx, wTexPath, 1u ) );
+			auto tex = Texture::Resolve( gfx, wTexPath, 1u );
+			hasAlphaGloss = tex->HasAlpha();
 			hasSpecMap = true;
+			bindablePtrs.push_back( std::move( tex ) );
 		}
-		else if( material.Get( AI_MATKEY_SHININESS, shininess ) != aiReturn_SUCCESS )
+		else if( !hasAlphaGloss && material.Get( AI_MATKEY_SHININESS, shininess ) != aiReturn_SUCCESS )
 		{
 			shininess = 40.f;
 		}
@@ -318,8 +323,13 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 			bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongSpecNormalMapPS.cso" ) );
 			struct PSMaterialConstantFull
 			{
-				alignas( 16 ) BOOL normalMapEnabled = TRUE;
+				BOOL normalMapEnabled = TRUE;
+				BOOL hasGlossMap;
+				alignas( 8 ) float specularPower;
 			} pMc;
+			pMc.hasGlossMap = hasAlphaGloss ? TRUE : FALSE;
+			pMc.specularPower = shininess;
+
 			bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantFull>::Resolve( gfx, pMc, 1u ) );
 		}
 		else
@@ -386,7 +396,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 
 		struct PSMaterialConstantNotex
 		{
-			dx::XMFLOAT4 materialColor = { 0.65f,0.65f,0.65f,1.0f };
+			dx::XMFLOAT4 materialColor = { 0.5f,0.5f,0.9f,1.0f };
 			float specularIntensity = 0.18f;
 			float specularPower;
 			float padding[2];

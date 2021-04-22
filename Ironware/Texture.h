@@ -35,8 +35,10 @@ public:
 	static std::shared_ptr<Texture> Resolve( Graphics& gfx, const std::wstring& path, UINT slot = 0u ) { return BindableCollection::Resolve<Texture>( gfx, path, slot ); }
 	static std::wstring GenerateUID( const std::wstring& path, UINT slot = 0u ) { return GET_CLASS_WNAME( Texture ) + L"#" + path + L"#" + std::to_wstring( slot ); }
 	std::wstring GetUID() const noexcept override { return GenerateUID( path, slot ); }
+	bool HasAlpha() const noexcept { return hasAlpha; }
 
 protected:
+	bool hasAlpha = false;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
 	const std::wstring& path;
 	const UINT slot;

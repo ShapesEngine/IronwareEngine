@@ -48,9 +48,7 @@ public:
 
 	public:
 		constexpr Color() noexcept = default;
-		constexpr Color( const Color& col ) noexcept :
-			dword( col.dword )
-		{}
+		constexpr Color( const Color& col ) noexcept = default;
 		constexpr Color( uint32_t dw ) noexcept :
 			dword( dw )
 		{}
@@ -120,12 +118,14 @@ public:
 	Color* GetBufferPtr() noexcept { return pBuffer.get(); }
 	const Color* GetBufferPtr() const noexcept { return pBuffer.get(); }
 	const Color* GetBufferPtrConst() const noexcept { return pBuffer.get(); }
+	bool IsAlphaLoaded() const noexcept { return alphaLoaded; }
 
 private:
-	Surface( uint32_t width, uint32_t height, std::unique_ptr<Color[]> pBufferParam ) noexcept;
+	Surface( uint32_t width, uint32_t height, std::unique_ptr<Color[]> pBufferParam, bool alphaLoaded = false ) noexcept;
 
 private:
 	std::unique_ptr<Color[]> pBuffer;
 	uint32_t width;
 	uint32_t height;
+	bool alphaLoaded = false;
 };

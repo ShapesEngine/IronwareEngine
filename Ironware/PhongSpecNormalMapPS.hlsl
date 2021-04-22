@@ -20,6 +20,8 @@ cbuffer LightCBuf
 cbuffer NMapCbuf
 {
     bool isNMapEnabled;
+    bool hasGloss;
+    float specularPowerConst;
 };
 
 cbuffer CBuffer
@@ -59,8 +61,17 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
     // multiplying by luminosity because we are using point light here
     float4 sampledSpec = specTex.Sample( splr, tc );
     float3 specularColor = sampledSpec.rgb;
-    float specularExpPower = pow( 2.f, sampledSpec.a * 13.f );
-    const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularExpPower );
+    float specularPower;
+    if( hasGloss )
+    {
+        specularPower = pow( 2.f, sampledSpec.a * 13.f );
+    }
+    else
+    {
+        specularPower = specularPowerConst;
+    }
+    
+    const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularPower );
 	// final color
     return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular * specularColor ), 1.f );
 }

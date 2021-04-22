@@ -58,6 +58,7 @@ Surface Surface::FromFile( const std::wstring& name )
 	uint32_t height = 0;
 	std::unique_ptr<Color[]> pBuffer;
 
+	bool alphaLoaded = false;
 	{
 		Gdiplus::Bitmap bitmap( name.c_str() );
 		if( bitmap.GetLastStatus() != Gdiplus::Status::Ok )
@@ -78,11 +79,16 @@ Surface Surface::FromFile( const std::wstring& name )
 				Gdiplus::Color c;
 				bitmap.GetPixel( x, y, &c );
 				pBuffer[(size_t)y * width + x] = c.GetValue();
+				
+				if( c.GetAlpha() != 255 )
+				{
+					alphaLoaded = true;
+				}
 			}
 		}
 	}
 
-	return Surface( width, height, std::move( pBuffer ) );
+	return Surface( width, height, std::move( pBuffer ), alphaLoaded );
 }
 
 void Surface::Save( const std::wstring& filename ) const
@@ -148,10 +154,11 @@ void Surface::Copy( const Surface& src ) IFNOEXCEPT
 	memcpy( pBuffer.get(), src.pBuffer.get(), (size_t)width * height * sizeof( Color ) );
 }
 
-Surface::Surface( uint32_t width, uint32_t height, std::unique_ptr<Color[]> pBufferParam ) noexcept :
+Surface::Surface( uint32_t width, uint32_t height, std::unique_ptr<Color[]> pBufferParam, bool alphaLoaded ) noexcept :
 	pBuffer( std::move( pBufferParam ) ),
 	width( width ),
-	height( height )
+	height( height ),
+	alphaLoaded( alphaLoaded )
 {}
 
 #pragma endregion Surface

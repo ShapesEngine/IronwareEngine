@@ -17,7 +17,7 @@ Texture::Texture( Graphics& gfx, const std::wstring& path, UINT slot ) :
 	INFOMAN( gfx );
 
 	const auto sur = Surface::FromFile( path );
-
+	hasAlpha = sur.IsAlphaLoaded();
 	auto width = sur.GetWidth();
 	auto height = sur.GetHeight();
 
