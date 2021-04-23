@@ -13,7 +13,6 @@
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
-#include <imgui/imgui.h>
 
 #include <memory>
 #include <vector>
@@ -51,7 +50,7 @@ void Mesh::Draw( Graphics& gfx, dx::FXMMATRIX accumulatedTransform ) const IFNOE
 class ModelWindow
 {
 public:
-	void ShowWindow( const char* name, const Node& root ) IFNOEXCEPT
+	void ShowWindow( Graphics& gfx, const char* name, const Node& root ) IFNOEXCEPT
 	{
 		if( ImGui::Begin( name ) )
 		{
@@ -74,6 +73,10 @@ public:
 				ImGui::SliderAngle( "Pitch", &transform.pitch, -180.0f, 180.0f );
 				ImGui::SliderAngle( "Yaw", &transform.yaw, -180.0f, 180.0f );
 				ImGui::SliderAngle( "Roll", &transform.roll, -180.0f, 180.0f );
+				if( !pSelectedNode->ShowControlMaterial( gfx, matFull ) )
+				{
+					pSelectedNode->ShowControlMaterial( gfx, matNoTex );
+				}
 			}
 			//==========
 		}
@@ -104,6 +107,8 @@ private:
 	};
 	std::unordered_map<uint32_t, TransformationParams> transforms;
 	Node* pSelectedNode = nullptr;
+	Node::PSMaterialConstantFull matFull;
+	Node::PSMaterialConstantNoTex matNoTex;
 };
 
 Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const dx::XMMATRIX& transform_in ) IFNOEXCEPT :
@@ -209,9 +214,9 @@ void Model::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
 	pRoot->Draw( gfx, dx::XMMatrixIdentity() );
 }
 
-void Model::ShowWindow( const char* name ) const noexcept( !IS_DEBUG )
+void Model::ShowWindow( Graphics& gfx, const char* name ) const noexcept( !IS_DEBUG )
 {
-	pModelWindow->ShowWindow( name, *pRoot );
+	pModelWindow->ShowWindow( gfx, name, *pRoot );
 }
 
 size_t Model::GetNodeSize() const noexcept
@@ -251,7 +256,9 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 	bool hasNormalMap = false;
 	bool hasAlphaGloss = false;
 
-	float shininess = 40.f;
+	aiColor4D diffuseColor = { 0.45f, 0.45f, 0.85f, 1.0f };
+	aiColor4D specularColor = { 0.18f, 0.18f, 0.18f, 1.0f };
+	ai_real shininess = 40.f;
 
 	ID3DBlob* pVertShaderBytecode = nullptr;
 
@@ -282,14 +289,26 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 			hasSpecMap = true;
 			bindablePtrs.push_back( std::move( tex ) );
 		}
-		else if( !hasAlphaGloss && material.Get( AI_MATKEY_SHININESS, shininess ) != aiReturn_SUCCESS )
-		{
-			shininess = 40.f;
-		}
 
 		if( hasDiffMap || hasNormalMap || hasSpecMap )
 		{
 			bindablePtrs.push_back( Sampler::Resolve( gfx ) );
+		}
+		else
+		{
+			if( !hasDiffMap && material.Get( AI_MATKEY_COLOR_DIFFUSE, diffuseColor ) != aiReturn_SUCCESS )
+			{
+				diffuseColor = { 0.45f, 0.45f, 0.85f, 1.0f };
+			}
+			if( !hasDiffMap && material.Get( AI_MATKEY_COLOR_SPECULAR, specularColor ) != aiReturn_SUCCESS )
+			{
+				specularColor = { 0.18f, 0.18f, 0.18f, 1.0f  };
+			}
+			if( !hasAlphaGloss && material.Get( AI_MATKEY_SHININESS, shininess ) != aiReturn_SUCCESS )
+			{
+				shininess = 40.f;
+			}
+			
 		}
 	}
 
@@ -321,16 +340,11 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		if( hasSpecMap )
 		{
 			bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongSpecNormalMapPS.cso" ) );
-			struct PSMaterialConstantFull
-			{
-				BOOL normalMapEnabled = TRUE;
-				BOOL hasGlossMap;
-				alignas( 8 ) float specularPower;
-			} pMc;
+			Node::PSMaterialConstantFull pMc;
 			pMc.hasGlossMap = hasAlphaGloss ? TRUE : FALSE;
 			pMc.specularPower = shininess;
 
-			bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantFull>::Resolve( gfx, pMc, 1u ) );
+			bindablePtrs.push_back( PixelConstantBuffer<Node::PSMaterialConstantFull>::Resolve( gfx, pMc, 1u ) );
 		}
 		else
 		{
@@ -341,6 +355,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 				alignas( 8 ) BOOL normalMapEnabled = TRUE;
 			} pMc;
 
+			pMc.specularIntensity = ( specularColor.r + specularColor.g + specularColor.b ) / 3.f;
 			pMc.specularPower = shininess;
 
 			bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantDiffNormal>::Resolve( gfx, pMc, 1u ) );
@@ -379,7 +394,10 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 				float specularPower;
 				alignas(8) float padding;
 			} pMc;
+
+			pMc.specularIntensity = ( specularColor.r + specularColor.g + specularColor.b ) / 3.f;
 			pMc.specularPower = shininess;
+
 			bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantDiff>::Resolve( gfx, pMc, 1u ) );
 			bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
 		}
@@ -394,15 +412,13 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 			);
 		}
 
-		struct PSMaterialConstantNotex
-		{
-			dx::XMFLOAT4 materialColor = { 0.5f,0.5f,0.9f,1.0f };
-			float specularIntensity = 0.18f;
-			float specularPower;
-			float padding[2];
-		} pMc;
+		Node::PSMaterialConstantNoTex pMc;
+
+		pMc.materialColor = reinterpret_cast<dx::XMFLOAT4&>( diffuseColor );
+		pMc.specularColor = reinterpret_cast<dx::XMFLOAT4&>( specularColor );
 		pMc.specularPower = shininess;
-		bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantNotex>::Resolve( gfx, pMc, 1u ) );
+
+		bindablePtrs.push_back( PixelConstantBuffer<Node::PSMaterialConstantNoTex>::Resolve( gfx, pMc, 1u ) );
 
 		auto pVertShader = VertexShader::Resolve( gfx, L"PhongVS.cso" );
 		// save bytecode, as it will be needed in input layout

@@ -44,9 +44,7 @@ public:
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
-	void AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT;
 
-protected:
 	/**
 	 * @brief Retrieves specified bindable from binds collection
 	 * @tparam T required bindable type
@@ -54,6 +52,9 @@ protected:
 	*/
 	template<typename T>
 	T* QueryBindable() const;
+
+protected:
+	void AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT;
 
 protected:
 	const class IndexBuffer* pIndexBuffer = nullptr;

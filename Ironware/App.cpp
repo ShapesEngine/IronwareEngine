@@ -49,7 +49,7 @@ void App::ProcessFrame()
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	goblin.ShowWindow();
+	goblin.ShowWindow( wnd.Gfx() );
 	//wall.SpawnControlWindow( wnd.Gfx() );
 
 	// present frame
