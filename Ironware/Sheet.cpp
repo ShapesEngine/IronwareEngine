@@ -49,7 +49,7 @@ Sheet::Sheet( Graphics& gfx, float size )
 	AddBind( PixelShader::Resolve( gfx, L"PhongNormalMapProcPS.cso" ) );
 
 	AddBind( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
-	AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );
+	AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal_obj.png", 1u ) );
 	AddBind( Sampler::Resolve( gfx ) );
 
 	AddBind( PixelConstantBuffer<SheetCBuff>::Resolve( gfx, cbuff, 1u ) );

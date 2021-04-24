@@ -605,7 +605,7 @@
     <FxCompile Include="IndexedPhongPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="PhongNormalMapProcPS.hlsl">
+    <FxCompile Include="PhongNormalMapObjectPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="PhongVS.hlsl">
