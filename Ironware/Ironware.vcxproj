@@ -392,8 +392,10 @@
     <None Include="..\External\Includes\DXErr\DXGetErrorString.inl" />
     <None Include="..\External\Includes\DXErr\DXTrace.inl" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="CommonOps.hlsli" />
     <None Include="cpp.hint" />
     <None Include="GDIPlusStd.h" />
+    <None Include="CommonLightOps.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

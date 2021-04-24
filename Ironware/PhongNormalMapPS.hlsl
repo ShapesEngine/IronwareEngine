@@ -42,7 +42,7 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
         const float3 sampledNMap = (float3)nmap.Sample( splr, tc );
         viewN = 2.0f * sampledNMap - 1.0f;
         viewN.y = -viewN.y;
-        viewN = mul( viewN, tanToView );
+        viewN = normalize( mul( viewN, tanToView ) );
     }
     // fragment to light vector data
     const float3 vToL = lightPos - viewPos;

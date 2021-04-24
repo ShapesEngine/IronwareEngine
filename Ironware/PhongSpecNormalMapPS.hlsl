@@ -1,20 +1,11 @@
+#include "CommonLightOps.hlsli"
+#include "CommonOps.hlsli"
+
 Texture2D tex;
 Texture2D specTex;
 Texture2D nmap;
 
 SamplerState splr;
-
-// for global dynamic light
-cbuffer LightCBuf
-{
-    float3 lightPos;
-    float3 ambient;
-    float3 diffuseColor;
-    float diffuseIntensity;
-    float attConst;
-    float attLin;
-    float attQuad;
-};
 
 // for object color
 cbuffer NMapCbuf
@@ -27,45 +18,28 @@ cbuffer NMapCbuf
     float specularMapWeight;
 };
 
-cbuffer CBuffer
-{
-    matrix modelView;
-    matrix modelViewProjection;
-};
-
 float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord, float3 viewTan : Tangent, float3 viewBitan : Bitangent ) : SV_Target
 {
+    viewN = normalize( viewN );
+    
     if( isNMapEnabled )
     {
-        const float3x3 tanToView = float3x3(
-            normalize( viewTan ),
-            normalize( viewBitan ),
-            normalize( viewN )
-        );
-        
-        const float3 sampledNMap = (float3)nmap.Sample( splr, tc );
-        viewN = 2.0f * sampledNMap - 1.0f;
-        viewN.y = -viewN.y;
-        viewN = mul( viewN, tanToView );
+        viewN = map_normal( normalize( viewTan ), normalize( viewBitan ), viewN, tc, nmap, splr );
     }
     // fragment to light vector data
-    const float3 vToL = lightPos - viewPos;
+    const float3 vToL = viewLightPos - viewPos;
     const float distToL = length( vToL );
     const float3 dirToL = vToL / distToL;
 	// attenuation
-    const float att = attConst + attLin * distToL + attQuad * ( distToL * distToL );
-    const float luminosity = 1.f / att;
+    const float luminosity = calc_luminosity( attConst, attLin, attQuad, distToL );
 	// diffuse intensity
-    const float3 diffuse = diffuseColor * diffuseIntensity * luminosity * max( 0.f, dot( dirToL, viewN ) ) * (float3)tex.Sample( splr, tc );
-    // reflected light vector
-    const float3 w = viewN * dot( vToL, viewN );
-    const float3 r = w * 2.f - vToL;
+    const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, dirToL, viewN );
     
     float3 specularReflectionColor;
     float specularPower = specularPowerConst;
     if( isSpecMapEnabled )
     {
-        float4 sampledSpec = specTex.Sample( splr, tc );
+        const float4 sampledSpec = specTex.Sample( splr, tc );
         specularReflectionColor = sampledSpec.rgb * specularMapWeight;
         if( hasGloss )
         {
@@ -77,8 +51,7 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
         specularReflectionColor = specularColor;
     }
     
-    
-    const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularPower );
+    const float3 specular = calc_speculate( specularReflectionColor, 1.f, viewN, vToL, viewPos, luminosity, specularPower );
 	// final color
-    return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular * specularReflectionColor ), 1.f );
+    return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular ), 1.f );
 }

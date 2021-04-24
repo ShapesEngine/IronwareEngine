@@ -23,6 +23,7 @@ cbuffer SpecularCBuf
 
 float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord ) : SV_Target
 {
+    viewN = normalize( viewN );
     // fragment to light vector data
     const float3 vToL = lightPos - viewPos;
     const float distToL = length( vToL );

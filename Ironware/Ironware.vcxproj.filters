@@ -52,6 +52,9 @@
     <Filter Include="External\assimp">
       <UniqueIdentifier>{cee9df29-0b87-4991-93af-8be4772ef58f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files\Ops">
+      <UniqueIdentifier>{ba0cc82a-2367-44d9-830b-8f3d8d0e18a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -669,5 +672,11 @@
     </None>
     <None Include="cpp.hint" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="CommonOps.hlsli">
+      <Filter>Shader Files\Ops</Filter>
+    </None>
+    <None Include="CommonLightOps.hlsli">
+      <Filter>Shader Files\Ops</Filter>
+    </None>
   </ItemGroup>
 </Project>

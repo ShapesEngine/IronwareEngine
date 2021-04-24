@@ -36,7 +36,7 @@ float4 main( float3 viewPos : Position, float3 n : Normal, float2 tc : TexCoord 
         const float3 sampledNMap = (float3)nmap.Sample( splr, tc );
         n = 2.f * sampledNMap - 1.f;
         n.z = -n.z;
-        n = mul( n, (float3x3)modelView );
+        n = normalize( mul( n, (float3x3)modelView ) );
     }
     // fragment to light vector data
     const float3 vToL = lightPos - viewPos;
