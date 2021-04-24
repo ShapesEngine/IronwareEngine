@@ -43,14 +43,18 @@ void App::ProcessFrame()
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
 	goblin.Draw( wnd.Gfx() );
+	nano.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
-	//wall.Draw( wnd.Gfx() );
+	wall.Draw( wnd.Gfx() );
+	wallObj.Draw( wnd.Gfx() );
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	goblin.ShowWindow( wnd.Gfx() );
-	//wall.SpawnControlWindow( wnd.Gfx() );
+	goblin.ShowWindow( wnd.Gfx(), "Goblin" );
+	nano.ShowWindow( wnd.Gfx(), "Nanosuit" );
+	wallObj.ShowWindow( wnd.Gfx(), "Brickwall" );
+	wall.SpawnControlWindow( wnd.Gfx() );
 
 	// present frame
 	wnd.Gfx().EndFrame();

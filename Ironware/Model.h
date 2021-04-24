@@ -99,7 +99,7 @@ public:
 	};
 
 public:
-	Model( Graphics& gfx, std::string filename, DirectX::XMFLOAT3 startingPos = { 0.f, 0.f, 0.f } );
+	Model( Graphics& gfx, std::wstring path, float scale = 1.f, DirectX::XMFLOAT3 startingPos = { 0.f, 0.f, 0.f } );
 	void Draw( Graphics& gfx ) const IFNOEXCEPT;
 	void ShowWindow( Graphics& gfx, const char* name = "Model" ) const IFNOEXCEPT;
 	size_t GetNodeSize() const noexcept;
@@ -115,6 +115,8 @@ private:
 	// other nodes are used when the draw 
 	// has been called
 	std::unique_ptr<Node> pRoot;
+	std::wstring path;
+	float scale;
 	// pImpl
 	std::unique_ptr<class ModelWindow> pModelWindow{ std::make_unique<ModelWindow>() };
 	size_t nodeNum = 0;

@@ -44,8 +44,9 @@ private:
 	Camera camera;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
 	PointLight pointLight{ wnd.Gfx() };
-	Model goblin{ wnd.Gfx(), "Models\\goblin\\GoblinX.obj", { 4.f, 10.f, -6.f } };
-	//Model nano{ wnd.Gfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
-	//Sheet wall{ wnd.Gfx(), 3.f };
+	Model goblin{ wnd.Gfx(), L"Models\\goblin\\GoblinX.obj", 6.f, { 4.f, 10.f, -16.f } };
+	Model nano{ wnd.Gfx(), L"Models\\nanosuit_textured\\nanosuit.obj" };
+	Model wallObj{ wnd.Gfx(), L"Models\\brickwall\\brickwall.obj", 3.f, { -10.f, 10.f, 0.f } };
+	Sheet wall{ wnd.Gfx(), 3.f };
 	IronTimer timer;
 };

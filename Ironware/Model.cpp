@@ -18,6 +18,7 @@
 #include <vector>
 #include <unordered_map>
 #include <sstream>
+#include <filesystem>
 
 namespace dx = DirectX;
 
@@ -179,11 +180,13 @@ const char* Model::Exception::what() const noexcept
 	return CON_CHREINT_CAST( whatBuffer.c_str() );
 }
 
-Model::Model( Graphics& gfx, std::string filename, DirectX::XMFLOAT3 startingPos )
+Model::Model( Graphics& gfx, std::wstring path, float scale, DirectX::XMFLOAT3 startingPos ) :
+	scale( scale ),
+	path( path )
 {
 	Assimp::Importer importer;
 	auto pScene = importer.ReadFile(
-		filename,
+		to_narrow( path ),
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ConvertToLeftHanded |
@@ -203,6 +206,7 @@ Model::Model( Graphics& gfx, std::string filename, DirectX::XMFLOAT3 startingPos
 	}
 
 	pRoot = ParseNode( *pScene->mRootNode );
+	pRoot->SetAppliedTransform( DirectX::XMMatrixTranslationFromVector( DirectX::XMLoadFloat3( &startingPos ) ) );
 }
 
 void Model::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
@@ -226,11 +230,12 @@ size_t Model::GetNodeSize() const noexcept
 
 Model::~Model() noexcept = default;
 
-std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, const aiMaterial* const* pMaterials ) IFNOEXCEPT
+std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials ) IFNOEXCEPT
 {
 	using ElType = VertexLayout::ElementType;
-	const std::wstring base = L"Models\\goblin\\";
-	const auto meshTag = base + L"$" + to_wide( mesh.mName.C_Str() );
+
+	const std::wstring rootPath = std::move( std::filesystem::path( path ).parent_path().wstring() + L"\\" );
+	const auto meshTag = path + L"$" + to_wide( mesh.mName.C_Str() );
 
 	VertexByteBuffer vbuff{ 
 		VertexLayout{} 
@@ -269,13 +274,13 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		aiString texPath;
 		if( material.GetTexture( aiTextureType_DIFFUSE, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
-			std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
+			std::wstring wTexPath = rootPath + to_wide( std::string( texPath.C_Str() ) );
 			bindablePtrs.push_back( Texture::Resolve( gfx, wTexPath ) );
 			hasDiffMap = true;
 		}
 		if( material.GetTexture( aiTextureType_NORMALS, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
-			std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
+			std::wstring wTexPath = rootPath + to_wide( std::string( texPath.C_Str() ) );
 			auto tex = Texture::Resolve( gfx, wTexPath, 2u );
 			hasAlphaGloss = tex->HasAlpha();
 			hasNormalMap = true;
@@ -283,7 +288,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 		}
 		if( material.GetTexture( aiTextureType_SPECULAR, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
-			std::wstring wTexPath = base + to_wide( std::string( texPath.C_Str() ) );
+			std::wstring wTexPath = rootPath + to_wide( std::string( texPath.C_Str() ) );
 			auto tex = Texture::Resolve( gfx, wTexPath, 1u );
 			hasAlphaGloss = tex->HasAlpha();
 			hasSpecMap = true;
@@ -308,11 +313,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics & gfx, const aiMesh & mesh, con
 			{
 				shininess = 40.f;
 			}
-			
 		}
 	}
-
-	ai_real scale = 5.f;
 
 	if( hasDiffMap && hasNormalMap )
 	{
