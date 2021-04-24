@@ -35,7 +35,7 @@ float3 calc_diffuse(
     return diffuseColor * diffuseIntensity * luminosity * max( 0.f, dot( viewDirFragToL, viewN ) );
 }
 
-float3 calc_speculate(
+float3 calc_specular(
     const in float3 specularColor,
     uniform float specularIntensity,
     const in float3 viewN,

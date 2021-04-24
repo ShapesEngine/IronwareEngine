@@ -675,7 +675,13 @@
     <None Include="CommonOps.hlsli">
       <Filter>Shader Files\Ops</Filter>
     </None>
+    <None Include="CommonPointLightOps.hlsli">
+      <Filter>Shader Files\Ops</Filter>
+    </None>
     <None Include="CommonLightOps.hlsli">
+      <Filter>Shader Files\Ops</Filter>
+    </None>
+    <None Include="CommonTransforms.hlsli">
       <Filter>Shader Files\Ops</Filter>
     </None>
   </ItemGroup>

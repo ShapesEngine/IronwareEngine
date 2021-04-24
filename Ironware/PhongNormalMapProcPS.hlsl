@@ -4,56 +4,36 @@ Texture2D nmap;
 SamplerState splr;
 
 // for global dynamic light
-cbuffer LightCBuf
-{
-    float3 lightPos;
-    float3 ambient;
-    float3 diffuseColor;
-    float diffuseIntensity;
-    float attConst;
-    float attLin;
-    float attQuad;
-};
+#include "CommonOps.hlsli"
+#include "CommonLightOps.hlsli"
+
+#include "CommonPointLightOps.hlsli"
 
 // for object color
-cbuffer SpecularCBuf
+cbuffer ObjectCBuf
 {
     float specularIntensity;
     float specularPower;
     bool isNMapEnabled;
 };
 
-cbuffer CBuffer
-{
-    matrix modelView;
-    matrix modelViewProjection;
-};
+#include "CommonTransforms.hlsli"
 
-float4 main( float3 viewPos : Position, float3 n : Normal, float2 tc : TexCoord ) : SV_Target
+float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord ) : SV_Target
 {
     if( isNMapEnabled )
     {
         const float3 sampledNMap = (float3)nmap.Sample( splr, tc );
-        n = 2.f * sampledNMap - 1.f;
-        n.z = -n.z;
-        n = normalize( mul( n, (float3x3)modelView ) );
+        viewN = 2.f * sampledNMap - 1.f;
+        viewN = normalize( mul( viewN, (float3x3)modelView ) );
     }
     // fragment to light vector data
-    const float3 vToL = lightPos - viewPos;
-    const float distToL = length( vToL );
-    const float3 dirToL = vToL / distToL;
+    LightVectorData lightVec = calc_light_vector_data( viewLightPos, viewPos );
 	// attenuation
-    const float att = attConst + attLin * distToL + attQuad * ( distToL * distToL );
-    const float luminosity = 1.f / att;
+    const float luminosity = calc_luminosity( attConst, attLin, attQuad, lightVec.distToL );
 	// diffuse intensity
-    const float3 diffuse = diffuseColor * diffuseIntensity * luminosity * max( 0.f, dot( dirToL, n ) );
-    // reflected light vector
-    const float3 w = n * dot( vToL, n );
-    const float3 r = w * 2.f - vToL;
-	// calculate specular intensity based on angle between viewing vector and reflection vector, narrow with power function
-    // multiplying by luminosity because we are using point light here
-    const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) *
-                            specularIntensity * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularPower );
+    const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, lightVec.dirToL, viewN );
+    const float3 specular = calc_specular( specularIntensity.rrr, 1.f, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
 	// final color
     return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular ), 1.f );
 }

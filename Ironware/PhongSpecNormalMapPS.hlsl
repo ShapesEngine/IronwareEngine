@@ -1,5 +1,6 @@
-#include "CommonLightOps.hlsli"
+#include "CommonPointLightOps.hlsli"
 #include "CommonOps.hlsli"
+#include "CommonLightOps.hlsli"
 
 Texture2D tex;
 Texture2D specTex;
@@ -27,13 +28,11 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
         viewN = map_normal( normalize( viewTan ), normalize( viewBitan ), viewN, tc, nmap, splr );
     }
     // fragment to light vector data
-    const float3 vToL = viewLightPos - viewPos;
-    const float distToL = length( vToL );
-    const float3 dirToL = vToL / distToL;
+    LightVectorData lightVec = calc_light_vector_data( viewLightPos, viewPos );
 	// attenuation
-    const float luminosity = calc_luminosity( attConst, attLin, attQuad, distToL );
+    const float luminosity = calc_luminosity( attConst, attLin, attQuad, lightVec.distToL );
 	// diffuse intensity
-    const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, dirToL, viewN );
+    const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, lightVec.dirToL, viewN );
     
     float3 specularReflectionColor;
     float specularPower = specularPowerConst;
@@ -51,7 +50,7 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
         specularReflectionColor = specularColor;
     }
     
-    const float3 specular = calc_speculate( specularReflectionColor, 1.f, viewN, vToL, viewPos, luminosity, specularPower );
+    const float3 specular = calc_specular( specularReflectionColor, 1.f, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
 	// final color
     return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular ), 1.f );
 }
