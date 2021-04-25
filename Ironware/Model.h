@@ -60,9 +60,13 @@ public:
 private:
 	void AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT;
 	void ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT;
-	void SetAppliedTransform( DirectX::FXMMATRIX transform ) noexcept;
+	
 	template<typename M>
 	bool ShowControlMaterial( Graphics& gfx, M& pMC );
+
+	void SetAppliedTransform( DirectX::FXMMATRIX transform ) noexcept { DirectX::XMStoreFloat4x4( &appliedTransform, transform ); }
+	const DirectX::XMFLOAT4X4& GetAppliedTransform() const noexcept { return appliedTransform; }
+	uint32_t GetID() const noexcept { return index; }
 
 private:
 	std::string name;

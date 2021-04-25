@@ -10,6 +10,7 @@
 #define IR_INCLUDE_TEXTURE
 #include "BindableCommon.h"
 #include "IronUtils.h"
+#include "IronMath.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -63,8 +64,27 @@ public:
 			//2nd column
 			if( pSelectedNode )
 			{
-				auto& transform = transforms[pSelectedNode->index];
+				const auto id = pSelectedNode->GetID();
+				auto i = transforms.find( id );
+				if( i == transforms.end() )
+				{
+					TransformationParams tp;
+					const auto& tf = pSelectedNode->GetAppliedTransform();
 
+					const auto rot = extract_euler_angles( tf );
+					tp.pitch = rot.x;
+					tp.yaw = rot.y;
+					tp.roll = rot.z;
+
+					const auto translation = extract_translation( tf );
+					tp.x = translation.x;
+					tp.y = translation.y;
+					tp.z = translation.z;
+
+					std::tie( i, std::ignore ) = transforms.insert( { id, std::move( tp ) } );
+				}
+
+				auto& transform = i->second;
 				ImGui::Text( "Position" );
 				ImGui::SliderFloat( "X", &transform.x, -20.0f, 20.0f );
 				ImGui::SliderFloat( "Y", &transform.y, -20.0f, 20.0f );
@@ -142,11 +162,6 @@ void Node::AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT
 {
 	assert( pChild );
 	childPtrs.push_back( std::move( pChild ) );
-}
-
-void Node::SetAppliedTransform( dx::FXMMATRIX transform ) noexcept
-{
-	dx::XMStoreFloat4x4( &appliedTransform, transform );
 }
 
 void Node::ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT

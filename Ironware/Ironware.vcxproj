@@ -126,6 +126,7 @@
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputLayout.cpp" />
+    <ClCompile Include="IronMath.cpp" />
     <ClCompile Include="IronTimer.cpp" />
     <ClCompile Include="IronException.cpp" />
     <ClCompile Include="IronUtils.cpp" />
