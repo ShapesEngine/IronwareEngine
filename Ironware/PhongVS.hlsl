@@ -1,8 +1,4 @@
-cbuffer CBuffer
-{
-    matrix modelView;
-    matrix modelViewProjection;
-};
+#include "CommonTransforms.hlsli"
 
 struct VSOut
 {

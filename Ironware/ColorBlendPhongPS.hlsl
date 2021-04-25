@@ -1,14 +1,7 @@
 // for global dynamic light
-cbuffer LightCBuf
-{
-    float3 lightPos;
-    float3 ambient;
-    float3 diffuseColor;
-    float diffuseIntensity;
-    float attConst;
-    float attLin;
-    float attQuad;
-};
+#include "CommonPointLightOps.hlsli"
+#include "CommonLightOps.hlsli"
+#include "CommonOps.hlsli"
 
 // for object color
 cbuffer ObjectCBuf
@@ -21,21 +14,12 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float3 color : Co
 {
     viewN = normalize( viewN );
     // fragment to light vector data
-    const float3 vToL = lightPos - viewPos;
-    const float distToL = length( vToL );
-    const float3 dirToL = vToL / distToL;
+    const LightVectorData lightVec = calc_light_vector_data( viewLightPos, viewPos );
 	// attenuation
-    const float att = attConst + attLin * distToL + attQuad * ( distToL * distToL );
-    const float luminosity = 1.f / att;
+    const float luminosity = calc_luminosity( attConst, attLin, attQuad, lightVec.distToL );
 	// diffuse intensity
-    const float3 diffuse = diffuseColor * diffuseIntensity * luminosity * max( 0.f, dot( dirToL, viewN ) );
-    // reflected light vector
-    const float3 w = viewN * dot( vToL, viewN );
-    const float3 r = w * 2.f - vToL;
-	// calculate specular intensity based on angle between viewing vector and reflection vector, narrow with power function
-    // multiplying by luminosity because we are using point light here
-    const float3 specular = luminosity * ( diffuseColor * diffuseIntensity ) *
-                            specularIntensity * pow( max( 0.f, dot( normalize( -r ), normalize( viewPos ) ) ), specularPower );
+    const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, lightVec.dirToL, viewN );
+    const float3 specular = calc_specular( diffuseColor, specularIntensity, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
 	// final color
     return float4( saturate( ( diffuse + ambient + specular ) * color ), 1.f );
 }

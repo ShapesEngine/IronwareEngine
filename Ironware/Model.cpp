@@ -386,6 +386,18 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 
 		if( hasSpecMap )
 		{
+			struct PSMaterialConstantDiffSpec
+			{
+				float specularPower;
+				float specularMapWeight;
+				alignas( 8 ) BOOL hasGloss;
+			} pMc;
+
+			pMc.specularPower = shininess;
+			pMc.specularMapWeight = 1.f;
+			pMc.hasGloss = hasAlphaGloss ? TRUE : FALSE;
+
+			bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantDiffSpec>::Resolve( gfx, pMc, 1u ) );
 			bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongSpecMapPS.cso" ) );
 		}
 		else
@@ -394,7 +406,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 			{
 				float specularIntensity = 0.2f;
 				float specularPower;
-				alignas(8) float padding;
+				alignas( 8 ) float padding;
 			} pMc;
 
 			pMc.specularIntensity = ( specularColor.r + specularColor.g + specularColor.b ) / 3.f;
