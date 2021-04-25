@@ -39,6 +39,8 @@ void Camera::SpawnControlWindow() noexcept
 		ImGui::Text( "Orientation" );
 		ImGui::SliderAngle( "Pitch", &pitch, 0.995f * -90.f, 0.995f * 90.f );
 		ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f );
+		ImGui::Text( "Movement" );
+		ImGui::SliderFloat( "Speed", &translationSpeed, MIN_SPEED_LIMIT, MAX_SPEED_LIMIT );
 		if( ImGui::Button( "Reset" ) )
 		{
 			Reset();
@@ -72,7 +74,8 @@ void Camera::Translate( DirectX::XMFLOAT3 translation ) noexcept
 
 void Camera::Reset() noexcept
 {
-	pos = { 0.f, 1.f, -28.f };
+	translationSpeed = 15.f;
+	pos = { -60.f, 5.f, 2.f };
 	pitch = 0.f;
-	yaw = 0.f;
+	yaw = PI / 2.f;
 }

@@ -32,9 +32,14 @@ public:
 	void Rotate( float dx, float dy ) noexcept;
 	void Translate( DirectX::XMFLOAT3 translation ) noexcept;
 	void Reset() noexcept;
+	void SpeedUp() noexcept { translationSpeed += translationSpeed <= MAX_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
+	void SpeedDown() noexcept { translationSpeed -= translationSpeed >= MIN_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
 
 private:
-	float translationSpeed = 15.f;
+	static constexpr float MAX_SPEED_LIMIT = 45.f;
+	static constexpr float MIN_SPEED_LIMIT = 2.f;
+	static constexpr float SPEED_MOD_VALUE = 1.f;
+	float translationSpeed;
 	float rotationSpeed = 0.004f;
 	DirectX::XMFLOAT3 pos;
 	float pitch;

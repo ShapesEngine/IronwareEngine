@@ -13,9 +13,8 @@
 
 App::App()
 {
-	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 40.f ) );
+	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );
 	wnd.EnableMouseCursor();
-	//wall.SetPos( { 10.f, 10.f, 0.f } );
 }
 
 int App::BeginFrame()
@@ -42,19 +41,21 @@ void App::ProcessFrame()
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
-	goblin.Draw( wnd.Gfx() );
-	nano.Draw( wnd.Gfx() );
 	pointLight.Draw( wnd.Gfx() );
+	sponza.Draw( wnd.Gfx() );
+	/*goblin.Draw( wnd.Gfx() );
+	nano.Draw( wnd.Gfx() );
 	wall.Draw( wnd.Gfx() );
-	wallObj.Draw( wnd.Gfx() );
+	wallObj.Draw( wnd.Gfx() );*/
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	goblin.ShowWindow( wnd.Gfx(), "Goblin" );
+	sponza.ShowWindow( wnd.Gfx(), "sponza" );
+	/*goblin.ShowWindow( wnd.Gfx(), "Goblin" );
 	nano.ShowWindow( wnd.Gfx(), "Nanosuit" );
 	wallObj.ShowWindow( wnd.Gfx(), "Brickwall" );
-	wall.SpawnControlWindow( wnd.Gfx() );
+	wall.SpawnControlWindow( wnd.Gfx() );*/
 
 	// present frame
 	wnd.Gfx().EndFrame();
@@ -110,6 +111,14 @@ void App::HandleInput()
 			if( e->GetType() == Mouse::Event::Type::RAWMOVE )
 			{
 				camera.Rotate( (float)e->GetRawDeltaX(), (float)e->GetRawDeltaY() );
+			}
+			else if( e->GetType() == Mouse::Event::Type::WHEELUP )
+			{
+				camera.SpeedUp();
+			}
+			else if( e->GetType() == Mouse::Event::Type::WHEELDOWN )
+			{
+				camera.SpeedDown();
 			}
 		}
 	}
