@@ -81,27 +81,27 @@ void App::HandleInput()
 
 	if( !wnd.IsCursorEnabled() )
 	{
-		if( wnd.kbd.KeyIsPressed( 'W' ) )
+		if( wnd.kbd.KeyIsPressed( 'W' ) || wnd.kbd.KeyIsPressed( VK_UP ) )
 		{
 			camera.Translate( { 0.f, 0.f, dt } );
 		}
-		if( wnd.kbd.KeyIsPressed( 'S' ) )
+		if( wnd.kbd.KeyIsPressed( 'S' ) || wnd.kbd.KeyIsPressed( VK_DOWN ) )
 		{
 			camera.Translate( { 0.f, 0.f, -dt } );
 		}
-		if( wnd.kbd.KeyIsPressed( 'D' ) )
+		if( wnd.kbd.KeyIsPressed( 'D' ) || wnd.kbd.KeyIsPressed( VK_RIGHT ) )
 		{
 			camera.Translate( { dt, 0.f, 0.f } );
 		}
-		if( wnd.kbd.KeyIsPressed( 'A' ) )
+		if( wnd.kbd.KeyIsPressed( 'A' ) || wnd.kbd.KeyIsPressed( VK_LEFT ) )
 		{
 			camera.Translate( { -dt, 0.f, 0.f } );
 		}
-		if( wnd.kbd.KeyIsPressed( 'E' ) )
+		if( wnd.kbd.KeyIsPressed( 'E' ) || wnd.kbd.KeyIsPressed( VK_SPACE ) )
 		{
 			camera.Translate( { 0.f, dt, 0.f } );
 		}
-		if( wnd.kbd.KeyIsPressed( 'Q' ) )
+		if( wnd.kbd.KeyIsPressed( 'Q' ) || wnd.kbd.KeyIsPressed( VK_CONTROL ) )
 		{
 			camera.Translate( { 0.f, -dt, 0.f } );
 		}
