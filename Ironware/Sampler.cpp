@@ -19,6 +19,10 @@ Sampler::Sampler( Graphics& gfx, UINT slot, D3D11_FILTER filter, D3D11_TEXTURE_A
 	descSampler.AddressU = texAddrMode;
 	descSampler.AddressV = texAddrMode;
 	descSampler.AddressW = texAddrMode;
+	descSampler.MipLODBias = 0.f;
+	descSampler.MinLOD = 0.f;
+	descSampler.MaxLOD = D3D11_FLOAT32_MAX;
+	descSampler.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
 
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateSamplerState( &descSampler, &pSampler ) );
 }
