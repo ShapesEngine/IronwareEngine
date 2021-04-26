@@ -307,10 +307,10 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 		if( material.GetTexture( aiTextureType_SPECULAR, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
 			std::wstring wTexPath = rootPath + to_wide( std::string( texPath.C_Str() ) );
-			auto tex = Texture::Resolve( gfx, wTexPath, 1u );
-			hasAlphaGloss = tex->HasAlpha();
+			auto pTex = Texture::Resolve( gfx, wTexPath, 1u );
+			hasAlphaGloss = pTex->HasAlpha();
 			hasSpecMap = true;
-			bindablePtrs.push_back( std::move( tex ) );
+			bindablePtrs.push_back( std::move( pTex ) );
 		}
 
 		if( hasDiffMap || hasNormalMap || hasSpecMap )
@@ -466,7 +466,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 		bindablePtrs.push_back( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertShaderBytecode ) );
 	}
 
-	bindablePtrs.push_back( BlendState::Resolve( gfx, hasAlphaDiffuse ) );
+	// bindablePtrs.push_back( BlendState::Resolve( gfx, hasAlphaDiffuse ) );
 
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );
 }

@@ -22,6 +22,8 @@ cbuffer NMapCbuf
 float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord, float3 viewTan : Tangent, float3 viewBitan : Bitangent ) : SV_Target
 {
     float4 sampledDiff = tex.Sample( splr, tc );
+    clip( sampledDiff.a < 0.1f ? -1.f : 1.f );
+    
     viewN = normalize( viewN );
     
     if( isNMapEnabled )
