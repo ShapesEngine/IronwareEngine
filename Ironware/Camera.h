@@ -34,6 +34,7 @@ public:
 	void Reset() noexcept;
 	void SpeedUp() noexcept { translationSpeed += translationSpeed <= MAX_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
 	void SpeedDown() noexcept { translationSpeed -= translationSpeed >= MIN_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
+	const DirectX::XMFLOAT3& GetPos() const noexcept { return pos; }
 
 private:
 	static constexpr float MAX_SPEED_LIMIT = 45.f;
