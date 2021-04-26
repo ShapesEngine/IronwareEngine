@@ -275,6 +275,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 	bool hasSpecMap = false;
 	bool hasNormalMap = false;
 	bool hasAlphaGloss = false;
+	bool hasAlphaDiffuse = false;
 
 	aiColor4D diffuseColor = { 0.45f, 0.45f, 0.85f, 1.0f };
 	aiColor4D specularColor = { 0.18f, 0.18f, 0.18f, 1.0f };
@@ -290,16 +291,18 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 		if( material.GetTexture( aiTextureType_DIFFUSE, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
 			std::wstring wTexPath = rootPath + to_wide( std::string( texPath.C_Str() ) );
-			bindablePtrs.push_back( Texture::Resolve( gfx, wTexPath ) );
+			auto pTex = Texture::Resolve( gfx, wTexPath );
 			hasDiffMap = true;
+			hasAlphaDiffuse = pTex->HasAlpha();
+			bindablePtrs.push_back( std::move( pTex ) );
 		}
 		if( material.GetTexture( aiTextureType_NORMALS, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
 			std::wstring wTexPath = rootPath + to_wide( std::string( texPath.C_Str() ) );
-			auto tex = Texture::Resolve( gfx, wTexPath, 2u );
-			hasAlphaGloss = tex->HasAlpha();
+			auto pTex = Texture::Resolve( gfx, wTexPath, 2u );
+			hasAlphaGloss = pTex->HasAlpha();
 			hasNormalMap = true;
-			bindablePtrs.push_back( std::move( tex ) );
+			bindablePtrs.push_back( std::move( pTex ) );
 		}
 		if( material.GetTexture( aiTextureType_SPECULAR, 0u, &texPath ) == aiReturn_SUCCESS )
 		{
@@ -462,6 +465,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 	{
 		bindablePtrs.push_back( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertShaderBytecode ) );
 	}
+
+	bindablePtrs.push_back( BlendState::Resolve( gfx, hasAlphaDiffuse ) );
 
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );
 }

@@ -38,8 +38,8 @@ public:
 	bool HasAlpha() const noexcept { return hasAlpha; }
 
 protected:
-	bool hasAlpha = false;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
+	bool hasAlpha = false;
 	const std::wstring& path;
 	const UINT slot;
 };

@@ -183,6 +183,9 @@
     <ClCompile Include="IronMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BlendState.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -577,6 +580,9 @@
     </ClInclude>
     <ClInclude Include="Box.h">
       <Filter>Header Files\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendState.h">
+      <Filter>Header Files\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

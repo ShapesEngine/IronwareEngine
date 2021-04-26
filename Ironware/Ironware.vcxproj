@@ -117,6 +117,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Bindable.cpp" />
+    <ClCompile Include="BlendState.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawable.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="..\External\Includes\imgui\imstb_truetype.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="BindableCollection.h" />
+    <ClInclude Include="BlendState.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonMacros.h" />

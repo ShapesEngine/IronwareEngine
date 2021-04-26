@@ -21,6 +21,7 @@ cbuffer NMapCbuf
 
 float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord, float3 viewTan : Tangent, float3 viewBitan : Bitangent ) : SV_Target
 {
+    float4 sampledDiff = tex.Sample( splr, tc );
     viewN = normalize( viewN );
     
     if( isNMapEnabled )
@@ -52,5 +53,5 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
     
     const float3 specular = calc_specular( specularReflectionColor, 1.f, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
 	// final color
-    return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular ), 1.f );
+    return float4( saturate( ( diffuse + ambient ) * sampledDiff.rgb + specular ), sampledDiff.a );
 }

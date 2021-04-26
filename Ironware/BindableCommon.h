@@ -24,6 +24,7 @@
 #include "Sampler.h"
 // needed to import textures
 #include "Surface.h"
+#include "BlendState.h"
 #endif
 
 #include "BindableCollection.h"
