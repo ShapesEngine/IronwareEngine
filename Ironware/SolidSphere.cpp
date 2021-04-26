@@ -47,6 +47,10 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 	AddBind( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 
 	AddBind( std::make_shared<TransformCBuffer>( gfx, *this ) );
+
+	AddBind( BlendState::Resolve( gfx, false ) );
+
+	AddBind( RasterizerState::Resolve( gfx, false ) );
 }
 
 void SolidSphere::UpdateColor( Graphics& gfx, const DirectX::XMFLOAT3A& col ) noexcept

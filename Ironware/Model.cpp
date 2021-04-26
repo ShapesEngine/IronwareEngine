@@ -467,7 +467,7 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 		bindablePtrs.push_back( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertShaderBytecode ) );
 	}
 
-	// bindablePtrs.push_back( BlendState::Resolve( gfx, hasAlphaDiffuse ) );
+	bindablePtrs.push_back( BlendState::Resolve( gfx, false ) );
 	// it's assumed that all models that have alpha value in diffuse tex to be two sided meshes
 	bindablePtrs.push_back( RasterizerState::Resolve( gfx, hasAlphaDiffuse ) );
 

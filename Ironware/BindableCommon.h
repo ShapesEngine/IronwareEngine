@@ -19,13 +19,13 @@
 #include "VertexBuffer.h"
 #include "VertexShader.h"
 #include "RasterizerState.h"
+#include "BlendState.h"
 
 #ifdef IR_INCLUDE_TEXTURE
 #include "Texture.h"
 #include "Sampler.h"
 // needed to import textures
 #include "Surface.h"
-#include "BlendState.h"
 #endif
 
 #include "BindableCollection.h"
