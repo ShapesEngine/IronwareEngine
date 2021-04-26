@@ -359,7 +359,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 
 		if( hasSpecMap )
 		{
-			bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongSpecNormalMapPS.cso" ) );
+			bindablePtrs.push_back( PixelShader::Resolve( gfx, hasAlphaDiffuse ?
+									L"PhongSpecNormalMapMaskPS.cso" : L"PhongSpecNormalMapPS.cso" ) );
 			Node::PSMaterialConstantFull pMc;
 			pMc.hasGlossMap = hasAlphaGloss ? TRUE : FALSE;
 			pMc.specularPower = shininess;
@@ -467,6 +468,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 	}
 
 	// bindablePtrs.push_back( BlendState::Resolve( gfx, hasAlphaDiffuse ) );
+	// it's assumed that all models that have alpha value in diffuse tex to be two sided meshes
+	bindablePtrs.push_back( RasterizerState::Resolve( gfx, hasAlphaDiffuse ) );
 
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );
 }

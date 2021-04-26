@@ -18,6 +18,7 @@
 #include "TransformCBufferEx.h"
 #include "VertexBuffer.h"
 #include "VertexShader.h"
+#include "RasterizerState.h"
 
 #ifdef IR_INCLUDE_TEXTURE
 #include "Texture.h"

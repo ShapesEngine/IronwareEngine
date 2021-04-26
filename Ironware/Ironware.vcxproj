@@ -136,6 +136,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="RasterizerState.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClInclude Include="..\External\Includes\assimp\aabb.h" />
     <ClInclude Include="..\External\Includes\assimp\ai_assert.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="RasterizerState.h" />
     <ClInclude Include="Sheet.h" />
     <ClInclude Include="SkinnedBox.h" />
     <ClCompile Include="Sheet.cpp" />
@@ -333,6 +335,10 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="PhongSpecMapPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="PhongSpecNormalMapMaskPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
