@@ -11,6 +11,8 @@
 #include "BindableCommon.h"
 #include "BindableCollection.h"
 
+#include <DirectXTex/DirectXTex.h>
+
 App::App()
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );

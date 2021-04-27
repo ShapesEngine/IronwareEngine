@@ -55,6 +55,9 @@
     <Filter Include="Shader Files\Ops">
       <UniqueIdentifier>{ba0cc82a-2367-44d9-830b-8f3d8d0e18a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\DirectXTex">
+      <UniqueIdentifier>{c270df46-24db-46b5-b942-110b471b204a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -590,6 +593,30 @@
     <ClInclude Include="RasterizerState.h">
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="..\External\Includes\DirectXTex\DirectXTex.h">
+      <Filter>External\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\Includes\DirectXTex\DirectXTexP.h">
+      <Filter>External\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\Includes\DirectXTex\filters.h">
+      <Filter>External\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\Includes\DirectXTex\scoped.h">
+      <Filter>External\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\Includes\DirectXTex\BC.h">
+      <Filter>External\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\Includes\DirectXTex\BCDirectCompute.h">
+      <Filter>External\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\Includes\DirectXTex\d3dx12.h">
+      <Filter>External\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\Includes\DirectXTex\DDS.h">
+      <Filter>External\DirectXTex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ironware.rc">
@@ -701,6 +728,9 @@
     </None>
     <None Include="CommonTransforms.hlsli">
       <Filter>Shader Files\Ops</Filter>
+    </None>
+    <None Include="..\External\Includes\DirectXTex\DirectXTex.inl">
+      <Filter>External\DirectXTex</Filter>
     </None>
   </ItemGroup>
 </Project>
