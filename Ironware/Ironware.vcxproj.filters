@@ -192,6 +192,9 @@
     <ClCompile Include="RasterizerState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SurfaceEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -616,6 +619,9 @@
     </ClInclude>
     <ClInclude Include="..\External\Includes\DirectXTex\DDS.h">
       <Filter>External\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="SurfaceEx.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

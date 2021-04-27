@@ -123,8 +123,8 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="GDIPlusManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
@@ -246,6 +246,7 @@
     <ClCompile Include="Sheet.cpp" />
     <ClCompile Include="SolidSphere.cpp" />
     <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="SurfaceEx.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="PrimitiveTopology.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="SurfaceEx.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="PrimitiveTopology.h" />
     <ClInclude Include="TransformCBuffer.h" />

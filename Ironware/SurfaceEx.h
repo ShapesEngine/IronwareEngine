@@ -1,36 +1,38 @@
 /*!
- * \file Surface.h
+ * \file SurfaceEx.h
  * \date 2020/11/03 11:31
  *
  * \author Yernar Aldabergenov
  * Contact: yernar.aa@gmail.com
  *
- * \brief In this file we have Surface, Color, Exception classes.
- * * Surface needs Color class to represent color of a pixel.
+ * \brief In this file we have SurfaceEx, Color, Exception classes.
+ * * SurfaceEx needs Color class to represent color of a pixel.
  *
  * TODO:
  *
- * \note
+ * \note SurfaceEx is newer version of SurfaceEx which uses DirectXTex instead of
+ * * GDIPlus and makes texture loading times much better.
 */
 #pragma once
 
 #include "IronException.h"
 #include "CommonMacros.h"
 
+#include <DirectXTex/DirectXTex.h>
+
 #include <string>
-#include <cassert>
-#include <memory>
+#include <optional>
 
 /*!
- * \class Surface
+ * \class SurfaceEx
  *
- * \brief Surface could be used for setting/getting pixel data,
+ * \brief SurfaceEx could be used for setting/getting pixel data,
  * * saving & loading a texture from a file.
  *
  * \author Yernar Aldabergenov
  * \date November 2020
  */
-class Surface
+class SurfaceEx
 {
 public:
 	/*!
@@ -56,7 +58,7 @@ public:
 			dword( ( x << 24u ) | ( r << 16u ) | ( g << 8u ) | b )
 		{}
 		constexpr Color( uint8_t r, uint8_t g, uint8_t b ) noexcept :
-			dword( ( r << 16u ) | ( g << 8u ) | b )
+			dword( ( 255u << 24u | r << 16u ) | ( g << 8u ) | b )
 		{}
 		constexpr Color( Color col, uint8_t x ) noexcept :
 			Color( ( x << 24u ) | col.dword )
@@ -81,7 +83,7 @@ public:
 	/*!
 	 * \class Exception
 	 *
-	 * \brief A class for handling surface exceptions
+	 * \brief A class for handling SurfaceEx exceptions
 	 *
 	 * \author Yernar Aldabergenov
 	 * \date March 2021
@@ -89,43 +91,42 @@ public:
 	class Exception : public IronException
 	{
 	public:
-		Exception( int line, const wchar_t* file, std::wstring note ) noexcept;
+		Exception( int line, const wchar_t* file, const std::wstring& note, std::optional<HRESULT> hr = {} ) noexcept;
+		Exception( int line, const wchar_t* file, std::wstring filename, const std::wstring& note, std::optional<HRESULT> hr = {} ) noexcept;
 		const char* what() const noexcept override;
 
-		const wchar_t* GetType() const noexcept override { return L"Iron Surface Exception"; }
+		const wchar_t* GetType() const noexcept override { return L"Iron SurfaceEx Exception"; }
 		const std::wstring& GetNote() const noexcept { return note; }
 	private:
+		std::optional<HRESULT> hr;
 		std::wstring note;
 	};
 
 public:
-	Surface( uint32_t width, uint32_t height ) noexcept;
-	Surface( Surface&& source ) noexcept;
-	Surface( Surface& ) = delete;
-	Surface& operator=( Surface&& donor ) noexcept;
-	Surface& operator=( const Surface& ) = delete;
-	~Surface() = default;
+	SurfaceEx( uint32_t width, uint32_t height );
+	SurfaceEx( SurfaceEx&& source ) noexcept = default;
+	SurfaceEx( SurfaceEx& ) = delete;
+	SurfaceEx& operator=( SurfaceEx&& donor ) noexcept = default;
+	SurfaceEx& operator=( const SurfaceEx& ) = delete;
+	~SurfaceEx() = default;
 
 	void PutPixel( uint32_t x, uint32_t y, Color c ) IFNOEXCEPT;
 	Color GetPixel( uint32_t x, uint32_t y ) const IFNOEXCEPT;
-	static Surface FromFile( const std::wstring& name );
+	static SurfaceEx FromFile( const std::wstring& name );
 	void Save( const std::wstring& filename ) const;
-	void Copy( const Surface& src ) IFNOEXCEPT;
+	void Clear( Color fillValue ) noexcept;
 
-	void Clear( Color fillValue ) noexcept { memset( pBuffer.get(), fillValue.dword, (size_t)width * height * sizeof( Color ) ); }
-	uint32_t GetWidth() const noexcept { return width; }
-	uint32_t GetHeight() const noexcept { return height; }
-	Color* GetBufferPtr() noexcept { return pBuffer.get(); }
-	const Color* GetBufferPtr() const noexcept { return pBuffer.get(); }
-	const Color* GetBufferPtrConst() const noexcept { return pBuffer.get(); }
-	bool IsAlphaLoaded() const noexcept { return alphaLoaded; }
-
-private:
-	Surface( uint32_t width, uint32_t height, std::unique_ptr<Color[]> pBufferParam, bool alphaLoaded = false ) noexcept;
+	uint32_t GetWidth() const noexcept { return (uint32_t)scratchImg.GetMetadata().width; }
+	uint32_t GetHeight() const noexcept { return (uint32_t)scratchImg.GetMetadata().height; }
+	Color* GetBufferPtr() noexcept { return reinterpret_cast<Color*>( scratchImg.GetPixels() ); }
+	const Color* GetBufferPtr() const noexcept { return const_cast<SurfaceEx*>( this )->GetBufferPtr(); }
+	const Color* GetBufferPtrConst() const noexcept { return const_cast<SurfaceEx*>( this )->GetBufferPtr(); }
+	bool IsAlphaLoaded() const noexcept { return !scratchImg.IsAlphaAllOpaque(); }
 
 private:
-	std::unique_ptr<Color[]> pBuffer;
-	uint32_t width;
-	uint32_t height;
-	bool alphaLoaded = false;
+	SurfaceEx( DirectX::ScratchImage scratchImg ) noexcept;
+
+private:
+	DirectX::ScratchImage scratchImg;
+	static constexpr auto format = DXGI_FORMAT_B8G8R8A8_UNORM;
 };
