@@ -14,7 +14,6 @@
 #include "Camera.h"
 #include "PointLight.h"
 #include "Model.h"
-#include "GDIPlusManager.h"
 #include "Sheet.h"
 
  /**
@@ -39,7 +38,6 @@ private:
 	void HandleInput();
 
 private:
-	GDIPlusManager gdipm;
 	ImguiManager imguim;
 	Camera camera;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
