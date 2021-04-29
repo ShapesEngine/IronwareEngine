@@ -24,7 +24,7 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
 	// diffuse intensity
     const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, lightVec.dirToL, viewN );
     // reflected light vector
-    const float3 specular = calc_specular( diffuseColor, specularIntensity, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
+    const float3 specular = calc_specular( diffuseColor, diffuseIntensity * specularIntensity, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
 	// final color
     return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular ), 1.f );
 }
