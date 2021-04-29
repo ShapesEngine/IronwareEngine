@@ -92,18 +92,6 @@ Graphics::Graphics( HWND hWnd )
 	GFX_CALL_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), &pBackBuffer ) );
 	GFX_CALL_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer.Get(), nullptr, &pRenderTargetView ) );
 
-	// create depth stencil state
-	D3D11_DEPTH_STENCIL_DESC descDepthStencil = {};
-	descDepthStencil.DepthEnable = TRUE;
-	descDepthStencil.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	descDepthStencil.DepthFunc = D3D11_COMPARISON_LESS;
-	wrl::ComPtr<ID3D11DepthStencilState> pDSState;
-	GFX_CALL_THROW_INFO( pDevice->CreateDepthStencilState( &descDepthStencil, &pDSState ) );
-
-	// bind depth state
-	pImmediateContext->OMSetDepthStencilState( pDSState.Get(), 1u );
-
-	// stencil is not applied yet, only depth
 	wrl::ComPtr<ID3D11Texture2D> pDepth;
 	D3D11_TEXTURE2D_DESC descDepth;
 	descDepth.Width = windowWidth;

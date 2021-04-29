@@ -204,6 +204,9 @@
     <ClCompile Include="ConstantBuffersEx.cpp">
       <Filter>Source Files\Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="DepthStencilState.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -639,6 +642,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffersEx.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilState.h">
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
   </ItemGroup>

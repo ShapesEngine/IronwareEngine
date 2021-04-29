@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date April 2021
  *
- * 
+ *
  */
 #include "Box.h"
 #include "Vertex.h"
@@ -40,18 +40,18 @@ Box::Box( Graphics & gfx, float size )
 	{
 		vbuff.EmplaceBack( v.pos, v.n, v.tex );
 	}
-	const std::wstring& sheetTag = L"$box." + std::to_wstring( size );
-	AddBind( VertexBuffer::Resolve( gfx, sheetTag, vbuff ) );
-	AddBind( IndexBuffer::Resolve( gfx, sheetTag, model.indices ) );
+	const std::wstring& boxTag = L"$box." + std::to_wstring( size );
+	AddBind( VertexBuffer::Resolve( gfx, boxTag, vbuff ) );
+	AddBind( IndexBuffer::Resolve( gfx, boxTag, model.indices ) );
 
 	auto pVertexShader = VertexShader::Resolve( gfx, L"PhongDiffuseMapVS.cso" );
 	auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 	AddBind( std::move( pVertexShader ) );
 
-	AddBind( PixelShader::Resolve( gfx, L"PhongNormalMapPS.cso" ) );
+	AddBind( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
 
 	AddBind( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
-	AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );
+	/*AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );*/
 	AddBind( Sampler::Resolve( gfx ) );
 
 	AddBind( PixelConstantBuffer<SheetCBuff>::Resolve( gfx, cbuff, 1u ) );
@@ -60,13 +60,47 @@ Box::Box( Graphics & gfx, float size )
 
 	AddBind( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
 
-	AddBind( std::make_shared<TransformCBufferEx>( gfx, *this, 0u, 2u ) );
+	AddBind( std::make_shared<DepthStencilState>( gfx, DepthStencilState::StencilMode::Write ) );
+
+	auto pTfCbuf = std::make_shared<TransformCBufferEx>( gfx, *this, 0u, 2u );
+
+	outlineBindables.push_back( VertexBuffer::Resolve( gfx, boxTag, vbuff ) );
+	outlineBindables.push_back( IndexBuffer::Resolve( gfx, boxTag, model.indices ) );
+	pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+	pVertexShaderBytecode = pVertexShader->GetBytecode();
+	outlineBindables.push_back( std::move( pVertexShader ) );
+	outlineBindables.push_back( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
+	struct SolidColorBuffer
+	{
+		DirectX::XMFLOAT4 color = { 1.0f, 1.0f, 0.4f, 1.0f };
+	} scb;
+	outlineBindables.push_back( PixelConstantBuffer<SolidColorBuffer>::Resolve( gfx, scb, 1u ) );
+	outlineBindables.push_back( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+	outlineBindables.push_back( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
+	outlineBindables.push_back( std::move( pTfCbuf ) );
+	outlineBindables.push_back( std::make_shared<DepthStencilState>( gfx, DepthStencilState::StencilMode::Mask ) );
+}
+
+void Box::DrawOutline( Graphics & gfx ) noexcept( !IS_DEBUG )
+{
+	isOutlineEnabled = true;
+	for( const auto& b : outlineBindables )
+	{
+		b->Bind( gfx );
+	}
+	gfx.DrawIndexed( QueryBindable<IndexBuffer>()->GetCount() );
+	isOutlineEnabled = false;
 }
 
 DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 {
-	return DirectX::XMMatrixRotationRollPitchYaw( orientation.x, orientation.y, orientation.z ) *
+	auto xm = DirectX::XMMatrixRotationRollPitchYaw( orientation.x, orientation.y, orientation.z ) *
 		DirectX::XMMatrixTranslation( pos.x, pos.y, pos.z );
+	if( isOutlineEnabled )
+	{
+		xm = DirectX::XMMatrixScaling( 1.03f, 1.03f, 1.03f ) * xm;
+	}
+	return xm;
 }
 
 void Box::SpawnControlWindow( Graphics & gfx ) noexcept

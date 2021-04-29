@@ -553,8 +553,8 @@ struct CD3DX12_CLEAR_VALUE : public D3D12_CLEAR_VALUE
         Format = format;
         memset( &Color, 0, sizeof( Color ) );
         /* Use memcpy to preserve NAN values */
-        memcpy( &DepthStencil.Depth, &depth, sizeof( depth ) );
-        DepthStencil.Stencil = stencil;
+        memcpy( &DepthStencilState.Depth, &depth, sizeof( depth ) );
+        DepthStencilState.Stencil = stencil;
     }
 };
 
@@ -3251,8 +3251,8 @@ inline bool operator==( const D3D12_CLEAR_VALUE &a, const D3D12_CLEAR_VALUE &b) 
      || a.Format == DXGI_FORMAT_D32_FLOAT
      || a.Format == DXGI_FORMAT_D32_FLOAT_S8X24_UINT)
     {
-        return (a.DepthStencil.Depth == b.DepthStencil.Depth) &&
-          (a.DepthStencil.Stencil == b.DepthStencil.Stencil);
+        return (a.DepthStencilState.Depth == b.DepthStencilState.Depth) &&
+          (a.DepthStencilState.Stencil == b.DepthStencilState.Stencil);
     } else {
         return (a.Color[0] == b.Color[0]) &&
                (a.Color[1] == b.Color[1]) &&

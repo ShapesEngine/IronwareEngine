@@ -20,6 +20,7 @@
 #include "VertexShader.h"
 #include "RasterizerState.h"
 #include "BlendState.h"
+#include "DepthStencilState.h"
 
 #ifdef IR_INCLUDE_TEXTURE
 #include "Texture.h"

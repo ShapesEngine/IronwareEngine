@@ -23,6 +23,12 @@ void PixelConstantBufferEx::Update( Graphics & gfx, const Buffer & buf )
 	GetContext( gfx )->Unmap( pConstantBuffer.Get(), 0u );
 }
 
+std::wstring PixelConstantBufferEx::GetUID() const noexcept
+{
+	assert( false && "Not yet integrated with bCollection system!" );
+	return L"?";
+}
+
 PixelConstantBufferEx::PixelConstantBufferEx( Graphics & gfx, const LayoutElement & layoutRoot, UINT slot, const Buffer * pBuf ) :
 	slot( slot )
 {

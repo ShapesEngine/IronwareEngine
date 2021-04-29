@@ -47,14 +47,18 @@ void App::ProcessFrame()
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
 	pointLight.Draw( wnd.Gfx() );
-	sponza.Draw( wnd.Gfx() );
+	box1.Draw( wnd.Gfx() );
+	box2.Draw( wnd.Gfx() );
+	//sponza.Draw( wnd.Gfx() );
 	/*sheet1.Draw( wnd.Gfx() );
 	sheet2.Draw( wnd.Gfx() );*/
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	sponza.ShowWindow( wnd.Gfx(), "sponza" );
+	box1.DrawOutline( wnd.Gfx() );
+	box2.DrawOutline( wnd.Gfx() );
+	//sponza.ShowWindow( wnd.Gfx(), "sponza" );
 	/*sheet1.SpawnControlWindow( wnd.Gfx(), "sheet1" );
 	sheet2.SpawnControlWindow( wnd.Gfx(), "sheet2" );*/
 	/*goblin.ShowWindow( wnd.Gfx(), "Goblin" );
