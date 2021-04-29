@@ -195,6 +195,12 @@
     <ClCompile Include="SurfaceEx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DynamicConstantBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -621,6 +627,12 @@
       <Filter>External\DirectXTex</Filter>
     </ClInclude>
     <ClInclude Include="SurfaceEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicConstantBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

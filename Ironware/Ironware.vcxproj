@@ -122,6 +122,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
+    <ClCompile Include="DynamicConstantBuffer.cpp" />
     <ClCompile Include="GDIPlusManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -135,6 +136,7 @@
     <ClCompile Include="IronException.cpp" />
     <ClCompile Include="IronUtils.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="DynamicLayout.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
@@ -237,7 +239,9 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonMacros.h" />
+    <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="ImGuiManager.h" />
+    <ClInclude Include="DynamicLayout.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RasterizerState.h" />
