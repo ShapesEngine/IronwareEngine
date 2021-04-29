@@ -47,8 +47,8 @@ private:
 	/*Model goblin{ wnd.Gfx(), L"Models\\goblin\\GoblinX.obj", 6.f, { 4.f, 10.f, -16.f } };
 	Model nano{ wnd.Gfx(), L"Models\\nanosuit_textured\\nanosuit.obj" };
 	Model wallObj{ wnd.Gfx(), L"Models\\brickwall\\brickwall.obj", 3.f, { -10.f, 10.f, 0.f } };*/
-	Sheet sheet1{ wnd.Gfx(), 3.f, { 0.f, 0.f, 1.f, 0.5f } };
-	Sheet sheet2{ wnd.Gfx(), 3.f, { 1.f, 0.f, 0.f, 0.5f } };
+	/*Sheet sheet1{ wnd.Gfx(), 3.f, { 0.f, 0.f, 1.f, 0.5f } };
+	Sheet sheet2{ wnd.Gfx(), 3.f, { 1.f, 0.f, 0.f, 0.5f } };*/
 	Model sponza{ wnd.Gfx(), L"Models\\sponza\\sponza.obj", 1.f / 20.f };
 	IronTimer timer;
 };

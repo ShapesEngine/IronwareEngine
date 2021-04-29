@@ -169,7 +169,7 @@ public:
 	/**
 	 * @return size of the elements in bytes
 	*/
-	size_t Size() const IFNOEXCEPT { return elements.empty() ? 0 : elements.back().GetOffsetAfter(); }
+	size_t Size() const IFNOEXCEPT { return elements.empty() ? 0u : elements.back().GetOffsetAfter(); }
 	size_t GetElementCount() const IFNOEXCEPT { return elements.size(); }
 
 	VertexLayout& Append( ElementType ElementType ) IFNOEXCEPT;

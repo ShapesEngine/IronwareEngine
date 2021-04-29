@@ -18,8 +18,8 @@ App::App()
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );
 	wnd.EnableMouseCursor();
 	auto camPos = camera.GetPos();
-	sheet1.SetPos( camPos );
-	sheet2.SetPos( { camPos.x, camPos.y, camPos.z - 5.f } );
+	/*sheet1.SetPos( camPos );
+	sheet2.SetPos( { camPos.x, camPos.y, camPos.z - 5.f } );*/
 }
 
 int App::BeginFrame()
@@ -48,15 +48,15 @@ void App::ProcessFrame()
 
 	pointLight.Draw( wnd.Gfx() );
 	sponza.Draw( wnd.Gfx() );
-	sheet1.Draw( wnd.Gfx() );
-	sheet2.Draw( wnd.Gfx() );
+	/*sheet1.Draw( wnd.Gfx() );
+	sheet2.Draw( wnd.Gfx() );*/
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
 	sponza.ShowWindow( wnd.Gfx(), "sponza" );
-	sheet1.SpawnControlWindow( wnd.Gfx(), "sheet1" );
-	sheet2.SpawnControlWindow( wnd.Gfx(), "sheet2" );
+	/*sheet1.SpawnControlWindow( wnd.Gfx(), "sheet1" );
+	sheet2.SpawnControlWindow( wnd.Gfx(), "sheet2" );*/
 	/*goblin.ShowWindow( wnd.Gfx(), "Goblin" );
 	nano.ShowWindow( wnd.Gfx(), "Nanosuit" );
 	wallObj.ShowWindow( wnd.Gfx(), "Brickwall" );
