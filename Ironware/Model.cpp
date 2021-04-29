@@ -11,7 +11,6 @@
 #include "BindableCommon.h"
 #include "IronUtils.h"
 #include "IronMath.h"
-#include "DynamicConstantBuffer.h"
 #include "ConstantBuffersEx.h"
 
 #include <assimp/Importer.hpp>
@@ -83,22 +82,63 @@ public:
 					tp.y = translation.y;
 					tp.z = translation.z;
 
-					std::tie( i, std::ignore ) = transforms.insert( { id, std::move( tp ) } );
+					auto pMatConst = pSelectedNode->GetMaterialConstants();
+					auto buf = pMatConst != nullptr ? std::optional<Buffer>{ *pMatConst } : std::optional<Buffer>{};
+					std::tie( i, std::ignore ) = transforms.insert( { id, { std::move( tp ), false, std::move( buf ), false } } );
 				}
 
 				auto& transform = i->second;
 				ImGui::Text( "Position" );
-				ImGui::SliderFloat( "X", &transform.x, -20.0f, 20.0f );
-				ImGui::SliderFloat( "Y", &transform.y, -20.0f, 20.0f );
-				ImGui::SliderFloat( "Z", &transform.z, -20.0f, 20.0f );
+				ImGui::SliderFloat( "X", &transform.tranformParams.x, -20.f, 20.f );
+				ImGui::SliderFloat( "Y", &transform.tranformParams.y, -20.f, 20.f );
+				ImGui::SliderFloat( "Z", &transform.tranformParams.z, -20.f, 20.f );
 
 				ImGui::Text( "Orientation" );
-				ImGui::SliderAngle( "Pitch", &transform.pitch, -180.0f, 180.0f );
-				ImGui::SliderAngle( "Yaw", &transform.yaw, -180.0f, 180.0f );
-				ImGui::SliderAngle( "Roll", &transform.roll, -180.0f, 180.0f );
-				if( !pSelectedNode->ShowControlMaterial( gfx, matFull ) )
+				ImGui::SliderAngle( "Pitch", &transform.tranformParams.pitch, -180.f, 180.f );
+				ImGui::SliderAngle( "Yaw", &transform.tranformParams.yaw, -180.f, 180.f );
+				ImGui::SliderAngle( "Roll", &transform.tranformParams.roll, -180.f, 180.f );
+
+				// link imgui ctrl to cached material params
+				if( i->second.materialCbuf )
 				{
-					pSelectedNode->ShowControlMaterial( gfx, matNoTex );
+					auto& mat = *i->second.materialCbuf;
+					// dirty check
+					auto& dirty = i->second.materialCbufDirty;
+					const auto dcheck = [&dirty]( bool changed ) {dirty = dirty || changed; };
+					// widgets
+					ImGui::Text( "Material" );
+					if( auto v = mat["normalMapEnabled"]; v.Exists() )
+					{
+						dcheck( ImGui::Checkbox( "Norm Map", &v ) );
+					}
+					if( auto v = mat["specularMapEnabled"]; v.Exists() )
+					{
+						dcheck( ImGui::Checkbox( "Spec Map", &v ) );
+					}
+					if( auto v = mat["hasGlossMap"]; v.Exists() )
+					{
+						dcheck( ImGui::Checkbox( "Gloss Map", &v ) );
+					}
+					if( auto v = mat["materialColor"]; v.Exists() )
+					{
+						dcheck( ImGui::ColorPicker3( "Diff Color", reinterpret_cast<float*>( &static_cast<dx::XMFLOAT3&>( v ) ) ) );
+					}
+					if( auto v = mat["specularPower"]; v.Exists() )
+					{
+						dcheck( ImGui::SliderFloat( "Spec Power", &v, 0.0f, 100.0f, "%.1f", 1.5f ) );
+					}
+					if( auto v = mat["specularColor"]; v.Exists() )
+					{
+						dcheck( ImGui::ColorPicker3( "Spec Color", reinterpret_cast<float*>( &static_cast<dx::XMFLOAT3&>( v ) ) ) );
+					}
+					if( auto v = mat["specularMapWeight"]; v.Exists() )
+					{
+						dcheck( ImGui::SliderFloat( "Spec Weight", &v, 0.0f, 4.0f ) );
+					}
+					if( auto v = mat["specularIntensity"]; v.Exists() )
+					{
+						dcheck( ImGui::SliderFloat( "Spec Intens", &v, 0.0f, 1.0f ) );
+					}
 				}
 			}
 			//==========
@@ -106,11 +146,25 @@ public:
 		ImGui::End();
 	}
 
-	auto GetTransform() const noexcept
+	void ApplyParameters() IFNOEXCEPT
+	{
+		if( TransformDirty() )
+		{
+			pSelectedNode->SetAppliedTransform( GetTransform() );
+			ResetTransformDirty();
+		}
+		if( MaterialDirty() )
+		{
+			pSelectedNode->SetMaterialConstants( GetMaterial() );
+			ResetMaterialDirty();
+		}
+	}
+
+	DirectX::XMMATRIX GetTransform() const IFNOEXCEPT
 	{
 		const auto& transform = transforms.at( pSelectedNode->index );
-		return dx::XMMatrixRotationRollPitchYaw( transform.pitch, transform.yaw, transform.roll ) *
-			dx::XMMatrixTranslation( transform.x, transform.y, transform.z );
+		return dx::XMMatrixRotationRollPitchYaw( transform.tranformParams.pitch, transform.tranformParams.yaw, transform.tranformParams.roll ) *
+			dx::XMMatrixTranslation( transform.tranformParams.x, transform.tranformParams.y, transform.tranformParams.z );
 	}
 
 	Node* GetSelectedNode() const noexcept
@@ -118,20 +172,58 @@ public:
 		return pSelectedNode;
 	}
 
+	const Buffer& GetMaterial() const IFNOEXCEPT
+	{
+		assert( pSelectedNode != nullptr );
+		const auto& mat = transforms.at( pSelectedNode->GetID() ).materialCbuf;
+		assert( mat );
+		return *mat;
+	}
+
+	bool TransformDirty() const IFNOEXCEPT
+	{
+		return pSelectedNode && transforms.at( pSelectedNode->GetID() ).transformParamsDirty;
+	}
+
+	void ResetTransformDirty() IFNOEXCEPT
+	{
+		transforms.at( pSelectedNode->GetID() ).transformParamsDirty = false;
+	}
+
+	bool MaterialDirty() const IFNOEXCEPT
+	{
+		return pSelectedNode && transforms.at( pSelectedNode->GetID() ).materialCbufDirty;
+	}
+
+	void ResetMaterialDirty() IFNOEXCEPT
+	{
+		transforms.at( pSelectedNode->GetID() ).materialCbufDirty = false;
+	}
+
+	bool IsDirty() const IFNOEXCEPT
+	{
+		return TransformDirty() || MaterialDirty();
+	}
+
 private:
 	struct TransformationParams
 	{
-		float roll = 0.0f;
-		float pitch = 0.0f;
-		float yaw = 0.0f;
-		float x = 0.0f;
-		float y = 0.0f;
-		float z = 0.0f;
+		float roll = 0.f;
+		float pitch = 0.f;
+		float yaw = 0.f;
+		float x = 0.f;
+		float y = 0.f;
+		float z = 0.f;
 	};
-	std::unordered_map<uint32_t, TransformationParams> transforms;
+	struct NodeData
+	{
+		TransformationParams tranformParams;
+		bool transformParamsDirty;
+		std::optional<Buffer> materialCbuf;
+		bool materialCbufDirty;
+	};
+	std::unordered_map<uint32_t, NodeData> transforms;
 	Node* pSelectedNode = nullptr;
-	Node::PSMaterialConstantFull matFull;
-	Node::PSMaterialConstantNoTex matNoTex;
 };
 
 Node::Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const dx::XMMATRIX& transform_in ) IFNOEXCEPT :
@@ -158,6 +250,23 @@ void Node::Draw( Graphics& gfx, dx::FXMMATRIX accumulatedTransform ) const IFNOE
 	{
 		pc->Draw( gfx, built );
 	}
+}
+
+const Buffer* Node::GetMaterialConstants() const IFNOEXCEPT
+{
+	if( meshPtrs.empty() )
+	{
+		return nullptr;
+	}
+	auto pBindable = meshPtrs.front()->QueryBindable<CachingPixelConstantBufferEx>();
+	return &pBindable->GetBuffer();
+}
+
+void Node::SetMaterialConstants( const Buffer& buf_in ) IFNOEXCEPT
+{
+	auto pcb = meshPtrs.front()->QueryBindable<CachingPixelConstantBufferEx>();
+	assert( pcb != nullptr );
+	pcb->SetBuffer( buf_in );
 }
 
 void Node::AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT
@@ -279,8 +388,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 	bool hasAlphaGloss = false;
 	bool hasAlphaDiffuse = false;
 
-	aiColor4D diffuseColor = { 0.45f, 0.45f, 0.85f, 1.0f };
-	aiColor4D specularColor = { 0.18f, 0.18f, 0.18f, 1.0f };
+	aiColor4D diffuseColor = { 0.45f, 0.45f, 0.85f, 1.f };
+	aiColor4D specularColor = { 0.18f, 0.18f, 0.18f, 1.f };
 	ai_real shininess = 40.f;
 
 	ID3DBlob* pVertShaderBytecode = nullptr;
@@ -323,11 +432,11 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 		{
 			if( !hasDiffMap && material.Get( AI_MATKEY_COLOR_DIFFUSE, diffuseColor ) != aiReturn_SUCCESS )
 			{
-				diffuseColor = { 0.45f, 0.45f, 0.85f, 1.0f };
+				diffuseColor = { 0.45f, 0.45f, 0.85f, 1.f };
 			}
 			if( !hasDiffMap && material.Get( AI_MATKEY_COLOR_SPECULAR, specularColor ) != aiReturn_SUCCESS )
 			{
-				specularColor = { 0.18f, 0.18f, 0.18f, 1.0f  };
+				specularColor = { 0.18f, 0.18f, 0.18f, 1.f  };
 			}
 			if( !hasAlphaGloss && material.Get( AI_MATKEY_SHININESS, shininess ) != aiReturn_SUCCESS )
 			{
@@ -361,27 +470,39 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 
 		if( hasSpecMap )
 		{
-			bindablePtrs.push_back( PixelShader::Resolve( gfx, hasAlphaDiffuse ?
-									L"PhongSpecNormalMapMaskPS.cso" : L"PhongSpecNormalMapPS.cso" ) );
-			Node::PSMaterialConstantFull pMc;
-			pMc.hasGlossMap = hasAlphaGloss ? TRUE : FALSE;
-			pMc.specularPower = shininess;
+			RawLayout lay;
+			lay.Add<Type::Bool>( "normalMapEnabled" );
+			lay.Add<Type::Bool>( "specularMapEnabled" );
+			lay.Add<Type::Bool>( "hasGlossMap" );
+			lay.Add<Type::Float>( "specularPower" );
+			lay.Add<Type::Float3>( "specularColor" );
+			lay.Add<Type::Float>( "specularMapWeight" );
 
-			bindablePtrs.push_back( PixelConstantBuffer<Node::PSMaterialConstantFull>::Resolve( gfx, pMc, 1u ) );
+			auto buf = Buffer( std::move( lay ) );
+			buf["normalMapEnabled"] = true;
+			buf["specularMapEnabled"] = true;
+			buf["hasGlossMap"] = hasAlphaGloss;
+			buf["specularPower"] = shininess;
+			buf["specularColor"] = dx::XMFLOAT3{ 0.75f,0.75f,0.75f };
+			buf["specularMapWeight"] = 0.671f;
+
+			bindablePtrs.push_back( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
+			bindablePtrs.push_back( PixelShader::Resolve( gfx, hasAlphaDiffuse ?
+				L"PhongSpecNormalMapMaskPS.cso" : L"PhongSpecNormalMapPS.cso" ) );
 		}
 		else
 		{
-			struct PSMaterialConstantDiffNormal
-			{
-				float specularIntensity = 0.2f;
-				float specularPower;
-				alignas( 8 ) BOOL normalMapEnabled = TRUE;
-			} pMc;
+			RawLayout layout;
+			layout.Add<Type::Float>( "specularIntensity" );
+			layout.Add<Type::Float>( "specularPower" );
+			layout.Add<Type::Bool>( "normalMapEnabled" );
 
-			pMc.specularIntensity = ( specularColor.r + specularColor.g + specularColor.b ) / 3.f;
-			pMc.specularPower = shininess;
+			auto cbuf = Buffer( std::move( layout ) );
+			cbuf["specularIntensity"] = ( specularColor.r + specularColor.g + specularColor.b ) / 3.0f;
+			cbuf["specularPower"] = shininess;
+			cbuf["normalMapEnabled"] = true;
 
-			bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantDiffNormal>::Resolve( gfx, pMc, 1u ) );
+			bindablePtrs.push_back( std::make_shared<CachingPixelConstantBufferEx>( gfx,cbuf,1u ) );
 			bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongNormalMapPS.cso" ) );
 		}
 	}
@@ -407,33 +528,30 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 
 		if( hasSpecMap )
 		{
-			struct PSMaterialConstantDiffSpec
-			{
-				float specularPower;
-				float specularMapWeight;
-				alignas( 8 ) BOOL hasGloss;
-			} pMc;
+			RawLayout lay;
+			lay.Add<Type::Float>( "specularPower" );
+			lay.Add<Type::Bool>( "hasGloss" );
+			lay.Add<Type::Float>( "specularMapWeight" );
 
-			pMc.specularPower = shininess;
-			pMc.specularMapWeight = 1.f;
-			pMc.hasGloss = hasAlphaGloss ? TRUE : FALSE;
-
-			bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantDiffSpec>::Resolve( gfx, pMc, 1u ) );
+			auto buf = Buffer( std::move( lay ) );
+			buf["specularPower"] = shininess;
+			buf["hasGloss"] = hasAlphaGloss;
+			buf["specularMapWeight"] = 1.0f;
+			bindablePtrs.push_back( std::make_unique<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 			bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongSpecMapPS.cso" ) );
 		}
 		else
 		{
-			struct PSMaterialConstantDiff
-			{
-				float specularIntensity = 0.2f;
-				float specularPower;
-				alignas( 8 ) float padding;
-			} pMc;
+			RawLayout lay;
+			lay.Add<Type::Float>( "specularIntensity" );
+			lay.Add<Type::Float>( "specularPower" );
 
-			pMc.specularIntensity = ( specularColor.r + specularColor.g + specularColor.b ) / 3.f;
-			pMc.specularPower = shininess;
+			auto buf = Buffer( std::move( lay ) );
+			buf["specularIntensity"] = ( specularColor.r + specularColor.g + specularColor.b ) / 3.0f;
+			buf["specularPower"] = shininess;
+			buf["specularMapWeight"] = 1.0f;
 
-			bindablePtrs.push_back( PixelConstantBuffer<PSMaterialConstantDiff>::Resolve( gfx, pMc, 1u ) );
+			bindablePtrs.push_back( std::make_unique<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 			bindablePtrs.push_back( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
 		}
 	}
@@ -447,13 +565,17 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 			);
 		}
 
-		Node::PSMaterialConstantNoTex pMc;
+		RawLayout lay;
+		lay.Add<Type::Float4>( "materialColor" );
+		lay.Add<Type::Float4>( "specularColor" );
+		lay.Add<Type::Float>( "specularPower" );
 
-		pMc.materialColor = reinterpret_cast<dx::XMFLOAT4&>( diffuseColor );
-		pMc.specularColor = reinterpret_cast<dx::XMFLOAT4&>( specularColor );
-		pMc.specularPower = shininess;
+		auto buf = Buffer( std::move( lay ) );
+		buf["specularPower"] = shininess;
+		buf["specularColor"] = reinterpret_cast<dx::XMFLOAT4&>( specularColor );
+		buf["materialColor"] = reinterpret_cast<dx::XMFLOAT4&>( diffuseColor );
 
-		bindablePtrs.push_back( PixelConstantBuffer<Node::PSMaterialConstantNoTex>::Resolve( gfx, pMc, 1u ) );
+		bindablePtrs.push_back( std::make_unique<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
 		auto pVertShader = VertexShader::Resolve( gfx, L"PhongVS.cso" );
 		// save bytecode, as it will be needed in input layout

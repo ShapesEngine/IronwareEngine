@@ -11,6 +11,7 @@
 #include "Drawable.h"
 #include "CommonMacros.h"
 #include "IronException.h"
+#include "DynamicConstantBuffer.h"
 
 #include <assimp/scene.h>
 #include <imgui/imgui.h>
@@ -34,25 +35,6 @@ class Node
 	friend class Model;
 	friend class ModelWindow;
 
-private:
-	struct PSMaterialConstantFull
-	{
-		BOOL normalMapEnabled = TRUE;
-		BOOL specularMapEnabled = TRUE;
-		BOOL hasGlossMap = FALSE;
-		float specularPower = 3.3f;
-		DirectX::XMFLOAT3 specularColor = { 0.75f, 0.75f, 0.75f };
-		float specularMapWeight = 0.65f;
-	};
-
-	struct PSMaterialConstantNoTex
-	{
-		DirectX::XMFLOAT4 materialColor = { 0.447970f, 0.327254f, 0.176283f, 1.f };
-		DirectX::XMFLOAT4 specularColor = { 0.65f, 0.65f, 0.65f, 1.f };
-		float specularPower = 120.f;
-		float padding[3];
-	};
-
 public:
 	Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const DirectX::XMMATRIX& transform_in ) IFNOEXCEPT;
 	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
@@ -60,6 +42,8 @@ public:
 private:
 	void AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT;
 	void ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT;
+	const Buffer* GetMaterialConstants() const IFNOEXCEPT;
+	void SetMaterialConstants( const Buffer& ) IFNOEXCEPT;
 	
 	template<typename M>
 	bool ShowControlMaterial( Graphics& gfx, M& pMC );
@@ -125,61 +109,3 @@ private:
 	std::unique_ptr<class ModelWindow> pModelWindow{ std::make_unique<ModelWindow>() };
 	size_t nodeNum = 0;
 };
-
-template<typename M>
-bool Node::ShowControlMaterial( Graphics& gfx, M& pMC )
-{
-	if( meshPtrs.empty() )
-	{
-		return false;
-	}
-
-	if constexpr( std::is_same<PSMaterialConstantFull, M>::value )
-	{
-		if( auto pcb = meshPtrs.front()->QueryBindable<PixelConstantBuffer<PSMaterialConstantFull>>() )
-		{
-			ImGui::Text( "Material" );
-
-			bool normalMapEnabled = (bool)pMC.normalMapEnabled;
-			ImGui::Checkbox( "Norm Map", &normalMapEnabled );
-			pMC.normalMapEnabled = normalMapEnabled ? TRUE : FALSE;
-
-			bool specularMapEnabled = (bool)pMC.specularMapEnabled;
-			ImGui::Checkbox( "Spec Map", &specularMapEnabled );
-			pMC.specularMapEnabled = specularMapEnabled ? TRUE : FALSE;
-
-			bool hasGlossMap = (bool)pMC.hasGlossMap;
-			ImGui::Checkbox( "Gloss Alpha", &hasGlossMap );
-			pMC.hasGlossMap = hasGlossMap ? TRUE : FALSE;
-
-			ImGui::SliderFloat( "Spec Weight", &pMC.specularMapWeight, 0.0f, 2.0f );
-
-			ImGui::SliderFloat( "Spec Pow", &pMC.specularPower, 0.0f, 1000.0f, "%f", 5.0f );
-
-			ImGui::ColorPicker3( "Spec Color", reinterpret_cast<float*>( &pMC.specularColor ) );
-
-			pcb->Update( gfx, pMC );
-
-			return true;
-		}
-	}
-	else if constexpr( std::is_same<PSMaterialConstantNoTex, M>::value )
-	{
-		if( auto pcb = meshPtrs.front()->QueryBindable<PixelConstantBuffer<M>>() )
-		{
-			ImGui::Text( "Material" );
-
-			ImGui::ColorPicker3( "Spec Color", reinterpret_cast<float*>( &pMC.specularColor ) );
-
-			ImGui::SliderFloat( "Spec Power", &pMC.specularPower, 0.0f, 1000.0f, "%f", 5.0f );
-
-			ImGui::ColorPicker3( "Diffuse Color", reinterpret_cast<float*>( &pMC.materialColor ) );
-
-			pcb->Update( gfx, pMC );
-
-			return true;
-		}
-	}
-
-	return false;
-}

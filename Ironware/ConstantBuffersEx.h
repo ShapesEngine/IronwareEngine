@@ -23,6 +23,10 @@ public:
 	void Update( Graphics& gfx, const Buffer& buf );
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
 	virtual const LayoutElement& GetRootLayoutElement() const noexcept = 0;
+	std::wstring GetUID() const noexcept override
+	{
+		return L"";
+	}
 
 protected:
 	PixelConstantBufferEx( Graphics& gfx, const LayoutElement& layoutRoot, UINT slot, const Buffer* pBuf );
