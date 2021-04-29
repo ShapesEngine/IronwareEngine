@@ -120,6 +120,7 @@
     <ClCompile Include="BlendState.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ConstantBuffersEx.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="DynamicConstantBuffer.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonMacros.h" />
+    <ClInclude Include="ConstantBuffersEx.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="DynamicLayout.h" />

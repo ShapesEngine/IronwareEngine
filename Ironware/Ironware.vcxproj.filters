@@ -201,6 +201,9 @@
     <ClCompile Include="DynamicLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConstantBuffersEx.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -634,6 +637,9 @@
     </ClInclude>
     <ClInclude Include="DynamicLayout.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffersEx.h">
+      <Filter>Header Files\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

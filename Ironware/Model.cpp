@@ -11,6 +11,8 @@
 #include "BindableCommon.h"
 #include "IronUtils.h"
 #include "IronMath.h"
+#include "DynamicConstantBuffer.h"
+#include "ConstantBuffersEx.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
