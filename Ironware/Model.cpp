@@ -337,10 +337,7 @@ Model::Model( Graphics& gfx, std::wstring path, float scale, DirectX::XMFLOAT3 s
 
 void Model::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
 {
-	if( auto node = pModelWindow->GetSelectedNode() )
-	{
-		node->SetAppliedTransform( pModelWindow->GetTransform() );
-	}
+	pModelWindow->ApplyParameters();
 	pRoot->Draw( gfx, dx::XMMatrixIdentity() );
 }
 
