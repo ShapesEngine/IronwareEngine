@@ -99,7 +99,7 @@ DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 		DirectX::XMMatrixTranslation( pos.x, pos.y, pos.z );
 	if( isOutlineEnabled )
 	{
-		xm = DirectX::XMMatrixScaling( 1.03f, 1.03f, 1.03f ) * xm;
+		xm = DirectX::XMMatrixScaling( 1.015f, 1.015f, 1.015f ) * xm;
 	}
 	return xm;
 }

@@ -592,6 +592,8 @@ std::unique_ptr<Mesh> Model::ParseMesh( Graphics& gfx, const aiMesh& mesh, const
 	// it's assumed that all models that have alpha value in diffuse tex to be two sided meshes
 	bindablePtrs.push_back( RasterizerState::Resolve( gfx, hasAlphaDiffuse ) );
 
+	bindablePtrs.push_back( std::make_shared<DepthStencilState>( gfx, DepthStencilState::StencilMode::Off ) );
+
 	return std::make_unique<Mesh>( gfx, std::move( bindablePtrs ) );
 }
 

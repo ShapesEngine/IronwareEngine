@@ -98,7 +98,7 @@ Graphics::Graphics( HWND hWnd )
 	descDepth.Height = windowHeight;
 	descDepth.MipLevels = 0u;
 	descDepth.ArraySize = 1u;
-	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	descDepth.SampleDesc.Count = 1u;
 	descDepth.SampleDesc.Quality = 0u;
 	descDepth.Usage = D3D11_USAGE_DEFAULT;
@@ -109,7 +109,7 @@ Graphics::Graphics( HWND hWnd )
 
 	// create view of depth stencil texture
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+	descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	descDSV.Texture2D.MipSlice = 0u;
 	GFX_CALL_THROW_INFO( pDevice->CreateDepthStencilView(
@@ -142,7 +142,7 @@ void Graphics::BeginFrame( float red, float green, float blue ) noexcept
 	const float color[] = { red, green, blue, 1.f };
 	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
 	// max depth 1.f
-	pImmediateContext->ClearDepthStencilView( pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.f, 0u );
+	pImmediateContext->ClearDepthStencilView( pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0u );
 
 	// =======================================================================
 	// imgui begin frame
