@@ -26,7 +26,7 @@ public:
 private:
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT3 orientation;
-	struct SheetCBuff
+	struct BoxCBuff
 	{
 		DirectX::XMFLOAT4 color;
 	}cbuff;

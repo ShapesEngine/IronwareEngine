@@ -28,11 +28,11 @@ private:
 	std::vector<std::shared_ptr<Bindable>> outlineBindables;
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT3 orientation;
-	struct SheetCBuff
+	struct BoxCBuff
 	{
 		float specularIntensity;
 		float specularPower;
 		alignas( 8 ) BOOL isNormalMappingEnabled;
-	}cbuff;
+	} cbuff;
 	bool isOutlineEnabled = false;
 };

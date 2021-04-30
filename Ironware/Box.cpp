@@ -54,7 +54,7 @@ Box::Box( Graphics & gfx, float size )
 	/*AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );*/
 	AddBind( Sampler::Resolve( gfx ) );
 
-	AddBind( PixelConstantBuffer<SheetCBuff>::Resolve( gfx, cbuff, 1u ) );
+	AddBind( PixelConstantBuffer<BoxCBuff>::Resolve( gfx, cbuff, 1u ) );
 
 	AddBind( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
@@ -125,7 +125,7 @@ void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept
 
 		if( bi || bp || bnm )
 		{
-			QueryBindable<PixelConstantBuffer<SheetCBuff>>()->Update( gfx, cbuff );
+			QueryBindable<PixelConstantBuffer<BoxCBuff>>()->Update( gfx, cbuff );
 		}
 
 		if( ImGui::Button( "Reset" ) )

@@ -50,7 +50,7 @@ Sheet::Sheet( Graphics& gfx, float size, DirectX::XMFLOAT4 color ) :
 
 	AddBind( Sampler::Resolve( gfx ) );
 
-	AddBind( std::make_shared<PixelConstantBuffer<SheetCBuff>>( gfx, cbuff, 1u ) );
+	AddBind( std::make_shared<PixelConstantBuffer<BoxCBuff>>( gfx, cbuff, 1u ) );
 
 	AddBind( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
