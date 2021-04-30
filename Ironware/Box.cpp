@@ -63,6 +63,7 @@ Box::Box( Graphics & gfx, float size )
 	AddBind( std::make_shared<DepthStencilState>( gfx, DepthStencilState::StencilMode::Write ) );
 
 	auto pTfCbuf = std::make_shared<TransformCBufferEx>( gfx, *this, 0u, 2u );
+	AddBind( pTfCbuf );
 
 	outlineBindables.push_back( VertexBuffer::Resolve( gfx, boxTag, vbuff ) );
 	outlineBindables.push_back( IndexBuffer::Resolve( gfx, boxTag, model.indices ) );
@@ -72,7 +73,7 @@ Box::Box( Graphics & gfx, float size )
 	outlineBindables.push_back( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
 	struct SolidColorBuffer
 	{
-		DirectX::XMFLOAT4 color = { 1.0f, 1.0f, 0.4f, 1.0f };
+		DirectX::XMFLOAT4 color = { 1.0f, 1.0f, 0.5f, 1.0f };
 	} scb;
 	outlineBindables.push_back( PixelConstantBuffer<SolidColorBuffer>::Resolve( gfx, scb, 1u ) );
 	outlineBindables.push_back( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
@@ -84,7 +85,7 @@ Box::Box( Graphics & gfx, float size )
 void Box::DrawOutline( Graphics & gfx ) noexcept( !IS_DEBUG )
 {
 	isOutlineEnabled = true;
-	for( const auto& b : outlineBindables )
+	for( auto& b : outlineBindables )
 	{
 		b->Bind( gfx );
 	}
@@ -103,9 +104,9 @@ DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 	return xm;
 }
 
-void Box::SpawnControlWindow( Graphics & gfx ) noexcept
+void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept
 {
-	if( ImGui::Begin( "Box" ) )
+	if( ImGui::Begin( name ) )
 	{
 		ImGui::Text( "Position" );
 		ImGui::SliderFloat( "X", &pos.x, -60.f, 60.f, "%.1f" );

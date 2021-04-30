@@ -51,6 +51,8 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 	AddBind( BlendState::Resolve( gfx, false ) );
 
 	AddBind( RasterizerState::Resolve( gfx, false ) );
+
+	AddBind( std::make_shared<DepthStencilState>( gfx, DepthStencilState::StencilMode::Off ) );
 }
 
 void SolidSphere::UpdateColor( Graphics& gfx, const DirectX::XMFLOAT3A& col ) noexcept

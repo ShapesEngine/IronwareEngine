@@ -26,14 +26,14 @@ void PointLight::SpawnControlWindow() noexcept
 		ImGui::SliderFloat( "Z", &cbufData.pos.z, -65.f, 65.f, "%.1f" );
 
 		ImGui::Text( "Intensity/Color" );
-		ImGui::SliderFloat( "Intensity", &cbufData.diffuseIntensity, 0.01f, 2.f, "%.2f", 2 );
+		ImGui::SliderFloat( "Intensity", &cbufData.diffuseIntensity, 0.01f, 2.f, "%.2f", 2.f );
 		ImGui::ColorEdit3( "Diffuse Color", &cbufData.diffuseColor.x );
 		ImGui::ColorEdit3( "Ambient", &cbufData.ambient.x );
 
 		ImGui::Text( "Falloff" );
-		ImGui::SliderFloat( "Constant", &cbufData.attConst, 0.05f, 10.f, "%.2f", 4 );
-		ImGui::SliderFloat( "Linear", &cbufData.attLin, 0.0001f, 4.f, "%.4f", 8 );
-		ImGui::SliderFloat( "Quadratic", &cbufData.attQuad, 0.0000001f, 10.f, "%.7f", 10 );
+		ImGui::SliderFloat( "Constant", &cbufData.attConst, 0.05f, 10.f, "%.2f", 4.f );
+		ImGui::SliderFloat( "Linear", &cbufData.attLin, 0.0001f, 4.f, "%.4f", 8.f );
+		ImGui::SliderFloat( "Quadratic", &cbufData.attQuad, 0.0000001f, 10.f, "%.7f", 10.f );
 
 		if( ImGui::Button( "Reset" ) )
 		{
