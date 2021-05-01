@@ -47,7 +47,7 @@ void App::ProcessFrame()
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
 	pointLight.Draw( wnd.Gfx() );
-	sponza.Draw( wnd.Gfx() );
+	//sponza.Draw( wnd.Gfx() );
 	box1.Draw( wnd.Gfx() );
 	box2.Draw( wnd.Gfx() );
 	box1.DrawOutline( wnd.Gfx() );
@@ -60,7 +60,7 @@ void App::ProcessFrame()
 	pointLight.SpawnControlWindow();
 	box1.SpawnControlWindow( wnd.Gfx(), "box1" );
 	box2.SpawnControlWindow( wnd.Gfx(), "box2" );
-	sponza.ShowWindow( wnd.Gfx(), "sponza" );
+	//sponza.ShowWindow( wnd.Gfx(), "sponza" );
 	/*sheet1.SpawnControlWindow( wnd.Gfx(), "sheet1" );
 	sheet2.SpawnControlWindow( wnd.Gfx(), "sheet2" );*/
 	/*goblin.ShowWindow( wnd.Gfx(), "Goblin" );
