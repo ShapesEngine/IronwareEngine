@@ -1051,3 +1051,6 @@ dkms.conf
 # Libs dir
 !External/Libs/Debug/*
 !External/Libs/Release/*
+
+# VTune Profiler
+Ironware/VTune Profiler Results
