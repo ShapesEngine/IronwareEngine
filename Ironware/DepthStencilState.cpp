@@ -36,9 +36,3 @@ DepthStencilState::DepthStencilState( Graphics & gfx, StencilMode mode ) :
 
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateDepthStencilState( &descDepthStencil, &pDSState ) );
 }
-
-std::wstring DepthStencilState::GetUID() const noexcept
-{
-	assert( false && "Not yet integrated with bCollection system!" );
-	return L"?";
-}

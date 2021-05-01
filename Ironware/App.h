@@ -16,6 +16,7 @@
 #include "Model.h"
 #include "GDIPlusManager.h"
 #include "Box.h"
+#include "FrameExecutor.h"
 
  /**
   * @brief Base class that controls scene
@@ -39,6 +40,7 @@ private:
 	void HandleInput();
 
 private:
+	FrameExecutor fexe;
 	GDIPlusManager gdipm;
 	ImguiManager imguim;
 	Camera camera;

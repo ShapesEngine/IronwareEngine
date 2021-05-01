@@ -9,24 +9,33 @@
 #include "Drawable.h"
 #include "GraphicsExceptionMacros.h"
 #include "IndexBuffer.h"
-#include "Bindable.h"
+#include "VertexBuffer.h"
+#include "PrimitiveTopology.h"
 
 #include <cassert>
 
-void Drawable::Draw( Graphics& gfx ) const IFNOEXCEPT
+void Drawable::AddTechnique( RenderTechnique tech_in ) noexcept
 {
-	for( auto& b : binds )
-	{
-		b->Bind( gfx );
-	}
-	gfx.DrawIndexed( pIndexBuffer->GetCount() );
+	tech_in.InitializeParentReferences( *this );
+	techniques.push_back( std::move( tech_in ) );
 }
 
-void Drawable::AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT
+void Drawable::Submit( FrameExecutor & frame ) const noexcept
 {
-	if( const auto pi = dynamic_cast<IndexBuffer*>( bind.get() ) )
+	for( const auto& tech : techniques )
 	{
-		pIndexBuffer = pi;
+		tech.Submit( frame, *this );
 	}
-	binds.push_back( std::move( bind ) );
+}
+
+void Drawable::Bind( Graphics & gfx ) const noexcept
+{
+	pTopology->Bind( gfx );
+	pIndices->Bind( gfx );
+	pVertices->Bind( gfx );
+}
+
+UINT Drawable::GetIndexCount() const noexcept( !IS_DEBUG )
+{
+	return pIndices->GetCount();
 }

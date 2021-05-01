@@ -10,6 +10,7 @@
 #include "Vertex.h"
 #define IR_INCLUDE_TEXTURE
 #include "BindableCommon.h"
+#include "RenderStep.h"
 #include <imgui/imgui.h>
 #include "Cube.h"
 
@@ -41,56 +42,80 @@ Box::Box( Graphics & gfx, float size )
 		vbuff.EmplaceBack( v.pos, v.n, v.tex );
 	}
 	const std::wstring& boxTag = L"$box." + std::to_wstring( size );
-	AddBind( VertexBuffer::Resolve( gfx, boxTag, vbuff ) );
-	AddBind( IndexBuffer::Resolve( gfx, boxTag, model.indices ) );
+	pVertices = VertexBuffer::Resolve( gfx, boxTag, vbuff );
+	pIndices = IndexBuffer::Resolve( gfx, boxTag, model.indices );
+	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	auto pVertexShader = VertexShader::Resolve( gfx, L"PhongDiffuseMapVS.cso" );
-	auto pVertexShaderBytecode = pVertexShader->GetBytecode();
-	AddBind( std::move( pVertexShader ) );
-
-	AddBind( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
-
-	AddBind( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
-	/*AddBind( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );*/
-	AddBind( Sampler::Resolve( gfx ) );
-
-	AddBind( PixelConstantBuffer<BoxCBuff>::Resolve( gfx, cbuff, 1u ) );
-
-	AddBind( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
-
-	AddBind( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
-
-	AddBind( std::make_shared<DepthStencilState>( gfx, DepthStencilState::StencilMode::Write ) );
-
-	auto pTfCbuf = std::make_shared<TransformCBufferEx>( gfx, *this, 0u, 2u );
-	AddBind( pTfCbuf );
-
-	outlineBindables.push_back( VertexBuffer::Resolve( gfx, boxTag, vbuff ) );
-	outlineBindables.push_back( IndexBuffer::Resolve( gfx, boxTag, model.indices ) );
-	pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
-	pVertexShaderBytecode = pVertexShader->GetBytecode();
-	outlineBindables.push_back( std::move( pVertexShader ) );
-	outlineBindables.push_back( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
-	struct SolidColorBuffer
 	{
-		DirectX::XMFLOAT4 color = { 1.0f, 1.0f, 0.5f, 1.0f };
-	} scb;
-	outlineBindables.push_back( PixelConstantBuffer<SolidColorBuffer>::Resolve( gfx, scb, 1u ) );
-	outlineBindables.push_back( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
-	outlineBindables.push_back( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
-	outlineBindables.push_back( std::move( pTfCbuf ) );
-	outlineBindables.push_back( std::make_shared<DepthStencilState>( gfx, DepthStencilState::StencilMode::Mask ) );
-}
+		{
+			RenderTechnique box;
+			RenderStep lambertian{ 0ull };
+			auto pVertexShader = VertexShader::Resolve( gfx, L"PhongDiffuseMapVS.cso" );
+			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+			lambertian.AddBindable( std::move( pVertexShader ) );
 
-void Box::DrawOutline( Graphics & gfx ) noexcept( !IS_DEBUG )
-{
-	isOutlineEnabled = true;
-	for( auto& b : outlineBindables )
-	{
-		b->Bind( gfx );
+			lambertian.AddBindable( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
+
+			lambertian.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
+			/*lambertian.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );*/
+			lambertian.AddBindable( Sampler::Resolve( gfx ) );
+
+			lambertian.AddBindable( PixelConstantBuffer<BoxCBuff>::Resolve( gfx, cbuff, 1u ) );
+
+			lambertian.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+			
+			lambertian.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+
+			box.AddStep( std::move( lambertian ) );
+			AddTechnique( box );
+		}
+
+		RenderTechnique outlineRT;
+		{
+			RenderStep mask{ 1ull };
+			auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+			mask.AddBindable( std::move( pVertexShader ) );
+
+			mask.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+
+			mask.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+
+			outlineRT.AddStep( std::move( mask ) );
+		}
+
+		{
+			RenderStep outline{ 2ull };
+			auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+			outline.AddBindable( std::move( pVertexShader ) );
+
+			outline.AddBindable( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
+
+			outline.AddBindable( PixelConstantBuffer<BoxCBuff>::Resolve( gfx, cbuff, 1u ) );
+
+			outline.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+
+			class TransformCBufferScaled : public TransformCBuffer
+			{
+			public:
+				using TransformCBuffer::TransformCBuffer;
+				void Bind( Graphics& gfx ) noexcept override
+				{
+					const auto scale = dx::XMMatrixScaling( 1.04f, 1.04f, 1.04f );
+					auto tf = GetTransform( gfx );
+					tf.modelView = tf.modelView * scale;
+					tf.modelViewProj = tf.modelViewProj * scale;
+					UpdateBind( gfx, tf );
+				}
+			};
+
+			outline.AddBindable( std::make_shared<TransformCBufferScaled>( gfx ) );
+
+			outlineRT.AddStep( std::move( outline ) );
+		}
+		AddTechnique( std::move( outlineRT ) );
 	}
-	gfx.DrawIndexed( QueryBindable<IndexBuffer>()->GetCount() );
-	isOutlineEnabled = false;
 }
 
 DirectX::XMMATRIX Box::GetTransformXM() const noexcept
@@ -125,7 +150,7 @@ void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept
 
 		if( bi || bp || bnm )
 		{
-			QueryBindable<PixelConstantBuffer<BoxCBuff>>()->Update( gfx, cbuff );
+			//QueryBindable<PixelConstantBuffer<BoxCBuff>>()->Update( gfx, cbuff );
 		}
 
 		if( ImGui::Button( "Reset" ) )

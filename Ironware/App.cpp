@@ -46,12 +46,12 @@ void App::ProcessFrame()
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
-	pointLight.Draw( wnd.Gfx() );
+	pointLight.Submit( fexe );
 	//sponza.Draw( wnd.Gfx() );
-	box1.Draw( wnd.Gfx() );
-	box2.Draw( wnd.Gfx() );
-	box1.DrawOutline( wnd.Gfx() );
-	box2.DrawOutline( wnd.Gfx() );
+	box1.Submit( fexe );
+	box2.Submit( fexe );
+
+	fexe.Execute( wnd.Gfx() );
 	/*sheet1.Draw( wnd.Gfx() );
 	sheet2.Draw( wnd.Gfx() );*/
 
@@ -70,6 +70,7 @@ void App::ProcessFrame()
 
 	// present frame
 	wnd.Gfx().EndFrame();
+	fexe.Reset();
 }
 
 void App::HandleInput()

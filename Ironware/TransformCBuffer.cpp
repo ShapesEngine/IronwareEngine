@@ -10,8 +10,7 @@
 
 std::unique_ptr<VertexConstantBuffer<TransformCBuffer::Transforms>> TransformCBuffer::pVertConstBuffer;
 
-TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT slot ) :
-	parent( parent )
+TransformCBuffer::TransformCBuffer( Graphics & gfx, UINT slot )
 {
 	if( !pVertConstBuffer )
 	{
@@ -19,16 +18,23 @@ TransformCBuffer::TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT 
 	}
 }
 
+void TransformCBuffer::InitializeParentReference( const Drawable & parent ) noexcept
+{
+	pParent = &parent;
+}
+
 void TransformCBuffer::UpdateBind( Graphics& gfx, const Transforms& transforms ) noexcept
 {
+	assert( pParent );
 	pVertConstBuffer->Update( gfx, transforms );
 	pVertConstBuffer->Bind( gfx );
 }
 
 TransformCBuffer::Transforms TransformCBuffer::GetTransform( Graphics& gfx ) const noexcept
 {
-	const auto modelView = parent.GetTransformXM() * gfx.GetCamera();
-	return	{
+	assert( pParent );
+	const auto modelView = pParent->GetTransformXM() * gfx.GetCamera();
+	return {
 		// M * V => model * view
 		DirectX::XMMatrixTranspose( modelView ),
 		// MV * P => modelview * projection

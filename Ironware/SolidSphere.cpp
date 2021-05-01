@@ -26,37 +26,43 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 		VertexLayout{}
 		.Append( VertexLayout::ElementType::Position3D )
 	);
+	const std::wstring& sphereTag{ L"$sphere." + std::to_wstring( radius ) };
+
 	for( auto& v : model.vertices )
 	{
 		vbuff.EmplaceBack( v.pos );
 	}
-	const std::wstring& sphereTag = L"$sphere." + std::to_wstring( radius );
-	AddBind( VertexBuffer::Resolve( gfx, sphereTag, vbuff ) );
-	AddBind( IndexBuffer::Resolve( gfx, sphereTag, model.indices ) );
+	pVertices = VertexBuffer::Resolve( gfx, sphereTag, vbuff );
+	pIndices = IndexBuffer::Resolve( gfx, sphereTag, model.indices );
+	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
-	auto pVertexShaderBytecode = pVertexShader->GetBytecode();
-	AddBind( std::move( pVertexShader ) );
+	{
+		RenderTechnique techq;
+		RenderStep only{ 0u };
 
-	AddBind( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
+		auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+		only.AddBindable( std::move( pVertexShader ) );
 
-	AddBind( PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color, 1u ) );
+		only.AddBindable( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
 
-	AddBind( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+		only.AddBindable( PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color, 1u ) );
 
-	AddBind( PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
+		only.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
-	AddBind( std::make_shared<TransformCBuffer>( gfx, *this ) );
+		only.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
-	AddBind( BlendState::Resolve( gfx, false ) );
+		only.AddBindable( BlendState::Resolve( gfx, false ) );
 
-	AddBind( RasterizerState::Resolve( gfx, false ) );
+		only.AddBindable( RasterizerState::Resolve( gfx, false ) );
 
-	AddBind( std::make_shared<DepthStencilState>( gfx, DepthStencilState::StencilMode::Off ) );
+		techq.AddStep( std::move( only ) );
+		AddTechnique( std::move( techq ) );
+	}
 }
 
 void SolidSphere::UpdateColor( Graphics& gfx, const DirectX::XMFLOAT3A& col ) noexcept
 {
 	color = col;
-	QueryBindable<PixelConstantBuffer<DirectX::XMFLOAT3A>>()->Update( gfx, color );
+	//QueryBindable<PixelConstantBuffer<DirectX::XMFLOAT3A>>()->Update( gfx, color );
 }

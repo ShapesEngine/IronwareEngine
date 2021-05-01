@@ -125,6 +125,7 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="DynamicConstantBuffer.cpp" />
+    <ClCompile Include="FrameExecutor.cpp" />
     <ClCompile Include="GDIPlusManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -147,6 +148,10 @@
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RasterizerState.cpp" />
+    <ClCompile Include="RenderJob.cpp" />
+    <ClCompile Include="RenderQueue.cpp" />
+    <ClCompile Include="RenderStep.cpp" />
+    <ClCompile Include="RenderTechnique.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClInclude Include="..\External\Includes\assimp\aabb.h" />
     <ClInclude Include="..\External\Includes\assimp\ai_assert.h" />
@@ -247,17 +252,22 @@
     <ClInclude Include="ConstantBuffersEx.h" />
     <ClInclude Include="DepthStencilState.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
+    <ClInclude Include="FrameExecutor.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="DynamicLayout.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="NullPixelShader.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RasterizerState.h" />
+    <ClInclude Include="RenderJob.h" />
+    <ClInclude Include="RenderQueue.h" />
+    <ClInclude Include="RenderStep.h" />
+    <ClInclude Include="RenderTechnique.h" />
     <ClInclude Include="Sheet.h" />
     <ClInclude Include="SkinnedBox.h" />
     <ClCompile Include="Sheet.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="SolidSphere.cpp" />
     <ClCompile Include="Surface.cpp" />

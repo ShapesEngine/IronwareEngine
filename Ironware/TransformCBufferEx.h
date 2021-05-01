@@ -8,8 +8,9 @@
  */
 #pragma once
 
-#include "TransformCBuffer.h"
 
+#include "TransformCBuffer.h"
+#if 0
  /**
   * @brief Extended version of bindable transform constant buffer class
   * * which has vertex and pixel constant buffers
@@ -26,3 +27,4 @@ protected:
 private:
 	static std::unique_ptr<PixelConstantBuffer<Transforms>> pPixConstBuffer;
 };
+#endif // 

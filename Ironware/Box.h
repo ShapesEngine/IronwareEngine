@@ -17,7 +17,6 @@ class Box : public Drawable
 {
 public:
 	Box( Graphics& gfx, float size );
-	void DrawOutline( Graphics& gfx ) IFNOEXCEPT;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 	void SpawnControlWindow( Graphics& gfx, const char* name ) noexcept;
 	void Reset() noexcept;

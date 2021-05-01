@@ -42,7 +42,8 @@ protected:
 	};
 
 public:
-	TransformCBuffer( Graphics& gfx, const Drawable& parent, UINT slot = 0u );
+	TransformCBuffer( Graphics& gfx, UINT slot = 0u );
+	void InitializeParentReference( const Drawable& parent ) noexcept override;
 	void Bind( Graphics& gfx ) noexcept override { UpdateBind( gfx, GetTransform( gfx ) ); }
 
 protected:
@@ -54,5 +55,5 @@ private:
 
 protected:
 	static std::unique_ptr<VertexConstantBuffer<Transforms>> pVertConstBuffer;
-	const Drawable& parent;
+	const Drawable* pParent = nullptr;
 };

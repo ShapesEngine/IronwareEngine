@@ -15,6 +15,7 @@
 #include "Graphics.h"
 #include "Bindable.h"
 #include "CommonMacros.h"
+#include "RenderTechnique.h"
 
 #include <DirectXMath.h>
 
@@ -43,35 +44,16 @@ public:
 	virtual ~Drawable() = default;
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
-	void Draw( Graphics& gfx ) const IFNOEXCEPT;
-
-	/**
-	 * @brief Retrieves specified bindable from binds collection
-	 * @tparam T required bindable type
-	 * @return pointer to the bindable type, if it was found
-	*/
-	template<typename T>
-	T* QueryBindable() const;
+	void AddTechnique( RenderTechnique tech_in ) noexcept;
+	void Submit( class FrameExecutor& frame ) const noexcept;
+	void Bind( Graphics& gfx ) const noexcept;
+	UINT GetIndexCount() const IFNOEXCEPT;
 
 protected:
-	void AddBind( std::shared_ptr<Bindable> bind ) IFNOEXCEPT;
-
-protected:
-	const class IndexBuffer* pIndexBuffer = nullptr;
+	std::shared_ptr<class IndexBuffer> pIndices;
+	std::shared_ptr<class VertexBuffer> pVertices;
+	std::shared_ptr<class PrimitiveTopology> pTopology;
 
 private:
-	std::vector<std::shared_ptr<Bindable>> binds;
+	std::vector<RenderTechnique> techniques;
 };
-
-template<typename T>
-T* Drawable::QueryBindable() const
-{
-	for( const auto& pb : binds )
-	{
-		if( auto pT = dynamic_cast<T*>( pb.get() ) )
-		{
-			return pT;
-		}
-	}
-	return nullptr;
-}

@@ -7,6 +7,8 @@
  * \date November 2020
  */
 #include "PointLight.h"
+#include "FrameExecutor.h"
+
 #include <imgui/imgui.h>
 
 PointLight::PointLight( Graphics& gfx, float radius ) :
@@ -43,12 +45,12 @@ void PointLight::SpawnControlWindow() noexcept
 	ImGui::End();
 }
 
-void PointLight::Draw( Graphics& gfx ) const IFNOEXCEPT
+void PointLight::Submit( FrameExecutor& frame ) const IFNOEXCEPT
 {
 	const DirectX::XMFLOAT3A color = { cbufData.diffuseColor.x, cbufData.diffuseColor.y, cbufData.diffuseColor.z };
-	mesh.UpdateColor( gfx, color );
+	//mesh.UpdateColor( gfx, color );
 	mesh.SetPosition( cbufData.pos );
-	mesh.Draw( gfx );
+	mesh.Submit( frame );
 }
 
 void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept

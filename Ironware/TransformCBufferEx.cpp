@@ -1,3 +1,4 @@
+#if 0
 /*!
  * \file TransformCBufferEx.cpp
  *
@@ -31,3 +32,4 @@ void TransformCBufferEx::UpdateBind( Graphics& gfx, const Transforms& transforms
 	pPixConstBuffer->Update( gfx, transforms );
 	pPixConstBuffer->Bind( gfx );
 }
+#endif // 0

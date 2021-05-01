@@ -58,6 +58,12 @@
     <Filter Include="External\DirectXTex">
       <UniqueIdentifier>{c270df46-24db-46b5-b942-110b471b204a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\RenderQueue">
+      <UniqueIdentifier>{e41ac399-d7d2-4d64-b329-6e28d7e68720}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\RenderQueue">
+      <UniqueIdentifier>{3e39503f-461e-4b1a-988c-789dec8b80b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -206,6 +212,21 @@
     </ClCompile>
     <ClCompile Include="RasterizerState.cpp">
       <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderJob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderStep.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTechnique.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameExecutor.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -649,6 +670,21 @@
     </ClInclude>
     <ClInclude Include="NullPixelShader.h">
       <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderJob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderStep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTechnique.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameExecutor.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
