@@ -247,6 +247,7 @@
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="DynamicLayout.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="NullPixelShader.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RasterizerState.h" />
     <ClInclude Include="Sheet.h" />
