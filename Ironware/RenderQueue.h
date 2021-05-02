@@ -7,6 +7,7 @@
 
 /**
  * @brief Container class that holds appropriate rendering jobs
+ * * It can execute all the rendering jobs
 */
 class RenderQueue
 {

@@ -13,7 +13,8 @@
 #include <vector>
 
 /**
- * @brief 
+ * @brief Class that holds 1 or more steps of object rendering
+ * * and able of submitting rendering steps
 */
 class RenderTechnique
 {

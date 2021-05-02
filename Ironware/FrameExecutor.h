@@ -14,8 +14,7 @@
 #include <array>
 
  /**
-  * @brief Class that is responsible for executing according to multiple
-  * * rendering queues
+  * @brief Class that is responsible for executing according to multiple rendering queues
  */
 class FrameExecutor
 {

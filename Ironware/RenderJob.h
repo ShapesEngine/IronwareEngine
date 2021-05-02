@@ -11,7 +11,8 @@
 #include "CommonMacros.h"
 
  /**
-  * @brief
+  * @brief Class that is responsible for managing drawing objects
+  * @note It's usually stored in RenderQueue container
  */
 class RenderJob
 {

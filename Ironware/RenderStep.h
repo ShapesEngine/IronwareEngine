@@ -14,7 +14,8 @@
 #include <vector>
 
 /**
- * @brief 
+ * @brief Class that is responsible for submitting steps of the object rendering
+ * * to the frame executor
 */
 class RenderStep
 {

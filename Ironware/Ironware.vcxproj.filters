@@ -213,20 +213,20 @@
     <ClCompile Include="RasterizerState.cpp">
       <Filter>Source Files\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="RenderQueue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RenderJob.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RenderQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderQueue.cpp">
+      <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
     <ClCompile Include="RenderStep.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
     <ClCompile Include="RenderTechnique.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
     <ClCompile Include="FrameExecutor.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -671,20 +671,20 @@
     <ClInclude Include="NullPixelShader.h">
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="RenderQueue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RenderJob.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\RenderQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderQueue.h">
+      <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
     <ClInclude Include="RenderStep.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
     <ClInclude Include="RenderTechnique.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
     <ClInclude Include="FrameExecutor.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
