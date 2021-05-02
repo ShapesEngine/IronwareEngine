@@ -40,5 +40,5 @@ private:
 	// position's proper value is set when the draw call has been called
 	DirectX::XMFLOAT3 position;
 	// color's proper value is set when the draw call has been called
-	DirectX::XMFLOAT3A color;
+	DirectX::XMFLOAT3A color = { 1.f, 1.f, 1.f };
 };
