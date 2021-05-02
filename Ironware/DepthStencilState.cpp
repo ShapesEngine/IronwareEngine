@@ -20,6 +20,8 @@ DepthStencilState::DepthStencilState( Graphics & gfx, StencilMode mode ) :
 
 	if( mode == StencilMode::Write )
 	{
+		descDepthStencil.DepthEnable = FALSE;
+		descDepthStencil.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 		descDepthStencil.StencilEnable = TRUE;
 		descDepthStencil.StencilWriteMask = 0xFFu;
 		descDepthStencil.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
@@ -28,6 +30,7 @@ DepthStencilState::DepthStencilState( Graphics & gfx, StencilMode mode ) :
 	else if( mode == StencilMode::Mask )
 	{
 		descDepthStencil.DepthEnable = FALSE;
+		descDepthStencil.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 		descDepthStencil.StencilEnable = TRUE;
 		descDepthStencil.StencilReadMask = 0xFFu;
 		descDepthStencil.FrontFace.StencilFunc = D3D11_COMPARISON_NOT_EQUAL;
