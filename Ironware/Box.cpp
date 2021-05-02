@@ -47,8 +47,8 @@ Box::Box( Graphics & gfx, float size )
 	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
 	{
+		RenderTechnique box;
 		{
-			RenderTechnique box;
 			RenderStep lambertian{ 0ull };
 			auto pVertexShader = VertexShader::Resolve( gfx, L"PhongDiffuseMapVS.cso" );
 			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
@@ -63,13 +63,15 @@ Box::Box( Graphics & gfx, float size )
 			lambertian.AddBindable( PixelConstantBuffer<BoxCBuff>::Resolve( gfx, cbuff, 1u ) );
 
 			lambertian.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
-			
+
 			lambertian.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
 			box.AddStep( std::move( lambertian ) );
-			AddTechnique( box );
 		}
+		AddTechnique( std::move( box ) );
+	}
 
+	{
 		RenderTechnique outlineRT;
 		{
 			RenderStep mask{ 1ull };
@@ -91,8 +93,6 @@ Box::Box( Graphics & gfx, float size )
 			outline.AddBindable( std::move( pVertexShader ) );
 
 			outline.AddBindable( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
-
-			outline.AddBindable( PixelConstantBuffer<BoxCBuff>::Resolve( gfx, cbuff, 1u ) );
 
 			outline.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 

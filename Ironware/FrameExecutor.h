@@ -28,4 +28,3 @@ public:
 private:
 	std::array<RenderQueue, 3> rqs;
 };
-
