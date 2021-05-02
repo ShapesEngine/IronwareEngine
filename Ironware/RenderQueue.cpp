@@ -8,7 +8,7 @@
  */
 #include "RenderQueue.h"
 
-void RenderQueue::Execute( Graphics & gfx ) const noexcept( !IS_DEBUG )
+void RenderQueue::Execute( Graphics & gfx ) const IFNOEXCEPT
 {
 	for( const auto& j : jobs )
 	{

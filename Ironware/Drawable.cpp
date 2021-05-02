@@ -35,7 +35,7 @@ void Drawable::Bind( Graphics & gfx ) const noexcept
 	pVertices->Bind( gfx );
 }
 
-UINT Drawable::GetIndexCount() const noexcept( !IS_DEBUG )
+UINT Drawable::GetIndexCount() const IFNOEXCEPT
 {
 	return pIndices->GetCount();
 }

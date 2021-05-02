@@ -108,7 +108,7 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const IFNOEXC
 	return desc;
 }
 
-std::wstring VertexLayout::GetCode() const noexcept( !IS_DEBUG )
+std::wstring VertexLayout::GetCode() const IFNOEXCEPT
 {
 	std::wstring code;
 	for( const auto& e : elements )

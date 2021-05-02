@@ -9,7 +9,7 @@
 #include "FrameExecutor.h"
 #include "BindableCommon.h"
 
-void FrameExecutor::Execute( Graphics& gfx ) const noexcept( !IS_DEBUG )
+void FrameExecutor::Execute( Graphics& gfx ) const IFNOEXCEPT
 {
 	DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Off )->Bind( gfx );
 	rqs[0].Execute( gfx );

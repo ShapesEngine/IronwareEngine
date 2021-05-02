@@ -19,10 +19,10 @@ class RenderTechnique
 {
 public:
 	void AddStep( RenderStep step ) noexcept { steps.push_back( std::move( step ) ); }
-	void Activate() noexcept { active = true; }
-	void Deactivate() noexcept { active = false; }
 	void InitializeParentReferences( const class Drawable& parent ) noexcept;
 	void Submit( class FrameExecutor& frame, const class Drawable& drawable ) const noexcept;
+	void Activate() noexcept { active = true; }
+	void Deactivate() noexcept { active = false; }
 
 private:
 	bool active = true;

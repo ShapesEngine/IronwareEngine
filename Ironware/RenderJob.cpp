@@ -16,7 +16,7 @@ RenderJob::RenderJob( const RenderStep* pStep, const Drawable * pDrawable ) :
 	pDrawable( pDrawable )
 {}
 
-void RenderJob::Execute( Graphics & gfx ) const noexcept( !IS_DEBUG )
+void RenderJob::Execute( Graphics & gfx ) const IFNOEXCEPT
 {
 	pDrawable->Bind( gfx );
 	pStep->Bind( gfx );

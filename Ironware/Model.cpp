@@ -335,13 +335,13 @@ Model::Model( Graphics& gfx, std::wstring path, float scale, DirectX::XMFLOAT3 s
 	pRoot->SetAppliedTransform( DirectX::XMMatrixTranslationFromVector( DirectX::XMLoadFloat3( &startingPos ) ) );
 }
 
-void Model::Draw( Graphics& gfx ) const noexcept( !IS_DEBUG )
+void Model::Draw( Graphics& gfx ) const IFNOEXCEPT
 {
 	pModelWindow->ApplyParameters();
 	pRoot->Draw( gfx, dx::XMMatrixIdentity() );
 }
 
-void Model::ShowWindow( Graphics& gfx, const char* name ) const noexcept( !IS_DEBUG )
+void Model::ShowWindow( Graphics& gfx, const char* name ) const IFNOEXCEPT
 {
 	pModelWindow->ShowWindow( gfx, name, *pRoot );
 }

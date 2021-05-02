@@ -120,13 +120,8 @@ Box::Box( Graphics & gfx, float size )
 
 DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 {
-	auto xm = DirectX::XMMatrixRotationRollPitchYaw( orientation.x, orientation.y, orientation.z ) *
+	return DirectX::XMMatrixRotationRollPitchYaw( orientation.x, orientation.y, orientation.z ) *
 		DirectX::XMMatrixTranslation( pos.x, pos.y, pos.z );
-	if( isOutlineEnabled )
-	{
-		xm = DirectX::XMMatrixScaling( 1.015f, 1.015f, 1.015f ) * xm;
-	}
-	return xm;
 }
 
 void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept

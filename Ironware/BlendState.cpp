@@ -49,7 +49,7 @@ void BlendState::SetFactor( float factor ) IFNOEXCEPT
 	blendFactors->fill( factor );
 }
 
-float BlendState::GetFactor() const noexcept( !IS_DEBUG )
+float BlendState::GetFactor() const IFNOEXCEPT
 {
 	assert( blendFactors );
 	return blendFactors->front();
