@@ -6,6 +6,7 @@
  *
  *
  */
+#define DVTX_SOURCE_FILE
 #include "Vertex.h"
 
 Vertex::Vertex( std::byte* data, const VertexLayout& layout ) :
@@ -43,60 +44,6 @@ VertexLayout& VertexLayout::Append( ElementType Type ) IFNOEXCEPT
 	return *this;
 }
 
-D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const IFNOEXCEPT
-{
-	switch( type )
-	{
-	case ElementType::Position2D:
-		return GenerateDesc<ElementType::Position2D>( GetOffset() );
-	case ElementType::Position3D:
-		return GenerateDesc<ElementType::Position3D>( GetOffset() );
-	case ElementType::Texture2D:
-		return GenerateDesc<ElementType::Texture2D>( GetOffset() );
-	case ElementType::Normal:
-		return GenerateDesc<ElementType::Normal>( GetOffset() );
-	case ElementType::Tangent:
-		return GenerateDesc<ElementType::Tangent>( GetOffset() );
-	case ElementType::Bitangent:
-		return GenerateDesc<ElementType::Bitangent>( GetOffset() );
-	case ElementType::Float3Color:
-		return GenerateDesc<ElementType::Float3Color>( GetOffset() );
-	case ElementType::Float4Color:
-		return GenerateDesc<ElementType::Float4Color>( GetOffset() );
-	case ElementType::BGRAColor:
-		return GenerateDesc<ElementType::BGRAColor>( GetOffset() );
-	}
-	assert( "Invalid element type" && false );
-	return { "INVALID", 0u, DXGI_FORMAT_UNKNOWN, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u };
-}
-
-const wchar_t* VertexLayout::Element::GetCode() const noexcept
-{
-	switch( type )
-	{
-	case ElementType::Position2D:
-		return Map<ElementType::Position2D>::code;
-	case ElementType::Position3D:
-		return Map<ElementType::Position3D>::code;
-	case ElementType::Texture2D:
-		return Map<ElementType::Texture2D>::code;
-	case ElementType::Normal:
-		return Map<ElementType::Normal>::code;
-	case ElementType::Tangent:
-		return Map<ElementType::Tangent>::code;
-	case ElementType::Bitangent:
-		return Map<ElementType::Bitangent>::code;
-	case ElementType::Float3Color:
-		return Map<ElementType::Float3Color>::code;
-	case ElementType::Float4Color:
-		return Map<ElementType::Float4Color>::code;
-	case ElementType::BGRAColor:
-		return Map<ElementType::BGRAColor>::code;
-	}
-	assert( "Invalid element type" && false );
-	return L"Invalid";
-}
-
 std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const IFNOEXCEPT
 {
 	std::vector<D3D11_INPUT_ELEMENT_DESC> desc;
@@ -116,4 +63,36 @@ std::wstring VertexLayout::GetCode() const IFNOEXCEPT
 		code += e.GetCode();
 	}
 	return code;
+}
+
+template<VertexLayout::ElementType type>
+struct DescGenerate
+{
+	static constexpr D3D11_INPUT_ELEMENT_DESC Exec( size_t offset ) noexcept
+	{
+		return {
+			VertexLayout::Map<type>::semantic,0,
+			VertexLayout::Map<type>::dxgiFormat,
+			0,(UINT)offset,D3D11_INPUT_PER_VERTEX_DATA,0
+		};
+	}
+};
+
+D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const IFNOEXCEPT
+{
+	return Bridge<DescGenerate>( type, GetOffset() );
+}
+
+template<VertexLayout::ElementType type>
+struct CodeLookup
+{
+	static constexpr auto Exec() noexcept
+	{
+		return VertexLayout::Map<type>::code;
+	}
+};
+
+const wchar_t* VertexLayout::Element::GetCode() const IFNOEXCEPT
+{
+	return Bridge<CodeLookup>( type );
 }

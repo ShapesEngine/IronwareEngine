@@ -10,6 +10,7 @@
 #pragma once
 
 #include "CommonMacros.h"
+#include "IronUtils.h"
 
 #include <string>
 #include <vector>
@@ -17,6 +18,22 @@
 #include <dxgiformat.h>
 #include <type_traits>
 #include <d3d11.h>
+#define NOMINMAX
+#include <assimp/scene.h>
+
+#define DVTX_ELEMENT_AI_EXTRACTOR(member) static SysType Extract( const aiMesh& mesh,size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
+
+#define LAYOUT_ELEMENT_TYPES \
+	X( Position2D ) \
+	X( Position3D ) \
+	X( Texture2D ) \
+	X( Normal ) \
+	X( Tangent ) \
+	X( Bitangent ) \
+	X( Float3Color ) \
+	X( Float4Color ) \
+	X( BGRAColor ) \
+	X( Count )
 
 // ARGB color struct
 struct BGRAColor
@@ -35,16 +52,9 @@ class VertexLayout
 public:
 	enum class ElementType
 	{
-		Position2D,
-		Position3D,
-		Texture2D,
-		Normal,
-		Tangent,
-		Bitangent,
-		Float3Color,
-		Float4Color,
-		BGRAColor,
-		Count
+#define X(el) el,
+		LAYOUT_ELEMENT_TYPES
+#undef X
 	};
 
 	template<ElementType> struct Map;
@@ -54,6 +64,7 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 		static constexpr const char* semantic = "Position";
 		static constexpr const wchar_t* code = L"P2";
+		DVTX_ELEMENT_AI_EXTRACTOR( mVertices )
 	};
 	template<> struct Map<ElementType::Position3D>
 	{
@@ -61,6 +72,7 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Position";
 		static constexpr const wchar_t* code = L"P3";
+		DVTX_ELEMENT_AI_EXTRACTOR( mVertices )
 	};
 	template<> struct Map<ElementType::Texture2D>
 	{
@@ -68,6 +80,7 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 		static constexpr const char* semantic = "TexCoord";
 		static constexpr const wchar_t* code = L"T2";
+		DVTX_ELEMENT_AI_EXTRACTOR( mTextureCoords[0] )
 	};
 	template<> struct Map<ElementType::Normal>
 	{
@@ -75,6 +88,7 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Normal";
 		static constexpr const wchar_t* code = L"N";
+		DVTX_ELEMENT_AI_EXTRACTOR( mNormals )
 	};
 	template<> struct Map<ElementType::Tangent>
 	{
@@ -82,6 +96,7 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Tangent";
 		static constexpr const wchar_t* code = L"T";
+		DVTX_ELEMENT_AI_EXTRACTOR( mTangents )
 	};
 	template<> struct Map<ElementType::Bitangent>
 	{
@@ -89,6 +104,7 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Bitangent";
 		static constexpr const wchar_t* code = L"B";
+		DVTX_ELEMENT_AI_EXTRACTOR( mBitangents )
 	};
 	template<> struct Map<ElementType::Float3Color>
 	{
@@ -96,6 +112,7 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 		static constexpr const char* semantic = "Color";
 		static constexpr const wchar_t* code = L"CF3";
+		DVTX_ELEMENT_AI_EXTRACTOR( mColors[0] )
 	};
 	template<> struct Map<ElementType::Float4Color>
 	{
@@ -103,6 +120,7 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		static constexpr const char* semantic = "Color";
 		static constexpr const wchar_t* code = L"CF4";
+		DVTX_ELEMENT_AI_EXTRACTOR( mColors[0] )
 	};
 	template<> struct Map<ElementType::BGRAColor>
 	{
@@ -110,7 +128,29 @@ public:
 		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 		static constexpr const char* semantic = "Color";
 		static constexpr const wchar_t* code = L"CU4";
+		DVTX_ELEMENT_AI_EXTRACTOR( mColors[0] )
 	};
+	template<> struct Map<ElementType::Count>
+	{
+		using SysType = long double;
+		static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_UNKNOWN;
+		static constexpr const char* semantic = "!INVALID!";
+		static constexpr const wchar_t* code = L"!INV!";
+		DVTX_ELEMENT_AI_EXTRACTOR( mFaces )
+	};
+
+	template<template<VertexLayout::ElementType> class F, typename... Args>
+	static constexpr auto Bridge( VertexLayout::ElementType type, Args&&... args ) IFNOEXCEPT
+	{
+		switch( type )
+		{
+#define X(el) case VertexLayout::ElementType::el: return F<VertexLayout::ElementType::el>::Exec( std::forward<Args>( args )... );
+			LAYOUT_ELEMENT_TYPES
+#undef X
+		}
+		assert( "Invalid element type" && false );
+		return F<VertexLayout::ElementType::Count>::Exec( std::forward<Args>( args )... );
+	}
 
 	class Element
 	{
@@ -137,14 +177,9 @@ public:
 		static constexpr size_t SizeOf( ElementType type ) IFNOEXCEPT;
 
 		D3D11_INPUT_ELEMENT_DESC GetDesc() const IFNOEXCEPT;
-		const wchar_t* GetCode() const noexcept;
-
-	private:
-		template<ElementType type>
-		static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc( size_t offset ) noexcept
-		{
-			return { Map<type>::semantic, 0u, Map<type>::dxgiFormat, 0u, (UINT)offset, D3D11_INPUT_PER_VERTEX_DATA, 0u };
-		}
+		const wchar_t* GetCode() const IFNOEXCEPT;
+		template<ElementType Type>
+		bool Has() const noexcept;
 
 	private:
 		ElementType type;
@@ -190,6 +225,17 @@ class Vertex
 {
 	using ElType = VertexLayout::ElementType;
 	friend class VertexByteBuffer;
+private:
+	template<VertexLayout::ElementType type>
+	struct AttributeSetting
+	{
+		template<typename T>
+		static constexpr auto Exec( Vertex* pVertex, std::byte* pAttribute, T&& val ) IFNOEXCEPT
+		{
+			return pVertex->SetAttribute<type>( pAttribute, std::forward<T>( val ) );
+		}
+	};
+
 public:
 	/**
 	 * @brief Gives an access to the element from the layout.
@@ -315,32 +361,18 @@ private:
 
 #pragma region layoutImpl
 
+template<VertexLayout::ElementType type>
+struct SysSizeLookup
+{
+	static constexpr auto Exec() noexcept
+	{
+		return sizeof( VertexLayout::Map<type>::SysType );
+	}
+};
+
 constexpr size_t VertexLayout::Element::SizeOf( ElementType type ) IFNOEXCEPT
 {
-	using namespace DirectX;
-	switch( type )
-	{
-	case ElementType::Position2D:
-		return sizeof( Map<ElementType::Position2D>::SysType );
-	case ElementType::Position3D:
-		return sizeof( Map<ElementType::Position3D>::SysType );
-	case ElementType::Texture2D:
-		return sizeof( Map<ElementType::Texture2D>::SysType );
-	case ElementType::Normal:
-		return sizeof( Map<ElementType::Normal>::SysType );
-	case ElementType::Tangent:
-		return sizeof( Map<ElementType::Tangent>::SysType );
-	case ElementType::Bitangent:
-		return sizeof( Map<ElementType::Bitangent>::SysType );
-	case ElementType::Float3Color:
-		return sizeof( Map<ElementType::Float3Color>::SysType );
-	case ElementType::Float4Color:
-		return sizeof( Map<ElementType::Float4Color>::SysType );
-	case ElementType::BGRAColor:
-		return sizeof( Map<ElementType::BGRAColor>::SysType );
-	}
-	assert( "Invalid element type" && false );
-	return 0u;
+	return Bridge<SysSizeLookup>( type );
 }
 
 template<VertexLayout::ElementType Type>
@@ -355,6 +387,19 @@ const VertexLayout::Element& VertexLayout::Resolve() const IFNOEXCEPT
 	}
 	assert( "Element with provided type hasn't been found!" && false );
 	return elements.front();
+}
+
+template<VertexLayout::ElementType Type>
+bool VertexLayout::Element::Has() const noexcept
+{
+	for( auto& e : elements )
+	{
+		if( e.GetType() == Type )
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 #pragma endregion layoutImpl
@@ -373,39 +418,9 @@ void Vertex::SetAttributeByIndex( size_t index, T && value ) IFNOEXCEPT
 {
 	const auto& element = layout.ResolveByIndex( index );
 	auto pAttribute = pData + element.GetOffset();
-	switch( element.GetType() )
-	{
-	case ElType::Position2D:
-		SetAttribute<ElType::Position2D>( pAttribute, std::forward<T>( value ) );
-		break;
-	case ElType::Position3D:
-		SetAttribute<ElType::Position3D>( pAttribute, std::forward<T>( value ) );
-		break;
-	case ElType::Texture2D:
-		SetAttribute<ElType::Texture2D>( pAttribute, std::forward<T>( value ) );
-		break;
-	case ElType::Normal:
-		SetAttribute<ElType::Normal>( pAttribute, std::forward<T>( value ) );
-	case ElType::Tangent:
-		SetAttribute<ElType::Tangent>( pAttribute, std::forward<T>( value ) );
-	case ElType::Bitangent:
-		SetAttribute<ElType::Bitangent>( pAttribute, std::forward<T>( value ) );
-		break;
-	case ElType::Float3Color:
-		SetAttribute<ElType::Float3Color>( pAttribute, std::forward<T>( value ) );
-		break;
-	case ElType::Float4Color:
-		SetAttribute<ElType::Float4Color>( pAttribute, std::forward<T>( value ) );
-		break;
-	case ElType::BGRAColor:
-		SetAttribute<ElType::BGRAColor>( pAttribute, std::forward<T>( value ) );
-		break;
-	case ElType::Count:
-		assert( "Don't use count type here!" && false );
-		break;
-	default:
-		assert( "Bad element type" && false );
-	}
+	VertexLayout::Bridge<AttributeSetting>(
+		element.GetType(), this, pAttribute, std::forward<T>( value )
+		);
 }
 
 template<typename First, TPACK Rest>
@@ -445,3 +460,8 @@ void VertexByteBuffer::EmplaceBack( Params&&... params ) IFNOEXCEPT
 #pragma endregion bufferImpl
 
 #pragma endregion impl
+
+#undef DVTX_ELEMENT_AI_EXTRACTOR
+#ifndef DVTX_SOURCE_FILE
+#undef LAYOUT_ELEMENT_TYPES
+#endif

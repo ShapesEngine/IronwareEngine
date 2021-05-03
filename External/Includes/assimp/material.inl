@@ -88,6 +88,7 @@ inline aiReturn aiMaterial::Get(const char* pKey,unsigned int type,
     unsigned int idx, Type* pOut,
     unsigned int* pMax) const
 {
+#undef min
     unsigned int iNum = pMax ? *pMax : 1;
 
     const aiMaterialProperty* prop;
