@@ -113,7 +113,7 @@ Box::Box( Graphics & gfx, float size )
 			class TransformCBufferScaling : public TransformCBuffer
 			{
 			public:
-				TransformCBufferScaling( Graphics& gfx, float scale = 1.315 ) :
+				TransformCBufferScaling( Graphics& gfx, float scale = 1.035 ) :
 					TransformCBuffer( gfx ),
 					buf( MakeLayout() )
 				{
@@ -127,10 +127,11 @@ Box::Box( Graphics & gfx, float size )
 
 				void Bind( Graphics& gfx ) noexcept override
 				{
-					const auto scale = dx::XMMatrixScaling( 1.015f, 1.015f, 1.015f );
+					const float scale = buf["scale"];
+					const auto scaleMat = dx::XMMatrixScaling( scale, scale, scale );
 					auto tf = GetTransform( gfx );
-					tf.modelView = tf.modelView * scale;
-					tf.modelViewProj = tf.modelViewProj * scale;
+					tf.modelView = tf.modelView * scaleMat;
+					tf.modelViewProj = tf.modelViewProj * scaleMat;
 					UpdateBind( gfx, tf );
 				}
 
