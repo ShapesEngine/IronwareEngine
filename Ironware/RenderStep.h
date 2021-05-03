@@ -10,6 +10,7 @@
 
 #include "Graphics.h"
 #include "Bindable.h"
+#include "TechniqueProbe.h"
 
 #include <vector>
 
@@ -25,6 +26,7 @@ public:
 	void Submit( class FrameExecutor& frame, const class Drawable& drawable ) const;
 	void Bind( Graphics& gfx ) const;
 	void InitializeParentReferences( const class Drawable& parent ) noexcept;
+	void Accept( TechniqueProbe& probe );
 
 protected:
 	/**

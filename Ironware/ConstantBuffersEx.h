@@ -16,6 +16,7 @@
 #include "Bindable.h"
 #include "GraphicsExceptionMacros.h"
 #include "DynamicConstantBuffer.h"
+#include "TechniqueProbe.h"
 
 class PixelConstantBufferEx : public Bindable
 {
@@ -42,6 +43,7 @@ public:
 	const Buffer& GetBuffer() const noexcept { return buf; }
 	void SetBuffer( const Buffer& buf_in );
 	void Bind( Graphics& gfx ) noexcept override;
+	void Accept( TechniqueProbe& probe ) override;
 
 private:
 	bool dirty = false;

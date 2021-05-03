@@ -4,16 +4,30 @@
  * \author Yernar Aldabergenov
  * \date May 2021
  *
- * 
+ *
  */
 #include "RenderTechnique.h"
 #include "FrameExecutor.h"
+
+RenderTechnique::RenderTechnique( std::wstring name ) noexcept :
+	name( name )
+{
+}
 
 void RenderTechnique::InitializeParentReferences( const Drawable & parent ) noexcept
 {
 	for( auto& s : steps )
 	{
 		s.InitializeParentReferences( parent );
+	}
+}
+
+void RenderTechnique::Accept( TechniqueProbe & probe )
+{
+	probe.SetTechnique( this );
+	for( auto& s : steps )
+	{
+		s.Accept( probe );
 	}
 }
 

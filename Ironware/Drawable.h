@@ -47,6 +47,7 @@ public:
 	void AddTechnique( RenderTechnique tech_in ) noexcept;
 	void Submit( class FrameExecutor& frame ) const noexcept;
 	void Bind( Graphics& gfx ) const noexcept;
+	void Accept( class TechniqueProbe& probe );
 	UINT GetIndexCount() const IFNOEXCEPT;
 
 protected:

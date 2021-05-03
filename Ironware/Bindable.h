@@ -42,6 +42,7 @@ public:
 	virtual ~Bindable() = default;
 	virtual std::wstring GetUID() const noexcept = 0;
 	virtual void InitializeParentReference( const class Drawable& ) noexcept {}
+	virtual void Accept( class TechniqueProbe& ) {}
 
 protected:
 	static ID3D11DeviceContext* GetContext( Graphics& gfx ) noexcept { return gfx.pImmediateContext.Get(); }

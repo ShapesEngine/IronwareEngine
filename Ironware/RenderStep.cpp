@@ -33,3 +33,12 @@ void RenderStep::InitializeParentReferences( const Drawable & parent ) noexcept
 		b->InitializeParentReference( parent );
 	}
 }
+
+void RenderStep::Accept( TechniqueProbe & probe )
+{
+	probe.SetStep( this );
+	for( auto& pb : bindables )
+	{
+		pb->Accept( probe );
+	}
+}

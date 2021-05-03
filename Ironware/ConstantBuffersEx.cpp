@@ -80,6 +80,14 @@ void CachingPixelConstantBufferEx::Bind( Graphics & gfx ) noexcept
 	PixelConstantBufferEx::Bind( gfx );
 }
 
+void CachingPixelConstantBufferEx::Accept( TechniqueProbe & probe )
+{
+	if( probe.VisitBuffer( buf ) )
+	{
+		dirty = true;
+	}
+}
+
 NocachePixelConstantBufferEx::NocachePixelConstantBufferEx( Graphics & gfx, const CookedLayout & layout, UINT slot ) :
 	PixelConstantBufferEx( gfx, *layout.ShareRoot(), slot, nullptr ),
 	pLayoutRoot( layout.ShareRoot() )

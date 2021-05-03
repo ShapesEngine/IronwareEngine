@@ -228,6 +228,9 @@
     <ClCompile Include="FrameExecutor.cpp">
       <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
+    <ClCompile Include="TechniqueProbe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -684,6 +687,9 @@
       <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
     <ClInclude Include="FrameExecutor.h">
+      <Filter>Header Files\RenderQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="TechniqueProbe.h">
       <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
   </ItemGroup>

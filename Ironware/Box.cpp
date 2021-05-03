@@ -11,13 +11,15 @@
 #define IR_INCLUDE_TEXTURE
 #include "BindableCommon.h"
 #include "RenderStep.h"
-#include <imgui/imgui.h>
 #include "Cube.h"
+#include "DynamicConstantBuffer.h"
+#include "RenderTechnique.h"
+#include "TechniqueProbe.h"
+
+#include <imgui/imgui.h>
 
 Box::Box( Graphics & gfx, float size )
 {
-	Reset();
-
 	namespace dx = DirectX;
 
 	struct Vertex
@@ -47,32 +49,38 @@ Box::Box( Graphics & gfx, float size )
 	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
 	{
-		RenderTechnique box;
+		RenderTechnique lambertian{ L"Lambertian" };
 		{
-			RenderStep lambertian{ 0ull };
+			RenderStep lambertianStep{ 0ull };
 			auto pVertexShader = VertexShader::Resolve( gfx, L"PhongDiffuseMapVS.cso" );
 			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
-			lambertian.AddBindable( std::move( pVertexShader ) );
+			lambertianStep.AddBindable( std::move( pVertexShader ) );
 
-			lambertian.AddBindable( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
+			lambertianStep.AddBindable( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
 
-			lambertian.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
+			lambertianStep.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
 			/*lambertian.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );*/
-			lambertian.AddBindable( Sampler::Resolve( gfx ) );
+			lambertianStep.AddBindable( Sampler::Resolve( gfx ) );
 
-			lambertian.AddBindable( PixelConstantBuffer<BoxCBuff>::Resolve( gfx, cbuff, 1u ) );
+			RawLayout lay;
+			lay.Add<Float>( "specularIntensity" );
+			lay.Add<Float>( "specularPower" );
+			auto buf = Buffer( std::move( lay ) );
+			buf["specularIntensity"] = 0.1f;
+			buf["specularPower"] = 20.0f;
+			lambertianStep.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
-			lambertian.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+			lambertianStep.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
-			lambertian.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+			lambertianStep.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
-			box.AddStep( std::move( lambertian ) );
+			lambertian.AddStep( std::move( lambertianStep ) );
 		}
-		AddTechnique( std::move( box ) );
+		AddTechnique( std::move( lambertian ) );
 	}
 
 	{
-		RenderTechnique outlineRT;
+		RenderTechnique outlineRT{ L"Outline" };
 		{
 			RenderStep mask{ 1ull };
 			auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
@@ -94,23 +102,50 @@ Box::Box( Graphics & gfx, float size )
 
 			outline.AddBindable( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
 
+			RawLayout lay;
+			lay.Add<Float4>( "color" );
+			auto buf = Buffer( std::move( lay ) );
+			buf["color"] = DirectX::XMFLOAT4{ 1.0f, 1.f, 0.5f, 1.0f };
+			outline.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
+
 			outline.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
-			class TransformCBufferScaled : public TransformCBuffer
+			class TransformCBufferScaling : public TransformCBuffer
 			{
 			public:
-				using TransformCBuffer::TransformCBuffer;
+				TransformCBufferScaling( Graphics& gfx, float scale = 1.315 ) :
+					TransformCBuffer( gfx ),
+					buf( MakeLayout() )
+				{
+					buf["scale"] = scale;
+				}
+
+				void Accept( TechniqueProbe& probe ) override
+				{
+					probe.VisitBuffer( buf );
+				}
+
 				void Bind( Graphics& gfx ) noexcept override
 				{
-					const auto scale = dx::XMMatrixScaling( 1.04f, 1.04f, 1.04f );
+					const auto scale = dx::XMMatrixScaling( 1.015f, 1.015f, 1.015f );
 					auto tf = GetTransform( gfx );
 					tf.modelView = tf.modelView * scale;
 					tf.modelViewProj = tf.modelViewProj * scale;
 					UpdateBind( gfx, tf );
 				}
+
+			private:
+				static RawLayout MakeLayout()
+				{
+					RawLayout layout;
+					layout.Add<Float>( "scale" );
+					return layout;
+				}
+			private:
+				Buffer buf;
 			};
 
-			outline.AddBindable( std::make_shared<TransformCBufferScaled>( gfx ) );
+			outline.AddBindable( std::make_shared<TransformCBufferScaling>( gfx ) );
 
 			outlineRT.AddStep( std::move( outline ) );
 		}
@@ -138,29 +173,45 @@ void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept
 		ImGui::SliderAngle( "Yaw", &orientation.y, -180.0f, 180.0f );
 		ImGui::SliderAngle( "Roll", &orientation.z, -180.0f, 180.0f );
 
-		ImGui::Text( "Properties" );
-		const bool bi = ImGui::SliderFloat( "Specular Intensity", &cbuff.specularIntensity, 0.01f, 1.f, "%.2f", 2 );
-		const bool bp = ImGui::SliderFloat( "Specular Power", &cbuff.specularPower, 10.f, 50.f, "%.f", 2 );
-		const bool bnm = ImGui::Checkbox( "Enable Normal Mapping", reinterpret_cast<bool*>( &cbuff.isNormalMappingEnabled ) );
-
-		if( bi || bp || bnm )
+		class Probe : public TechniqueProbe
 		{
-			//QueryBindable<PixelConstantBuffer<BoxCBuff>>()->Update( gfx, cbuff );
-		}
+		public:
+			void OnSetTechnique() override
+			{
+				using namespace std::string_literals;
+				ImGui::TextColored( { 0.4f, 1.0f, 0.6f, 1.0f }, to_narrow( pTech->GetName() ).c_str() );
+				bool active = pTech->IsActive();
+				ImGui::Checkbox( ( "Tech Active##"s + to_narrow( pTech->GetName() ) ).c_str(), &active );
+				pTech->SetActive( active );
+			}
+			bool VisitBuffer( Buffer& buf ) override
+			{
+				namespace dx = DirectX;
+				float dirty = false;
+				const auto dcheck = [&dirty]( bool changed ) {dirty = dirty || changed; };
 
-		if( ImGui::Button( "Reset" ) )
-		{
-			Reset();
-		}
+				if( auto v = buf["scale"]; v.Exists() )
+				{
+					dcheck( ImGui::SliderFloat( "Scale", &v, 1.0f, 2.0f, "%.3f", 3.5f ) );
+				}
+				if( auto v = buf["color"]; v.Exists() )
+				{
+					dcheck( ImGui::ColorPicker4( "Color", reinterpret_cast<float*>( &static_cast<dx::XMFLOAT4&>( v ) ) ) );
+				}
+				if( auto v = buf["specularIntensity"]; v.Exists() )
+				{
+					dcheck( ImGui::SliderFloat( "Specular Intensity", &v, 0.0f, 1.0f ) );
+				}
+				if( auto v = buf["specularPower"]; v.Exists() )
+				{
+					dcheck( ImGui::SliderFloat( "Glossiness", &v, 1.0f, 100.0f, "%.1f", 1.5f ) );
+				}
+				return dirty;
+			}
+		};
+
+		static Probe probe;
+		Accept( probe );
 	}
 	ImGui::End();
-}
-
-void Box::Reset() noexcept
-{
-	pos = { 10.f, 10.f, 0.f };
-	orientation = { 0.f, 0.f, 0.f };
-	cbuff.specularIntensity = 0.1f;
-	cbuff.specularPower = 22.f;
-	cbuff.isNormalMappingEnabled = TRUE;
 }

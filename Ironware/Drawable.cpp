@@ -35,6 +35,14 @@ void Drawable::Bind( Graphics & gfx ) const noexcept
 	pVertices->Bind( gfx );
 }
 
+void Drawable::Accept( TechniqueProbe & probe )
+{
+	for( auto& t : techniques )
+	{
+		t.Accept( probe );
+	}
+}
+
 UINT Drawable::GetIndexCount() const IFNOEXCEPT
 {
 	return pIndices->GetCount();

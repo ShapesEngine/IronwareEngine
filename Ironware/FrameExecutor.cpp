@@ -19,11 +19,6 @@ void FrameExecutor::Execute( Graphics& gfx ) const IFNOEXCEPT
 	rqs[1].Execute( gfx );
 
 	DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Mask )->Bind( gfx );
-	struct SolidColorCBuff
-	{
-		DirectX::XMFLOAT4 color = { 1.f, 1.f, 0.5f, 1.f };
-	} colCbuff;
-	PixelConstantBuffer<SolidColorCBuff>::Resolve( gfx, colCbuff, 1u )->Bind( gfx );
 	rqs[2].Execute( gfx );
 }
 
