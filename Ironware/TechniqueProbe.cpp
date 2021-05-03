@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date May 2021
  *
- * 
+ *
  */
 #include "TechniqueProbe.h"
 #include "RenderTechnique.h"
@@ -20,4 +20,10 @@ void TechniqueProbe::SetStep( RenderStep * pStep_in )
 {
 	pStep = pStep_in;
 	OnSetStep();
+}
+
+bool TechniqueProbe::VisitBuffer( Buffer & buf )
+{
+	bufIdx++;
+	return OnVisitBuffer( buf );
 }
