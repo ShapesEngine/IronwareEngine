@@ -308,8 +308,10 @@ private:
 class VertexByteBuffer
 {
 public:
-	VertexByteBuffer( VertexLayout layout );
+	VertexByteBuffer( VertexLayout layout, size_t size = 0u ) IFNOEXCEPT;
+	VertexByteBuffer( VertexLayout layout, const aiMesh& mesh );
 
+	void Resize( size_t newSize ) IFNOEXCEPT;
 	VertexLayout& GetLayout() noexcept { return layout; }
 	const VertexLayout& GetLayout() const noexcept { return layout; }
 	/**

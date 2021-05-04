@@ -16,9 +16,42 @@ Vertex::Vertex( std::byte* data, const VertexLayout& layout ) :
 	assert( pData != nullptr );
 }
 
-VertexByteBuffer::VertexByteBuffer( VertexLayout layout ) :
+VertexByteBuffer::VertexByteBuffer( VertexLayout layout, size_t size ) IFNOEXCEPT :
 	layout( std::move( layout ) )
-{}
+{
+	Resize( size );
+}
+
+template<VertexLayout::ElementType type>
+struct AttributeAiMeshFill
+{
+	static constexpr void Exec( VertexByteBuffer* pBuf, const aiMesh& mesh ) IFNOEXCEPT
+	{
+		for( auto end = mesh.mNumVertices, i = 0u; i < end; i++ )
+		{
+			( *pBuf )[i].Attribute<type>() = VertexLayout::Map<type>::Extract( mesh, i );
+		}
+	}
+};
+
+VertexByteBuffer::VertexByteBuffer( VertexLayout layout, const aiMesh & mesh ) :
+	layout( std::move( layout ) )
+{
+	Resize( mesh.mNumVertices );
+	for( size_t i = 0, end = layout.GetElementCount(); i < end; i++ )
+	{
+		VertexLayout::Bridge<AttributeAiMeshFill>( layout.ResolveByIndex( i ).GetType(), this, mesh );
+	}
+}
+
+void VertexByteBuffer::Resize( size_t newSize ) noexcept( !IS_DEBUG )
+{
+	const auto size = Size();
+	if( size < newSize )
+	{
+		buffer.resize( buffer.size() + layout.Size() * ( newSize - size ) );
+	}
+}
 
 Vertex VertexByteBuffer::Back() IFNOEXCEPT
 {
