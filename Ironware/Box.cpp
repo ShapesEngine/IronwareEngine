@@ -52,11 +52,11 @@ Box::Box( Graphics & gfx, float size )
 		RenderTechnique lambertian{ L"Lambertian" };
 		{
 			RenderStep lambertianStep{ 0ull };
-			auto pVertexShader = VertexShader::Resolve( gfx, L"PhongDiffuseMapVS.cso" );
+			auto pVertexShader = VertexShader::Resolve( gfx, L"PhongDif_VS.cso" );
 			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 			lambertianStep.AddBindable( std::move( pVertexShader ) );
 
-			lambertianStep.AddBindable( PixelShader::Resolve( gfx, L"PhongDiffuseMapPS.cso" ) );
+			lambertianStep.AddBindable( PixelShader::Resolve( gfx, L"PhongDif_PS.cso" ) );
 
 			lambertianStep.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
 			/*lambertian.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );*/
@@ -83,7 +83,7 @@ Box::Box( Graphics & gfx, float size )
 		RenderTechnique outlineRT{ L"Outline" };
 		{
 			RenderStep mask{ 1ull };
-			auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+			auto pVertexShader = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
 			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 			mask.AddBindable( std::move( pVertexShader ) );
 
@@ -96,11 +96,11 @@ Box::Box( Graphics & gfx, float size )
 
 		{
 			RenderStep outline{ 2ull };
-			auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+			auto pVertexShader = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
 			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 			outline.AddBindable( std::move( pVertexShader ) );
 
-			outline.AddBindable( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
+			outline.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
 
 			RawLayout lay;
 			lay.Add<Float4>( "color" );

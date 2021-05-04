@@ -23,31 +23,14 @@ class Material
 public:
 	Material( Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path ) IFNOEXCEPT;
 	VertexByteBuffer ExtractVertices( const aiMesh& mesh ) const noexcept;
-	std::vector<uint16_t> ExtractIndices( const aiMesh& mesh ) const noexcept
-	{
-		std::vector<uint16_t> indices;
-		indices.reserve( (size_t)mesh.mNumFaces * 3 );
-		for( uint32_t i = 0; i < mesh.mNumFaces; i++ )
-		{
-			const auto& face = mesh.mFaces[i];
-			assert( face.mNumIndices == 3 );
-			indices.push_back( face.mIndices[0] );
-			indices.push_back( face.mIndices[1] );
-			indices.push_back( face.mIndices[2] );
-		}
-		return indices;
-	}
-	std::shared_ptr<VertexBuffer> MakeVertexBindable( Graphics& gfx, const aiMesh& mesh ) const IFNOEXCEPT
-	{
-		return VertexBuffer::Resolve( gfx, MakeMeshTag( mesh ), ExtractVertices( mesh ) );
-	}
-	std::shared_ptr<IndexBuffer> MakeIndexBindable( Graphics& gfx, const aiMesh& mesh ) const IFNOEXCEPT
-	{
-		return IndexBuffer::Resolve( gfx, MakeMeshTag( mesh ), ExtractIndices( mesh ) );
-	}
+	std::vector<uint16_t> ExtractIndices( const aiMesh& mesh ) const noexcept;
+	std::shared_ptr<VertexBuffer> MakeVertexBindable( Graphics& gfx, const aiMesh& mesh ) const IFNOEXCEPT;
+	std::shared_ptr<IndexBuffer> MakeIndexBindable( Graphics& gfx, const aiMesh& mesh ) const IFNOEXCEPT;
 	std::vector<RenderTechnique> GetTechniques() const noexcept;
+
 private:
 	std::wstring MakeMeshTag( const aiMesh& mesh ) const noexcept { return modelPath + L"$" + to_wide( mesh.mName.C_Str() ); }
+
 private:
 	VertexLayout vtxLayout;
 	std::vector<RenderTechnique> techniques;

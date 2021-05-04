@@ -88,10 +88,10 @@ modelPath( path.wstring() )
 		{
 			step.AddBindable( std::make_shared<TransformCBuffer>( gfx, 0u ) );
 			step.AddBindable( BlendState::Resolve( gfx, false ) );
-			auto pvs = VertexShader::Resolve( gfx, shaderCode + L"VS.cso" );
+			auto pvs = VertexShader::Resolve( gfx, shaderCode + L"_VS.cso" );
 			auto pvsbc = pvs->GetBytecode();
 			step.AddBindable( std::move( pvs ) );
-			step.AddBindable( PixelShader::Resolve( gfx, shaderCode + L"PS.cso" ) );
+			step.AddBindable( PixelShader::Resolve( gfx, shaderCode + L"_PS.cso" ) );
 			step.AddBindable( InputLayout::Resolve( gfx, vtxLayout, pvsbc ) );
 			if( hasTexture )
 			{
@@ -132,7 +132,7 @@ modelPath( path.wstring() )
 		{
 			RenderStep mask( 1 );
 
-			auto pvs = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+			auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
 			auto pvsbc = pvs->GetBytecode();
 			mask.AddBindable( std::move( pvs ) );
 
@@ -149,12 +149,12 @@ modelPath( path.wstring() )
 			RenderStep draw( 2 );
 
 			// these can be pass-constant (tricky due to layout issues)
-			auto pvs = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+			auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
 			auto pvsbc = pvs->GetBytecode();
 			draw.AddBindable( std::move( pvs ) );
 
 			// this can be pass-constant
-			draw.AddBindable( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
+			draw.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
 
 			RawLayout lay;
 			lay.Add<Float3>( "materialColor" );
@@ -212,10 +212,37 @@ modelPath( path.wstring() )
 		techniques.push_back( std::move( outline ) );
 	}
 }
+
 VertexByteBuffer Material::ExtractVertices( const aiMesh& mesh ) const noexcept
 {
 	return { vtxLayout, mesh };
 }
+
+std::vector<uint16_t> Material::ExtractIndices( const aiMesh & mesh ) const noexcept
+{
+	std::vector<uint16_t> indices;
+	indices.reserve( (size_t)mesh.mNumFaces * 3 );
+	for( uint32_t i = 0; i < mesh.mNumFaces; i++ )
+	{
+		const auto& face = mesh.mFaces[i];
+		assert( face.mNumIndices == 3 );
+		indices.push_back( face.mIndices[0] );
+		indices.push_back( face.mIndices[1] );
+		indices.push_back( face.mIndices[2] );
+	}
+	return indices;
+}
+
+std::shared_ptr<VertexBuffer> Material::MakeVertexBindable( Graphics & gfx, const aiMesh & mesh ) const noexcept( !IS_DEBUG )
+{
+	return VertexBuffer::Resolve( gfx, MakeMeshTag( mesh ), ExtractVertices( mesh ) );
+}
+
+std::shared_ptr<IndexBuffer> Material::MakeIndexBindable( Graphics & gfx, const aiMesh & mesh ) const noexcept( !IS_DEBUG )
+{
+	return IndexBuffer::Resolve( gfx, MakeMeshTag( mesh ), ExtractIndices( mesh ) );
+}
+
 std::vector<RenderTechnique> Material::GetTechniques() const noexcept
 {
 	return techniques;

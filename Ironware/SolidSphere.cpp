@@ -40,11 +40,11 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 		RenderTechnique techq;
 		RenderStep only{ 0ull };
 
-		auto pVertexShader = VertexShader::Resolve( gfx, L"SolidVS.cso" );
+		auto pVertexShader = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
 		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 		only.AddBindable( std::move( pVertexShader ) );
 
-		only.AddBindable( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
+		only.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
 
 		only.AddBindable( PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color, 1u ) );
 
