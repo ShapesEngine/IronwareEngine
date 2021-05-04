@@ -16,6 +16,7 @@
 #include "Model.h"
 #include "GDIPlusManager.h"
 #include "Model.h"
+#include "Mesh.h"
 #include "Box.h"
 #include "FrameExecutor.h"
 #include "Material.h"
@@ -50,9 +51,9 @@ private:
 	PointLight pointLight{ wnd.Gfx() };
 	Box box1{ wnd.Gfx(), 5.f };
 	Box box2{ wnd.Gfx(), 5.f };
-	std::unique_ptr<Mesh> pLoaded;
-	/*Model goblin{ wnd.Gfx(), L"Models\\goblin\\GoblinX.obj", 6.f, { 4.f, 10.f, -16.f } };
-	Model nano{ wnd.Gfx(), L"Models\\nanosuit_textured\\nanosuit.obj" };
+	std::unique_ptr<class Mesh> pLoaded;
+	Model goblin{ wnd.Gfx(), L"Models\\goblin\\GoblinX.obj", 6.f, { 4.f, 10.f, -16.f } };
+	/*Model nano{ wnd.Gfx(), L"Models\\nanosuit_textured\\nanosuit.obj" };
 	Model wallObj{ wnd.Gfx(), L"Models\\brickwall\\brickwall.obj", 3.f, { -10.f, 10.f, 0.f } };*/
 	/*Sheet sheet1{ wnd.Gfx(), 3.f, { 0.f, 0.f, 1.f, 0.5f } };
 	Sheet sheet2{ wnd.Gfx(), 3.f, { 1.f, 0.f, 0.f, 0.5f } };*/

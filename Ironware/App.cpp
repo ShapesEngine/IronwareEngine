@@ -10,6 +10,7 @@
 #define IR_INCLUDE_TEXTURE
 #include "BindableCommon.h"
 #include "BindableCollection.h"
+#include "DynamicConstantBuffer.h"
 
 #include <DirectXTex/DirectXTex.h>
 #include <assimp/Importer.hpp>
