@@ -17,6 +17,7 @@
 #include "GDIPlusManager.h"
 #include "Box.h"
 #include "FrameExecutor.h"
+#include "Material.h"
 
  /**
   * @brief Base class that controls scene
@@ -48,6 +49,7 @@ private:
 	PointLight pointLight{ wnd.Gfx() };
 	Box box1{ wnd.Gfx(), 5.f };
 	Box box2{ wnd.Gfx(), 5.f };
+	std::unique_ptr<Mesh> pLoaded;
 	/*Model goblin{ wnd.Gfx(), L"Models\\goblin\\GoblinX.obj", 6.f, { 4.f, 10.f, -16.f } };
 	Model nano{ wnd.Gfx(), L"Models\\nanosuit_textured\\nanosuit.obj" };
 	Model wallObj{ wnd.Gfx(), L"Models\\brickwall\\brickwall.obj", 3.f, { -10.f, 10.f, 0.f } };*/

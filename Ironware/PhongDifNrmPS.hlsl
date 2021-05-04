@@ -11,16 +11,18 @@ SamplerState splr;
 // for object color
 cbuffer SpecularCBuf
 {
-    float specularIntensity;
-    float specularPower;
-    bool isNMapEnabled;
+    float3 specularColor;
+    float specularWeight;
+    float specularGloss;
+    bool useNormalMap;
+    float normalMapWeight;
 };
 
 #include "CommonTransforms.hlsli"
 
 float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord, float3 viewTan : Tangent, float3 viewBitan : Bitangent ) : SV_Target
 {
-    if( isNMapEnabled )
+    if( useNormalMap )
     {
         const float3x3 tanToView = float3x3(
             normalize( viewTan ),
@@ -40,7 +42,10 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
 	// diffuse intensity
     const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, lightVec.dirToL, viewN );
     // reflected light vector
-    const float3 specular = calc_specular( diffuseColor, specularIntensity, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
+    const float3 specular = calc_specular(
+    diffuseColor * diffuseIntensity * specularColor,
+    specularWeight, viewN, lightVec.vToL, viewPos, luminosity, specularGloss
+    );
 	// final color
     return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular ), 1.f );
 }

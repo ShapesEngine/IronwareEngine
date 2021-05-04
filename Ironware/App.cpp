@@ -12,12 +12,28 @@
 #include "BindableCollection.h"
 
 #include <DirectXTex/DirectXTex.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <string>
 
 App::App()
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );
 	wnd.EnableMouseCursor();
 	auto camPos = camera.GetPos();
+	{
+		std::string path = "Models\\brickwall\\brickwall.obj";;
+		Assimp::Importer imp;
+		const auto pScene = imp.ReadFile( path,
+			aiProcess_Triangulate |
+			aiProcess_JoinIdenticalVertices |
+			aiProcess_ConvertToLeftHanded |
+			aiProcess_GenNormals |
+			aiProcess_CalcTangentSpace
+		);
+		Material mat{ wnd.Gfx(),*pScene->mMaterials[1],path };
+		pLoaded = std::make_unique<Mesh>( wnd.Gfx(), mat, *pScene->mMeshes[0] );
+	}
 	/*sheet1.SetPos( camPos );
 	sheet2.SetPos( { camPos.x, camPos.y, camPos.z - 5.f } );*/
 }
@@ -48,8 +64,8 @@ void App::ProcessFrame()
 
 	pointLight.Submit( fexe );
 	//sponza.Draw( wnd.Gfx() );
-	box1.Submit( fexe );
-	box2.Submit( fexe );
+	/*box1.Submit( fexe );
+	box2.Submit( fexe );*/
 
 	fexe.Execute( wnd.Gfx() );
 	/*sheet1.Draw( wnd.Gfx() );
@@ -58,8 +74,9 @@ void App::ProcessFrame()
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	box1.SpawnControlWindow( wnd.Gfx(), "box1" );
-	box2.SpawnControlWindow( wnd.Gfx(), "box2" );
+	/*box1.SpawnControlWindow( wnd.Gfx(), "box1" );
+	box2.SpawnControlWindow( wnd.Gfx(), "box2" );*/
+	pLoaded->Submit( fexe, DirectX::XMMatrixIdentity() );
 	//sponza.ShowWindow( wnd.Gfx(), "sponza" );
 	/*sheet1.SpawnControlWindow( wnd.Gfx(), "sheet1" );
 	sheet2.SpawnControlWindow( wnd.Gfx(), "sheet2" );*/

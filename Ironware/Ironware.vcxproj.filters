@@ -740,10 +740,10 @@
     <FxCompile Include="PhongSpecMapPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="PhongNormalMapPS.hlsl">
+    <FxCompile Include="PhongDifNrmPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="PhongNormalMapVS.hlsl">
+    <FxCompile Include="PhongDifNrmVS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="PhongSpecNormalMapPS.hlsl">
