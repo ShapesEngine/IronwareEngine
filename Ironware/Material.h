@@ -27,7 +27,7 @@ public:
 	{
 		std::vector<uint16_t> indices;
 		indices.reserve( (size_t)mesh.mNumFaces * 3 );
-		for( unsigned int i = 0; i < mesh.mNumFaces; i++ )
+		for( uint32_t i = 0; i < mesh.mNumFaces; i++ )
 		{
 			const auto& face = mesh.mFaces[i];
 			assert( face.mNumIndices == 3 );
