@@ -21,6 +21,10 @@
 
 #include <memory>
 
+class TechniqueProbe;
+class Material;
+struct aiMesh;
+
 /*!
  * \class Drawable
  *
@@ -40,6 +44,7 @@ class Drawable
 {
 public:
 	Drawable() = default;
+	Drawable( Graphics& gfx,const Material& mat,const aiMesh& mesh ) noexcept;
 	Drawable( const Drawable& ) = delete;
 	virtual ~Drawable() = default;
 

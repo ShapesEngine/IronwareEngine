@@ -16,6 +16,8 @@
 #include "Graphics.h"
 #include "DxgiInfoManager.h"
 
+#include <memory>
+
 /*!
  * \class Bindable
  *
@@ -55,4 +57,10 @@ protected:
 	 * @return Reference to the DXgiInfoManager object from graphics instance
 	*/
 	static DxgiInfoManager& GetInfoManager( Graphics& gfx );
+};
+
+class CloningBindable : public Bindable
+{
+public:
+	virtual std::unique_ptr<CloningBindable> Clone() const noexcept = 0;
 };

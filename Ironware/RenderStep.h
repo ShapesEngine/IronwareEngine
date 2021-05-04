@@ -22,6 +22,10 @@ class RenderStep
 {
 public:
 	RenderStep( size_t targetPass_in );
+	RenderStep( RenderStep&& ) = default;
+	RenderStep( const RenderStep & src ) noexcept;
+	RenderStep& operator=( const RenderStep& ) = delete;
+	RenderStep& operator=( RenderStep&& ) = delete;
 	void AddBindable( std::shared_ptr<Bindable> bind_in ) noexcept { bindables.push_back( std::move( bind_in ) ); }
 	void Submit( class FrameExecutor& frame, const class Drawable& drawable ) const;
 	void Bind( Graphics& gfx ) const;

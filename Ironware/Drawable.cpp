@@ -11,8 +11,22 @@
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "PrimitiveTopology.h"
+#include <assimp/scene.h>
+#include "Material.h"
 
 #include <cassert>
+
+Drawable::Drawable( Graphics& gfx, const Material& mat, const aiMesh& mesh ) noexcept
+{
+	pVertices = mat.MakeVertexBindable( gfx, mesh );
+	pIndices = mat.MakeIndexBindable( gfx, mesh );
+	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+
+	for( auto& t : mat.GetTechniques() )
+	{
+		AddTechnique( std::move( t ) );
+	}
+}
 
 void Drawable::AddTechnique( RenderTechnique tech_in ) noexcept
 {

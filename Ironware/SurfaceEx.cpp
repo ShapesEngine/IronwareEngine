@@ -49,7 +49,7 @@ SurfaceEx::Color SurfaceEx::GetPixel( uint32_t x, uint32_t y ) const IFNOEXCEPT
 SurfaceEx SurfaceEx::FromFile( const std::wstring & name )
 {
 	DirectX::ScratchImage scratch;
-	HRESULT hr = DirectX::LoadFromWICFile( name.c_str(), DirectX::WIC_FLAGS_NONE, nullptr, scratch );
+	HRESULT hr = DirectX::LoadFromWICFile( name.c_str(), DirectX::WIC_FLAGS_IGNORE_SRGB, nullptr, scratch );
 
 	if( FAILED( hr ) )
 	{

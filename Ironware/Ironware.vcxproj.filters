@@ -231,6 +231,9 @@
     <ClCompile Include="TechniqueProbe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -691,6 +694,9 @@
     </ClInclude>
     <ClInclude Include="TechniqueProbe.h">
       <Filter>Header Files\RenderQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

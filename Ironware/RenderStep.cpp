@@ -13,6 +13,23 @@ RenderStep::RenderStep( size_t targetPass_in ) :
 	targetPass{ targetPass_in }
 {}
 
+RenderStep::RenderStep( const RenderStep & src ) noexcept :
+	targetPass( src.targetPass )
+{
+	bindables.reserve( src.bindables.size() );
+	for( auto& pb : src.bindables )
+	{
+		if( auto* pCloning = dynamic_cast<const CloningBindable*>( pb.get() ) )
+		{
+			bindables.push_back( pCloning->Clone() );
+		}
+		else
+		{
+			bindables.push_back( pb );
+		}
+	}
+}
+
 void RenderStep::Submit( FrameExecutor & frame, const Drawable & drawable ) const
 {
 	frame.Accept( RenderJob{ this, &drawable }, targetPass );

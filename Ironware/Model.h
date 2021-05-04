@@ -15,15 +15,18 @@
 
 #include <assimp/scene.h>
 #include <imgui/imgui.h>
+#include <string>
 
 #include <optional>
 #include <type_traits>
 
+class Material;
+
 class Mesh : public Drawable
 {
 public:
-	Mesh( Graphics& gfx, std::vector<std::shared_ptr<Bindable>> bindablePtrs );
-	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
+	Mesh( Graphics& gfx,const Material& mat,const aiMesh& mesh ) IFNOEXCEPT;
+	void Submit( FrameExecutor& frame, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMLoadFloat4x4( &transform ); }
 
 private:
@@ -37,7 +40,7 @@ class Node
 
 public:
 	Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const DirectX::XMMATRIX& transform_in ) IFNOEXCEPT;
-	void Draw( Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
+	void Submit( FrameExecutor& frame, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
 
 private:
 	void AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT;
@@ -88,7 +91,7 @@ public:
 
 public:
 	Model( Graphics& gfx, std::wstring path, float scale = 1.f, DirectX::XMFLOAT3 startingPos = { 0.f, 0.f, 0.f } );
-	void Draw( Graphics& gfx ) const IFNOEXCEPT;
+	void Submit( FrameExecutor& frame ) const IFNOEXCEPT;
 	void ShowWindow( Graphics& gfx, const char* name = "Model" ) const IFNOEXCEPT;
 	size_t GetNodeSize() const noexcept;
 	~Model() noexcept;

@@ -32,7 +32,7 @@
  * Contact: yernar.aa@gmail.com
  *
  */
-class TransformCBuffer : public Bindable
+class TransformCBuffer : public CloningBindable
 {
 protected:
 	struct Transforms
@@ -44,6 +44,7 @@ protected:
 public:
 	TransformCBuffer( Graphics& gfx, UINT slot = 0u );
 	void InitializeParentReference( const Drawable& parent ) noexcept override;
+	std::unique_ptr<CloningBindable> Clone() const noexcept override { return std::make_unique<TransformCBuffer>( *this ); }
 	void Bind( Graphics& gfx ) noexcept override { UpdateBind( gfx, GetTransform( gfx ) ); }
 
 protected:

@@ -140,9 +140,10 @@
     <ClCompile Include="IronUtils.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="DynamicLayout.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Model.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="FrameExecutor.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="DynamicLayout.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="NullPixelShader.h" />
     <ClInclude Include="PointLight.h" />

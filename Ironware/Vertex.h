@@ -11,6 +11,7 @@
 
 #include "CommonMacros.h"
 #include "IronUtils.h"
+#include "IronWin.h"
 
 #include <string>
 #include <vector>
@@ -18,7 +19,7 @@
 #include <dxgiformat.h>
 #include <type_traits>
 #include <d3d11.h>
-#define NOMINMAX
+
 #include <assimp/scene.h>
 
 #define DVTX_ELEMENT_AI_EXTRACTOR(member) static SysType Extract( const aiMesh& mesh,size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
@@ -178,8 +179,6 @@ public:
 
 		D3D11_INPUT_ELEMENT_DESC GetDesc() const IFNOEXCEPT;
 		const wchar_t* GetCode() const IFNOEXCEPT;
-		template<ElementType Type>
-		bool Has() const noexcept;
 
 	private:
 		ElementType type;
@@ -211,6 +210,7 @@ public:
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const IFNOEXCEPT;
 	std::wstring GetCode() const IFNOEXCEPT;
+	bool Has( ElementType Type ) const noexcept;
 
 private:
 	std::vector<Element> elements;
@@ -389,19 +389,6 @@ const VertexLayout::Element& VertexLayout::Resolve() const IFNOEXCEPT
 	}
 	assert( "Element with provided type hasn't been found!" && false );
 	return elements.front();
-}
-
-template<VertexLayout::ElementType Type>
-bool VertexLayout::Element::Has() const noexcept
-{
-	for( auto& e : elements )
-	{
-		if( e.GetType() == Type )
-		{
-			return true;
-		}
-	}
-	return false;
 }
 
 #pragma endregion layoutImpl

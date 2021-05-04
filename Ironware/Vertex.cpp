@@ -17,7 +17,7 @@ Vertex::Vertex( std::byte* data, const VertexLayout& layout ) :
 }
 
 VertexByteBuffer::VertexByteBuffer( VertexLayout layout, size_t size ) IFNOEXCEPT :
-	layout( std::move( layout ) )
+layout( std::move( layout ) )
 {
 	Resize( size );
 }
@@ -73,7 +73,10 @@ Vertex VertexByteBuffer::operator[]( size_t index ) IFNOEXCEPT
 VertexLayout& VertexLayout::Append( ElementType Type ) IFNOEXCEPT
 {
 	assert( Type != ElementType::Count );
-	elements.emplace_back( Type, Size() );
+	if( !Has( Type ) )
+	{	
+		elements.emplace_back( Type, Size() );
+	}
 	return *this;
 }
 
@@ -96,6 +99,18 @@ std::wstring VertexLayout::GetCode() const IFNOEXCEPT
 		code += e.GetCode();
 	}
 	return code;
+}
+
+bool VertexLayout::Has( ElementType Type ) const noexcept
+{
+	for( auto& e : elements )
+	{
+		if( e.GetType() == Type )
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 template<VertexLayout::ElementType type>
