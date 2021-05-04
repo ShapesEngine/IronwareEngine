@@ -15,6 +15,7 @@
 #include "PointLight.h"
 #include "Model.h"
 #include "GDIPlusManager.h"
+#include "Model.h"
 #include "Box.h"
 #include "FrameExecutor.h"
 #include "Material.h"

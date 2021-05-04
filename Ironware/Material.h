@@ -26,7 +26,7 @@ public:
 	std::vector<uint16_t> ExtractIndices( const aiMesh& mesh ) const noexcept
 	{
 		std::vector<uint16_t> indices;
-		indices.reserve( mesh.mNumFaces * 3 );
+		indices.reserve( (size_t)mesh.mNumFaces * 3 );
 		for( unsigned int i = 0; i < mesh.mNumFaces; i++ )
 		{
 			const auto& face = mesh.mFaces[i];
