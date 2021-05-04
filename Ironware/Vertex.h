@@ -309,7 +309,7 @@ class VertexByteBuffer
 {
 public:
 	VertexByteBuffer( VertexLayout layout, size_t size = 0u ) IFNOEXCEPT;
-	VertexByteBuffer( VertexLayout layout, const aiMesh& mesh );
+	VertexByteBuffer( VertexLayout layout_in, const aiMesh& mesh );
 
 	void Resize( size_t newSize ) IFNOEXCEPT;
 	VertexLayout& GetLayout() noexcept { return layout; }

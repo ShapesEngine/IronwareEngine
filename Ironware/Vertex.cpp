@@ -34,8 +34,8 @@ struct AttributeAiMeshFill
 	}
 };
 
-VertexByteBuffer::VertexByteBuffer( VertexLayout layout, const aiMesh & mesh ) :
-	layout( std::move( layout ) )
+VertexByteBuffer::VertexByteBuffer( VertexLayout layout_in, const aiMesh & mesh ) :
+	layout( std::move( layout_in ) )
 {
 	Resize( mesh.mNumVertices );
 	for( size_t i = 0, end = layout.GetElementCount(); i < end; i++ )

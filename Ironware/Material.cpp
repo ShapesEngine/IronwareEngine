@@ -10,7 +10,7 @@
 #include "IronUtils.h"
 
 Material::Material( Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path ) IFNOEXCEPT :
-	modelPath( path.wstring() )
+modelPath( path.wstring() )
 {
 	const auto rootPath = path.parent_path().wstring() + L"\\";
 	{
@@ -157,9 +157,9 @@ Material::Material( Graphics& gfx, const aiMaterial& material, const std::filesy
 			draw.AddBindable( PixelShader::Resolve( gfx, L"SolidPS.cso" ) );
 
 			RawLayout lay;
-			lay.Add<Float4>( "materialColor" );
+			lay.Add<Float3>( "materialColor" );
 			auto buf = Buffer( std::move( lay ) );
-			buf["materialColor"] = DirectX::XMFLOAT4{ 1.0f,0.4f,0.4f,1.0f };
+			buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
 			draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
 			// TODO: better sub-layout generation tech for future consideration maybe

@@ -22,18 +22,12 @@ cbuffer SpecularCBuf
 
 float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord, float3 viewTan : Tangent, float3 viewBitan : Bitangent ) : SV_Target
 {
+    viewN = normalize( viewN );
+    
     if( useNormalMap )
     {
-        const float3x3 tanToView = float3x3(
-            normalize( viewTan ),
-            normalize( viewBitan ),
-            normalize( viewN )
-        );
-        
-        const float3 sampledNMap = (float3)nmap.Sample( splr, tc );
-        viewN = 2.0f * sampledNMap - 1.0f;
-        viewN.y = -viewN.y;
-        viewN = normalize( mul( viewN, tanToView ) );
+        const float3 mappedNormal = map_normal( normalize( viewTan ), normalize( viewBitan ), viewN, tc, nmap, splr );
+        viewN = lerp( viewN, mappedNormal, normalMapWeight );
     }
     // fragment to light vector data
     const LightVectorData lightVec = calc_light_vector_data( viewLightPos, viewPos );
