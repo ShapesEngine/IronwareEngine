@@ -11,12 +11,12 @@ SamplerState splr;
 // for object color
 cbuffer NMapCbuf
 {
-    bool isNMapEnabled;
-    bool isSpecMapEnabled;
     bool hasGloss;
-    float specularPowerConst;
     float3 specularColor;
     float specularMapWeight;
+    float specularGloss;
+    bool isNMapEnabled;
+    float normalMapWeight;
 };
 
 float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord, float3 viewTan : Tangent, float3 viewBitan : Bitangent ) : SV_Target
@@ -46,22 +46,15 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
     const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, lightVec.dirToL, viewN );
     
     float3 specularReflectionColor;
-    float specularPower = specularPowerConst;
-    if( isSpecMapEnabled )
+    float specularPower = specularGloss;
+    const float4 sampledSpec = specTex.Sample( splr, tc );
+    specularReflectionColor = sampledSpec.rgb * specularMapWeight;
+    if( hasGloss )
     {
-        const float4 sampledSpec = specTex.Sample( splr, tc );
-        specularReflectionColor = sampledSpec.rgb * specularMapWeight;
-        if( hasGloss )
-        {
-            specularPower = pow( 2.f, sampledSpec.a * 13.f );
-        }
-    }
-    else
-    {
-        specularReflectionColor = specularColor;
+        specularPower = pow( 2.f, sampledSpec.a * 13.f );
     }
     
     const float3 specular = calc_specular( specularReflectionColor, 1.f, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
 	// final color
-    return float4( saturate( ( diffuse + ambient ) * sampledDiff.rgb + specular ), sampledDiff.a );
+    return float4( saturate( ( diffuse + ambient ) * sampledDiff.rgb + specular ), 1.f );
 }

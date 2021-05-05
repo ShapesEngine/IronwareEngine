@@ -9,9 +9,10 @@ SamplerState splr;
 
 cbuffer SpecCBuff
 {
-    float specPower;
-    float specMapWeight;
     bool hasGloss;
+    float3 specColor;
+    float specWeight;
+    float specGloss;
 };
 
 float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCoord ) : SV_Target
@@ -27,12 +28,12 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
     
     float4 sampledSpec = specTex.Sample( splr, tc );
     float3 specularColor = sampledSpec.rgb;
-    float specularPower = specPower;
+    float specularPower = specGloss;
     if( hasGloss )
     {
         specularPower = pow( 2.f, sampledSpec.a * 13.f );
     }
-    const float3 specular = calc_specular( specularColor, 1.f, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
+    const float3 specular = calc_specular( diffuseColor * specularColor, specWeight, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
 	// final color
     return float4( saturate( ( diffuse + ambient ) * tex.Sample( splr, tc ).rgb + specular ), 1.f );
 }

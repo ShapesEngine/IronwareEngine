@@ -25,6 +25,7 @@
 #include "ModelWindow.h"
 #include "ModelException.h"
 #include "Mesh.h"
+#include "Material.h"
 
 namespace dx = DirectX;
 
@@ -47,10 +48,19 @@ Model::Model( Graphics& gfx, std::wstring path, float scale, DirectX::XMFLOAT3 s
 		throw ModelException( __LINE__, WFILE, importer.GetErrorString() );
 	}
 
+	// parse materials
+	std::vector<Material> materials;
+	materials.reserve( pScene->mNumMaterials );
+	for( size_t i = 0; i < pScene->mNumMaterials; i++ )
+	{
+		materials.emplace_back( gfx, *pScene->mMaterials[i], path );
+	}
+
 	meshPtrs.reserve( pScene->mNumMeshes );
 	for( size_t i = 0; i < pScene->mNumMeshes; i++ )
 	{
-		meshPtrs.push_back( ParseMesh( gfx, *pScene->mMeshes[i], pScene->mMaterials ) );
+		const auto& mesh = *pScene->mMeshes[i];
+		meshPtrs.push_back( std::make_unique<Mesh>( gfx, materials[mesh.mMaterialIndex], mesh ));
 	}
 
 	pRoot = ParseNode( *pScene->mRootNode );
@@ -59,14 +69,14 @@ Model::Model( Graphics& gfx, std::wstring path, float scale, DirectX::XMFLOAT3 s
 
 void Model::Submit( FrameExecutor& frame ) const IFNOEXCEPT
 {
-	pModelWindow->ApplyParameters();
+	/*pModelWindow->ApplyParameters();*/
 	pRoot->Submit( frame, dx::XMMatrixIdentity() );
 }
 
-void Model::ShowWindow( Graphics& gfx, const char* name ) const IFNOEXCEPT
-{
-	pModelWindow->ShowWindow( gfx, name, *pRoot );
-}
+//void Model::ShowWindow( Graphics& gfx, const char* name ) const IFNOEXCEPT
+//{
+//	pModelWindow->ShowWindow( gfx, name, *pRoot );
+//}
 
 Model::~Model() noexcept = default;
 

@@ -4,9 +4,10 @@
 
 cbuffer ObjectCBuf
 {
-    float4 materialColor;
-    float4 specularColor;
-    float specularPower;
+    float3 materialColor;
+    float3 specularColor;
+    float specularWeight;
+    float specularGloss;
 };
 
 float4 main( float3 viewPos : Position, float3 viewN : Normal ) : SV_Target
@@ -19,7 +20,7 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal ) : SV_Target
 	// diffuse intensity
     const float3 diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, lightVec.dirToL, viewN );
 	// calculate specular intensity based on angle between viewing vector and reflection vector, narrow with power function
-    const float4 specular = calc_specular( specularColor.rgb, 1.f, viewN, lightVec.vToL, viewPos, luminosity, specularPower ).rgbr;
+    const float3 specular = calc_specular( diffuseColor * diffuseIntensity * specularColor, specularWeight, viewN, lightVec.vToL, viewPos, luminosity, specularGloss );
 	// final color
-    return saturate( float4( diffuse + ambient, 1.f ) * materialColor + specular );
+    return float4( saturate( diffuse + ambient) * materialColor + specular, 1.f );
 }

@@ -24,7 +24,7 @@ public:
 
 private:
 	void AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT;
-	void ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT;
+	//void ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT;
 
 	void SetAppliedTransform( DirectX::FXMMATRIX transform ) noexcept { DirectX::XMStoreFloat4x4( &appliedTransform, transform ); }
 	const DirectX::XMFLOAT4X4& GetAppliedTransform() const noexcept { return appliedTransform; }

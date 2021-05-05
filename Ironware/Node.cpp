@@ -44,24 +44,24 @@ void Node::AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT
 	childPtrs.push_back( std::move( pChild ) );
 }
 
-void Node::ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT
-{
-	const auto node_flags =
-		( pSelectedNode != nullptr && index == pSelectedNode->index ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) |
-		( childPtrs.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow );
-
-	const bool isExpanded = ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, name.c_str() );
-	if( ImGui::IsItemClicked() )
-	{
-		pSelectedNode = const_cast<Node*>( this );
-	}
-
-	if( isExpanded )
-	{
-		for( const auto& pc : childPtrs )
-		{
-			pc->ShowTree( pSelectedNode );
-		}
-		ImGui::TreePop();
-	}
-}
+//void Node::ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT
+//{
+//	const auto node_flags =
+//		( pSelectedNode != nullptr && index == pSelectedNode->index ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) |
+//		( childPtrs.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow );
+//
+//	const bool isExpanded = ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, name.c_str() );
+//	if( ImGui::IsItemClicked() )
+//	{
+//		pSelectedNode = const_cast<Node*>( this );
+//	}
+//
+//	if( isExpanded )
+//	{
+//		for( const auto& pc : childPtrs )
+//		{
+//			pc->ShowTree( pSelectedNode );
+//		}
+//		ImGui::TreePop();
+//	}
+//}
