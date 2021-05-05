@@ -190,7 +190,7 @@ void App::ProcessFrame()
 				// used to change the highlighted node on selection change
 				struct Probe : public TechniqueProbe
 				{
-					virtual void OnSetTechnique()
+					void OnSetTechnique() override
 					{
 						if( pTech->GetName() == L"Outline" )
 						{

@@ -162,7 +162,7 @@ modelPath( path.wstring() )
 				RawLayout lay;
 				lay.Add<Float3>( "materialColor" );
 				auto buf = Buffer( std::move( lay ) );
-				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
+				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,1.f,0.5f };
 				draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 			}
 
@@ -174,50 +174,9 @@ modelPath( path.wstring() )
 				draw.AddBindable( std::make_shared<CachingVertexConstantBufferEx>( gfx, buf, 1u ) );
 			}
 
-			// TODO: better sub-layout generation tech for future consideration maybe
 			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, pvsbc ) );
 
-			// quick and dirty... nicer solution maybe takes a lamba... we'll see :)
-			class TransformCbufScaling : public TransformCBuffer
-			{
-			public:
-				TransformCbufScaling( Graphics& gfx, float scale = 1.04 )
-					:
-					TransformCBuffer( gfx ),
-					buf( MakeLayout() )
-				{
-					buf["scale"] = scale;
-				}
-				void Accept( TechniqueProbe& probe ) override
-				{
-					probe.VisitBuffer( buf );
-				}
-				void Bind( Graphics& gfx ) noexcept override
-				{
-					const float scale = buf["scale"];
-					const auto scaleMatrix = DirectX::XMMatrixScaling( scale, scale, scale );
-					auto xf = GetTransform( gfx );
-					xf.modelView = xf.modelView * scaleMatrix;
-					xf.modelViewProj = xf.modelViewProj * scaleMatrix;
-					UpdateBind( gfx, xf );
-				}
-				std::unique_ptr<CloningBindable> Clone() const noexcept override
-				{
-					return std::make_unique<TransformCbufScaling>( *this );
-				}
-			private:
-				static RawLayout MakeLayout()
-				{
-					RawLayout layout;
-					layout.Add<Float>( "scale" );
-					return layout;
-				}
-			private:
-				Buffer buf;
-			};
-			draw.AddBindable( std::make_shared<TransformCbufScaling>( gfx ) );
-
-			// TODO: might need to specify rasterizer when doubled-sided models start being used
+			draw.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
 			outline.AddStep( std::move( draw ) );
 		}
