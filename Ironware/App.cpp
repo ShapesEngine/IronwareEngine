@@ -187,17 +187,29 @@ void App::ProcessFrame()
 			const bool isExpanded = ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, node.GetName().c_str() );
 			if( ImGui::IsItemClicked() )
 			{
-				pSelectedNode = const_cast<Node*>( &node );
-			}
-
-			/*if( isExpanded )
-			{
-				for( const auto& pc : childPtrs )
+				// used to change the highlighted node on selection change
+				struct Probe : public TechniqueProbe
 				{
-					pc->ShowTree( pSelectedNode );
+					virtual void OnSetTechnique()
+					{
+						if( pTech->GetName() == L"Outline" )
+						{
+							pTech->SetActive( highlighted );
+						}
+					}
+					bool highlighted = false;
+				} probe;
+
+				// remove highlight on prev-selected node
+				if( pSelectedNode != nullptr )
+				{
+					pSelectedNode->Accept( probe );
 				}
-				ImGui::TreePop();
-			}*/
+				// add highlight to newly-selected node
+				probe.highlighted = true;
+				node.Accept( probe );
+				pSelectedNode = &node;
+			}
 			return isExpanded;
 		}
 

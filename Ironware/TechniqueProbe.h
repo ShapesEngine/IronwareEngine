@@ -24,7 +24,7 @@ public:
 protected:
 	virtual void OnSetTechnique() {}
 	virtual void OnSetStep() {}
-	virtual bool OnVisitBuffer( class Buffer& ) = 0;
+	virtual bool OnVisitBuffer( class Buffer& ) { return false; }
 
 protected:
 	class RenderTechnique* pTech = nullptr;
