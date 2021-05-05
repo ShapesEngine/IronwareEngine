@@ -99,6 +99,10 @@ void App::ProcessFrame()
 			{
 				dcheck( ImGui::SliderFloat( tag( "Scale" ), &v, 1.0f, 2.0f, "%.3f", 3.5f ) );
 			}
+			if( auto v = buf["offset"]; v.Exists() )
+			{
+				dcheck( ImGui::SliderFloat( tag( "Offset" ), &v, 0.0f, 1.0f, "%.3f", 2.5f ) );
+			}
 			if( auto v = buf["materialColor"]; v.Exists() )
 			{
 				dcheck( ImGui::ColorPicker3( tag( "Color" ), reinterpret_cast<float*>( &static_cast<dx::XMFLOAT3&>( v ) ) ) );

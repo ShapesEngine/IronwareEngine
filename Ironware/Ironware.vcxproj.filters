@@ -785,6 +785,9 @@
     <FxCompile Include="PhongDifMskSpcNrm_VS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="Offset_VS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\External\Includes\DXErr\DXGetErrorDescription.inl">

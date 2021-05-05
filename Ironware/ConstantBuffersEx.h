@@ -18,45 +18,78 @@
 #include "DynamicConstantBuffer.h"
 #include "TechniqueProbe.h"
 
-class PixelConstantBufferEx : public Bindable
+class ConstantBufferEx : public Bindable
 {
 public:
 	void Update( Graphics& gfx, const Buffer& buf );
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
 	virtual const LayoutElement& GetRootLayoutElement() const noexcept = 0;
 	std::wstring GetUID() const noexcept override;
 
 protected:
-	PixelConstantBufferEx( Graphics& gfx, const LayoutElement& layoutRoot, UINT slot, const Buffer* pBuf );
+	ConstantBufferEx( Graphics& gfx, const LayoutElement& layoutRoot, UINT slot, const Buffer* pBuf );
 
-private:
+protected:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
 	UINT slot;
 };
 
-class CachingPixelConstantBufferEx : public PixelConstantBufferEx
+class PixelConstantBufferEx : public ConstantBufferEx
 {
 public:
-	CachingPixelConstantBufferEx( Graphics& gfx, const CookedLayout& layout, UINT slot );
-	CachingPixelConstantBufferEx( Graphics& gfx, const Buffer& buf, UINT slot );
+	using ConstantBufferEx::ConstantBufferEx;
+	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
+};
+
+class VertexConstantBufferEx : public ConstantBufferEx
+{
+public:
+	using ConstantBufferEx::ConstantBufferEx;
+	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
+};
+
+template<class T>
+class CachingConstantBufferEx : public T
+{
+public:
+	CachingConstantBufferEx( Graphics& gfx, const CookedLayout& layout, UINT slot ) :
+		T( gfx, *layout.ShareRoot(), slot, nullptr ),
+		buf( Buffer( layout ) )
+	{}
+	CachingConstantBufferEx( Graphics& gfx, const Buffer& buf, UINT slot ) :
+		T( gfx, buf.GetRootLayoutElement(), slot, &buf ),
+		buf( buf )
+	{}
+	void Bind( Graphics& gfx ) noexcept override
+	{
+		if( dirty )
+		{
+			T::Update( gfx, buf );
+			dirty = false;
+		}
+		T::Bind( gfx );
+	}
+
+	void SetBuffer( const Buffer& buf_in )
+	{
+		buf.CopyFrom( buf_in );
+		dirty = true;
+	}
+
+	void Accept( TechniqueProbe& probe ) override
+	{
+		if( probe.VisitBuffer( buf ) )
+		{
+			dirty = true;
+		}
+	}
+
 	const LayoutElement& GetRootLayoutElement() const noexcept override { return buf.GetRootLayoutElement(); }
 	const Buffer& GetBuffer() const noexcept { return buf; }
-	void SetBuffer( const Buffer& buf_in );
-	void Bind( Graphics& gfx ) noexcept override;
-	void Accept( TechniqueProbe& probe ) override;
 
 private:
 	bool dirty = false;
 	Buffer buf;
 };
 
-class NocachePixelConstantBufferEx : public PixelConstantBufferEx
-{
-public:
-	NocachePixelConstantBufferEx( Graphics& gfx, const CookedLayout& layout, UINT slot );
-	NocachePixelConstantBufferEx( Graphics& gfx, const Buffer& buf, UINT slot );
-	const LayoutElement& GetRootLayoutElement() const noexcept override { return *pLayoutRoot; }
-
-private:
-	std::shared_ptr<LayoutElement> pLayoutRoot;
-};
+using CachingPixelConstantBufferEx = CachingConstantBufferEx<PixelConstantBufferEx>;
+using CachingVertexConstantBufferEx = CachingConstantBufferEx<VertexConstantBufferEx>;

@@ -151,18 +151,28 @@ modelPath( path.wstring() )
 			RenderStep draw( 2 );
 
 			// these can be pass-constant (tricky due to layout issues)
-			auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
+			auto pvs = VertexShader::Resolve( gfx, L"Offset_VS.cso" );
 			auto pvsbc = pvs->GetBytecode();
 			draw.AddBindable( std::move( pvs ) );
 
 			// this can be pass-constant
 			draw.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
 
-			RawLayout lay;
-			lay.Add<Float3>( "materialColor" );
-			auto buf = Buffer( std::move( lay ) );
-			buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
-			draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
+			{
+				RawLayout lay;
+				lay.Add<Float3>( "materialColor" );
+				auto buf = Buffer( std::move( lay ) );
+				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
+				draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
+			}
+
+			{
+				RawLayout lay;
+				lay.Add<Float>( "offset" );
+				auto buf = Buffer( std::move( lay ) );
+				buf["offset"] = 0.1f;
+				draw.AddBindable( std::make_shared<CachingVertexConstantBufferEx>( gfx, buf, 1u ) );
+			}
 
 			// TODO: better sub-layout generation tech for future consideration maybe
 			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, pvsbc ) );

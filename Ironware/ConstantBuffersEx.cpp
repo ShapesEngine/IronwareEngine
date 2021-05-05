@@ -8,7 +8,7 @@
  */
 #include "ConstantBuffersEx.h"
 
-void PixelConstantBufferEx::Update( Graphics & gfx, const Buffer & buf )
+void ConstantBufferEx::Update( Graphics & gfx, const Buffer & buf )
 {
 	assert( &buf.GetRootLayoutElement() == &GetRootLayoutElement() );
 	INFOMAN( gfx );
@@ -23,13 +23,13 @@ void PixelConstantBufferEx::Update( Graphics & gfx, const Buffer & buf )
 	GetContext( gfx )->Unmap( pConstantBuffer.Get(), 0u );
 }
 
-std::wstring PixelConstantBufferEx::GetUID() const noexcept
+std::wstring ConstantBufferEx::GetUID() const noexcept
 {
 	assert( false && "Not yet integrated with bCollection system!" );
 	return L"?";
 }
 
-PixelConstantBufferEx::PixelConstantBufferEx( Graphics & gfx, const LayoutElement & layoutRoot, UINT slot, const Buffer * pBuf ) :
+ConstantBufferEx::ConstantBufferEx( Graphics & gfx, const LayoutElement & layoutRoot, UINT slot, const Buffer * pBuf ) :
 	slot( slot )
 {
 	INFOMAN( gfx );
@@ -53,47 +53,3 @@ PixelConstantBufferEx::PixelConstantBufferEx( Graphics & gfx, const LayoutElemen
 		GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBuffer( &cbd, nullptr, &pConstantBuffer ) );
 	}
 }
-
-CachingPixelConstantBufferEx::CachingPixelConstantBufferEx( Graphics & gfx, const CookedLayout & layout, UINT slot ) :
-	PixelConstantBufferEx( gfx, *layout.ShareRoot(), slot, nullptr ),
-	buf( Buffer( layout ) )
-{}
-
-CachingPixelConstantBufferEx::CachingPixelConstantBufferEx( Graphics & gfx, const Buffer & buf, UINT slot ) :
-	PixelConstantBufferEx( gfx, buf.GetRootLayoutElement(), slot, &buf ),
-	buf( buf )
-{}
-
-void CachingPixelConstantBufferEx::SetBuffer( const Buffer & buf_in )
-{
-	buf.CopyFrom( buf_in );
-	dirty = true;
-}
-
-void CachingPixelConstantBufferEx::Bind( Graphics & gfx ) noexcept
-{
-	if( dirty )
-	{
-		Update( gfx, buf );
-		dirty = false;
-	}
-	PixelConstantBufferEx::Bind( gfx );
-}
-
-void CachingPixelConstantBufferEx::Accept( TechniqueProbe & probe )
-{
-	if( probe.VisitBuffer( buf ) )
-	{
-		dirty = true;
-	}
-}
-
-NocachePixelConstantBufferEx::NocachePixelConstantBufferEx( Graphics & gfx, const CookedLayout & layout, UINT slot ) :
-	PixelConstantBufferEx( gfx, *layout.ShareRoot(), slot, nullptr ),
-	pLayoutRoot( layout.ShareRoot() )
-{}
-
-NocachePixelConstantBufferEx::NocachePixelConstantBufferEx( Graphics & gfx, const Buffer & buf, UINT slot ) :
-	PixelConstantBufferEx( gfx, buf.GetRootLayoutElement(), slot, &buf ),
-	pLayoutRoot( buf.ShareLayoutRoot() )
-{}
