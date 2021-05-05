@@ -65,6 +65,7 @@ modelPath( path.wstring() )
 				hasGlossAlpha = tex->HasAlpha();
 				step.AddBindable( std::move( tex ) );
 				pscLayout.Add<Bool>( "useGlossAlpha" );
+				pscLayout.Add<Bool>( "useSpecMap" );
 			}
 			pscLayout.Add<Float3>( "specularColor" );
 			pscLayout.Add<Float>( "specularWeight" );
@@ -106,6 +107,7 @@ modelPath( path.wstring() )
 				r = reinterpret_cast<DirectX::XMFLOAT3&>( color );
 			}
 			buf["useGlossAlpha"].SetIfExists( hasGlossAlpha );
+			buf["useSpecMap"].SetIfExists( true );
 			if( auto r = buf["specularColor"]; r.Exists() )
 			{
 				aiColor3D color = { 0.18f,0.18f,0.18f };
@@ -233,9 +235,20 @@ std::vector<uint16_t> Material::ExtractIndices( const aiMesh & mesh ) const noex
 	return indices;
 }
 
-std::shared_ptr<VertexBuffer> Material::MakeVertexBindable( Graphics & gfx, const aiMesh & mesh ) const noexcept( !IS_DEBUG )
+std::shared_ptr<VertexBuffer> Material::MakeVertexBindable( Graphics & gfx, const aiMesh & mesh, float scale ) const noexcept( !IS_DEBUG )
 {
-	return VertexBuffer::Resolve( gfx, MakeMeshTag( mesh ), ExtractVertices( mesh ) );
+	auto vtc = ExtractVertices( mesh );
+	if( scale != 1.0f )
+	{
+		for( auto i = 0u; i < vtc.Size(); i++ )
+		{
+			DirectX::XMFLOAT3& pos = vtc[i].Attribute<VertexLayout::ElementType::Position3D>();
+			pos.x *= scale;
+			pos.y *= scale;
+			pos.z *= scale;
+		}
+	}
+	return VertexBuffer::Resolve( gfx, MakeMeshTag( mesh ), std::move( vtc ) );
 }
 
 std::shared_ptr<IndexBuffer> Material::MakeIndexBindable( Graphics & gfx, const aiMesh & mesh ) const noexcept( !IS_DEBUG )

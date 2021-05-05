@@ -13,12 +13,14 @@
 void TechniqueProbe::SetTechnique( RenderTechnique * pTech_in )
 {
 	pTech = pTech_in;
+	techIdx++;
 	OnSetTechnique();
 }
 
 void TechniqueProbe::SetStep( RenderStep * pStep_in )
 {
 	pStep = pStep_in;
+	stepIdx++;
 	OnSetStep();
 }
 

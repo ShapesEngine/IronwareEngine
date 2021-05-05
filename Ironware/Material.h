@@ -24,7 +24,7 @@ public:
 	Material( Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path ) IFNOEXCEPT;
 	VertexByteBuffer ExtractVertices( const aiMesh& mesh ) const noexcept;
 	std::vector<uint16_t> ExtractIndices( const aiMesh& mesh ) const noexcept;
-	std::shared_ptr<VertexBuffer> MakeVertexBindable( Graphics& gfx, const aiMesh& mesh ) const IFNOEXCEPT;
+	std::shared_ptr<VertexBuffer> MakeVertexBindable( Graphics& gfx, const aiMesh& mesh, float scale = 1.f ) const IFNOEXCEPT;
 	std::shared_ptr<IndexBuffer> MakeIndexBindable( Graphics& gfx, const aiMesh& mesh ) const IFNOEXCEPT;
 	std::vector<RenderTechnique> GetTechniques() const noexcept;
 

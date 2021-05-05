@@ -31,13 +31,14 @@ class Model
 public:
 	Model( Graphics& gfx, std::wstring path, float scale = 1.f, DirectX::XMFLOAT3 startingPos = { 0.f, 0.f, 0.f } );
 	void Submit( FrameExecutor& frame ) const IFNOEXCEPT;
-	/*void ShowWindow( Graphics& gfx, const char* name = "Model" ) const IFNOEXCEPT;*/
+
+	void Accept( class ModelProbe& probe );
 	size_t GetNodeSize() const noexcept { return nodeNum; }
 	~Model() noexcept;
 
 private:
 	static std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials ) IFNOEXCEPT;
-	std::unique_ptr<Node> ParseNode( const aiNode& node, DirectX::FXMMATRIX additionalTransform ) IFNOEXCEPT;
+	std::unique_ptr<Node> ParseNode( const aiNode& node, float scale ) IFNOEXCEPT;
 
 private:
 	std::vector<std::unique_ptr<Mesh>> meshPtrs;

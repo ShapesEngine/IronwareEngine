@@ -10,6 +10,7 @@ SamplerState splr;
 cbuffer SpecCBuff
 {
     bool hasGloss;
+    bool useSpecMap;
     float3 specColor;
     float specWeight;
     float specGloss;
@@ -27,7 +28,15 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
     // reflected light vector
     
     float4 sampledSpec = specTex.Sample( splr, tc );
-    float3 specularColor = sampledSpec.rgb;
+    float3 specularColor;
+    if( useSpecMap )
+    {
+        specularColor = sampledSpec.rgb;
+    }
+    else
+    {
+        specularColor = specColor;
+    }
     float specularPower = specGloss;
     if( hasGloss )
     {

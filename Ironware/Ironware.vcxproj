@@ -147,7 +147,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="ModelException.cpp" />
-    <ClCompile Include="ModelWindow.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="PixelShader.cpp" />
@@ -264,7 +263,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelException.h" />
-    <ClInclude Include="ModelWindow.h" />
+    <ClInclude Include="ModelProbe.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NullPixelShader.h" />
     <ClInclude Include="PointLight.h" />

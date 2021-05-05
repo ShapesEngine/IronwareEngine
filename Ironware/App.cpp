@@ -11,6 +11,9 @@
 #include "BindableCommon.h"
 #include "BindableCollection.h"
 #include "DynamicConstantBuffer.h"
+#include "ModelProbe.h"
+#include "Node.h"
+#include "IronMath.h"
 
 #include <DirectXTex/DirectXTex.h>
 #include <assimp/Importer.hpp>
@@ -64,14 +67,12 @@ void App::ProcessFrame()
 	//goblin.Submit( fexe );
 	pointLight.Submit( fexe );
 	sponza.Submit( fexe );
-	/*box1.Submit( fexe );
-	box2.Submit( fexe );*/
 	//pLoaded->Submit( fexe, DirectX::XMMatrixIdentity() );
 	fexe.Execute( wnd.Gfx() );
 	/*sheet1.Draw( wnd.Gfx() );
 	sheet2.Draw( wnd.Gfx() );*/
 
-	class Probe : public TechniqueProbe
+	class TP : public TechniqueProbe
 	{
 	public:
 		void OnSetTechnique() override
@@ -114,6 +115,10 @@ void App::ProcessFrame()
 			{
 				dcheck( ImGui::SliderFloat( tag( "Spec. Weight" ), &v, 0.0f, 2.0f ) );
 			}
+			if( auto v = buf["useSpecMap"]; v.Exists() )
+			{
+				dcheck( ImGui::Checkbox( tag( "Spec. Map Enable" ), &v ) );
+			}
 			if( auto v = buf["useNormalMap"]; v.Exists() )
 			{
 				dcheck( ImGui::Checkbox( tag( "Normal Map Enable" ), &v ) );
@@ -124,10 +129,119 @@ void App::ProcessFrame()
 			}
 			return dirty;
 		}
-	} probe;
-	//pLoaded->Accept( probe );
+	};
+
+	class MP : ModelProbe
+	{
+	public:
+		void SpawnWindow( Model& model )
+		{
+			ImGui::Begin( "Model" );
+			ImGui::Columns( 2, nullptr, true );
+			model.Accept( *this );
+
+			ImGui::NextColumn();
+			if( pSelectedNode )
+			{
+				bool dirty = false;
+				const auto dcheck = [&dirty]( bool changed ) {dirty = dirty || changed; };
+				auto& tf = ResolveTransform();
+				ImGui::TextColored( { 0.4f,1.0f,0.6f,1.0f }, "Translation" );
+				dcheck( ImGui::SliderFloat( "X", &tf.x, -60.f, 60.f ) );
+				dcheck( ImGui::SliderFloat( "Y", &tf.y, -60.f, 60.f ) );
+				dcheck( ImGui::SliderFloat( "Z", &tf.z, -60.f, 60.f ) );
+				ImGui::TextColored( { 0.4f,1.0f,0.6f,1.0f }, "Orientation" );
+				dcheck( ImGui::SliderAngle( "X-rotation", &tf.xRot, -180.0f, 180.0f ) );
+				dcheck( ImGui::SliderAngle( "Y-rotation", &tf.yRot, -180.0f, 180.0f ) );
+				dcheck( ImGui::SliderAngle( "Z-rotation", &tf.zRot, -180.0f, 180.0f ) );
+				if( dirty )
+				{
+					pSelectedNode->SetAppliedTransform(
+						dx::XMMatrixRotationX( tf.xRot ) *
+						dx::XMMatrixRotationY( tf.yRot ) *
+						dx::XMMatrixRotationZ( tf.zRot ) *
+						dx::XMMatrixTranslation( tf.x, tf.y, tf.z )
+					);
+				}
+			}
+			if( pSelectedNode )
+			{
+				TP probe;
+				pSelectedNode->Accept( probe );
+			}
+			ImGui::End();
+		}
+
+	protected:
+		bool PushNode( Node& node ) override
+		{
+			const auto index = node.GetID();
+			const auto node_flags =
+				( pSelectedNode != nullptr && index == pSelectedNode->GetID() ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) |
+				( node.HasChildren() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow );
+
+			const bool isExpanded = ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, node.GetName().c_str() );
+			if( ImGui::IsItemClicked() )
+			{
+				pSelectedNode = const_cast<Node*>( &node );
+			}
+
+			/*if( isExpanded )
+			{
+				for( const auto& pc : childPtrs )
+				{
+					pc->ShowTree( pSelectedNode );
+				}
+				ImGui::TreePop();
+			}*/
+			return isExpanded;
+		}
+
+		void PopNode( Node& node ) override { ImGui::TreePop(); }
+
+	private:
+		Node* pSelectedNode = nullptr;
+		struct TransformParameters
+		{
+			float xRot = 0.0f;
+			float yRot = 0.0f;
+			float zRot = 0.0f;
+			float x = 0.0f;
+			float y = 0.0f;
+			float z = 0.0f;
+		};
+		std::unordered_map<int, TransformParameters> transformParams;
+	private:
+		TransformParameters& ResolveTransform() noexcept
+		{
+			const auto id = pSelectedNode->GetID();
+			auto i = transformParams.find( id );
+			if( i == transformParams.end() )
+			{
+				return LoadTransform( id );
+			}
+			return i->second;
+		}
+		TransformParameters& LoadTransform( int id ) noexcept
+		{
+			const auto& applied = pSelectedNode->GetAppliedTransform();
+			const auto angles = extract_euler_angles( applied );
+			const auto translation = extract_translation( applied );
+			TransformParameters tp;
+			tp.zRot = angles.z;
+			tp.xRot = angles.x;
+			tp.yRot = angles.y;
+			tp.x = translation.x;
+			tp.y = translation.y;
+			tp.z = translation.z;
+			return transformParams.insert( { id,{ tp } } ).first->second;
+		}
+	};
+
+	static MP modelProbe;
 
 	// imgui window to control camera & light
+	modelProbe.SpawnWindow( sponza );
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
 

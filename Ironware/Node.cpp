@@ -10,7 +10,7 @@
 #include "Mesh.h"
 #include "FrameExecutor.h"
 #include "Model.h"
-#include "ModelWindow.h"
+#include "ModelProbe.h"
 
 Node::Node( std::vector<Mesh*> meshPtrs, const std::string & name, uint32_t index, const DirectX::XMMATRIX & transform_in ) noexcept( !IS_DEBUG ) :
 	meshPtrs( std::move( meshPtrs ) ),
@@ -38,30 +38,28 @@ void Node::Submit( FrameExecutor& frame, dx::FXMMATRIX accumulatedTransform ) co
 	}
 }
 
+void Node::Accept( ModelProbe & probe )
+{
+	if( probe.PushNode( *this ) )
+	{
+		for( auto& cp : childPtrs )
+		{
+			cp->Accept( probe );
+		}
+		probe.PopNode( *this );
+	}
+}
+
+void Node::Accept( TechniqueProbe& probe )
+{
+	for( auto& mp : meshPtrs )
+	{
+		mp->Accept( probe );
+	}
+}
+
 void Node::AddChild( std::unique_ptr<Node> pChild ) IFNOEXCEPT
 {
 	assert( pChild );
 	childPtrs.push_back( std::move( pChild ) );
 }
-
-//void Node::ShowTree( Node*& pSelectedNode ) const IFNOEXCEPT
-//{
-//	const auto node_flags =
-//		( pSelectedNode != nullptr && index == pSelectedNode->index ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) |
-//		( childPtrs.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow );
-//
-//	const bool isExpanded = ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, name.c_str() );
-//	if( ImGui::IsItemClicked() )
-//	{
-//		pSelectedNode = const_cast<Node*>( this );
-//	}
-//
-//	if( isExpanded )
-//	{
-//		for( const auto& pc : childPtrs )
-//		{
-//			pc->ShowTree( pSelectedNode );
-//		}
-//		ImGui::TreePop();
-//	}
-//}

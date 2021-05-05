@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date September 2020
  *
- * 
+ *
  */
 #pragma once
 
@@ -57,3 +57,5 @@ constexpr T to_rad( T deg )
 DirectX::XMFLOAT3 extract_euler_angles( const DirectX::XMFLOAT4X4& matrix );
 
 DirectX::XMFLOAT3 extract_translation( const DirectX::XMFLOAT4X4& matrix );
+
+DirectX::XMMATRIX scale_translation( DirectX::FXMMATRIX matrix, float scale );

@@ -12,6 +12,7 @@ SamplerState splr;
 cbuffer NMapCbuf
 {
     bool hasGloss;
+    bool useSpecMap;
     float3 specularColor;
     float specularMapWeight;
     float specularGloss;
@@ -36,7 +37,8 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
     
     if( isNMapEnabled )
     {
-        viewN = map_normal( normalize( viewTan ), normalize( viewBitan ), viewN, tc, nmap, splr );
+        const float3 mappedN = map_normal( normalize( viewTan ), normalize( viewBitan ), viewN, tc, nmap, splr );
+        viewN = lerp( viewN, mappedN, normalMapWeight );
     }
     // fragment to light vector data
     LightVectorData lightVec = calc_light_vector_data( viewLightPos, viewPos );
@@ -48,13 +50,21 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
     float3 specularReflectionColor;
     float specularPower = specularGloss;
     const float4 sampledSpec = specTex.Sample( splr, tc );
-    specularReflectionColor = sampledSpec.rgb * specularMapWeight;
+    if( useSpecMap )
+    {
+        specularReflectionColor = sampledSpec.rgb;
+    }
+    else
+    {
+        specularReflectionColor = specularColor;
+    }
+    
     if( hasGloss )
     {
         specularPower = pow( 2.f, sampledSpec.a * 13.f );
     }
     
-    const float3 specular = calc_specular( specularReflectionColor, 1.f, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
+    const float3 specular = calc_specular( diffuseColor * diffuseIntensity * specularReflectionColor, specularMapWeight, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
 	// final color
     return float4( saturate( ( diffuse + ambient ) * sampledDiff.rgb + specular ), 1.f );
 }

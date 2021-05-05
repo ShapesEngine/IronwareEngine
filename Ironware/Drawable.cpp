@@ -16,9 +16,9 @@
 
 #include <cassert>
 
-Drawable::Drawable( Graphics& gfx, const Material& mat, const aiMesh& mesh ) noexcept
+Drawable::Drawable( Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale ) noexcept
 {
-	pVertices = mat.MakeVertexBindable( gfx, mesh );
+	pVertices = mat.MakeVertexBindable( gfx, mesh, scale );
 	pIndices = mat.MakeIndexBindable( gfx, mesh );
 	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
