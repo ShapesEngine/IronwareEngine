@@ -96,7 +96,7 @@ std::unique_ptr<Node> Model::ParseNode( const aiNode & node, DirectX::FXMMATRIX 
 
 	for( uint32_t i = 0; i < node.mNumChildren; i++ )
 	{
-		pNode->AddChild( ParseNode( *node.mChildren[i], additionalTransform ) );
+		pNode->AddChild( ParseNode( *node.mChildren[i], dx::XMMatrixIdentity() ) );
 	}
 
 	return pNode;

@@ -61,9 +61,9 @@ void App::ProcessFrame()
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
-	goblin.Submit( fexe );
+	//goblin.Submit( fexe );
 	pointLight.Submit( fexe );
-	//sponza.Draw( wnd.Gfx() );
+	sponza.Submit( fexe );
 	/*box1.Submit( fexe );
 	box2.Submit( fexe );*/
 	//pLoaded->Submit( fexe, DirectX::XMMatrixIdentity() );
