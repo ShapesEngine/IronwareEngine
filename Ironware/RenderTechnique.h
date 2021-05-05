@@ -21,7 +21,7 @@ class RenderTechnique
 {
 public:
 	RenderTechnique() = default;
-	RenderTechnique( std::wstring name ) noexcept;
+	RenderTechnique( std::wstring name, bool startActive = true ) noexcept;
 	void InitializeParentReferences( const class Drawable& parent ) noexcept;
 	void Accept( TechniqueProbe& probe );
 	void AddStep( RenderStep step ) noexcept { steps.push_back( std::move( step ) ); }

@@ -36,8 +36,8 @@ public:
 	~Model() noexcept;
 
 private:
-	std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials ) IFNOEXCEPT;
-	std::unique_ptr<Node> ParseNode( const aiNode& node ) IFNOEXCEPT;
+	static std::unique_ptr<Mesh> ParseMesh( Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials ) IFNOEXCEPT;
+	std::unique_ptr<Node> ParseNode( const aiNode& node, DirectX::FXMMATRIX additionalTransform ) IFNOEXCEPT;
 
 private:
 	std::vector<std::unique_ptr<Mesh>> meshPtrs;

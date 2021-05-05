@@ -21,8 +21,8 @@ App::App()
 {
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );
 	wnd.EnableMouseCursor();
-	auto camPos = camera.GetPos();
-	std::wstring path = L"Models\\brickwall\\brickwall.obj";;
+	//auto camPos = camera.GetPos();
+	/*std::wstring path = L"Models\\brickwall\\brickwall.obj";;
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile( to_narrow( path ),
 		aiProcess_Triangulate |
@@ -31,8 +31,8 @@ App::App()
 		aiProcess_GenNormals |
 		aiProcess_CalcTangentSpace
 	);
-	Material mat{ wnd.Gfx(),*pScene->mMaterials[1],path };
-	pLoaded = std::make_unique<Mesh>( wnd.Gfx(), mat, *pScene->mMeshes[0] );
+	Material mat{ wnd.Gfx(),*pScene->mMaterials[1],path };*/
+	//pLoaded = std::make_unique<Mesh>( wnd.Gfx(), mat, *pScene->mMeshes[0] );
 	/*sheet1.SetPos( camPos );
 	sheet2.SetPos( { camPos.x, camPos.y, camPos.z - 5.f } );*/
 }
@@ -66,7 +66,7 @@ void App::ProcessFrame()
 	//sponza.Draw( wnd.Gfx() );
 	/*box1.Submit( fexe );
 	box2.Submit( fexe );*/
-	pLoaded->Submit( fexe, DirectX::XMMatrixIdentity() );
+	//pLoaded->Submit( fexe, DirectX::XMMatrixIdentity() );
 	fexe.Execute( wnd.Gfx() );
 	/*sheet1.Draw( wnd.Gfx() );
 	sheet2.Draw( wnd.Gfx() );*/
@@ -125,7 +125,7 @@ void App::ProcessFrame()
 			return dirty;
 		}
 	} probe;
-	pLoaded->Accept( probe );
+	//pLoaded->Accept( probe );
 
 	// imgui window to control camera & light
 	camera.SpawnControlWindow();
@@ -139,8 +139,8 @@ void App::ProcessFrame()
 	wallObj.ShowWindow( wnd.Gfx(), "Brickwall" );
 	wall.SpawnControlWindow( wnd.Gfx() );*/
 
-	box1.SpawnControlWindow( wnd.Gfx(), "box1" );
-	box2.SpawnControlWindow( wnd.Gfx(), "box2" );
+	//box1.SpawnControlWindow( wnd.Gfx(), "box1" );
+	//box2.SpawnControlWindow( wnd.Gfx(), "box2" );
 
 	// present frame
 	wnd.Gfx().EndFrame();

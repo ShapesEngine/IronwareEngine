@@ -128,7 +128,7 @@ modelPath( path.wstring() )
 	}
 	// outline technique
 	{
-		RenderTechnique outline( L"Outline" );
+		RenderTechnique outline( L"Outline", false );
 		{
 			RenderStep mask( 1 );
 

@@ -9,10 +9,10 @@
 #include "RenderTechnique.h"
 #include "FrameExecutor.h"
 
-RenderTechnique::RenderTechnique( std::wstring name ) noexcept :
-	name( name )
-{
-}
+RenderTechnique::RenderTechnique( std::wstring name, bool startActive ) noexcept :
+	name( name ),
+	active( startActive )
+{}
 
 void RenderTechnique::InitializeParentReferences( const Drawable & parent ) noexcept
 {
