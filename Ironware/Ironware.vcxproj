@@ -116,6 +116,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="DepthStencilView.cpp" />
     <ClCompile Include="GraphicsResource.cpp" />
     <ClCompile Include="BlendState.cpp" />
     <ClCompile Include="Box.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="RenderJob.cpp" />
     <ClCompile Include="RenderQueue.cpp" />
     <ClCompile Include="RenderStep.cpp" />
+    <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RenderTechnique.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClInclude Include="..\External\Includes\assimp\aabb.h" />
@@ -255,6 +257,7 @@
     <ClInclude Include="CommonMacros.h" />
     <ClInclude Include="ConstantBuffersEx.h" />
     <ClInclude Include="DepthStencilState.h" />
+    <ClInclude Include="DepthStencilView.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="FrameExecutor.h" />
     <ClInclude Include="GraphicsResource.h" />
@@ -272,6 +275,7 @@
     <ClInclude Include="RenderJob.h" />
     <ClInclude Include="RenderQueue.h" />
     <ClInclude Include="RenderStep.h" />
+    <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="RenderTechnique.h" />
     <ClInclude Include="Sheet.h" />
     <ClInclude Include="SkinnedBox.h" />

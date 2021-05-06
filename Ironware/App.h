@@ -43,11 +43,11 @@ private:
 	void HandleInput();
 
 private:
-	FrameExecutor fexe;
 	GDIPlusManager gdipm;
 	ImguiManager imguim;
 	Camera camera;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
+	FrameExecutor fexe{ wnd.Gfx() };
 	PointLight pointLight{ wnd.Gfx() };
 	//std::unique_ptr<class Mesh> pLoaded;
 	//Model goblin{ wnd.Gfx(), L"Models\\goblin\\GoblinX.obj", 5.f, { 4.f, 10.f, -16.f } };

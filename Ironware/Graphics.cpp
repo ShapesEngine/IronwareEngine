@@ -21,6 +21,7 @@
 #include "Graphics.h"
 #include "IronUtils.h"
 #include "GraphicsExceptionMacros.h"
+#include "DepthStencilView.h"
 
 #include <imgui/imgui_impl_dx11.h>
 #include <imgui/imgui_impl_win32.h>
@@ -93,29 +94,7 @@ Graphics::Graphics( HWND hWnd )
 	GFX_CALL_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), &pBackBuffer ) );
 	GFX_CALL_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer.Get(), nullptr, &pRenderTargetView ) );
 
-	wrl::ComPtr<ID3D11Texture2D> pDepth;
-	D3D11_TEXTURE2D_DESC descDepth;
-	descDepth.Width = width;
-	descDepth.Height = height;
-	descDepth.MipLevels = 0u;
-	descDepth.ArraySize = 1u;
-	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	descDepth.SampleDesc.Count = 1u;
-	descDepth.SampleDesc.Quality = 0u;
-	descDepth.Usage = D3D11_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	descDepth.CPUAccessFlags = 0u;
-	descDepth.MiscFlags = 0u;
-	GFX_CALL_THROW_INFO( pDevice->CreateTexture2D( &descDepth, nullptr, &pDepth ) );
 
-	// create view of depth stencil texture
-	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-	descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	descDSV.Texture2D.MipSlice = 0u;
-	GFX_CALL_THROW_INFO( pDevice->CreateDepthStencilView(
-		pDepth.Get(), &descDSV, &pDepthStencilView
-	) );
 
 	// bind depth stencil view to OM
 	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), pDepthStencilView.Get() );
@@ -142,8 +121,6 @@ void Graphics::BeginFrame( float red, float green, float blue ) noexcept
 {
 	const float color[] = { red, green, blue, 1.f };
 	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
-	// max depth 1.f
-	pImmediateContext->ClearDepthStencilView( pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0u );
 
 	// =======================================================================
 	// imgui begin frame
@@ -179,7 +156,7 @@ void Graphics::EndFrame()
 		{
 			throw GFX_DEVICE_REMOVED_EXCEPT( pDevice->GetDeviceRemovedReason() );
 		}
-		
+
 		throw GFX_EXCEPT( hr );
 	}
 }
@@ -187,6 +164,16 @@ void Graphics::EndFrame()
 void Graphics::DrawIndexed( UINT count ) IFNOEXCEPT
 {
 	GFX_CALL_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0u ) );
+}
+
+void Graphics::BindSwapBuffer() noexcept
+{
+	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), nullptr );
+}
+
+void Graphics::BindSwapBuffer( const DepthStencilView & dsv ) noexcept
+{
+	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), dsv.pDepthStencilView.Get() );
 }
 
 #pragma endregion Graphics

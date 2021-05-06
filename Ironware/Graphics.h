@@ -86,9 +86,11 @@ public:
 	void BeginFrame( float red, float green, float blue ) noexcept;
 	void EndFrame();
 	void DrawIndexed( UINT count ) IFNOEXCEPT;
+	void BindSwapBuffer() noexcept;
+	void BindSwapBuffer( const class DepthStencilView& dsv ) noexcept;
+
 	UINT GetWidth() const noexcept { return width; }
 	UINT GetHeight() const noexcept { return height; }
-
 	void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
 	DirectX::XMMATRIX GetCamera() const noexcept { return camera; }
 	void SetProjection( DirectX::FXMMATRIX proj ) noexcept { projection = proj; }

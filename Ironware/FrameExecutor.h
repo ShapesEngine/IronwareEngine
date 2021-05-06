@@ -10,6 +10,7 @@
 
 #include "RenderJob.h"
 #include "RenderQueue.h"
+#include "DepthStencilView.h"
 
 #include <array>
 
@@ -19,6 +20,7 @@
 class FrameExecutor
 {
 public:
+	FrameExecutor( Graphics& gfx );
 	void Execute( Graphics& gfx ) const IFNOEXCEPT;
 	void Reset() noexcept;
 
@@ -26,4 +28,5 @@ public:
 
 private:
 	std::array<RenderQueue, 3> rqs;
+	DepthStencilView dsv;
 };

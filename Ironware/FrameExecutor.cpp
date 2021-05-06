@@ -8,9 +8,17 @@
  */
 #include "FrameExecutor.h"
 #include "BindableCommon.h"
+#include "DepthStencilView.h"
+
+FrameExecutor::FrameExecutor( Graphics & gfx ) :
+	dsv( gfx, gfx.GetWidth(), gfx.GetHeight() )
+{}
 
 void FrameExecutor::Execute( Graphics& gfx ) const IFNOEXCEPT
 {
+	dsv.Clear( gfx );
+	gfx.BindSwapBuffer( dsv );
+
 	DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Off )->Bind( gfx );
 	rqs[0].Execute( gfx );
 
