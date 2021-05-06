@@ -13,7 +13,7 @@
 */
 #pragma once
 
-#include "Graphics.h"
+#include "GraphicsResource.h"
 #include "DxgiInfoManager.h"
 
 #include <memory>
@@ -33,7 +33,7 @@
  * Contact: yernar.aa@gmail.com
  *
  */
-class Bindable
+class Bindable : public GraphicsResource
 {
 public:
 	/**
@@ -45,18 +45,6 @@ public:
 	virtual std::wstring GetUID() const noexcept = 0;
 	virtual void InitializeParentReference( const class Drawable& ) noexcept {}
 	virtual void Accept( class TechniqueProbe& ) {}
-
-protected:
-	static ID3D11DeviceContext* GetContext( Graphics& gfx ) noexcept { return gfx.pImmediateContext.Get(); }
-	static ID3D11Device* GetDevice( Graphics& gfx ) noexcept { return gfx.pDevice.Get(); }
-
-	/**
-	 * @brief Avoid calling this function directly, instead call INFOMAN macro
-	 * * that will automatically get the infomanager
-	 * @param gfx Graphics object where the infomanager is stored
-	 * @return Reference to the DXgiInfoManager object from graphics instance
-	*/
-	static DxgiInfoManager& GetInfoManager( Graphics& gfx );
 };
 
 class CloningBindable : public Bindable

@@ -28,7 +28,7 @@
 
 class Graphics
 {
-	friend class Bindable;
+	friend class GraphicsResource;
 public:
 	class Exception : public IronException
 	{
@@ -86,6 +86,8 @@ public:
 	void BeginFrame( float red, float green, float blue ) noexcept;
 	void EndFrame();
 	void DrawIndexed( UINT count ) IFNOEXCEPT;
+	UINT GetWidth() const noexcept { return width; }
+	UINT GetHeight() const noexcept { return height; }
 
 	void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
 	DirectX::XMMATRIX GetCamera() const noexcept { return camera; }
@@ -99,6 +101,8 @@ private:
 	DirectX::XMMATRIX projection = {};
 	DirectX::XMMATRIX camera = {};
 	bool imGuiEnabled = true;
+	UINT width = 0u;
+	UINT height = 0u;
 
 #ifndef NDEBUG
 	DxgiInfoManager infoManager;

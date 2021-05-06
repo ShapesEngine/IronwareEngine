@@ -182,7 +182,7 @@ void App::ProcessFrame()
 			const auto index = node.GetID();
 			const auto node_flags =
 				( pSelectedNode != nullptr && index == pSelectedNode->GetID() ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) |
-				( node.HasChildren() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow );
+				( node.HasChildren() ? ImGuiTreeNodeFlags_OpenOnArrow : ImGuiTreeNodeFlags_Leaf );
 
 			const bool isExpanded = ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, node.GetName().c_str() );
 			if( ImGui::IsItemClicked() )

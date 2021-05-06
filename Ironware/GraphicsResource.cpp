@@ -6,12 +6,12 @@
  *
  *
  */
-#include "Bindable.h"
+#include "GraphicsResource.h"
 #ifdef NDEBUG
 #include <stdexcept>
 #endif
 
-DxgiInfoManager& Bindable::GetInfoManager( Graphics& gfx )
+DxgiInfoManager& GraphicsResource::GetInfoManager( Graphics& gfx )
 {
 #ifndef NDEBUG
 	return gfx.infoManager;

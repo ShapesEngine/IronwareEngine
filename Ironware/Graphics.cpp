@@ -21,6 +21,7 @@
 #include "Graphics.h"
 #include "IronUtils.h"
 #include "GraphicsExceptionMacros.h"
+
 #include <imgui/imgui_impl_dx11.h>
 #include <imgui/imgui_impl_win32.h>
 
@@ -38,13 +39,13 @@ Graphics::Graphics( HWND hWnd )
 {
 	RECT windowRect;
 	GetClientRect( hWnd, &windowRect );
-	UINT windowWidth = windowRect.right - windowRect.left;
-	UINT windowHeight = windowRect.bottom - windowRect.top;
+	width = windowRect.right - windowRect.left;
+	height = windowRect.bottom - windowRect.top;
 
 	DXGI_SWAP_CHAIN_DESC descSwapChain = {};
 	// D3D will automatically deduce width/height if it is 0
-	descSwapChain.BufferDesc.Width = windowWidth;
-	descSwapChain.BufferDesc.Height = windowHeight;
+	descSwapChain.BufferDesc.Width = width;
+	descSwapChain.BufferDesc.Height = height;
 	descSwapChain.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	descSwapChain.BufferDesc.RefreshRate.Numerator = 0;
 	descSwapChain.BufferDesc.RefreshRate.Denominator = 0;
@@ -94,8 +95,8 @@ Graphics::Graphics( HWND hWnd )
 
 	wrl::ComPtr<ID3D11Texture2D> pDepth;
 	D3D11_TEXTURE2D_DESC descDepth;
-	descDepth.Width = windowWidth;
-	descDepth.Height = windowHeight;
+	descDepth.Width = width;
+	descDepth.Height = height;
 	descDepth.MipLevels = 0u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -121,8 +122,8 @@ Graphics::Graphics( HWND hWnd )
 
 	// configure viewport
 	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)windowWidth;
-	vp.Height = (FLOAT)windowHeight;
+	vp.Width = (FLOAT)width;
+	vp.Height = (FLOAT)height;
 	vp.MinDepth = 0.f;
 	vp.MaxDepth = 1.f;
 	vp.TopLeftX = 0.f;
@@ -178,10 +179,8 @@ void Graphics::EndFrame()
 		{
 			throw GFX_DEVICE_REMOVED_EXCEPT( pDevice->GetDeviceRemovedReason() );
 		}
-		else
-		{
-			throw GFX_EXCEPT( hr );
-		}
+		
+		throw GFX_EXCEPT( hr );
 	}
 }
 
