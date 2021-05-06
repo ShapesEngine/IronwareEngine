@@ -33,13 +33,15 @@
 class Sampler : public Bindable
 {
 public:
-	Sampler( Graphics& gfx, UINT slot = 0u, D3D11_FILTER filter = D3D11_FILTER_ANISOTROPIC, D3D11_TEXTURE_ADDRESS_MODE texAddrMode = D3D11_TEXTURE_ADDRESS_WRAP );
+	Sampler( Graphics& gfx, bool afEnabled, bool reflect, UINT slot = 0u );
 	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetSamplers( slot, 1u, pSampler.GetAddressOf() ); }
-	static std::shared_ptr<Sampler> Resolve( Graphics& gfx, UINT slot = 0u ) { return BindableCollection::Resolve<Sampler>( gfx, slot ); }
-	static std::wstring GenerateUID( UINT slot ) { return GET_CLASS_WNAME( Sampler ) + L"#" + std::to_wstring( slot ); }
-	std::wstring GetUID() const noexcept override { return GenerateUID( slot ); }
+	static std::shared_ptr<Sampler> Resolve( Graphics& gfx, bool afEnabled = true, bool reflect = false, UINT slot = 0u ) { return BindableCollection::Resolve<Sampler>( gfx, afEnabled, reflect, slot ); }
+	static std::wstring GenerateUID( bool afEnabled, bool reflect, UINT slot ) { return GET_CLASS_WNAME( Sampler ) + ( afEnabled ? L"#AF" : L"#PT" ) + ( reflect ? L"#R" : L"#W" ) + L"#" + std::to_wstring( slot ); }
+	std::wstring GetUID() const noexcept override { return GenerateUID( anisotropicEnabled, reflection, slot ); }
 
 protected:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
 	const UINT slot;
+	bool anisotropicEnabled;
+	bool reflection;
 };

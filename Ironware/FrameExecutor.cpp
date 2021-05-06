@@ -14,6 +14,7 @@
 #include "InputLayout.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "Sampler.h"
 
 FrameExecutor::FrameExecutor( Graphics & gfx ) :
 	dsv( gfx, gfx.GetWidth(), gfx.GetHeight() ),
@@ -21,9 +22,7 @@ FrameExecutor::FrameExecutor( Graphics & gfx ) :
 {
 	namespace dx = DirectX;
 	const auto lay = VertexLayout{}.Append( VertexLayout::ElementType::Position2D );
-	VertexByteBuffer vbb{
-		lay
-	};
+	VertexByteBuffer vbb{ lay };
 
 	vbb.EmplaceBack( dx::XMFLOAT2{ -1.f, 1.f } );
 	vbb.EmplaceBack( dx::XMFLOAT2{ 1.f, 1.f } );
@@ -35,6 +34,7 @@ FrameExecutor::FrameExecutor( Graphics & gfx ) :
 	pVsFull = VertexShader::Resolve( gfx, L"Fullscreen_VS.cso" );
 	pPsFull = PixelShader::Resolve( gfx, L"Filter_PS.cso" );
 	pLayoutFull = InputLayout::Resolve( gfx, lay, pVsFull->GetBytecode() );
+	pSampler = Sampler::Resolve( gfx, false, true );
 }
 
 void FrameExecutor::Execute( Graphics& gfx ) const IFNOEXCEPT
@@ -59,6 +59,7 @@ void FrameExecutor::Execute( Graphics& gfx ) const IFNOEXCEPT
 	pVsFull->Bind( gfx );
 	pPsFull->Bind( gfx );
 	pLayoutFull->Bind( gfx );
+	pSampler->Bind( gfx );
 	gfx.DrawIndexed( pIbFull->GetCount() );
 }
 
