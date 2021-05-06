@@ -11,6 +11,7 @@
 #include "RenderJob.h"
 #include "RenderQueue.h"
 #include "DepthStencilView.h"
+#include "RenderTarget.h"
 
 #include <array>
 
@@ -29,4 +30,10 @@ public:
 private:
 	std::array<RenderQueue, 3> rqs;
 	DepthStencilView dsv;
+	RenderTarget rt;
+	std::shared_ptr<class VertexBuffer> pVbFull;
+	std::shared_ptr<class IndexBuffer> pIbFull;
+	std::shared_ptr<class VertexShader> pVsFull;
+	std::shared_ptr<class PixelShader> pPsFull;
+	std::shared_ptr<class InputLayout> pLayoutFull;
 };
