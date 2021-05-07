@@ -252,6 +252,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="BindableCollection.h" />
     <ClInclude Include="BlendState.h" />
+    <ClInclude Include="BlurPack.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonMacros.h" />
@@ -348,6 +349,10 @@
     <Image Include="ironware_WaA_icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="BlurOutline_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="ColorBlendPhongPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

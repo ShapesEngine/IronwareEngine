@@ -12,6 +12,7 @@
 #include "RenderQueue.h"
 #include "DepthStencilView.h"
 #include "RenderTarget.h"
+#include "BlurPack.h"
 
 #include <array>
 
@@ -22,7 +23,7 @@ class FrameExecutor
 {
 public:
 	FrameExecutor( Graphics& gfx );
-	void Execute( Graphics& gfx ) const IFNOEXCEPT;
+	void Execute( Graphics& gfx ) IFNOEXCEPT;
 	void Reset() noexcept;
 
 	void Accept( RenderJob job, size_t target ) IFNOEXCEPT { rqs[target].Accept( job ); }
@@ -30,12 +31,12 @@ public:
 private:
 	std::array<RenderQueue, 3> rqs;
 	DepthStencilView dsv;
-	RenderTarget rt;
+	RenderTarget rt1;
+	RenderTarget rt2;
+	BlurPack blur;
 	std::shared_ptr<class VertexBuffer> pVbFull;
 	std::shared_ptr<class IndexBuffer> pIbFull;
 	std::shared_ptr<class VertexShader> pVsFull;
-	std::shared_ptr<class PixelShader> pPsFull;
 	std::shared_ptr<class InputLayout> pLayoutFull;
-	std::shared_ptr<class Sampler> pSampler;
-	std::shared_ptr<class BlendState> pBlender;
+	std::shared_ptr<class Sampler> pSamplerFull;
 };

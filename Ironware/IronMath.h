@@ -15,7 +15,7 @@ constexpr double PI_D = 3.1415926535897932;
 constexpr float PI = float( PI_D );
 
 template <typename T>
-constexpr auto sq( const T& x )
+constexpr auto sq( const T& x ) noexcept
 {
 	return x * x;
 }
@@ -27,7 +27,7 @@ constexpr auto sq( const T& x )
  * @return wrapped angle in radians
 */
 template<typename T>
-T wrap_angle( T theta )
+T wrap_angle( T theta ) noexcept
 {
 	constexpr T twoPi = (T)2 * (T)PI_D;
 	const T mod = fmod( theta, twoPi );
@@ -43,19 +43,26 @@ T wrap_angle( T theta )
 }
 
 template<typename T>
-constexpr T interpolate( const T& src, const T& dst, float alpha )
+constexpr T interpolate( const T& src, const T& dst, float alpha ) noexcept
 {
 	return src + ( dst - src ) * alpha;
 }
 
 template<typename T>
-constexpr T to_rad( T deg )
+constexpr T to_rad( T deg ) noexcept
 {
 	return deg * PI / (T)180.0;
 }
 
-DirectX::XMFLOAT3 extract_euler_angles( const DirectX::XMFLOAT4X4& matrix );
+template<typename T>
+constexpr T gauss(T x, T sigma) noexcept
+{
+	const auto sigsq = sq( sigma );
+	return ( (T)1.0 / sqrt( (T)2.0 * (T)PI_D * sigsq ) ) * exp( -sq( x ) / ( (T)2.0 * sigsq ) );
+}
 
-DirectX::XMFLOAT3 extract_translation( const DirectX::XMFLOAT4X4& matrix );
+DirectX::XMFLOAT3 extract_euler_angles( const DirectX::XMFLOAT4X4& matrix ) noexcept;
 
-DirectX::XMMATRIX scale_translation( DirectX::FXMMATRIX matrix, float scale );
+DirectX::XMFLOAT3 extract_translation( const DirectX::XMFLOAT4X4& matrix ) noexcept;
+
+DirectX::XMMATRIX scale_translation( DirectX::FXMMATRIX matrix, float scale ) noexcept;

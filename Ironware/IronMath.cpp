@@ -8,7 +8,7 @@
  */
 #include "IronMath.h"
 
-DirectX::XMFLOAT3 extract_euler_angles( const DirectX::XMFLOAT4X4& mat )
+DirectX::XMFLOAT3 extract_euler_angles( const DirectX::XMFLOAT4X4& mat ) noexcept
 {
 	DirectX::XMFLOAT3 euler;
 
@@ -27,12 +27,12 @@ DirectX::XMFLOAT3 extract_euler_angles( const DirectX::XMFLOAT4X4& mat )
 	return euler;
 }
 
-DirectX::XMFLOAT3 extract_translation( const DirectX::XMFLOAT4X4 & matrix )
+DirectX::XMFLOAT3 extract_translation( const DirectX::XMFLOAT4X4 & matrix ) noexcept
 {
 	return { matrix._41, matrix._42, matrix._43 };
 }
 
-DirectX::XMMATRIX scale_translation( DirectX::FXMMATRIX matrix, float scale )
+DirectX::XMMATRIX scale_translation( DirectX::FXMMATRIX matrix, float scale ) noexcept
 {
 	DirectX::XMMATRIX matTemp = matrix;
 	matTemp.r[3].m128_f32[0] *= scale;
