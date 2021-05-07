@@ -37,4 +37,5 @@ private:
 	std::shared_ptr<class PixelShader> pPsFull;
 	std::shared_ptr<class InputLayout> pLayoutFull;
 	std::shared_ptr<class Sampler> pSampler;
+	std::shared_ptr<class BlendState> pBlender;
 };

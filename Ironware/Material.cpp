@@ -151,7 +151,7 @@ modelPath( path.wstring() )
 			RenderStep draw( 2 );
 
 			// these can be pass-constant (tricky due to layout issues)
-			auto pvs = VertexShader::Resolve( gfx, L"Offset_VS.cso" );
+			auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
 			auto pvsbc = pvs->GetBytecode();
 			draw.AddBindable( std::move( pvs ) );
 
@@ -164,14 +164,6 @@ modelPath( path.wstring() )
 				auto buf = Buffer( std::move( lay ) );
 				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,1.f,0.5f };
 				draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
-			}
-
-			{
-				RawLayout lay;
-				lay.Add<Float>( "offset" );
-				auto buf = Buffer( std::move( lay ) );
-				buf["offset"] = 0.1f;
-				draw.AddBindable( std::make_shared<CachingVertexConstantBufferEx>( gfx, buf, 1u ) );
 			}
 
 			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, pvsbc ) );

@@ -119,7 +119,7 @@ Graphics::~Graphics()
 
 void Graphics::BeginFrame( float red, float green, float blue ) noexcept
 {
-	const float color[] = { red, green, blue, 1.f };
+	const float color[] = { red, green, blue, 0.f };
 	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
 
 	// =======================================================================

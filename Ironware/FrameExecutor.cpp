@@ -15,6 +15,7 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 #include "Sampler.h"
+#include "BlendState.h"
 
 FrameExecutor::FrameExecutor( Graphics & gfx ) :
 	dsv( gfx, gfx.GetWidth(), gfx.GetHeight() ),
@@ -35,13 +36,16 @@ FrameExecutor::FrameExecutor( Graphics & gfx ) :
 	pPsFull = PixelShader::Resolve( gfx, L"Filter_PS.cso" );
 	pLayoutFull = InputLayout::Resolve( gfx, lay, pVsFull->GetBytecode() );
 	pSampler = Sampler::Resolve( gfx, false, true );
+	pBlender = BlendState::Resolve( gfx, true );
 }
 
 void FrameExecutor::Execute( Graphics& gfx ) const IFNOEXCEPT
 {
 	dsv.Clear( gfx );
-	rt.BindAsTarget( gfx, dsv );
+	rt.Clear( gfx );
+	gfx.BindSwapBuffer( dsv );
 
+	BlendState::Resolve( gfx, false )->Bind( gfx );
 	DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Off )->Bind( gfx );
 	rqs[0].Execute( gfx );
 
@@ -49,10 +53,11 @@ void FrameExecutor::Execute( Graphics& gfx ) const IFNOEXCEPT
 	NullPixelShader::Resolve( gfx )->Bind( gfx );
 	rqs[1].Execute( gfx );
 
-	DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Mask )->Bind( gfx );
+	rt.BindAsTarget( gfx );
+	DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Off )->Bind( gfx );
 	rqs[2].Execute( gfx );
 
-	gfx.BindSwapBuffer();
+	gfx.BindSwapBuffer( dsv );
 	rt.BindAsTexture( gfx, 0u );
 	pVbFull->Bind( gfx );
 	pIbFull->Bind( gfx );
@@ -60,6 +65,8 @@ void FrameExecutor::Execute( Graphics& gfx ) const IFNOEXCEPT
 	pPsFull->Bind( gfx );
 	pLayoutFull->Bind( gfx );
 	pSampler->Bind( gfx );
+	pBlender->Bind( gfx );
+	DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Mask )->Bind( gfx );
 	gfx.DrawIndexed( pIbFull->GetCount() );
 }
 
