@@ -7,7 +7,7 @@
  *
  */
 #include "Texture.h"
-#include "Surface.h"
+#include "SurfaceEx.h"
 #include "GraphicsExceptionMacros.h"
 
 Texture::Texture( Graphics& gfx, const std::wstring& path, UINT slot ) :
@@ -16,7 +16,7 @@ Texture::Texture( Graphics& gfx, const std::wstring& path, UINT slot ) :
 {
 	INFOMAN( gfx );
 
-	const auto sur = Surface::FromFile( path );
+	const auto sur = SurfaceEx::FromFile( path );
 	hasAlpha = sur.IsAlphaLoaded();
 	auto width = sur.GetWidth();
 	auto height = sur.GetHeight();
@@ -42,7 +42,7 @@ Texture::Texture( Graphics& gfx, const std::wstring& path, UINT slot ) :
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateTexture2D( &descTexture, nullptr, &pTexture ) );
 
-	GetContext( gfx )->UpdateSubresource( pTexture.Get(), 0u, nullptr, sur.GetBufferPtrConst(), width * sizeof( Surface::Color ), 0u );
+	GetContext( gfx )->UpdateSubresource( pTexture.Get(), 0u, nullptr, sur.GetBufferPtrConst(), width * sizeof( SurfaceEx::Color ), 0u );
 
 	// =======================================================================
 	// Create the resource view on the texture
