@@ -27,6 +27,7 @@ public:
 	void Reset() noexcept;
 
 	void Accept( RenderJob job, size_t target ) IFNOEXCEPT { rqs[target].Accept( job ); }
+	void ShowWindows( Graphics& gfx ) { blur.ShowWindow( gfx ); }
 
 private:
 	std::array<RenderQueue, 3> rqs;
@@ -38,5 +39,7 @@ private:
 	std::shared_ptr<class IndexBuffer> pIbFull;
 	std::shared_ptr<class VertexShader> pVsFull;
 	std::shared_ptr<class InputLayout> pLayoutFull;
-	std::shared_ptr<class Sampler> pSamplerFull;
+	std::shared_ptr<class Sampler> pSamplerFullPoint;
+	std::shared_ptr<class Sampler> pSamplerFullBilin;
+	std::shared_ptr<class BlendState> pBlenderM;
 };

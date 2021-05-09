@@ -21,7 +21,7 @@ modelPath( path.wstring() )
 	// phong technique
 	{
 		RenderTechnique phong{ L"Phong" };
-		RenderStep step( 0 );
+		RenderStep step( 0ull );
 		std::wstring shaderCode = L"Phong";
 		aiString texFileName;
 

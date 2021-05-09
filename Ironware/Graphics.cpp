@@ -48,17 +48,17 @@ Graphics::Graphics( HWND hWnd )
 	descSwapChain.BufferDesc.Width = width;
 	descSwapChain.BufferDesc.Height = height;
 	descSwapChain.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	descSwapChain.BufferDesc.RefreshRate.Numerator = 0;
-	descSwapChain.BufferDesc.RefreshRate.Denominator = 0;
+	descSwapChain.BufferDesc.RefreshRate.Numerator = 0u;
+	descSwapChain.BufferDesc.RefreshRate.Denominator = 0u;
 	// setting as unspecified as we didn't set width and height
 	descSwapChain.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	descSwapChain.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	// disable anti aliasing
-	descSwapChain.SampleDesc.Count = 1;
-	descSwapChain.SampleDesc.Quality = 0;
+	descSwapChain.SampleDesc.Count = 1u;
+	descSwapChain.SampleDesc.Quality = 0u;
 	descSwapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	// 1 back & 1 front buffers => double buffering
-	descSwapChain.BufferCount = 1;
+	descSwapChain.BufferCount = 1u;
 	descSwapChain.OutputWindow = hWnd;
 	descSwapChain.Windowed = TRUE;
 	// TODO: consider using DXGI Flip Model
@@ -91,23 +91,8 @@ Graphics::Graphics( HWND hWnd )
 	// gain access to texture subresource in swap chain (back buffer)
 	wrl::ComPtr<ID3D11Resource> pBackBuffer;
 	// 0 is back buffer's index
-	GFX_CALL_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Resource ), &pBackBuffer ) );
+	GFX_CALL_THROW_INFO( pSwapChain->GetBuffer( 0u, __uuidof( ID3D11Resource ), &pBackBuffer ) );
 	GFX_CALL_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer.Get(), nullptr, &pRenderTargetView ) );
-
-
-
-	// bind depth stencil view to OM
-	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), pDepthStencilView.Get() );
-
-	// configure viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)width;
-	vp.Height = (FLOAT)height;
-	vp.MinDepth = 0.f;
-	vp.MaxDepth = 1.f;
-	vp.TopLeftX = 0.f;
-	vp.TopLeftY = 0.f;
-	pImmediateContext->RSSetViewports( 1u, &vp );
 
 	ImGui_ImplDX11_Init( pDevice.Get(), pImmediateContext.Get() );
 }
@@ -163,17 +148,35 @@ void Graphics::EndFrame()
 
 void Graphics::DrawIndexed( UINT count ) IFNOEXCEPT
 {
-	GFX_CALL_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0u ) );
+	GFX_CALL_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0 ) );
 }
 
 void Graphics::BindSwapBuffer() noexcept
 {
 	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), nullptr );
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = (FLOAT)width;
+	vp.Height = (FLOAT)height;
+	vp.MinDepth = 0.f;
+	vp.MaxDepth = 1.f;
+	vp.TopLeftX = 0.f;
+	vp.TopLeftY = 0.f;
+	pImmediateContext->RSSetViewports( 1u, &vp );
 }
 
 void Graphics::BindSwapBuffer( const DepthStencilView & dsv ) noexcept
 {
 	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), dsv.pDepthStencilView.Get() );
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = (FLOAT)width;
+	vp.Height = (FLOAT)height;
+	vp.MinDepth = 0.f;
+	vp.MaxDepth = 1.f;
+	vp.TopLeftX = 0.f;
+	vp.TopLeftY = 0.f;
+	pImmediateContext->RSSetViewports( 1u, &vp );
 }
 
 #pragma endregion Graphics

@@ -11,7 +11,9 @@
 
 namespace wrl = Microsoft::WRL;
 
-RenderTarget::RenderTarget( Graphics & gfx, UINT width, UINT height )
+RenderTarget::RenderTarget( Graphics & gfx, UINT width, UINT height ) :
+	width( width ),
+	height( height )
 {
 	INFOMAN( gfx );
 
@@ -47,4 +49,29 @@ RenderTarget::RenderTarget( Graphics & gfx, UINT width, UINT height )
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateRenderTargetView(
 		pTexture.Get(), &descRenderTar, &pTargetView
 	) );
+}
+
+void RenderTarget::SetViewport( Graphics & gfx ) const
+{
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = (FLOAT)width;
+	vp.Height = (FLOAT)height;
+	vp.MinDepth = 0.f;
+	vp.MaxDepth = 1.f;
+	vp.TopLeftX = 0.f;
+	vp.TopLeftY = 0.f;
+	GetContext( gfx )->RSSetViewports( 1u, &vp );
+}
+
+void RenderTarget::BindAsTarget( Graphics & gfx ) const noexcept
+{
+	GetContext( gfx )->OMSetRenderTargets( 1u, pTargetView.GetAddressOf(), nullptr );
+	SetViewport( gfx );
+}
+
+void RenderTarget::BindAsTarget( Graphics & gfx, const DepthStencilView & dsv ) const noexcept
+{
+	GetContext( gfx )->OMSetRenderTargets( 1u, pTargetView.GetAddressOf(), dsv.pDepthStencilView.Get() );
+	SetViewport( gfx );
 }

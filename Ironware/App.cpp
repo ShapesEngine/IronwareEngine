@@ -260,6 +260,7 @@ void App::ProcessFrame()
 	modelProbe.SpawnWindow( sponza );
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
+	fexe.ShowWindows( wnd.Gfx() );
 
 	//sponza.ShowWindow( wnd.Gfx(), "sponza" );
 	/*sheet1.SpawnControlWindow( wnd.Gfx(), "sheet1" );
