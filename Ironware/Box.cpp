@@ -33,12 +33,13 @@ Box::Box( Graphics & gfx, float size )
 	model.Transform( DirectX::XMMatrixScaling( size, size, size ) );
 	model.SetNormalsIndependentFlat();
 
-	VertexByteBuffer vbuff(
-		VertexLayout{}
+	VertexLayout layout;
+	layout
 		.Append( VertexLayout::ElementType::Position3D )
 		.Append( VertexLayout::ElementType::Normal )
-		.Append( VertexLayout::ElementType::Texture2D )
-	);
+		.Append( VertexLayout::ElementType::Texture2D );
+
+	VertexByteBuffer vbuff( layout );
 	for( auto& v : model.vertices )
 	{
 		vbuff.EmplaceBack( v.pos, v.n, v.tex );
@@ -48,109 +49,76 @@ Box::Box( Graphics & gfx, float size )
 	pIndices = IndexBuffer::Resolve( gfx, boxTag, model.indices );
 	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
+	auto tcb = std::make_shared<TransformCBuffer>( gfx );
+
 	{
-		RenderTechnique lambertian{ L"Lambertian" };
+		RenderTechnique shade( L"Shade" );
 		{
-			RenderStep lambertianStep{ 0ull };
-			auto pVertexShader = VertexShader::Resolve( gfx, L"PhongDif_VS.cso" );
-			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
-			lambertianStep.AddBindable( std::move( pVertexShader ) );
+			RenderStep only( "lambertian" );
 
-			lambertianStep.AddBindable( PixelShader::Resolve( gfx, L"PhongDif_PS.cso" ) );
+			only.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
+			only.AddBindable( Sampler::Resolve( gfx ) );
 
-			lambertianStep.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
-			/*lambertian.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall_normal.jpg", 1u ) );*/
-			lambertianStep.AddBindable( Sampler::Resolve( gfx ) );
+			auto pvs = VertexShader::Resolve( gfx, L"PhongDif_VS.cso" );
+			auto pvsbc = pvs->GetBytecode();
+			only.AddBindable( std::move( pvs ) );
+
+			only.AddBindable( PixelShader::Resolve( gfx, L"PhongDif_PS.cso" ) );
 
 			RawLayout lay;
-			lay.Add<Float>( "specularIntensity" );
-			lay.Add<Float>( "specularPower" );
+			lay.Add<Float3>( "specularColor" );
+			lay.Add<Float>( "specularWeight" );
+			lay.Add<Float>( "specularGloss" );
 			auto buf = Buffer( std::move( lay ) );
-			buf["specularIntensity"] = 0.1f;
-			buf["specularPower"] = 20.0f;
-			lambertianStep.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
+			buf["specularColor"] = dx::XMFLOAT3{ 1.0f,1.0f,1.0f };
+			buf["specularWeight"] = 0.1f;
+			buf["specularGloss"] = 20.0f;
+			only.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
-			lambertianStep.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+			only.AddBindable( InputLayout::Resolve( gfx, layout, pvsbc ) );
 
-			lambertianStep.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+			only.AddBindable( RasterizerState::Resolve( gfx, false ) );
 
-			lambertian.AddStep( std::move( lambertianStep ) );
+			only.AddBindable( tcb );
+
+			shade.AddStep( std::move( only ) );
 		}
-		AddTechnique( std::move( lambertian ) );
+		AddTechnique( std::move( shade ) );
 	}
 
 	{
-		RenderTechnique outlineRT{ L"Outline" };
+		RenderTechnique outline( L"Outline" );
 		{
-			RenderStep mask{ 1ull };
-			auto pVertexShader = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
-			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
-			mask.AddBindable( std::move( pVertexShader ) );
+			RenderStep mask( "outlineMask" );
 
-			mask.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+			// TODO: better sub-layout generation tech for future consideration maybe
+			mask.AddBindable( InputLayout::Resolve( gfx, layout, VertexShader::Resolve( gfx, L"Solid_VS.cso" )->GetBytecode() ) );
 
-			mask.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+			mask.AddBindable( std::move( tcb ) );
 
-			outlineRT.AddStep( std::move( mask ) );
+			// TODO: might need to specify rasterizer when doubled-sided models start being used
+
+			outline.AddStep( std::move( mask ) );
 		}
-
 		{
-			RenderStep outline{ 2ull };
-			auto pVertexShader = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
-			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
-			outline.AddBindable( std::move( pVertexShader ) );
-
-			outline.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
+			RenderStep draw( "outlineDraw" );
 
 			RawLayout lay;
 			lay.Add<Float4>( "color" );
 			auto buf = Buffer( std::move( lay ) );
-			buf["color"] = DirectX::XMFLOAT4{ 1.0f, 1.f, 0.5f, 1.0f };
-			outline.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
+			buf["color"] = DirectX::XMFLOAT4{ 1.0f,0.4f,0.4f,1.0f };
+			draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
-			outline.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
+			// TODO: better sub-layout generation tech for future consideration maybe
+			draw.AddBindable( InputLayout::Resolve( gfx, layout, VertexShader::Resolve( gfx, L"Solid_VS.cso" )->GetBytecode() ) );
 
-			class TransformCBufferScaling : public TransformCBuffer
-			{
-			public:
-				TransformCBufferScaling( Graphics& gfx, float scale = 1.035 ) :
-					TransformCBuffer( gfx ),
-					buf( MakeLayout() )
-				{
-					buf["scale"] = scale;
-				}
+			draw.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
-				void Accept( TechniqueProbe& probe ) override
-				{
-					probe.VisitBuffer( buf );
-				}
+			// TODO: might need to specify rasterizer when doubled-sided models start being used
 
-				void Bind( Graphics& gfx ) noexcept override
-				{
-					const float scale = buf["scale"];
-					const auto scaleMat = dx::XMMatrixScaling( scale, scale, scale );
-					auto tf = GetTransform( gfx );
-					tf.modelView = tf.modelView * scaleMat;
-					tf.modelViewProj = tf.modelViewProj * scaleMat;
-					UpdateBind( gfx, tf );
-				}
-
-			private:
-				static RawLayout MakeLayout()
-				{
-					RawLayout layout;
-					layout.Add<Float>( "scale" );
-					return layout;
-				}
-			private:
-				Buffer buf;
-			};
-
-			outline.AddBindable( std::make_shared<TransformCBufferScaling>( gfx ) );
-
-			outlineRT.AddStep( std::move( outline ) );
+			outline.AddStep( std::move( draw ) );
 		}
-		AddTechnique( std::move( outlineRT ) );
+		AddTechnique( std::move( outline ) );
 	}
 }
 

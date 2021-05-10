@@ -37,10 +37,11 @@ BlendState::BlendState( Graphics & gfx, bool isBlending, std::optional<float> fa
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateBlendState( &descBlend, &pBlendState ) );
 }
 
-void BlendState::Bind( Graphics & gfx ) noexcept
+void BlendState::Bind( Graphics & gfx ) IFNOEXCEPT
 {
+	INFOMAN_NOHR( gfx );
 	const FLOAT* pBlendFactors = blendFactors ? blendFactors->data() : nullptr;
-	GetContext( gfx )->OMSetBlendState( pBlendState.Get(), pBlendFactors, 0xffffffffu );
+	GFX_CALL_THROW_INFO_ONLY( GetContext( gfx )->OMSetBlendState( pBlendState.Get(), pBlendFactors, 0xffffffffu ) );
 }
 
 void BlendState::SetFactor( float factor ) IFNOEXCEPT

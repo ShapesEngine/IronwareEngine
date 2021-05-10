@@ -17,7 +17,7 @@ class Mesh : public Drawable
 {
 public:
 	Mesh( Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale = 1.f ) IFNOEXCEPT;
-	void Submit( FrameExecutor& frame, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
+	void Submit( DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMLoadFloat4x4( &transform ); }
 
 private:

@@ -18,7 +18,7 @@ class RasterizerState : public Bindable
 {
 public:
 	RasterizerState( Graphics& gfx, bool isTwoSided );
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->RSSetState( pRasterizerState.Get() ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->RSSetState( pRasterizerState.Get() ); }
 	static std::shared_ptr<RasterizerState> Resolve( Graphics& gfx, bool isTwoSided ) { return BindableCollection::Resolve<RasterizerState>( gfx, isTwoSided ); }
 	static std::wstring GenerateUID( bool isBlending ) { return GET_CLASS_WNAME( RasterizerState ) + L"#" + ( isBlending ? L"true" : L"false" ); }
 	std::wstring GetUID() const noexcept override { return GenerateUID( isTwoSided ); }

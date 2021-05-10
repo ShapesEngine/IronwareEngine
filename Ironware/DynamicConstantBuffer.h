@@ -24,7 +24,8 @@
 	X( Float3 ) \
 	X( Float4 ) \
 	X( Matrix ) \
-	X( Bool )
+	X( Bool ) \
+	X( Integer )
 
 
 namespace dx = DirectX;
@@ -87,6 +88,13 @@ template<> struct Map<Bool>
 	static constexpr const char* code = "BL";
 	static constexpr bool valid = true;
 };
+template<> struct Map<Integer>
+{
+	using SysType = int;
+	static constexpr size_t hlslSize = sizeof( SysType );
+	static constexpr const char* code = "IN";
+	static constexpr bool valid = true;
+};
 
 // ensures that every leaf type in master list has an entry in the static attribute map
 #define X(el) static_assert(Map<el>::valid,"Missing map implementation for " #el);
@@ -141,7 +149,7 @@ public:
 	std::string GetSignature() const IFNOEXCEPT;
 	/**
 	 * @brief Check if element is "real"
-	 */ 
+	 */
 	bool Exists() const noexcept;
 	/**
 	 * @brief calculate array indexing offset
@@ -231,7 +239,7 @@ private:
 	// each element stores its own offset. this makes lookup to find its position in the byte buffer
 	// fast. Special handling is required for situations where arrays are involved
 	std::optional<size_t> offset;
-	Type type = Empty;
+	Type type = Type::Empty;
 	std::unique_ptr<ExtraDataBase> pExtraData;
 };
 

@@ -14,7 +14,7 @@ cbuffer Control
 
 float4 main( float2 uv : Texcoord ) : SV_Target
 {
-    uint width, height;
+    float width, height;
     tex.GetDimensions( width, height );
     float dx, dy;
     if( horizontal )
@@ -34,7 +34,7 @@ float4 main( float2 uv : Texcoord ) : SV_Target
     for( int i = -r; i <= r; i++ )
     {
         const float2 tc = uv + float2( dx * i, dy * i );
-        const float4 s = tex.Sample( splr, tc ).rgba;
+        const float4 s = tex.Sample( splr, tc );
         const float coef = coefficients[i + r];
         accAlpha += s.a * coef;
         maxColor = max( s.rgb, maxColor );

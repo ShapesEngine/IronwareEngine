@@ -6,17 +6,17 @@
  *
  *
  */
-#include "RenderJob.h"
+#include "Job.h"
 #include "Graphics.h"
 #include "Drawable.h"
 #include "RenderStep.h"
 
-RenderJob::RenderJob( const RenderStep* pStep, const Drawable * pDrawable ) :
+Job::Job( const RenderStep* pStep, const Drawable * pDrawable ) :
 	pStep( pStep ),
 	pDrawable( pDrawable )
 {}
 
-void RenderJob::Execute( Graphics & gfx ) const IFNOEXCEPT
+void Job::Execute( Graphics & gfx ) const IFNOEXCEPT
 {
 	pDrawable->Bind( gfx );
 	pStep->Bind( gfx );

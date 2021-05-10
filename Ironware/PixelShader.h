@@ -33,7 +33,7 @@ class PixelShader : public Bindable
 public:
 	PixelShader( Graphics& gfx, const std::wstring& path );
 
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetShader( pPixelShader.Get(), nullptr, 0u ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->PSSetShader( pPixelShader.Get(), nullptr, 0u ); }
 	static std::shared_ptr<PixelShader> Resolve( Graphics& gfx, const std::wstring& path ) { return BindableCollection::Resolve<PixelShader>( gfx, path ); }
 	static std::wstring GenerateUID( const std::wstring& path ) { return GET_CLASS_WNAME( PixelShader ) + L"#" + path; }
 	std::wstring GetUID() const noexcept override { return GenerateUID( path ); }

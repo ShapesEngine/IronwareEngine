@@ -45,7 +45,7 @@ public:
 	TransformCBuffer( Graphics& gfx, UINT slot = 0u );
 	void InitializeParentReference( const Drawable& parent ) noexcept override;
 	std::unique_ptr<CloningBindable> Clone() const noexcept override { return std::make_unique<TransformCBuffer>( *this ); }
-	void Bind( Graphics& gfx ) noexcept override { UpdateBind( gfx, GetTransform( gfx ) ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { UpdateBind( gfx, GetTransform( gfx ) ); }
 
 protected:
 	void UpdateBind( Graphics& gfx, const Transforms &transforms ) noexcept;

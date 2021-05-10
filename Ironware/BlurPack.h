@@ -25,7 +25,7 @@ public:
 	{
 		SetKernelGauss( gfx, radius, sigma );
 	}
-	void Bind( Graphics& gfx ) noexcept
+	void Bind( Graphics& gfx ) IFNOEXCEPT
 	{
 		shader.Bind( gfx );
 		pcb.Bind( gfx );

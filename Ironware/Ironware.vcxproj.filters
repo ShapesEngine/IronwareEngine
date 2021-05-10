@@ -177,9 +177,6 @@
     <ClCompile Include="Sheet.cpp">
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="TransformCBufferEx.cpp">
-      <Filter>Source Files\Bindable</Filter>
-    </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -210,19 +207,16 @@
     <ClCompile Include="RasterizerState.cpp">
       <Filter>Source Files\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="RenderJob.cpp">
+    <ClCompile Include="Job.cpp">
       <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
-    <ClCompile Include="RenderQueue.cpp">
+    <ClCompile Include="Pass.cpp">
       <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
     <ClCompile Include="RenderStep.cpp">
       <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
     <ClCompile Include="RenderTechnique.cpp">
-      <Filter>Source Files\RenderQueue</Filter>
-    </ClCompile>
-    <ClCompile Include="FrameExecutor.cpp">
       <Filter>Source Files\RenderQueue</Filter>
     </ClCompile>
     <ClCompile Include="TechniqueProbe.cpp">
@@ -247,6 +241,48 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderTarget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraphCompileException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderQueuePass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StepLinkingProbe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FullScreenPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferClearPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BindingPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurOutlineRenderGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalBlurPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalBlurPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sink.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScaleOutlineRenderGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformCBufferScaling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -638,9 +674,6 @@
     <ClInclude Include="Sheet.h">
       <Filter>Header Files\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="TransformCBufferEx.h">
-      <Filter>Header Files\Bindable</Filter>
-    </ClInclude>
     <ClInclude Include="Box.h">
       <Filter>Header Files\Drawable</Filter>
     </ClInclude>
@@ -692,19 +725,16 @@
     <ClInclude Include="NullPixelShader.h">
       <Filter>Header Files\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="RenderJob.h">
+    <ClInclude Include="Job.h">
       <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
-    <ClInclude Include="RenderQueue.h">
+    <ClInclude Include="Pass.h">
       <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
     <ClInclude Include="RenderStep.h">
       <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
     <ClInclude Include="RenderTechnique.h">
-      <Filter>Header Files\RenderQueue</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameExecutor.h">
       <Filter>Header Files\RenderQueue</Filter>
     </ClInclude>
     <ClInclude Include="TechniqueProbe.h">
@@ -735,6 +765,66 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BlurPack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraphCompileException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderQueuePass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StepLinkingProbe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LambertianPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FullScreenPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferClearPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BindingPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurOutlineRenderGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VerticalBlurPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalBlurPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurOutlineDrawingPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScaleOutlineRenderGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineDrawingPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineMaskGenerationPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestModelProbe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformCBufferScaling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

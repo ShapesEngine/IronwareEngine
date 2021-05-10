@@ -116,7 +116,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="BindingPass.cpp" />
+    <ClCompile Include="BlurOutlineRenderGraph.cpp" />
+    <ClCompile Include="BufferClearPass.cpp" />
     <ClCompile Include="DepthStencilView.cpp" />
+    <ClCompile Include="FullScreenPass.cpp" />
     <ClCompile Include="GraphicsResource.cpp" />
     <ClCompile Include="BlendState.cpp" />
     <ClCompile Include="Box.cpp" />
@@ -126,12 +130,12 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="DynamicConstantBuffer.cpp" />
-    <ClCompile Include="FrameExecutor.cpp" />
     <ClCompile Include="GDIPlusManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="HorizontalBlurPass.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputLayout.cpp" />
@@ -150,11 +154,15 @@
     <ClCompile Include="ModelException.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RasterizerState.cpp" />
-    <ClCompile Include="RenderJob.cpp" />
-    <ClCompile Include="RenderQueue.cpp" />
+    <ClCompile Include="RenderGraph.cpp" />
+    <ClCompile Include="RenderGraphCompileException.cpp" />
+    <ClCompile Include="Job.cpp" />
+    <ClCompile Include="Pass.cpp" />
+    <ClCompile Include="RenderQueuePass.cpp" />
     <ClCompile Include="RenderStep.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RenderTechnique.cpp" />
@@ -251,19 +259,26 @@
     <ClInclude Include="..\External\Includes\imgui\imstb_truetype.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="BindableCollection.h" />
+    <ClInclude Include="BindingPass.h" />
     <ClInclude Include="BlendState.h" />
+    <ClInclude Include="BlurOutlineDrawingPass.h" />
+    <ClInclude Include="BlurOutlineRenderGraph.h" />
     <ClInclude Include="BlurPack.h" />
     <ClInclude Include="Box.h" />
+    <ClInclude Include="BufferClearPass.h" />
+    <ClInclude Include="BufferResource.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonMacros.h" />
     <ClInclude Include="ConstantBuffersEx.h" />
     <ClInclude Include="DepthStencilState.h" />
     <ClInclude Include="DepthStencilView.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
-    <ClInclude Include="FrameExecutor.h" />
+    <ClInclude Include="FullScreenPass.h" />
     <ClInclude Include="GraphicsResource.h" />
+    <ClInclude Include="HorizontalBlurPass.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="DynamicLayout.h" />
+    <ClInclude Include="LambertianPass.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
@@ -271,30 +286,42 @@
     <ClInclude Include="ModelProbe.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NullPixelShader.h" />
+    <ClInclude Include="OutlineDrawingPass.h" />
+    <ClInclude Include="OutlineMaskGenerationPass.h" />
+    <ClInclude Include="Source.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RasterizerState.h" />
-    <ClInclude Include="RenderJob.h" />
-    <ClInclude Include="RenderQueue.h" />
+    <ClInclude Include="RenderGraph.h" />
+    <ClInclude Include="RenderGraphCompileException.h" />
+    <ClInclude Include="Job.h" />
+    <ClInclude Include="Pass.h" />
+    <ClInclude Include="RenderQueuePass.h" />
     <ClInclude Include="RenderStep.h" />
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="RenderTechnique.h" />
+    <ClInclude Include="ScaleOutlineRenderGraph.h" />
     <ClInclude Include="Sheet.h" />
+    <ClInclude Include="Sink.h" />
     <ClInclude Include="SkinnedBox.h" />
+    <ClCompile Include="ScaleOutlineRenderGraph.cpp" />
     <ClCompile Include="Sheet.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Sink.cpp" />
     <ClCompile Include="SolidSphere.cpp" />
+    <ClCompile Include="StepLinkingProbe.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="SurfaceEx.cpp" />
     <ClCompile Include="TechniqueProbe.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="PrimitiveTopology.cpp" />
     <ClCompile Include="TransformCBuffer.cpp" />
-    <ClCompile Include="TransformCBufferEx.cpp" />
+    <ClCompile Include="TransformCBufferScaling.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
+    <ClCompile Include="VerticalBlurPass.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowsMessageMap.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -328,16 +355,19 @@
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="StepLinkingProbe.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="SurfaceEx.h" />
     <ClInclude Include="TechniqueProbe.h" />
+    <ClInclude Include="TestModelProbe.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="PrimitiveTopology.h" />
     <ClInclude Include="TransformCBuffer.h" />
-    <ClInclude Include="TransformCBufferEx.h" />
+    <ClInclude Include="TransformCBufferScaling.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />
+    <ClInclude Include="VerticalBlurPass.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowExceptionMacros.h" />
     <ClInclude Include="WindowsMessageMap.h" />

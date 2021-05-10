@@ -7,11 +7,14 @@
  *
  */
 #include "DepthStencilView.h"
+#include "RenderTarget.h"
 #include "GraphicsExceptionMacros.h"
+
+#include <cassert>
 
 namespace wrl = Microsoft::WRL;
 
-DepthStencilView::DepthStencilView( Graphics & gfx, UINT width, UINT height )
+DepthStencilView::DepthStencilView( Graphics & gfx, UINT width, UINT height, bool canBindShaderInput )
 {
 	INFOMAN( gfx );
 
@@ -31,4 +34,46 @@ DepthStencilView::DepthStencilView( Graphics & gfx, UINT width, UINT height )
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateDepthStencilView(
 		pDepthStencil.Get(), nullptr, &pDepthStencilView
 	) );
+}
+
+void DepthStencilView::BindAsBuffer( Graphics & gfx, BufferResource * renderTarget ) IFNOEXCEPT
+{
+	assert( dynamic_cast<RenderTarget*>( renderTarget ) != nullptr );
+	BindAsBuffer( gfx, static_cast<RenderTarget*>( renderTarget ) );
+}
+
+ShaderInputDepthStencil::ShaderInputDepthStencil( Graphics & gfx, UINT slot ) :
+	ShaderInputDepthStencil( gfx, gfx.GetWidth(), gfx.GetHeight(), slot )
+{}
+
+ShaderInputDepthStencil::ShaderInputDepthStencil( Graphics & gfx, UINT width, UINT height, UINT slot ) :
+	DepthStencilView( gfx, width, height, true ),
+	slot( slot )
+{
+	INFOMAN( gfx );
+
+	wrl::ComPtr<ID3D11Resource> pRes;
+	pDepthStencilView->GetResource( &pRes );
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // this will need to be fixed
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = 1;
+	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateShaderResourceView(
+		pRes.Get(), &srvDesc, &pShaderResourceView
+	) );
+}
+
+OutputOnlyDepthStencil::OutputOnlyDepthStencil( Graphics & gfx ) :
+	OutputOnlyDepthStencil( gfx, gfx.GetWidth(), gfx.GetHeight() )
+{}
+
+OutputOnlyDepthStencil::OutputOnlyDepthStencil( Graphics & gfx, UINT width, UINT height ) :
+	DepthStencilView( gfx, width, height, false )
+{}
+
+void OutputOnlyDepthStencil::Bind( Graphics & gfx ) IFNOEXCEPT
+{
+	assert( "OutputOnlyDepthStencil cannot be bound as shader input" && false );
 }

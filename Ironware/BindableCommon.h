@@ -17,7 +17,7 @@
 #include "PixelShader.h"
 #include "NullPixelShader.h"
 #include "PrimitiveTopology.h"
-#include "TransformCBufferEx.h"
+#include "TransformCBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexShader.h"
 #include "RasterizerState.h"

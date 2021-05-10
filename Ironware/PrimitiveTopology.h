@@ -35,8 +35,8 @@ class PrimitiveTopology : public Bindable
 public:
 	PrimitiveTopology( Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetPrimitiveTopology( type ); }
-	static std::shared_ptr<PrimitiveTopology> Resolve( Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type ) { return BindableCollection::Resolve<PrimitiveTopology>( gfx, type ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->IASetPrimitiveTopology( type ); }
+	static std::shared_ptr<PrimitiveTopology> Resolve( Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) { return BindableCollection::Resolve<PrimitiveTopology>( gfx, type ); }
 	static std::wstring GenerateUID( D3D11_PRIMITIVE_TOPOLOGY type ) { return GET_CLASS_WNAME( PrimitiveTopology ) + L"#" + std::to_wstring( type ); }
 	std::wstring GetUID() const noexcept override { return GenerateUID( type ); }
 

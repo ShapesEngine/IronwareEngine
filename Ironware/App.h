@@ -17,8 +17,8 @@
 #include "Model.h"
 #include "Mesh.h"
 #include "Box.h"
-#include "FrameExecutor.h"
 #include "Material.h"
+#include "BlurOutlineRenderGraph.h"
 
  /**
   * @brief Base class that controls scene
@@ -45,8 +45,8 @@ private:
 	ImguiManager imguim;
 	Camera camera;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
-	FrameExecutor fexe{ wnd.Gfx() };
 	PointLight pointLight{ wnd.Gfx() };
+	BlurOutlineRenderGraph rg{ wnd.Gfx() };
 	//std::unique_ptr<class Mesh> pLoaded;
 	//Model goblin{ wnd.Gfx(), L"Models\\goblin\\GoblinX.obj", 5.f, { 4.f, 10.f, -16.f } };
 	/*Model nano{ wnd.Gfx(), L"Models\\nanosuit_textured\\nanosuit.obj" };

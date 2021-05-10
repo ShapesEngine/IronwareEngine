@@ -15,6 +15,9 @@
 
 #include <string>
 #include <typeinfo>
+#include <vector>
+#include <algorithm>
+#include <iterator>
 
 // default buffer size
 constexpr size_t DEFAULT_BUFFER_SIZE = 512;
@@ -57,4 +60,31 @@ std::wstring to_wide( const char* narrow );
 */
 std::string to_narrow( const wchar_t* wide );
 
+// shortcut for getting wide character class name
 #define GET_CLASS_WNAME(class) to_wide( typeid( class ).name() )
+
+template<class Iter>
+void SplitStringIter( const std::string& s, const std::string& delim, Iter out )
+{
+	if( delim.empty() )
+	{
+		*out++ = s;
+	}
+	else
+	{
+		size_t a = 0, b = s.find( delim );
+		for( ; b != std::string::npos;
+			a = b + delim.length(), b = s.find( delim, a ) )
+		{
+			*out++ = std::move( s.substr( a, b - a ) );
+		}
+		*out++ = std::move( s.substr( a, s.length() - a ) );
+	}
+}
+
+inline std::vector<std::string> SplitString( const std::string& s, const std::string& delim )
+{
+	std::vector<std::string> strings;
+	SplitStringIter( s, delim, std::back_inserter( strings ) );
+	return strings;
+}

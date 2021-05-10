@@ -7,7 +7,7 @@
  *
  */
 #include "RenderTechnique.h"
-#include "FrameExecutor.h"
+#include "RenderGraph.h"
 
 RenderTechnique::RenderTechnique( std::wstring name, bool startActive ) noexcept :
 	name( name ),
@@ -31,13 +31,21 @@ void RenderTechnique::Accept( TechniqueProbe & probe )
 	}
 }
 
-void RenderTechnique::Submit( FrameExecutor & frame, const Drawable & drawable ) const noexcept
+void RenderTechnique::Submit( const Drawable & drawable ) const noexcept
 {
 	if( active )
 	{
 		for( const auto& step : steps )
 		{
-			step.Submit( frame, drawable );
+			step.Submit( drawable );
 		}
+	}
+}
+
+void RenderTechnique::Link( RenderGraph& rg )
+{
+	for( auto& step : steps )
+	{
+		step.Link( rg );
 	}
 }

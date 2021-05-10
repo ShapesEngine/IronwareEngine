@@ -38,7 +38,7 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 
 	{
 		RenderTechnique techq;
-		RenderStep only{ 0ull };
+		RenderStep only{ "lambertian" };
 
 		auto pVertexShader = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
 		auto pVertexShaderBytecode = pVertexShader->GetBytecode();

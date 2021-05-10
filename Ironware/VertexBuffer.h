@@ -35,7 +35,7 @@ public:
 	VertexBuffer( Graphics& gfx, const VertexByteBuffer& vbuff, UINT offset = 0u );
 	VertexBuffer( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset = 0u );
 
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->IASetVertexBuffers( 0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset ); }
 
 	static std::shared_ptr<VertexBuffer> Resolve( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset = 0u );
 	std::wstring GetUID() const noexcept override { return GenerateUID( tag ); }

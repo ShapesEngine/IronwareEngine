@@ -15,6 +15,7 @@
 
 #include "GraphicsResource.h"
 #include "DxgiInfoManager.h"
+#include "CommonMacros.h"
 
 #include <memory>
 
@@ -40,7 +41,7 @@ public:
 	 * @brief Binds the bindable type to the pipeline
 	 * @param gfx Graphics object where the context and device are stored
 	*/
-	virtual void Bind( Graphics& gfx ) noexcept = 0;
+	virtual void Bind( Graphics& gfx ) IFNOEXCEPT = 0;
 	virtual ~Bindable() = default;
 	virtual std::wstring GetUID() const noexcept = 0;
 	virtual void InitializeParentReference( const class Drawable& ) noexcept {}

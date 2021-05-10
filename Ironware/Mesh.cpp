@@ -13,8 +13,8 @@ Mesh::Mesh( Graphics & gfx, const Material & mat, const aiMesh & mesh, float sca
 	Drawable( gfx, mat, mesh, scale )
 {}
 
-void Mesh::Submit( FrameExecutor& frame, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
+void Mesh::Submit( DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
 {
 	DirectX::XMStoreFloat4x4( &transform, accumulatedTransform );
-	Drawable::Submit( frame );
+	Drawable::Submit();
 }

@@ -34,15 +34,15 @@ void Drawable::AddTechnique( RenderTechnique tech_in ) noexcept
 	techniques.push_back( std::move( tech_in ) );
 }
 
-void Drawable::Submit( FrameExecutor & frame ) const noexcept
+void Drawable::Submit() const noexcept
 {
 	for( const auto& tech : techniques )
 	{
-		tech.Submit( frame, *this );
+		tech.Submit( *this );
 	}
 }
 
-void Drawable::Bind( Graphics & gfx ) const noexcept
+void Drawable::Bind( Graphics & gfx ) const IFNOEXCEPT
 {
 	pTopology->Bind( gfx );
 	pIndices->Bind( gfx );
@@ -60,4 +60,12 @@ void Drawable::Accept( TechniqueProbe & probe )
 UINT Drawable::GetIndexCount() const IFNOEXCEPT
 {
 	return pIndices->GetCount();
+}
+
+void Drawable::LinkTechniques( RenderGraph & rg )
+{
+	for( auto& tech : techniques )
+	{
+		tech.Link( rg );
+	}
 }

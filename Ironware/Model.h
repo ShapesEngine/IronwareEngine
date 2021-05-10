@@ -22,6 +22,7 @@
 
 class Node;
 class Mesh;
+class RenderGraph;
 
 /**
  * @brief Responsible class for drawing a mesh from specified file
@@ -30,9 +31,10 @@ class Model
 {
 public:
 	Model( Graphics& gfx, std::wstring path, float scale = 1.f, DirectX::XMFLOAT3 startingPos = { 0.f, 0.f, 0.f } );
-	void Submit( FrameExecutor& frame ) const IFNOEXCEPT;
+	void Submit() const IFNOEXCEPT;
 
 	void Accept( class ModelProbe& probe );
+	void LinkTechniques( RenderGraph& rg );
 	size_t GetNodeSize() const noexcept { return nodeNum; }
 	~Model() noexcept;
 

@@ -66,15 +66,23 @@ Model::Model( Graphics& gfx, std::wstring path, float scale, DirectX::XMFLOAT3 s
 	pRoot->SetAppliedTransform( DirectX::XMMatrixTranslationFromVector( DirectX::XMLoadFloat3( &startingPos ) ) );
 }
 
-void Model::Submit( FrameExecutor& frame ) const IFNOEXCEPT
+void Model::Submit() const IFNOEXCEPT
 {
 	/*pModelWindow->ApplyParameters();*/
-	pRoot->Submit( frame, dx::XMMatrixIdentity() );
+	pRoot->Submit( dx::XMMatrixIdentity() );
 }
 
 void Model::Accept( ModelProbe & probe )
 {
 	pRoot->Accept( probe );
+}
+
+void Model::LinkTechniques( RenderGraph & rg )
+{
+	for( auto& pMesh : meshPtrs )
+	{
+		pMesh->LinkTechniques( rg );
+	}
 }
 
 Model::~Model() noexcept = default;

@@ -39,7 +39,7 @@ class VertexShader : public Bindable
 public:
 	VertexShader( Graphics& gfx, const std::wstring& path );
 
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetShader( pVertexShader.Get(), nullptr, 0u ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->VSSetShader( pVertexShader.Get(), nullptr, 0u ); }
 	ID3DBlob* GetBytecode() const noexcept { return pBytecodeBlob.Get(); }
 	static std::shared_ptr<VertexShader> Resolve( Graphics& gfx, const std::wstring& path ) noexcept { return BindableCollection::Resolve<VertexShader>( gfx, path ); }
 	static std::wstring GenerateUID( const std::wstring path ) noexcept { return to_wide( typeid( VertexShader ).name() ) + L"#" + path; }

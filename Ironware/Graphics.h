@@ -26,6 +26,8 @@
 #include <memory>
 #include <random>
 
+class RenderTarget;
+
 class Graphics
 {
 	friend class GraphicsResource;
@@ -86,9 +88,8 @@ public:
 	void BeginFrame( float red, float green, float blue ) noexcept;
 	void EndFrame();
 	void DrawIndexed( UINT count ) IFNOEXCEPT;
-	void BindSwapBuffer() noexcept;
-	void BindSwapBuffer( const class DepthStencilView& dsv ) noexcept;
 
+	std::shared_ptr<RenderTarget> GetTarget() { return pTarget; }
 	UINT GetWidth() const noexcept { return width; }
 	UINT GetHeight() const noexcept { return height; }
 	void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
@@ -112,6 +113,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pImmediateContext;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTargetView;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView;
+	std::shared_ptr<RenderTarget> pTarget;
 };

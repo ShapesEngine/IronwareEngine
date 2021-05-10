@@ -18,13 +18,16 @@
 #include "ConstantBuffers.h"
 #include "CommonMacros.h"
 
+class RenderGraph;
+
 class PointLight
 {
 public:
 	PointLight( Graphics& gfx, float radius = 0.5f );
 	void SpawnControlWindow() noexcept;
-	void Submit( FrameExecutor& frame ) const IFNOEXCEPT;
+	void Submit() const IFNOEXCEPT;
 	void Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept;
+	void LinkTechniques( RenderGraph& rg );
 	void Reset() noexcept;
 
 private:

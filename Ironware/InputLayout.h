@@ -37,7 +37,7 @@ public:
 		const VertexLayout& layout_in,
 		ID3DBlob* pVertexShaderBytecode );
 
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }
 	static std::shared_ptr<InputLayout> Resolve( Graphics& gfx, const VertexLayout& layout, ID3DBlob* pVSB ) { return BindableCollection::Resolve<InputLayout>( gfx, layout, pVSB ); }
 	static std::wstring GenerateUID( const VertexLayout& layout, ID3DBlob* = nullptr ) { return GET_CLASS_WNAME( InputLayout ) + L"#" + layout.GetCode(); }
 	std::wstring GetUID() const noexcept override { return GenerateUID( layout ); }

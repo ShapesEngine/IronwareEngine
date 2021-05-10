@@ -37,14 +37,14 @@ class PixelConstantBufferEx : public ConstantBufferEx
 {
 public:
 	using ConstantBufferEx::ConstantBufferEx;
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->PSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->PSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
 };
 
 class VertexConstantBufferEx : public ConstantBufferEx
 {
 public:
 	using ConstantBufferEx::ConstantBufferEx;
-	void Bind( Graphics& gfx ) noexcept override { GetContext( gfx )->VSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
+	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->VSSetConstantBuffers( slot, 1u, pConstantBuffer.GetAddressOf() ); }
 };
 
 template<class T>
@@ -59,7 +59,7 @@ public:
 		T( gfx, buf.GetRootLayoutElement(), slot, &buf ),
 		buf( buf )
 	{}
-	void Bind( Graphics& gfx ) noexcept override
+	void Bind( Graphics& gfx ) IFNOEXCEPT override
 	{
 		if( dirty )
 		{

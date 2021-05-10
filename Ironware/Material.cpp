@@ -8,6 +8,8 @@
  */
 #include "Material.h"
 #include "IronUtils.h"
+#include "TransformCBufferScaling.h"
+#include "DepthStencilState.h"
 
 Material::Material( Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path ) IFNOEXCEPT :
 modelPath( path.wstring() )
@@ -21,7 +23,7 @@ modelPath( path.wstring() )
 	// phong technique
 	{
 		RenderTechnique phong{ L"Phong" };
-		RenderStep step( 0ull );
+		RenderStep step( "lambertian" );
 		std::wstring shaderCode = L"Phong";
 		aiString texFileName;
 
@@ -88,7 +90,6 @@ modelPath( path.wstring() )
 		// common (post)
 		{
 			step.AddBindable( std::make_shared<TransformCBuffer>( gfx, 0u ) );
-			step.AddBindable( BlendState::Resolve( gfx, false ) );
 			auto pvs = VertexShader::Resolve( gfx, shaderCode + L"_VS.cso" );
 			auto pvsbc = pvs->GetBytecode();
 			step.AddBindable( std::move( pvs ) );
@@ -132,28 +133,16 @@ modelPath( path.wstring() )
 	{
 		RenderTechnique outline( L"Outline", false );
 		{
-			RenderStep mask( 1 );
+			RenderStep mask( "outlineMask" );
 
-			auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
-			auto pvsbc = pvs->GetBytecode();
-			mask.AddBindable( std::move( pvs ) );
-
-			// TODO: better sub-layout generation tech for future consideration maybe
-			mask.AddBindable( InputLayout::Resolve( gfx, vtxLayout, pvsbc ) );
+			mask.AddBindable( InputLayout::Resolve( gfx, vtxLayout, VertexShader::Resolve(gfx, L"Solid_VS.cso")->GetBytecode() ) );
 
 			mask.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
-
-			// TODO: might need to specify rasterizer when doubled-sided models start being used
 
 			outline.AddStep( std::move( mask ) );
 		}
 		{
-			RenderStep draw( 2 );
-
-			// these can be pass-constant (tricky due to layout issues)
-			auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
-			auto pvsbc = pvs->GetBytecode();
-			draw.AddBindable( std::move( pvs ) );
+			RenderStep draw( "outlineDraw" );
 
 			// this can be pass-constant
 			draw.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
@@ -166,7 +155,7 @@ modelPath( path.wstring() )
 				draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 			}
 
-			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, pvsbc ) );
+			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, VertexShader::Resolve(gfx, L"Solid_VS.cso")->GetBytecode() ) );
 
 			draw.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 

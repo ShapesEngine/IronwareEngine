@@ -21,7 +21,7 @@ class BlendState : public Bindable
 {
 public:
 	BlendState( Graphics& gfx, bool isBlending, std::optional<float> factor = {} );
-	void Bind( Graphics& gfx ) noexcept override;
+	void Bind( Graphics& gfx ) IFNOEXCEPT override;
 	void SetFactor( float factor ) IFNOEXCEPT;
 	float GetFactor() const IFNOEXCEPT;
 	static std::shared_ptr<BlendState> Resolve( Graphics& gfx, bool isBlending, std::optional<float> factor = {} ) { return BindableCollection::Resolve<BlendState>( gfx, isBlending, factor ); }

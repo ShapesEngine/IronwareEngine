@@ -21,6 +21,7 @@
 
 #include <memory>
 
+class RenderGraph;
 class TechniqueProbe;
 class Material;
 struct aiMesh;
@@ -50,10 +51,11 @@ public:
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void AddTechnique( RenderTechnique tech_in ) noexcept;
-	void Submit( class FrameExecutor& frame ) const noexcept;
-	void Bind( Graphics& gfx ) const noexcept;
+	void Submit() const noexcept;
+	void Bind( Graphics& gfx ) const IFNOEXCEPT;
 	void Accept( class TechniqueProbe& probe );
 	UINT GetIndexCount() const IFNOEXCEPT;
+	void LinkTechniques( RenderGraph& rg );
 
 protected:
 	std::shared_ptr<class IndexBuffer> pIndices;

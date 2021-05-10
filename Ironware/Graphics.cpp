@@ -22,11 +22,13 @@
 #include "IronUtils.h"
 #include "GraphicsExceptionMacros.h"
 #include "DepthStencilView.h"
+#include "RenderTarget.h"
 
 #include <imgui/imgui_impl_dx11.h>
 #include <imgui/imgui_impl_win32.h>
 
 #include <sstream>
+#include <array>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
@@ -89,10 +91,20 @@ Graphics::Graphics( HWND hWnd )
 	) );
 
 	// gain access to texture subresource in swap chain (back buffer)
-	wrl::ComPtr<ID3D11Resource> pBackBuffer;
+	wrl::ComPtr<ID3D11Texture2D> pBackBuffer;
 	// 0 is back buffer's index
-	GFX_CALL_THROW_INFO( pSwapChain->GetBuffer( 0u, __uuidof( ID3D11Resource ), &pBackBuffer ) );
-	GFX_CALL_THROW_INFO( pDevice->CreateRenderTargetView( pBackBuffer.Get(), nullptr, &pRenderTargetView ) );
+	GFX_CALL_THROW_INFO( pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), &pBackBuffer ) );
+	pTarget = std::shared_ptr<RenderTarget>{ new OutputOnlyRenderTarget( *this,pBackBuffer.Get() ) };
+
+	// viewport always fullscreen (for now)
+	D3D11_VIEWPORT vp;
+	vp.Width = (float)width;
+	vp.Height = (float)height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	pImmediateContext->RSSetViewports( 1u, &vp );
 
 	ImGui_ImplDX11_Init( pDevice.Get(), pImmediateContext.Get() );
 }
@@ -104,9 +116,6 @@ Graphics::~Graphics()
 
 void Graphics::BeginFrame( float red, float green, float blue ) noexcept
 {
-	const float color[] = { red, green, blue, 0.f };
-	pImmediateContext->ClearRenderTargetView( pRenderTargetView.Get(), color );
-
 	// =======================================================================
 	// imgui begin frame
 	// -----------------------------------------------------------------------
@@ -149,34 +158,6 @@ void Graphics::EndFrame()
 void Graphics::DrawIndexed( UINT count ) IFNOEXCEPT
 {
 	GFX_CALL_THROW_INFO_ONLY( pImmediateContext->DrawIndexed( count, 0u, 0 ) );
-}
-
-void Graphics::BindSwapBuffer() noexcept
-{
-	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), nullptr );
-	// configure viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)width;
-	vp.Height = (FLOAT)height;
-	vp.MinDepth = 0.f;
-	vp.MaxDepth = 1.f;
-	vp.TopLeftX = 0.f;
-	vp.TopLeftY = 0.f;
-	pImmediateContext->RSSetViewports( 1u, &vp );
-}
-
-void Graphics::BindSwapBuffer( const DepthStencilView & dsv ) noexcept
-{
-	pImmediateContext->OMSetRenderTargets( 1u, pRenderTargetView.GetAddressOf(), dsv.pDepthStencilView.Get() );
-	// configure viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)width;
-	vp.Height = (FLOAT)height;
-	vp.MinDepth = 0.f;
-	vp.MaxDepth = 1.f;
-	vp.TopLeftX = 0.f;
-	vp.TopLeftY = 0.f;
-	pImmediateContext->RSSetViewports( 1u, &vp );
 }
 
 #pragma endregion Graphics

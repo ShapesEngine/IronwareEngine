@@ -23,6 +23,7 @@ struct ExtraData
 	struct Array : public LayoutElement::ExtraDataBase
 	{
 		std::optional<LayoutElement> layoutElement;
+		size_t element_size;
 		size_t size = 0u;
 	};
 };
@@ -55,7 +56,7 @@ std::pair<size_t, const LayoutElement*> LayoutElement::CalculateIndexingOffset( 
 	assert( "Indexing into non-array" && type == Array );
 	const auto& data = static_cast<ExtraData::Array&>( *pExtraData );
 	assert( index < data.size );
-	return { offset + data.layoutElement->GetSizeInBytes() * index,&*data.layoutElement };
+	return { offset + data.element_size * index,&*data.layoutElement };
 }
 
 LayoutElement& LayoutElement::operator[]( const std::string& key ) IFNOEXCEPT
@@ -147,7 +148,7 @@ LayoutElement& LayoutElement::Set( Type addedType, size_t size ) IFNOEXCEPT
 }
 
 LayoutElement::LayoutElement( Type typeIn ) IFNOEXCEPT :
-	type{ typeIn }
+type{ typeIn }
 {
 	assert( typeIn != Empty );
 	if( typeIn == Struct )
@@ -215,6 +216,7 @@ size_t LayoutElement::FinalizeForArray( size_t offsetIn )
 	assert( data.size != 0u );
 	offset = AdvanceToBoundary( offsetIn );
 	data.layoutElement->Finalize( *offset );
+	data.element_size = LayoutElement::AdvanceToBoundary( data.layoutElement->GetSizeInBytes() );
 	return GetOffsetEnd();
 }
 

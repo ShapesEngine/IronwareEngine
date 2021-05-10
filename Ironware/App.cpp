@@ -14,6 +14,7 @@
 #include "ModelProbe.h"
 #include "Node.h"
 #include "IronMath.h"
+#include "TestModelProbe.h"
 
 #include <DirectXTex/DirectXTex.h>
 #include <assimp/Importer.hpp>
@@ -22,6 +23,9 @@
 
 App::App()
 {
+	pointLight.LinkTechniques( rg );
+	sponza.LinkTechniques( rg );
+
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );
 	wnd.EnableMouseCursor();
 	//auto camPos = camera.GetPos();
@@ -65,217 +69,22 @@ void App::ProcessFrame()
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
 	//goblin.Submit( fexe );
-	pointLight.Submit( fexe );
-	sponza.Submit( fexe );
+	pointLight.Submit();
+	sponza.Submit();
 	//pLoaded->Submit( fexe, DirectX::XMMatrixIdentity() );
-	fexe.Execute( wnd.Gfx() );
+	rg.Execute( wnd.Gfx() );
 	/*sheet1.Draw( wnd.Gfx() );
 	sheet2.Draw( wnd.Gfx() );*/
 
-	class TP : public TechniqueProbe
-	{
-	public:
-		void OnSetTechnique() override
-		{
-			using namespace std::string_literals;
-			ImGui::TextColored( { 0.4f,1.0f,0.6f,1.0f }, to_narrow( pTech->GetName() ).c_str() );
-			bool active = pTech->IsActive();
-			ImGui::Checkbox( ( "Tech Active##"s + std::to_string( techIdx ) ).c_str(), &active );
-			pTech->SetActive( active );
-		}
-		bool OnVisitBuffer( Buffer& buf ) override
-		{
-			namespace dx = DirectX;
-			float dirty = false;
-			const auto dcheck = [&dirty]( bool changed ) {dirty = dirty || changed; };
-			auto tag = [tagScratch = std::string{}, tagString = "##" + std::to_string( bufIdx )]
-			( const char* label ) mutable
-			{
-				tagScratch = label + tagString;
-				return tagScratch.c_str();
-			};
-
-			if( auto v = buf["scale"]; v.Exists() )
-			{
-				dcheck( ImGui::SliderFloat( tag( "Scale" ), &v, 1.0f, 2.0f, "%.3f", 3.5f ) );
-			}
-			if( auto v = buf["offset"]; v.Exists() )
-			{
-				dcheck( ImGui::SliderFloat( tag( "Offset" ), &v, 0.0f, 1.0f, "%.3f", 2.5f ) );
-			}
-			if( auto v = buf["materialColor"]; v.Exists() )
-			{
-				dcheck( ImGui::ColorPicker3( tag( "Color" ), reinterpret_cast<float*>( &static_cast<dx::XMFLOAT3&>( v ) ) ) );
-			}
-			if( auto v = buf["specularColor"]; v.Exists() )
-			{
-				dcheck( ImGui::ColorPicker3( tag( "Spec. Color" ), reinterpret_cast<float*>( &static_cast<dx::XMFLOAT3&>( v ) ) ) );
-			}
-			if( auto v = buf["specularGloss"]; v.Exists() )
-			{
-				dcheck( ImGui::SliderFloat( tag( "Glossiness" ), &v, 1.0f, 100.0f, "%.1f", 1.5f ) );
-			}
-			if( auto v = buf["specularWeight"]; v.Exists() )
-			{
-				dcheck( ImGui::SliderFloat( tag( "Spec. Weight" ), &v, 0.0f, 2.0f ) );
-			}
-			if( auto v = buf["useSpecMap"]; v.Exists() )
-			{
-				dcheck( ImGui::Checkbox( tag( "Spec. Map Enable" ), &v ) );
-			}
-			if( auto v = buf["useNormalMap"]; v.Exists() )
-			{
-				dcheck( ImGui::Checkbox( tag( "Normal Map Enable" ), &v ) );
-			}
-			if( auto v = buf["normalMapWeight"]; v.Exists() )
-			{
-				dcheck( ImGui::SliderFloat( tag( "Normal Map Weight" ), &v, 0.0f, 2.0f ) );
-			}
-			return dirty;
-		}
-	};
-
-	class MP : ModelProbe
-	{
-	public:
-		void SpawnWindow( Model& model )
-		{
-			ImGui::Begin( "Model" );
-			ImGui::Columns( 2, nullptr, true );
-			model.Accept( *this );
-
-			ImGui::NextColumn();
-			if( pSelectedNode )
-			{
-				bool dirty = false;
-				const auto dcheck = [&dirty]( bool changed ) {dirty = dirty || changed; };
-				auto& tf = ResolveTransform();
-				ImGui::TextColored( { 0.4f,1.0f,0.6f,1.0f }, "Translation" );
-				dcheck( ImGui::SliderFloat( "X", &tf.x, -60.f, 60.f ) );
-				dcheck( ImGui::SliderFloat( "Y", &tf.y, -60.f, 60.f ) );
-				dcheck( ImGui::SliderFloat( "Z", &tf.z, -60.f, 60.f ) );
-				ImGui::TextColored( { 0.4f,1.0f,0.6f,1.0f }, "Orientation" );
-				dcheck( ImGui::SliderAngle( "X-rotation", &tf.xRot, -180.0f, 180.0f ) );
-				dcheck( ImGui::SliderAngle( "Y-rotation", &tf.yRot, -180.0f, 180.0f ) );
-				dcheck( ImGui::SliderAngle( "Z-rotation", &tf.zRot, -180.0f, 180.0f ) );
-				if( dirty )
-				{
-					pSelectedNode->SetAppliedTransform(
-						dx::XMMatrixRotationX( tf.xRot ) *
-						dx::XMMatrixRotationY( tf.yRot ) *
-						dx::XMMatrixRotationZ( tf.zRot ) *
-						dx::XMMatrixTranslation( tf.x, tf.y, tf.z )
-					);
-				}
-			}
-			if( pSelectedNode )
-			{
-				TP probe;
-				pSelectedNode->Accept( probe );
-			}
-			ImGui::End();
-		}
-
-	protected:
-		bool PushNode( Node& node ) override
-		{
-			const auto index = node.GetID();
-			const auto node_flags =
-				( pSelectedNode != nullptr && index == pSelectedNode->GetID() ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None ) |
-				( node.HasChildren() ? ImGuiTreeNodeFlags_OpenOnArrow : ImGuiTreeNodeFlags_Leaf );
-
-			const bool isExpanded = ImGui::TreeNodeEx( reinterpret_cast<void*>( (intptr_t)index ), node_flags, node.GetName().c_str() );
-			if( ImGui::IsItemClicked() )
-			{
-				// used to change the highlighted node on selection change
-				struct Probe : public TechniqueProbe
-				{
-					void OnSetTechnique() override
-					{
-						if( pTech->GetName() == L"Outline" )
-						{
-							pTech->SetActive( highlighted );
-						}
-					}
-					bool highlighted = false;
-				} probe;
-
-				// remove highlight on prev-selected node
-				if( pSelectedNode != nullptr )
-				{
-					pSelectedNode->Accept( probe );
-				}
-				// add highlight to newly-selected node
-				probe.highlighted = true;
-				node.Accept( probe );
-				pSelectedNode = &node;
-			}
-			return isExpanded;
-		}
-
-		void PopNode( Node& node ) override { ImGui::TreePop(); }
-
-	private:
-		Node* pSelectedNode = nullptr;
-		struct TransformParameters
-		{
-			float xRot = 0.0f;
-			float yRot = 0.0f;
-			float zRot = 0.0f;
-			float x = 0.0f;
-			float y = 0.0f;
-			float z = 0.0f;
-		};
-		std::unordered_map<int, TransformParameters> transformParams;
-	private:
-		TransformParameters& ResolveTransform() noexcept
-		{
-			const auto id = pSelectedNode->GetID();
-			auto i = transformParams.find( id );
-			if( i == transformParams.end() )
-			{
-				return LoadTransform( id );
-			}
-			return i->second;
-		}
-		TransformParameters& LoadTransform( int id ) noexcept
-		{
-			const auto& applied = pSelectedNode->GetAppliedTransform();
-			const auto angles = extract_euler_angles( applied );
-			const auto translation = extract_translation( applied );
-			TransformParameters tp;
-			tp.zRot = angles.z;
-			tp.xRot = angles.x;
-			tp.yRot = angles.y;
-			tp.x = translation.x;
-			tp.y = translation.y;
-			tp.z = translation.z;
-			return transformParams.insert( { id,{ tp } } ).first->second;
-		}
-	};
-
+	// imgui windows
 	static MP modelProbe;
-
-	// imgui window to control camera & light
 	modelProbe.SpawnWindow( sponza );
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
-	fexe.ShowWindows( wnd.Gfx() );
 
-	//sponza.ShowWindow( wnd.Gfx(), "sponza" );
-	/*sheet1.SpawnControlWindow( wnd.Gfx(), "sheet1" );
-	sheet2.SpawnControlWindow( wnd.Gfx(), "sheet2" );*/
-	/*goblin.ShowWindow( wnd.Gfx(), "Goblin" );
-	nano.ShowWindow( wnd.Gfx(), "Nanosuit" );
-	wallObj.ShowWindow( wnd.Gfx(), "Brickwall" );
-	wall.SpawnControlWindow( wnd.Gfx() );*/
-
-	//box1.SpawnControlWindow( wnd.Gfx(), "box1" );
-	//box2.SpawnControlWindow( wnd.Gfx(), "box2" );
-
-	// present frame
+	// present
 	wnd.Gfx().EndFrame();
-	fexe.Reset();
+	rg.Reset();
 }
 
 void App::HandleInput()

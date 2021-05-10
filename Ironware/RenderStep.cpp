@@ -7,14 +7,15 @@
  *
  */
 #include "RenderStep.h"
-#include "FrameExecutor.h"
+#include "RenderQueuePass.h"
+#include "RenderGraph.h"
 
-RenderStep::RenderStep( size_t targetPass_in ) :
-	targetPass{ targetPass_in }
+RenderStep::RenderStep( std::string targetPassName ) :
+	targetPassName{ std::move( targetPassName ) }
 {}
 
 RenderStep::RenderStep( const RenderStep & src ) noexcept :
-	targetPass( src.targetPass )
+	targetPassName( src.targetPassName )
 {
 	bindables.reserve( src.bindables.size() );
 	for( auto& pb : src.bindables )
@@ -30,12 +31,12 @@ RenderStep::RenderStep( const RenderStep & src ) noexcept :
 	}
 }
 
-void RenderStep::Submit( FrameExecutor & frame, const Drawable & drawable ) const
+void RenderStep::Submit( const Drawable & drawable ) const
 {
-	frame.Accept( RenderJob{ this, &drawable }, targetPass );
+	pTargetPass->Accept( Job{ this, &drawable } );
 }
 
-void RenderStep::Bind( Graphics & gfx ) const
+void RenderStep::Bind( Graphics & gfx ) const IFNOEXCEPT
 {
 	for( const auto& b : bindables )
 	{
@@ -58,4 +59,10 @@ void RenderStep::Accept( TechniqueProbe & probe )
 	{
 		pb->Accept( probe );
 	}
+}
+
+void RenderStep::Link( RenderGraph & rg )
+{
+	assert( !pTargetPass );
+	pTargetPass = &rg.GetRenderQueue( targetPassName );
 }

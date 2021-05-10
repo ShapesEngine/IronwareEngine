@@ -14,6 +14,9 @@
 
 #include <vector>
 
+class RenderQueuePass;
+class RenderGraph;
+
 /**
  * @brief Class that is responsible for submitting steps of the object rendering
  * * to the frame executor
@@ -21,16 +24,17 @@
 class RenderStep
 {
 public:
-	RenderStep( size_t targetPass_in );
+	RenderStep( std::string targetPassName );
 	RenderStep( RenderStep&& ) = default;
 	RenderStep( const RenderStep & src ) noexcept;
 	RenderStep& operator=( const RenderStep& ) = delete;
 	RenderStep& operator=( RenderStep&& ) = delete;
 	void AddBindable( std::shared_ptr<Bindable> bind_in ) noexcept { bindables.push_back( std::move( bind_in ) ); }
-	void Submit( class FrameExecutor& frame, const class Drawable& drawable ) const;
-	void Bind( Graphics& gfx ) const;
+	void Submit( const class Drawable& drawable ) const;
+	void Bind( Graphics& gfx ) const IFNOEXCEPT;
 	void InitializeParentReferences( const class Drawable& parent ) noexcept;
 	void Accept( TechniqueProbe& probe );
+	void Link(RenderGraph& rg);
 
 protected:
 	/**
@@ -42,8 +46,9 @@ protected:
 	B* QueryBindable() const;
 
 private:
-	size_t targetPass;
 	std::vector<std::shared_ptr<Bindable>> bindables;
+	RenderQueuePass* pTargetPass = nullptr;
+	std::string targetPassName;
 };
 
 template<typename B>

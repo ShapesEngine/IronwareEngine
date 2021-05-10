@@ -7,7 +7,6 @@
  * \date November 2020
  */
 #include "PointLight.h"
-#include "FrameExecutor.h"
 
 #include <imgui/imgui.h>
 
@@ -45,12 +44,12 @@ void PointLight::SpawnControlWindow() noexcept
 	ImGui::End();
 }
 
-void PointLight::Submit( FrameExecutor& frame ) const IFNOEXCEPT
+void PointLight::Submit() const IFNOEXCEPT
 {
 	const DirectX::XMFLOAT3A color = { cbufData.diffuseColor.x, cbufData.diffuseColor.y, cbufData.diffuseColor.z };
 	//mesh.UpdateColor( gfx, color );
 	mesh.SetPosition( cbufData.pos );
-	mesh.Submit( frame );
+	mesh.Submit();
 }
 
 void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept
@@ -64,6 +63,11 @@ void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept
 	// ------------------------------------------------------------------------------
 	cbuffer.Update( gfx, dataCopy );
 	cbuffer.Bind( gfx );
+}
+
+void PointLight::LinkTechniques( RenderGraph & rg )
+{
+	mesh.LinkTechniques( rg );
 }
 
 void PointLight::Reset() noexcept

@@ -8,7 +8,6 @@
  */
 #include "Node.h"
 #include "Mesh.h"
-#include "FrameExecutor.h"
 #include "Model.h"
 #include "ModelProbe.h"
 
@@ -21,7 +20,7 @@ Node::Node( std::vector<Mesh*> meshPtrs, const std::string & name, uint32_t inde
 	dx::XMStoreFloat4x4( &appliedTransform, dx::XMMatrixIdentity() );
 }
 
-void Node::Submit( FrameExecutor& frame, dx::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
+void Node::Submit( dx::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
 {
 	const auto built =
 		dx::XMLoadFloat4x4( &appliedTransform ) *
@@ -29,12 +28,12 @@ void Node::Submit( FrameExecutor& frame, dx::FXMMATRIX accumulatedTransform ) co
 		accumulatedTransform;
 	for( const auto pm : meshPtrs )
 	{
-		pm->Submit( frame, built );
+		pm->Submit( built );
 	}
 
 	for( const auto& pc : childPtrs )
 	{
-		pc->Submit( frame, built );
+		pc->Submit( built );
 	}
 }
 
