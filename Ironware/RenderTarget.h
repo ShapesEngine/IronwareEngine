@@ -1,9 +1,18 @@
+/*!
+ * \file RenderTarget.h
+ *
+ * \author Yernar Aldabergenov
+ * \date May 2021
+ *
+ * 
+ */
 #pragma once
+
 #include "Bindable.h"
 #include "BufferResource.h"
 
 class Graphics;
-
+class SurfaceEx;
 class DepthStencilView;
 
 class RenderTarget : public Bindable, public BufferResource
@@ -34,6 +43,7 @@ class ShaderInputRenderTarget : public RenderTarget
 public:
 	ShaderInputRenderTarget( Graphics& gfx, UINT width, UINT height, UINT slot );
 	void Bind( Graphics& gfx ) IFNOEXCEPT override;
+	SurfaceEx ToSurface( Graphics& gfx ) const;
 
 private:
 	UINT slot;

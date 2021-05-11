@@ -9,6 +9,7 @@
 #include "RenderTarget.h"
 #include "GraphicsExceptionMacros.h"
 #include "DepthStencilView.h"
+#include "SurfaceEx.h"
 
 #include <array>
 
@@ -146,6 +147,49 @@ void ShaderInputRenderTarget::Bind( Graphics& gfx ) IFNOEXCEPT
 {
 	INFOMAN_NOHR( gfx );
 	GFX_CALL_THROW_INFO_ONLY( GetContext( gfx )->PSSetShaderResources( slot, 1, pShaderResourceView.GetAddressOf() ) );
+}
+
+SurfaceEx ShaderInputRenderTarget::ToSurface( Graphics & gfx ) const
+{
+	INFOMAN( gfx );
+	namespace wrl = Microsoft::WRL;
+
+	// creating a temp texture compatible with the source, but with CPU read access
+	wrl::ComPtr<ID3D11Resource> pResSource;
+	pShaderResourceView->GetResource( &pResSource );
+	wrl::ComPtr<ID3D11Texture2D> pTexSource;
+	pResSource.As( &pTexSource );
+	D3D11_TEXTURE2D_DESC textureDesc;
+	pTexSource->GetDesc( &textureDesc );
+	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	textureDesc.Usage = D3D11_USAGE_STAGING;
+	textureDesc.BindFlags = 0;
+	wrl::ComPtr<ID3D11Texture2D> pTexTemp;
+	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateTexture2D(
+		&textureDesc, nullptr, &pTexTemp
+	) );
+
+	// copy texture contents
+	GFX_CALL_THROW_INFO_ONLY( GetContext( gfx )->CopyResource( pTexTemp.Get(), pTexSource.Get() ) );
+
+	// create Surface and copy from temp texture to it
+	const auto width = GetWidth();
+	const auto height = GetHeight();
+	SurfaceEx s{ width, height };
+	D3D11_MAPPED_SUBRESOURCE msr = {};
+	GFX_CALL_THROW_INFO( GetContext( gfx )->Map( pTexTemp.Get(), 0, D3D11_MAP::D3D11_MAP_READ, 0u, &msr ) );
+	auto pSrcBytes = static_cast<const std::byte*>( msr.pData );
+	for( unsigned int y = 0; y < height; y++ )
+	{
+		auto pSrcRow = reinterpret_cast<const SurfaceEx::Color*>( pSrcBytes + msr.RowPitch * size_t( y ) );
+		for( unsigned int x = 0; x < width; x++ )
+		{
+			s.PutPixel( x, y, *( pSrcRow + x ) );
+		}
+	}
+	GFX_CALL_THROW_INFO_ONLY( GetContext( gfx )->Unmap( pTexTemp.Get(), 0u ) );
+
+	return s;
 }
 
 
