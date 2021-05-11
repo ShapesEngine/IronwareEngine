@@ -40,7 +40,7 @@ void RenderGraph::SetSinkTarget( const std::string& sinkName, const std::string&
 	{
 		throw RGC_EXCEPTION( "Global sink does not exist: " + sinkName );
 	}
-	auto targetSplit = SplitString( target, "." );
+	auto targetSplit = split_string( target, "." );
 	if( targetSplit.size() != 2u )
 	{
 		throw RGC_EXCEPTION( "Input target has incorrect format" );

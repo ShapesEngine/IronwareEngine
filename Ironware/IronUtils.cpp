@@ -44,3 +44,10 @@ std::string to_narrow( const wchar_t * wide )
 	narrow[DEFAULT_BUFFER_SIZE - 1] = '\0';
 	return narrow;
 }
+
+std::vector<std::string> split_string( const std::string & s, const std::string & delim )
+{
+	std::vector<std::string> strings;
+	split_string_iter( s, delim, std::back_inserter( strings ) );
+	return strings;
+}

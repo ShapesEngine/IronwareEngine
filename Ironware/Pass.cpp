@@ -109,7 +109,7 @@ void Pass::RegisterSource( std::unique_ptr<Source> source )
 void Pass::SetSinkLinkage( const std::string& registeredName, const std::string& target )
 {
 	auto& sink = GetSink( registeredName );
-	auto targetSplit = SplitString( target, "." );
+	auto targetSplit = split_string( target, "." );
 	if( targetSplit.size() != 2u )
 	{
 		throw RGC_EXCEPTION( "Input target has incorrect format" );

@@ -64,7 +64,7 @@ std::string to_narrow( const wchar_t* wide );
 #define GET_CLASS_WNAME(class) to_wide( typeid( class ).name() )
 
 template<class Iter>
-void SplitStringIter( const std::string& s, const std::string& delim, Iter out )
+void split_string_iter( const std::string& s, const std::string& delim, Iter out )
 {
 	if( delim.empty() )
 	{
@@ -82,9 +82,4 @@ void SplitStringIter( const std::string& s, const std::string& delim, Iter out )
 	}
 }
 
-inline std::vector<std::string> SplitString( const std::string& s, const std::string& delim )
-{
-	std::vector<std::string> strings;
-	SplitStringIter( s, delim, std::back_inserter( strings ) );
-	return strings;
-}
+std::vector<std::string> split_string( const std::string& s, const std::string& delim );
