@@ -60,7 +60,9 @@ Box::Box( Graphics & gfx, float size )
 			only.AddBindable( Sampler::Resolve( gfx ) );
 
 			auto pvs = VertexShader::Resolve( gfx, L"PhongDif_VS.cso" );
-			auto pvsbc = pvs->GetBytecode();
+
+			only.AddBindable( InputLayout::Resolve( gfx, layout, *pvs ) );
+
 			only.AddBindable( std::move( pvs ) );
 
 			only.AddBindable( PixelShader::Resolve( gfx, L"PhongDif_PS.cso" ) );
@@ -75,7 +77,6 @@ Box::Box( Graphics & gfx, float size )
 			buf["specularGloss"] = 20.f;
 			only.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
-			only.AddBindable( InputLayout::Resolve( gfx, layout, pvsbc ) );
 
 			only.AddBindable( RasterizerState::Resolve( gfx, false ) );
 
@@ -92,7 +93,7 @@ Box::Box( Graphics & gfx, float size )
 			RenderStep mask( "outlineMask" );
 
 			// TODO: better sub-layout generation tech for future consideration maybe
-			mask.AddBindable( InputLayout::Resolve( gfx, layout, VertexShader::Resolve( gfx, L"Solid_VS.cso" )->GetBytecode() ) );
+			mask.AddBindable( InputLayout::Resolve( gfx, layout, *VertexShader::Resolve( gfx, L"Solid_VS.cso" ) ) );
 
 			mask.AddBindable( std::move( tcb ) );
 
@@ -110,7 +111,7 @@ Box::Box( Graphics & gfx, float size )
 			draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
 			// TODO: better sub-layout generation tech for future consideration maybe
-			draw.AddBindable( InputLayout::Resolve( gfx, layout, VertexShader::Resolve( gfx, L"Solid_VS.cso" )->GetBytecode() ) );
+			draw.AddBindable( InputLayout::Resolve( gfx, layout, *VertexShader::Resolve( gfx, L"Solid_VS.cso" ) ) );
 
 			draw.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 

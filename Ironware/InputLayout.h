@@ -14,6 +14,7 @@
 #include "BindableCollection.h"
 #include "IronUtils.h"
 #include "Vertex.h"
+#include "VertexShader.h"
 
 /*!
  * \class InputLayout
@@ -35,14 +36,15 @@ class InputLayout : public Bindable
 public:
 	InputLayout( Graphics& gfx,
 		const VertexLayout& layout_in,
-		ID3DBlob* pVertexShaderBytecode );
+		const VertexShader& vs );
 
 	void Bind( Graphics& gfx ) IFNOEXCEPT override { GetContext( gfx )->IASetInputLayout( pInputLayout.Get() ); }
-	static std::shared_ptr<InputLayout> Resolve( Graphics& gfx, const VertexLayout& layout, ID3DBlob* pVSB ) { return BindableCollection::Resolve<InputLayout>( gfx, layout, pVSB ); }
-	static std::wstring GenerateUID( const VertexLayout& layout, ID3DBlob* = nullptr ) { return GET_CLASS_WNAME( InputLayout ) + L"#" + layout.GetCode(); }
-	std::wstring GetUID() const noexcept override { return GenerateUID( layout ); }
+	static std::shared_ptr<InputLayout> Resolve( Graphics& gfx, const VertexLayout& layout, const VertexShader& vs ) { return BindableCollection::Resolve<InputLayout>( gfx, layout, vs ); }
+	static std::wstring GenerateUID( const VertexLayout& layout, const VertexShader& vs ) { return GET_CLASS_WNAME( InputLayout ) + L"#" + layout.GetCode() + L"#" + vs.GetUID(); }
+	std::wstring GetUID() const noexcept override { return GenerateUID( layout, *pVShader ); }
 
 protected:
+	const VertexShader* pVShader;
 	const VertexLayout& layout;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
 };

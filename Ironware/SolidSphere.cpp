@@ -41,14 +41,14 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 		RenderStep only{ "lambertian" };
 
 		auto pVertexShader = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
-		auto pVertexShaderBytecode = pVertexShader->GetBytecode();
+
+		only.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), *pVertexShader ) );
+
 		only.AddBindable( std::move( pVertexShader ) );
 
 		only.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
 
 		only.AddBindable( PixelConstantBuffer<dx::XMFLOAT3A>::Resolve( gfx, color, 1u ) );
-
-		only.AddBindable( InputLayout::Resolve( gfx, vbuff.GetLayout(), pVertexShaderBytecode ) );
 
 		only.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 

@@ -27,7 +27,7 @@ BindingPass( std::move( name ) )
 	AddBind( IndexBuffer::Resolve( gfx, L"$Full", std::move( indices ) ) );
 	// setup other common fullscreen bindables
 	auto vs = VertexShader::Resolve( gfx, L"Fullscreen_VS.cso" );
-	AddBind( InputLayout::Resolve( gfx, lay, vs->GetBytecode() ) );
+	AddBind( InputLayout::Resolve( gfx, lay, *vs ) );
 	AddBind( std::move( vs ) );
 	AddBind( PrimitiveTopology::Resolve( gfx ) );
 	AddBind( RasterizerState::Resolve( gfx, false ) );

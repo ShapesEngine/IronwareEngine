@@ -91,10 +91,9 @@ modelPath( path.wstring() )
 		{
 			step.AddBindable( std::make_shared<TransformCBuffer>( gfx, 0u ) );
 			auto pvs = VertexShader::Resolve( gfx, shaderCode + L"_VS.cso" );
-			auto pvsbc = pvs->GetBytecode();
+			step.AddBindable( InputLayout::Resolve( gfx, vtxLayout, *pvs ) );
 			step.AddBindable( std::move( pvs ) );
 			step.AddBindable( PixelShader::Resolve( gfx, shaderCode + L"_PS.cso" ) );
-			step.AddBindable( InputLayout::Resolve( gfx, vtxLayout, pvsbc ) );
 			if( hasTexture )
 			{
 				step.AddBindable( Sampler::Resolve( gfx ) );
@@ -135,7 +134,7 @@ modelPath( path.wstring() )
 		{
 			RenderStep mask( "outlineMask" );
 
-			mask.AddBindable( InputLayout::Resolve( gfx, vtxLayout, VertexShader::Resolve(gfx, L"Solid_VS.cso")->GetBytecode() ) );
+			mask.AddBindable( InputLayout::Resolve( gfx, vtxLayout, *VertexShader::Resolve(gfx, L"Solid_VS.cso") ) );
 
 			mask.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
@@ -155,7 +154,7 @@ modelPath( path.wstring() )
 				draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 			}
 
-			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, VertexShader::Resolve(gfx, L"Solid_VS.cso")->GetBytecode() ) );
+			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, *VertexShader::Resolve(gfx, L"Solid_VS.cso") ) );
 
 			draw.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
