@@ -94,10 +94,10 @@ void RenderTarget::BindAsBuffer( Graphics& gfx, ID3D11DepthStencilView* pDepthSt
 	D3D11_VIEWPORT vp;
 	vp.Width = (float)width;
 	vp.Height = (float)height;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0.0f;
-	vp.TopLeftY = 0.0f;
+	vp.MinDepth = 0.f;
+	vp.MaxDepth = 1.f;
+	vp.TopLeftX = 0.f;
+	vp.TopLeftY = 0.f;
 	GFX_CALL_THROW_INFO_ONLY( GetContext( gfx )->RSSetViewports( 1u, &vp ) );
 }
 
@@ -109,7 +109,7 @@ void RenderTarget::Clear( Graphics& gfx, const std::array<float, 4>& color ) IFN
 
 void RenderTarget::Clear( Graphics& gfx ) IFNOEXCEPT
 {
-	Clear( gfx, { 0.0f,0.0f,0.0f,0.0f } );
+	Clear( gfx, { 0.f,0.f,0.f,0.f } );
 }
 
 UINT RenderTarget::GetWidth() const noexcept

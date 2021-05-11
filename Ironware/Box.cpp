@@ -70,9 +70,9 @@ Box::Box( Graphics & gfx, float size )
 			lay.Add<Float>( "specularWeight" );
 			lay.Add<Float>( "specularGloss" );
 			auto buf = Buffer( std::move( lay ) );
-			buf["specularColor"] = dx::XMFLOAT3{ 1.0f,1.0f,1.0f };
+			buf["specularColor"] = dx::XMFLOAT3{ 1.f,1.f,1.f };
 			buf["specularWeight"] = 0.1f;
-			buf["specularGloss"] = 20.0f;
+			buf["specularGloss"] = 20.f;
 			only.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
 			only.AddBindable( InputLayout::Resolve( gfx, layout, pvsbc ) );
@@ -106,7 +106,7 @@ Box::Box( Graphics & gfx, float size )
 			RawLayout lay;
 			lay.Add<Float4>( "color" );
 			auto buf = Buffer( std::move( lay ) );
-			buf["color"] = DirectX::XMFLOAT4{ 1.0f,0.4f,0.4f,1.0f };
+			buf["color"] = DirectX::XMFLOAT4{ 1.f,0.4f,0.4f,1.f };
 			draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
 			// TODO: better sub-layout generation tech for future consideration maybe
@@ -138,9 +138,9 @@ void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept
 		ImGui::SliderFloat( "Z", &pos.z, -60.f, 60.f, "%.1f" );
 
 		ImGui::Text( "Orientation" );
-		ImGui::SliderAngle( "Pitch", &orientation.x, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Yaw", &orientation.y, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Roll", &orientation.z, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Pitch", &orientation.x, -180.f, 180.f );
+		ImGui::SliderAngle( "Yaw", &orientation.y, -180.f, 180.f );
+		ImGui::SliderAngle( "Roll", &orientation.z, -180.f, 180.f );
 
 		class Probe : public TechniqueProbe
 		{
@@ -148,7 +148,7 @@ void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept
 			void OnSetTechnique() override
 			{
 				using namespace std::string_literals;
-				ImGui::TextColored( { 0.4f, 1.0f, 0.6f, 1.0f }, to_narrow( pTech->GetName() ).c_str() );
+				ImGui::TextColored( { 0.4f, 1.f, 0.6f, 1.f }, to_narrow( pTech->GetName() ).c_str() );
 				bool active = pTech->IsActive();
 				ImGui::Checkbox( ( "Tech Active##"s + std::to_string( techIdx ) ).c_str(), &active );
 				pTech->SetActive( active );
@@ -167,7 +167,7 @@ void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept
 
 				if( auto v = buf["scale"]; v.Exists() )
 				{
-					dcheck( ImGui::SliderFloat( tag( "Scale" ), &v, 1.0f, 2.0f, "%.3f", 3.5f ) );
+					dcheck( ImGui::SliderFloat( tag( "Scale" ), &v, 1.f, 2.f, "%.3f", 3.5f ) );
 				}
 				if( auto v = buf["color"]; v.Exists() )
 				{
@@ -175,11 +175,11 @@ void Box::SpawnControlWindow( Graphics & gfx, const char* name ) noexcept
 				}
 				if( auto v = buf["specularIntensity"]; v.Exists() )
 				{
-					dcheck( ImGui::SliderFloat( tag( "Specular Intensity" ), &v, 0.0f, 1.0f ) );
+					dcheck( ImGui::SliderFloat( tag( "Specular Intensity" ), &v, 0.f, 1.f ) );
 				}
 				if( auto v = buf["specularPower"]; v.Exists() )
 				{
-					dcheck( ImGui::SliderFloat( tag( "Glossiness" ), &v, 1.0f, 100.0f, "%.1f", 1.5f ) );
+					dcheck( ImGui::SliderFloat( tag( "Glossiness" ), &v, 1.f, 100.f, "%.1f", 1.5f ) );
 				}
 				return dirty;
 			}

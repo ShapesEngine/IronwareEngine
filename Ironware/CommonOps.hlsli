@@ -10,7 +10,7 @@ float3 map_normal(
     const float3x3 tanToTarget = float3x3( tan, bitan, n );
         
     const float3 sampledNMap = nmap.Sample( splr, tc ).xyz;
-    const float3 tanN = 2.0f * sampledNMap - 1.0f;
+    const float3 tanN = 2.f * sampledNMap - 1.f;
     return normalize( mul( tanN, tanToTarget ) );
 }
 
@@ -51,5 +51,5 @@ float3 calc_specular(
     const float3 viewCamToFrag = normalize( viewPos );
     // calculate specular component color based on angle between
     // viewing vector and reflection vector, narrow with power function
-    return luminosity * specularColor * specularIntensity * pow( max( 0.0f, dot( -r, viewCamToFrag ) ), specularPower );
+    return luminosity * specularColor * specularIntensity * pow( max( 0.f, dot( -r, viewCamToFrag ) ), specularPower );
 }

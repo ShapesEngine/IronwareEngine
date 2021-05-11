@@ -115,15 +115,15 @@ modelPath( path.wstring() )
 				material.Get( AI_MATKEY_COLOR_SPECULAR, color );
 				r = reinterpret_cast<DirectX::XMFLOAT3&>( color );
 			}
-			buf["specularWeight"].SetIfExists( 1.0f );
+			buf["specularWeight"].SetIfExists( 1.f );
 			if( auto r = buf["specularGloss"]; r.Exists() )
 			{
-				float gloss = 8.0f;
+				float gloss = 8.f;
 				material.Get( AI_MATKEY_SHININESS, gloss );
 				r = gloss;
 			}
 			buf["useNormalMap"].SetIfExists( true );
-			buf["normalMapWeight"].SetIfExists( 1.0f );
+			buf["normalMapWeight"].SetIfExists( 1.f );
 			step.AddBindable( std::make_unique<CachingPixelConstantBufferEx>( gfx, std::move( buf ), 1u ) );
 		}
 		phong.AddStep( std::move( step ) );
@@ -151,7 +151,7 @@ modelPath( path.wstring() )
 				RawLayout lay;
 				lay.Add<Float3>( "materialColor" );
 				auto buf = Buffer( std::move( lay ) );
-				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,1.f,0.5f };
+				buf["materialColor"] = DirectX::XMFLOAT3{ 1.f,1.f,0.5f };
 				draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 			}
 
@@ -188,7 +188,7 @@ std::vector<uint16_t> Material::ExtractIndices( const aiMesh & mesh ) const noex
 std::shared_ptr<VertexBuffer> Material::MakeVertexBindable( Graphics & gfx, const aiMesh & mesh, float scale ) const noexcept( !IS_DEBUG )
 {
 	auto vtc = ExtractVertices( mesh );
-	if( scale != 1.0f )
+	if( scale != 1.f )
 	{
 		for( auto i = 0u; i < vtc.Size(); i++ )
 		{

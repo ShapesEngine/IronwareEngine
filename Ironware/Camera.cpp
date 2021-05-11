@@ -25,7 +25,7 @@ DirectX::XMMATRIX Camera::GetMatrix() const noexcept
 
 	const auto camPosition = dx::XMLoadFloat3( &pos );
 	const auto camTarget = dx::XMVectorAdd( camPosition, forwardVector );
-	return dx::XMMatrixLookAtLH( camPosition, camTarget, dx::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f ) );
+	return dx::XMMatrixLookAtLH( camPosition, camTarget, dx::XMVectorSet( 0.f, 1.f, 0.f, 0.f ) );
 }
 
 void Camera::SpawnControlWindow() noexcept

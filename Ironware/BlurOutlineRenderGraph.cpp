@@ -19,6 +19,7 @@
 #include "DynamicConstantBuffer.h"
 #include "IronUtils.h"
 #include "IronMath.h"
+#include "imgui/imgui.h"
 
 BlurOutlineRenderGraph::BlurOutlineRenderGraph( Graphics& gfx ) :
 	RenderGraph( gfx )
@@ -97,7 +98,7 @@ void BlurOutlineRenderGraph::SetKernelGauss( int radius, float sigma ) IFNOEXCEP
 	auto k = blurKernel->GetBuffer();
 	const int nTaps = radius * 2 + 1;
 	k["nTaps"] = nTaps;
-	float sum = 0.0f;
+	float sum = 0.f;
 	for( int i = 0; i < nTaps; i++ )
 	{
 		const auto x = float( i - radius );
@@ -110,4 +111,70 @@ void BlurOutlineRenderGraph::SetKernelGauss( int radius, float sigma ) IFNOEXCEP
 		k["coefficients"][i] = (float)k["coefficients"][i] / sum;
 	}
 	blurKernel->SetBuffer( k );
+}
+
+void BlurOutlineRenderGraph::SetKernelBox( int radius ) IFNOEXCEPT
+{
+	assert( radius <= maxRadius );
+	auto k = blurKernel->GetBuffer();
+	const int nTaps = radius * 2 + 1;
+	k["nTaps"] = nTaps;
+	const float c = 1.0f / nTaps;
+	for( int i = 0; i < nTaps; i++ )
+	{
+		k["coefficients"][i] = c;
+	}
+	blurKernel->SetBuffer( k );
+}
+
+void BlurOutlineRenderGraph::RenderWidgets( Graphics& gfx )
+{
+	if( ImGui::Begin( "Kernel" ) )
+	{
+		bool filterChanged = false;
+		{
+			const char* items[] = { "Gauss","Box" };
+			static const char* curItem = items[0];
+			if( ImGui::BeginCombo( "Filter Type", curItem ) )
+			{
+				for(auto & item : items)
+				{
+					const bool isSelected = ( curItem == item );
+					if( ImGui::Selectable( item, isSelected ) )
+					{
+						filterChanged = true;
+						curItem = item;
+						if( curItem == items[0] )
+						{
+							kernelType = KernelType::Gauss;
+						}
+						else if( curItem == items[1] )
+						{
+							kernelType = KernelType::Box;
+						}
+					}
+					if( isSelected )
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+		}
+
+		bool radChange = ImGui::SliderInt( "Radius", &radius, 0, maxRadius );
+		bool sigChange = ImGui::SliderFloat( "Sigma", &sigma, 0.1f, 10.f );
+		if( radChange || sigChange || filterChanged )
+		{
+			if( kernelType == KernelType::Gauss )
+			{
+				SetKernelGauss( radius, sigma );
+			}
+			else if( kernelType == KernelType::Box )
+			{
+				SetKernelBox( radius );
+			}
+		}
+	}
+	ImGui::End();
 }

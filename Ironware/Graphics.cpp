@@ -100,10 +100,10 @@ Graphics::Graphics( HWND hWnd )
 	D3D11_VIEWPORT vp;
 	vp.Width = (float)width;
 	vp.Height = (float)height;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0.0f;
-	vp.TopLeftY = 0.0f;
+	vp.MinDepth = 0.f;
+	vp.MaxDepth = 1.f;
+	vp.TopLeftX = 0.f;
+	vp.TopLeftY = 0.f;
 	pImmediateContext->RSSetViewports( 1u, &vp );
 
 	ImGui_ImplDX11_Init( pDevice.Get(), pImmediateContext.Get() );

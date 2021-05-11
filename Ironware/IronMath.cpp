@@ -20,7 +20,7 @@ DirectX::XMFLOAT3 extract_euler_angles( const DirectX::XMFLOAT4X4& mat ) noexcep
 	}
 	else
 	{
-		euler.y = 0.0f;                            // Yaw
+		euler.y = 0.f;                            // Yaw
 		euler.z = atan2f( -mat._21, mat._11 );     // Roll
 	}
 

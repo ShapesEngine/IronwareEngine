@@ -73,7 +73,7 @@ void PointLight::LinkTechniques( RenderGraph & rg )
 void PointLight::Reset() noexcept
 {
 	cbufData = {
-		{ 10.0f,9.0f,2.5f },
+		{ 10.f,9.f,2.5f },
 		{ 0.05f, 0.05f, 0.05f },
 		{ 1.f, 1.f, 1.f },
 		1.f,

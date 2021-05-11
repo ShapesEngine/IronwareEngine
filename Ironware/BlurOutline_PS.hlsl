@@ -19,18 +19,18 @@ float4 main( float2 uv : Texcoord ) : SV_Target
     float dx, dy;
     if( horizontal )
     {
-        dx = 1.0f / width;
-        dy = 0.0f;
+        dx = 1.f / width;
+        dy = 0.f;
     }
     else
     {
-        dx = 0.0f;
-        dy = 1.0f / height;
+        dx = 0.f;
+        dy = 1.f / height;
     }
     const int r = nTaps / 2;
     
-    float accAlpha = 0.0f;
-    float3 maxColor = float3( 0.0f, 0.0f, 0.0f );
+    float accAlpha = 0.f;
+    float3 maxColor = float3( 0.f, 0.f, 0.f );
     for( int i = -r; i <= r; i++ )
     {
         const float2 tc = uv + float2( dx * i, dy * i );

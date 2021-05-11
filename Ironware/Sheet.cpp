@@ -79,9 +79,9 @@ void Sheet::SpawnControlWindow( Graphics& gfx, const char* pName ) noexcept
 		ImGui::SliderFloat( "Z", &pos.z, -60.f, 60.f, "%.1f" );
 
 		ImGui::Text( "Orientation" );
-		ImGui::SliderAngle( "Pitch", &orientation.x, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Yaw", &orientation.y, -180.0f, 180.0f );
-		ImGui::SliderAngle( "Roll", &orientation.z, -180.0f, 180.0f );
+		ImGui::SliderAngle( "Pitch", &orientation.x, -180.f, 180.f );
+		ImGui::SliderAngle( "Yaw", &orientation.y, -180.f, 180.f );
+		ImGui::SliderAngle( "Roll", &orientation.z, -180.f, 180.f );
 
 		ImGui::Text( "Properties" );
 

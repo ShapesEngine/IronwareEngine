@@ -75,7 +75,7 @@ public:
 		}
 
 		bool radChange = ImGui::SliderInt( "Radius", &radius, 0, 15 );
-		bool sigChange = ImGui::SliderFloat( "Sigma", &sigma, 0.1f, 10.0f );
+		bool sigChange = ImGui::SliderFloat( "Sigma", &sigma, 0.1f, 10.f );
 		if( radChange || sigChange || filterChanged )
 		{
 			if( kernelType == KernelType::Gauss )
@@ -94,7 +94,7 @@ public:
 		assert( radius <= MAX_RADIUS );
 		Kernel k;
 		k.nTaps = radius * 2 + 1;
-		float sum = 0.0f;
+		float sum = 0.f;
 		for( int i = 0; i < k.nTaps; i++ )
 		{
 			const auto x = float( i - radius );
@@ -113,7 +113,7 @@ public:
 		assert( radius <= MAX_RADIUS );
 		Kernel k;
 		k.nTaps = radius * 2 + 1;
-		const float c = 1.0f / k.nTaps;
+		const float c = 1.f / k.nTaps;
 		for( int i = 0; i < k.nTaps; i++ )
 		{
 			k.coefficients[i].x = c;

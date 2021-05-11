@@ -19,7 +19,7 @@ float4 main( float2 uv : TEXCOORD ) : SV_TARGET
     float dx = horizontal ? 1.f / (float)width : 0.f;
     float dy = horizontal ? 0.f : 1.f / (float)height;
     const int r = nTaps / 2;
-    float4 acc = float4( 0.0f, 0.0f, 0.0f, 0.f );
+    float4 acc = float4( 0.f, 0.f, 0.f, 0.f );
     for( int i = -r; i <= r; i++ )
     {
         const float2 tc = uv + float2( dx * i, dy * i );
