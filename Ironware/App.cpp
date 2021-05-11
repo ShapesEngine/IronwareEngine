@@ -13,7 +13,6 @@
 #include "DynamicConstantBuffer.h"
 #include "ModelProbe.h"
 #include "Node.h"
-#include "IronMath.h"
 #include "TestModelProbe.h"
 
 #include <DirectXTex/DirectXTex.h>

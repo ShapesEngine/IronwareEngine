@@ -26,7 +26,7 @@
 class Camera
 {
 public:
-	Camera();	
+	Camera( DirectX::XMFLOAT3 homePos = { 0.f, 0.f, 0.f }, float homePitch = 0.f, float homeYaw = 0.f );
 	DirectX::XMMATRIX GetMatrix() const noexcept;
 	void SpawnControlWindow() noexcept;
 	void Rotate( float dx, float dy ) noexcept;
@@ -37,6 +37,9 @@ public:
 	const DirectX::XMFLOAT3& GetPos() const noexcept { return pos; }
 
 private:
+	DirectX::XMFLOAT3 homePos;
+	float homePitch;
+	float homeYaw;
 	static constexpr float MAX_SPEED_LIMIT = 45.f;
 	static constexpr float MIN_SPEED_LIMIT = 2.f;
 	static constexpr float SPEED_MOD_VALUE = 1.f;

@@ -13,7 +13,10 @@
 
 namespace dx = DirectX;
 
-Camera::Camera()
+Camera::Camera( DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw ) :
+	homePos( homePos ),
+	homePitch( homePitch ),
+	homeYaw( homeYaw )
 {
 	Reset();
 }
@@ -75,7 +78,7 @@ void Camera::Translate( DirectX::XMFLOAT3 translation ) noexcept
 void Camera::Reset() noexcept
 {
 	translationSpeed = 15.f;
-	pos = { -60.f, 5.f, 2.f };
-	pitch = 0.f;
-	yaw = PI / 2.f;
+	pos = homePos;
+	pitch = homePitch;
+	yaw = homeYaw;
 }

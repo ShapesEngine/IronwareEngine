@@ -19,6 +19,7 @@
 #include "Box.h"
 #include "Material.h"
 #include "BlurOutlineRenderGraph.h"
+#include "IronMath.h"
 
  /**
   * @brief Base class that controls scene
@@ -43,7 +44,7 @@ private:
 
 private:
 	ImguiManager imguim;
-	Camera camera;
+	Camera camera{ { -60.f, 5.f, 2.f }, 0.f, PI / 2.f };
 	Window wnd{ 1280, 720, L"Ironware Engine" };
 	PointLight pointLight{ wnd.Gfx() };
 	BlurOutlineRenderGraph rg{ wnd.Gfx() };
