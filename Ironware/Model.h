@@ -32,6 +32,7 @@ class Model
 public:
 	Model( Graphics& gfx, std::wstring path, float scale = 1.f, DirectX::XMFLOAT3 startingPos = { 0.f, 0.f, 0.f } );
 	void Submit() const IFNOEXCEPT;
+	void SetRootTransform( DirectX::FXMMATRIX tf ) noexcept;
 
 	void Accept( class ModelProbe& probe );
 	void LinkTechniques( RenderGraph& rg );

@@ -30,6 +30,12 @@ App::App()
 	cube.LinkTechniques( rg );
 	cube2.LinkTechniques( rg );
 
+	nano.SetRootTransform(
+		DirectX::XMMatrixRotationY( PI / 2.f ) *
+		DirectX::XMMatrixTranslation( 40.f, 0.f, 2.f )
+	);
+	cube.SetPos( { 40.f, 0.f, 25.f } );
+
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );
 	wnd.EnableMouseCursor();
 	//auto camPos = camera.GetPos();
@@ -82,8 +88,8 @@ void App::ProcessFrame()
 
 	// imgui windows
 	static MP sponzaProbe{ "Sponza" };
-	static MP goblinProbe{ "Gobber" };
-	static MP nanoProbe{ "Nano" };
+	static MP goblinProbe{ "Goblin" };
+	static MP nanoProbe{ "Nanosuit" };
 	sponzaProbe.SpawnWindow( sponza );
 	nanoProbe.SpawnWindow( nano );
 	goblinProbe.SpawnWindow( goblin );

@@ -72,6 +72,11 @@ void Model::Submit() const IFNOEXCEPT
 	pRoot->Submit( dx::XMMatrixIdentity() );
 }
 
+void Model::SetRootTransform( DirectX::FXMMATRIX tf ) noexcept
+{
+	pRoot->SetAppliedTransform( tf );
+}
+
 void Model::Accept( ModelProbe & probe )
 {
 	pRoot->Accept( probe );
