@@ -278,6 +278,7 @@
     <ClInclude Include="HorizontalBlurPass.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="DynamicLayout.h" />
+    <ClInclude Include="IronWRL.h" />
     <ClInclude Include="LambertianPass.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />

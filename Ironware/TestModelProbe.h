@@ -91,6 +91,7 @@ public:
 	MP( std::string name ) :
 		name( name )
 	{}
+	virtual ~MP() = default;
 	void SpawnWindow( Model& model )
 	{
 		ImGui::Begin( name.c_str() );

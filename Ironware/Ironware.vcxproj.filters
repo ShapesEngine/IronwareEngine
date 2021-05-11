@@ -827,6 +827,9 @@
     <ClInclude Include="TransformCBufferScaling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IronWRL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ironware.rc">

@@ -20,7 +20,7 @@
 #include <dxgidebug.h>
 #include <vector>
 #include <string>
-#include <wrl.h>
+#include "IronWRL.h"
 
 /*!
  * \class DxgiInfoManager

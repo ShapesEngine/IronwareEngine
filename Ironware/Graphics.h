@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <d3d11.h>
-#include <wrl.h>
+#include "IronWRL.h"
 #include <DirectXMath.h>
 #include <memory>
 #include <random>
