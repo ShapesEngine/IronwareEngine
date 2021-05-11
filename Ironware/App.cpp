@@ -25,6 +25,10 @@ App::App()
 {
 	pointLight.LinkTechniques( rg );
 	sponza.LinkTechniques( rg );
+	goblin.LinkTechniques( rg );
+	nano.LinkTechniques( rg );
+	cube.LinkTechniques( rg );
+	cube2.LinkTechniques( rg );
 
 	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );
 	wnd.EnableMouseCursor();
@@ -68,17 +72,21 @@ void App::ProcessFrame()
 	wnd.Gfx().SetCamera( camera.GetMatrix() );
 	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
 
-	//goblin.Submit( fexe );
+	nano.Submit();
+	goblin.Submit();
 	pointLight.Submit();
 	sponza.Submit();
-	//pLoaded->Submit( fexe, DirectX::XMMatrixIdentity() );
+	cube.Submit();
+	//cube2.Submit();
 	rg.Execute( wnd.Gfx() );
-	/*sheet1.Draw( wnd.Gfx() );
-	sheet2.Draw( wnd.Gfx() );*/
 
 	// imgui windows
-	static MP modelProbe;
-	modelProbe.SpawnWindow( sponza );
+	static MP sponzaProbe{ "Sponza" };
+	static MP goblinProbe{ "Gobber" };
+	static MP nanoProbe{ "Nano" };
+	sponzaProbe.SpawnWindow( sponza );
+	nanoProbe.SpawnWindow( nano );
+	goblinProbe.SpawnWindow( goblin );
 	camera.SpawnControlWindow();
 	pointLight.SpawnControlWindow();
 

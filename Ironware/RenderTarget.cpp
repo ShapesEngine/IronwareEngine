@@ -122,7 +122,6 @@ UINT RenderTarget::GetHeight() const noexcept
 	return height;
 }
 
-
 ShaderInputRenderTarget::ShaderInputRenderTarget( Graphics& gfx, UINT width, UINT height, UINT slot ) :
 	RenderTarget( gfx, width, height ),
 	slot( slot )

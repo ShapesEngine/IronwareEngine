@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date May 2021
  *
- * 
+ *
  */
 #pragma once
 #include "TechniqueProbe.h"
@@ -88,6 +88,9 @@ public:
 class MP : ModelProbe
 {
 public:
+	MP( std::string name ) :
+		name( name )
+	{}
 	void SpawnWindow( Model& model )
 	{
 		ImGui::Begin( "Model" );
@@ -160,6 +163,7 @@ private:
 		float y = 0.0f;
 		float z = 0.0f;
 	};
+	std::string name;
 	std::unordered_map<int, TransformParameters> transformParams;
 private:
 	TransformParameters& ResolveTransform() noexcept
