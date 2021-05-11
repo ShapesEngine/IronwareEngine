@@ -22,6 +22,7 @@ ImguiManager::ImguiManager()
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImGui::GetIO().IniFilename = "IRNWR_ImGui.ini";
 	ImGui::StyleColorsDark();
 }
 
