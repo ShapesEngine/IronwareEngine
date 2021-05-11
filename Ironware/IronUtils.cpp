@@ -51,3 +51,8 @@ std::vector<std::string> split_string( const std::string & s, const std::string 
 	split_string_iter( s, delim, std::back_inserter( strings ) );
 	return strings;
 }
+
+bool string_contains( std::string_view haystack, std::string_view needle )
+{
+	return std::search( haystack.begin(), haystack.end(), needle.begin(), needle.end() ) != haystack.end();
+}

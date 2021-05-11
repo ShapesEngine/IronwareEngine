@@ -83,3 +83,5 @@ void split_string_iter( const std::string& s, const std::string& delim, Iter out
 }
 
 std::vector<std::string> split_string( const std::string& s, const std::string& delim );
+
+bool string_contains( std::string_view haystack, std::string_view needle );
