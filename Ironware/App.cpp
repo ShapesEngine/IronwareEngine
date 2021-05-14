@@ -14,6 +14,7 @@
 #include "ModelProbe.h"
 #include "Node.h"
 #include "TestModelProbe.h"
+#include "Camera.h"
 
 #include <DirectXTex/DirectXTex.h>
 #include <assimp/Importer.hpp>
@@ -22,6 +23,9 @@
 
 App::App()
 {
+	cameras.AddCamera( std::make_unique<Camera>( "F", DirectX::XMFLOAT3{ -60.f, 5.f, 2.f }, 0.f, PI / 2.f ) );
+	cameras.AddCamera( std::make_unique<Camera>( "S", DirectX::XMFLOAT3{ 60.f, 5.f, 2.f }, 0.f, -PI / 2.f ) );
+
 	pointLight.LinkTechniques( rg );
 	sponza.LinkTechniques( rg );
 	goblin.LinkTechniques( rg );
@@ -74,8 +78,8 @@ void App::ProcessFrame()
 {
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
 	// move away by 20.f from origin
-	wnd.Gfx().SetCamera( camera.GetMatrix() );
-	pointLight.Bind( wnd.Gfx(), camera.GetMatrix() );
+	wnd.Gfx().SetCamera( cameras.GetCamera().GetMatrix() );
+	pointLight.Bind( wnd.Gfx(), cameras.GetCamera().GetMatrix() );
 
 	nano.Submit();
 	goblin.Submit();
@@ -92,7 +96,7 @@ void App::ProcessFrame()
 	sponzaProbe.SpawnWindow( sponza );
 	nanoProbe.SpawnWindow( nano );
 	goblinProbe.SpawnWindow( goblin );
-	camera.SpawnControlWindow();
+	cameras.SpawnWindow();
 	pointLight.SpawnControlWindow();
 
 	rg.RenderWidgets( wnd.Gfx() );
@@ -124,42 +128,42 @@ void App::HandleInput()
 	{
 		if( wnd.kbd.KeyIsPressed( 'W' ) || wnd.kbd.KeyIsPressed( VK_UP ) )
 		{
-			camera.Translate( { 0.f, 0.f, dt } );
+			cameras.GetCamera().Translate( { 0.f, 0.f, dt } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'S' ) || wnd.kbd.KeyIsPressed( VK_DOWN ) )
 		{
-			camera.Translate( { 0.f, 0.f, -dt } );
+			cameras.GetCamera().Translate( { 0.f, 0.f, -dt } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'D' ) || wnd.kbd.KeyIsPressed( VK_RIGHT ) )
 		{
-			camera.Translate( { dt, 0.f, 0.f } );
+			cameras.GetCamera().Translate( { dt, 0.f, 0.f } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'A' ) || wnd.kbd.KeyIsPressed( VK_LEFT ) )
 		{
-			camera.Translate( { -dt, 0.f, 0.f } );
+			cameras.GetCamera().Translate( { -dt, 0.f, 0.f } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'E' ) || wnd.kbd.KeyIsPressed( VK_SPACE ) )
 		{
-			camera.Translate( { 0.f, dt, 0.f } );
+			cameras.GetCamera().Translate( { 0.f, dt, 0.f } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'Q' ) || wnd.kbd.KeyIsPressed( VK_CONTROL ) )
 		{
-			camera.Translate( { 0.f, -dt, 0.f } );
+			cameras.GetCamera().Translate( { 0.f, -dt, 0.f } );
 		}
 
 		while( const auto e = wnd.mouse.Read() )
 		{
 			if( e->GetType() == Mouse::Event::Type::RAWMOVE )
 			{
-				camera.Rotate( (float)e->GetRawDeltaX(), (float)e->GetRawDeltaY() );
+				cameras.GetCamera().Rotate( (float)e->GetRawDeltaX(), (float)e->GetRawDeltaY() );
 			}
 			else if( e->GetType() == Mouse::Event::Type::WHEELUP )
 			{
-				camera.SpeedUp();
+				cameras.GetCamera().SpeedUp();
 			}
 			else if( e->GetType() == Mouse::Event::Type::WHEELDOWN )
 			{
-				camera.SpeedDown();
+				cameras.GetCamera().SpeedDown();
 			}
 		}
 	}

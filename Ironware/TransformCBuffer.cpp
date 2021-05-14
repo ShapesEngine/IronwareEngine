@@ -33,7 +33,7 @@ void TransformCBuffer::UpdateBind( Graphics& gfx, const Transforms& transforms )
 TransformCBuffer::Transforms TransformCBuffer::GetTransform( Graphics& gfx ) const noexcept
 {
 	assert( pParent );
-	const auto modelView = pParent->GetTransformXM() * gfx.GetCamera();
+	const auto modelView = pParent->GetTransformXM() * gfx.GetCameraXM();
 	return {
 		// M * V => model * view
 		DirectX::XMMatrixTranspose( modelView ),

@@ -13,7 +13,8 @@
 
 namespace dx = DirectX;
 
-Camera::Camera( DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw ) :
+Camera::Camera( std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw ) noexcept :
+	name( std::move( name ) ),
 	homePos( homePos ),
 	homePitch( homePitch ),
 	homeYaw( homeYaw )
@@ -31,25 +32,21 @@ DirectX::XMMATRIX Camera::GetMatrix() const noexcept
 	return dx::XMMatrixLookAtLH( camPosition, camTarget, dx::XMVectorSet( 0.f, 1.f, 0.f, 0.f ) );
 }
 
-void Camera::SpawnControlWindow() noexcept
+void Camera::SpawnControlWidgets() noexcept
 {
-	if( ImGui::Begin( "Camera" ) )
+	ImGui::Text( "Position" );
+	ImGui::SliderFloat( "X", &pos.x, -80.f, 80.f );
+	ImGui::SliderFloat( "Y", &pos.y, -80.f, 80.f );
+	ImGui::SliderFloat( "Z", &pos.z, -80.f, 80.f );
+	ImGui::Text( "Orientation" );
+	ImGui::SliderAngle( "Pitch", &pitch, 0.995f * -90.f, 0.995f * 90.f );
+	ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f );
+	ImGui::Text( "Movement" );
+	ImGui::SliderFloat( "Speed", &translationSpeed, MIN_SPEED_LIMIT, MAX_SPEED_LIMIT );
+	if( ImGui::Button( "Reset" ) )
 	{
-		ImGui::Text( "Position" );
-		ImGui::SliderFloat( "X", &pos.x, -80.f, 80.f );
-		ImGui::SliderFloat( "Y", &pos.y, -80.f, 80.f );
-		ImGui::SliderFloat( "Z", &pos.z, -80.f, 80.f );
-		ImGui::Text( "Orientation" );
-		ImGui::SliderAngle( "Pitch", &pitch, 0.995f * -90.f, 0.995f * 90.f );
-		ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f );
-		ImGui::Text( "Movement" );
-		ImGui::SliderFloat( "Speed", &translationSpeed, MIN_SPEED_LIMIT, MAX_SPEED_LIMIT );
-		if( ImGui::Button( "Reset" ) )
-		{
-			Reset();
-		}
+		Reset();
 	}
-	ImGui::End();
 }
 
 void Camera::Rotate( float dx, float dy ) noexcept

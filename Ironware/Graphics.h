@@ -93,9 +93,9 @@ public:
 	UINT GetWidth() const noexcept { return width; }
 	UINT GetHeight() const noexcept { return height; }
 	void SetCamera( DirectX::FXMMATRIX cam ) noexcept { camera = cam; }
-	DirectX::XMMATRIX GetCamera() const noexcept { return camera; }
+	DirectX::FXMMATRIX GetCameraXM() const noexcept { return camera; }
 	void SetProjection( DirectX::FXMMATRIX proj ) noexcept { projection = proj; }
-	DirectX::XMMATRIX GetProjection() const noexcept { return projection; }
+	DirectX::FXMMATRIX GetProjection() const noexcept { return projection; }
 	void EnableImGui() noexcept { imGuiEnabled = true; }
 	void DisableImGui() noexcept { imGuiEnabled = false; }
 	bool IsImGuiEnabled() const noexcept { return imGuiEnabled; }

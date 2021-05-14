@@ -119,6 +119,7 @@
     <ClCompile Include="BindingPass.cpp" />
     <ClCompile Include="BlurOutlineRenderGraph.cpp" />
     <ClCompile Include="BufferClearPass.cpp" />
+    <ClCompile Include="CameraContainer.cpp" />
     <ClCompile Include="DepthStencilView.cpp" />
     <ClCompile Include="FullScreenPass.cpp" />
     <ClCompile Include="GraphicsResource.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="BufferClearPass.h" />
     <ClInclude Include="BufferResource.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraContainer.h" />
     <ClInclude Include="CommonMacros.h" />
     <ClInclude Include="ConstantBuffersEx.h" />
     <ClInclude Include="DepthStencilState.h" />

@@ -11,7 +11,7 @@
 #include "Window.h"
 #include "ImGuiManager.h"
 #include "IronTimer.h"
-#include "Camera.h"
+#include "CameraContainer.h"
 #include "PointLight.h"
 #include "Model.h"
 #include "Model.h"
@@ -44,7 +44,7 @@ private:
 
 private:
 	ImguiManager imguim;
-	Camera camera{ { -60.f, 5.f, 2.f }, 0.f, PI / 2.f };
+	CameraContainer cameras;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
 	PointLight pointLight{ wnd.Gfx() };
 	BlurOutlineRenderGraph rg{ wnd.Gfx() };

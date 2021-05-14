@@ -164,8 +164,8 @@ void AppMess::ProcessFrame()
 
 	ImGui::End();
 	// imgui window to control camera & light
-	camera.SpawnControlWindow();
-	pointLight.SpawnControlWindow();
+	camera.SpawnControlWidgets();
+	pointLight.SpawnControlWidgets();
 
 	// present frame
 	wnd.Gfx().EndFrame();
@@ -176,7 +176,7 @@ void AppMess::SpawnActiveBoxWindows()
 	// imgui box attribute control windows
 	for( auto i = boxControlIndexes.begin(); i != boxControlIndexes.end(); )
 	{
-		if( !boxes[*i]->SpawnControlWindow( *i, wnd.Gfx() ) )
+		if( !boxes[*i]->SpawnControlWidgets( *i, wnd.Gfx() ) )
 		{
 			i = boxControlIndexes.erase( i );
 		}
