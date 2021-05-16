@@ -155,6 +155,7 @@
     <ClCompile Include="ModelException.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Projection.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -291,6 +292,7 @@
     <ClInclude Include="NullPixelShader.h" />
     <ClInclude Include="OutlineDrawingPass.h" />
     <ClInclude Include="OutlineMaskGenerationPass.h" />
+    <ClInclude Include="Projection.h" />
     <ClInclude Include="Source.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RasterizerState.h" />

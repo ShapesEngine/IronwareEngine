@@ -7,19 +7,28 @@
  *
  */
 #include "Camera.h"
+#include "Graphics.h"
 #include "IronMath.h"
 
 #include <imgui/imgui.h>
 
 namespace dx = DirectX;
 
-Camera::Camera( std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw ) noexcept :
+Camera::Camera( std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw, Projection proj ) noexcept :
 	name( std::move( name ) ),
 	homePos( homePos ),
 	homePitch( homePitch ),
-	homeYaw( homeYaw )
+	homeYaw( homeYaw ),
+	homeProj( proj ),
+	projection( proj )
 {
 	Reset();
+}
+
+void Camera::BindToGraphics( Graphics & gfx ) const
+{
+	gfx.SetCamera( GetMatrix() );
+	gfx.SetProjection( projection.GetMatrix() );
 }
 
 DirectX::XMMATRIX Camera::GetMatrix() const noexcept
@@ -43,6 +52,7 @@ void Camera::SpawnControlWidgets() noexcept
 	ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f );
 	ImGui::Text( "Movement" );
 	ImGui::SliderFloat( "Speed", &translationSpeed, MIN_SPEED_LIMIT, MAX_SPEED_LIMIT );
+	projection.RenderWidgets();
 	if( ImGui::Button( "Reset" ) )
 	{
 		Reset();
@@ -78,4 +88,5 @@ void Camera::Reset() noexcept
 	pos = homePos;
 	pitch = homePitch;
 	yaw = homeYaw;
+	projection = homeProj;
 }

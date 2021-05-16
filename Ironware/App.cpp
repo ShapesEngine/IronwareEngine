@@ -39,7 +39,6 @@ App::App()
 	);
 	cube.SetPos( { 40.f, 0.f, 25.f } );
 
-	wnd.Gfx().SetProjection( DirectX::XMMatrixPerspectiveLH( 1.f, 9.f / 16.f, 0.5f, 400.f ) );
 	wnd.EnableMouseCursor();
 	//auto camPos = camera.GetPos();
 	/*std::wstring path = L"Models\\brickwall\\brickwall.obj";;
@@ -77,8 +76,7 @@ int App::BeginFrame()
 void App::ProcessFrame()
 {
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
-	// move away by 20.f from origin
-	wnd.Gfx().SetCamera( cameras.GetCamera().GetMatrix() );
+	cameras.GetCamera().BindToGraphics( wnd.Gfx() );
 	pointLight.Bind( wnd.Gfx(), cameras.GetCamera().GetMatrix() );
 
 	nano.Submit();

@@ -13,7 +13,11 @@
 */
 #pragma once
 
-#include "Graphics.h"
+#include "Projection.h"
+
+#include <string>
+
+class Graphics;
 
 /*!
  * \class Camera
@@ -26,7 +30,8 @@
 class Camera
 {
 public:
-	Camera( std::string name, DirectX::XMFLOAT3 homePos = { 0.f, 0.f, 0.f }, float homePitch = 0.f, float homeYaw = 0.f ) noexcept;
+	Camera( std::string name, DirectX::XMFLOAT3 homePos = { 0.f, 0.f, 0.f }, float homePitch = 0.f, float homeYaw = 0.f, Projection proj = { 1.f, 9.f / 16.f, 0.5f, 500.f } ) noexcept;
+	void BindToGraphics( Graphics& gfx ) const;
 	DirectX::XMMATRIX GetMatrix() const noexcept;
 	void SpawnControlWidgets() noexcept;
 	void Rotate( float dx, float dy ) noexcept;
@@ -50,5 +55,7 @@ private:
 	DirectX::XMFLOAT3 pos;
 	float pitch;
 	float yaw;
+	Projection projection;
+	Projection homeProj;
 };
 
