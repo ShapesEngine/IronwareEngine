@@ -9,6 +9,7 @@
 #include "CameraContainer.h"
 #include "Graphics.h"
 #include "Camera.h"
+#include "RenderGraph.h"
 
 #include <imgui/imgui.h>
 
@@ -47,4 +48,23 @@ void CameraContainer::Bind( Graphics & gfx )
 Camera & CameraContainer::GetCamera()
 {
 	return *cameras[selected];
+}
+
+void CameraContainer::LinkTechniques( RenderGraph& rg )
+{
+	for( auto& pcam : cameras )
+	{
+		pcam->LinkTechniques( rg );
+	}
+}
+
+void CameraContainer::Submit() const
+{
+	for( size_t i = 0; i < cameras.size(); i++ )
+	{
+		if( i != selected )
+		{
+			cameras[i]->Submit();
+		}
+	}
 }

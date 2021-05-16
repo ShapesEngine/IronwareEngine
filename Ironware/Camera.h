@@ -14,10 +14,12 @@
 #pragma once
 
 #include "Projection.h"
+#include "CameraIndicator.h"
 
 #include <string>
 
 class Graphics;
+class RnederGraph;
 
 /*!
  * \class Camera
@@ -30,13 +32,16 @@ class Graphics;
 class Camera
 {
 public:
-	Camera( std::string name, DirectX::XMFLOAT3 homePos = { 0.f, 0.f, 0.f }, float homePitch = 0.f, float homeYaw = 0.f, Projection proj = { 1.f, 9.f / 16.f, 0.5f, 500.f } ) noexcept;
+	Camera( Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos = { 0.f, 0.f, 0.f }, float homePitch = 0.f, float homeYaw = 0.f, Projection proj = { 1.f, 9.f / 16.f, 0.5f, 500.f } ) noexcept;
 	void BindToGraphics( Graphics& gfx ) const;
 	DirectX::XMMATRIX GetMatrix() const noexcept;
 	void SpawnControlWidgets() noexcept;
 	void Rotate( float dx, float dy ) noexcept;
 	void Translate( DirectX::XMFLOAT3 translation ) noexcept;
 	void Reset() noexcept;
+	void LinkTechniques( RenderGraph& rg );
+	void Submit() const;
+
 	void SpeedUp() noexcept { translationSpeed += translationSpeed <= MAX_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
 	void SpeedDown() noexcept { translationSpeed -= translationSpeed >= MIN_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
 	const DirectX::XMFLOAT3& GetPos() const noexcept { return pos; }
@@ -57,5 +62,6 @@ private:
 	float yaw;
 	Projection projection;
 	Projection homeProj;
+	CameraIndicator indicator;
 };
 

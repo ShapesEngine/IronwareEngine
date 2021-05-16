@@ -107,7 +107,7 @@ Box::Box( Graphics & gfx, float size )
 			RawLayout lay;
 			lay.Add<Float4>( "color" );
 			auto buf = Buffer( std::move( lay ) );
-			buf["color"] = DirectX::XMFLOAT4{ 1.f,0.4f,0.4f,1.f };
+			buf["color"] = DirectX::XMFLOAT4{ 1.f, 1.f, 0.5f, 1.f };
 			draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 
 			// TODO: better sub-layout generation tech for future consideration maybe

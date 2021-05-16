@@ -14,15 +14,18 @@
 
 namespace dx = DirectX;
 
-Camera::Camera( std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw, Projection proj ) noexcept :
+Camera::Camera( Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw, Projection proj ) noexcept :
 	name( std::move( name ) ),
 	homePos( homePos ),
 	homePitch( homePitch ),
 	homeYaw( homeYaw ),
 	homeProj( proj ),
-	projection( proj )
+	projection( proj ),
+	indicator( gfx )
 {
 	Reset();
+	indicator.SetPos( pos );
+	indicator.SetRotation( { pitch, yaw, 0.f } );
 }
 
 void Camera::BindToGraphics( Graphics & gfx ) const
@@ -63,6 +66,7 @@ void Camera::Rotate( float dx, float dy ) noexcept
 {
 	pitch = std::clamp( pitch + dy * rotationSpeed, 0.995f * -PI / 2.f, 0.995f * PI / 2.f );
 	yaw = wrap_angle( yaw + dx * rotationSpeed );
+	indicator.SetRotation( { pitch, yaw, 0.f } );
 }
 
 void Camera::Translate( DirectX::XMFLOAT3 translation ) noexcept
@@ -80,6 +84,7 @@ void Camera::Translate( DirectX::XMFLOAT3 translation ) noexcept
 		pos.y + translation.y,
 		pos.z + translation.z
 	};
+	indicator.SetPos( pos );
 }
 
 void Camera::Reset() noexcept
@@ -89,4 +94,14 @@ void Camera::Reset() noexcept
 	pitch = homePitch;
 	yaw = homeYaw;
 	projection = homeProj;
+}
+
+void Camera::LinkTechniques( RenderGraph & rg )
+{
+	indicator.LinkTechniques( rg );
+}
+
+void Camera::Submit() const
+{
+	indicator.Submit();
 }

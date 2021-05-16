@@ -14,6 +14,7 @@
 #include <memory>
 
 class Graphics;
+class RenderGraph;
 
 class CameraContainer
 {
@@ -22,6 +23,8 @@ public:
 	void AddCamera( std::unique_ptr<Camera> pCam );
 	void Bind( Graphics& gfx );
 	Camera& GetCamera();
+	void LinkTechniques( RenderGraph& rg );
+	void Submit() const;
 
 private:
 	std::vector<std::unique_ptr<Camera>> cameras;
