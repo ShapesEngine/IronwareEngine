@@ -7,6 +7,7 @@
  *
  */
 #include "RenderStep.h"
+#include "Drawable.h"
 #include "RenderQueuePass.h"
 #include "RenderGraph.h"
 

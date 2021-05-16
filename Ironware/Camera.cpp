@@ -14,18 +14,16 @@
 
 namespace dx = DirectX;
 
-Camera::Camera( Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw, Projection proj ) noexcept :
+Camera::Camera( Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw ) noexcept :
 	name( std::move( name ) ),
 	homePos( homePos ),
 	homePitch( homePitch ),
 	homeYaw( homeYaw ),
-	homeProj( proj ),
-	projection( proj ),
+	homeProj( gfx, 1.f, 9.f / 16.f, 0.5f, 500.f ),
+	projection( gfx, 1.f, 9.f / 16.f, 0.5f, 500.f ),
 	indicator( gfx )
 {
-	Reset();
-	indicator.SetPos( pos );
-	indicator.SetRotation( { pitch, yaw, 0.f } );
+	Reset( gfx );
 }
 
 void Camera::BindToGraphics( Graphics & gfx ) const
@@ -44,21 +42,38 @@ DirectX::XMMATRIX Camera::GetMatrix() const noexcept
 	return dx::XMMatrixLookAtLH( camPosition, camTarget, dx::XMVectorSet( 0.f, 1.f, 0.f, 0.f ) );
 }
 
-void Camera::SpawnControlWidgets() noexcept
+void Camera::SpawnControlWidgets( Graphics& gfx ) noexcept
 {
+	bool rotDirty = false;
+	bool posDirty = false;
+	const auto dcheck = []( bool d, bool& carry ) { carry = carry || d; };
 	ImGui::Text( "Position" );
-	ImGui::SliderFloat( "X", &pos.x, -80.f, 80.f );
-	ImGui::SliderFloat( "Y", &pos.y, -80.f, 80.f );
-	ImGui::SliderFloat( "Z", &pos.z, -80.f, 80.f );
+	dcheck( ImGui::SliderFloat( "X", &pos.x, -80.f, 80.f ), posDirty );
+	dcheck( ImGui::SliderFloat( "Y", &pos.y, -80.f, 80.f ), posDirty );
+	dcheck( ImGui::SliderFloat( "Z", &pos.z, -80.f, 80.f ), posDirty );
 	ImGui::Text( "Orientation" );
-	ImGui::SliderAngle( "Pitch", &pitch, 0.995f * -90.f, 0.995f * 90.f );
-	ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f );
+	dcheck( ImGui::SliderAngle( "Pitch", &pitch, 0.995f * -90.f, 0.995f * 90.f ), rotDirty );
+	dcheck( ImGui::SliderAngle( "Yaw", &yaw, -180.f, 180.f ), rotDirty );
 	ImGui::Text( "Movement" );
 	ImGui::SliderFloat( "Speed", &translationSpeed, MIN_SPEED_LIMIT, MAX_SPEED_LIMIT );
-	projection.RenderWidgets();
+	projection.RenderWidgets( gfx );
+	ImGui::Checkbox( "Camera Indicator", &enableCameraIndicator );
+	ImGui::Checkbox( "Frustum Indicator", &enableFrustumIndicator );
 	if( ImGui::Button( "Reset" ) )
 	{
-		Reset();
+		Reset( gfx );
+	}
+
+	if( rotDirty )
+	{
+		const dx::XMFLOAT3 angles = { pitch,yaw,0.0f };
+		indicator.SetRotation( angles );
+		projection.SetRotation( angles );
+	}
+	if( posDirty )
+	{
+		indicator.SetPos( pos );
+		projection.SetPos( pos );
 	}
 }
 
@@ -66,7 +81,9 @@ void Camera::Rotate( float dx, float dy ) noexcept
 {
 	pitch = std::clamp( pitch + dy * rotationSpeed, 0.995f * -PI / 2.f, 0.995f * PI / 2.f );
 	yaw = wrap_angle( yaw + dx * rotationSpeed );
-	indicator.SetRotation( { pitch, yaw, 0.f } );
+	const dx::XMFLOAT3 angles = { pitch, yaw, 0.f };
+	indicator.SetRotation( angles );
+	projection.SetRotation( angles );
 }
 
 void Camera::Translate( DirectX::XMFLOAT3 translation ) noexcept
@@ -85,23 +102,39 @@ void Camera::Translate( DirectX::XMFLOAT3 translation ) noexcept
 		pos.z + translation.z
 	};
 	indicator.SetPos( pos );
+	projection.SetPos( pos );
 }
 
-void Camera::Reset() noexcept
+void Camera::Reset( Graphics& gfx ) noexcept
 {
 	translationSpeed = 15.f;
 	pos = homePos;
 	pitch = homePitch;
 	yaw = homeYaw;
-	projection = homeProj;
+	//projection = homeProj;
+
+	const dx::XMFLOAT3 angles = { pitch, yaw, 0.f };
+	indicator.SetPos( pos );
+	indicator.SetRotation( angles );
+	projection.SetPos( pos );
+	projection.SetRotation( angles );
+	projection.Reset( gfx );
 }
 
 void Camera::LinkTechniques( RenderGraph & rg )
 {
 	indicator.LinkTechniques( rg );
+	projection.LinkTechniques( rg );
 }
 
 void Camera::Submit() const
 {
-	indicator.Submit();
+	if( enableCameraIndicator )
+	{
+		indicator.Submit();
+	}
+	if( enableFrustumIndicator )
+	{
+		projection.Submit();
+	}
 }

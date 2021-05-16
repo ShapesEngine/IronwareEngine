@@ -15,16 +15,20 @@
 #include "RenderQueuePass.h"
 #include "Sink.h"
 #include "Source.h"
+
 #include <sstream>
 
 RenderGraph::RenderGraph( Graphics& gfx ) :
 	backBufferTarget( gfx.GetTarget() ),
 	masterDepth( std::make_shared<OutputOnlyDepthStencil>( gfx ) )
 {
+	// ==============================================================================
 	// setup global sinks and sources
+	// ==============================================================================
 	AddGlobalSource( DirectBufferSource<RenderTarget>::Make( "backbuffer", backBufferTarget ) );
 	AddGlobalSource( DirectBufferSource<DepthStencilView>::Make( "masterDepth", masterDepth ) );
 	AddGlobalSink( DirectBufferSink<RenderTarget>::Make( "backbuffer", backBufferTarget ) );
+	// ==============================================================================
 }
 
 RenderGraph::~RenderGraph()

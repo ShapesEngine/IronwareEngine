@@ -63,8 +63,8 @@ int App::BeginFrame()
 void App::ProcessFrame()
 {
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
-	cameras.GetCamera().BindToGraphics( wnd.Gfx() );
-	pointLight.Bind( wnd.Gfx(), cameras.GetCamera().GetMatrix() );
+	cameras->BindToGraphics( wnd.Gfx() );
+	pointLight.Bind( wnd.Gfx(), cameras->GetMatrix() );
 
 	nano.Submit();
 	goblin.Submit();
@@ -83,7 +83,7 @@ void App::ProcessFrame()
 	sponzaProbe.SpawnWindow( sponza );
 	nanoProbe.SpawnWindow( nano );
 	goblinProbe.SpawnWindow( goblin );
-	cameras.SpawnWindow();
+	cameras.SpawnWindow( wnd.Gfx() );
 	pointLight.SpawnControlWindow();
 
 	rg.RenderWidgets( wnd.Gfx() );
@@ -115,42 +115,42 @@ void App::HandleInput()
 	{
 		if( wnd.kbd.KeyIsPressed( 'W' ) || wnd.kbd.KeyIsPressed( VK_UP ) )
 		{
-			cameras.GetCamera().Translate( { 0.f, 0.f, dt } );
+			cameras->Translate( { 0.f, 0.f, dt } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'S' ) || wnd.kbd.KeyIsPressed( VK_DOWN ) )
 		{
-			cameras.GetCamera().Translate( { 0.f, 0.f, -dt } );
+			cameras->Translate( { 0.f, 0.f, -dt } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'D' ) || wnd.kbd.KeyIsPressed( VK_RIGHT ) )
 		{
-			cameras.GetCamera().Translate( { dt, 0.f, 0.f } );
+			cameras->Translate( { dt, 0.f, 0.f } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'A' ) || wnd.kbd.KeyIsPressed( VK_LEFT ) )
 		{
-			cameras.GetCamera().Translate( { -dt, 0.f, 0.f } );
+			cameras->Translate( { -dt, 0.f, 0.f } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'E' ) || wnd.kbd.KeyIsPressed( VK_SPACE ) )
 		{
-			cameras.GetCamera().Translate( { 0.f, dt, 0.f } );
+			cameras->Translate( { 0.f, dt, 0.f } );
 		}
 		if( wnd.kbd.KeyIsPressed( 'Q' ) || wnd.kbd.KeyIsPressed( VK_CONTROL ) )
 		{
-			cameras.GetCamera().Translate( { 0.f, -dt, 0.f } );
+			cameras->Translate( { 0.f, -dt, 0.f } );
 		}
 
 		while( const auto e = wnd.mouse.Read() )
 		{
 			if( e->GetType() == Mouse::Event::Type::RAWMOVE )
 			{
-				cameras.GetCamera().Rotate( (float)e->GetRawDeltaX(), (float)e->GetRawDeltaY() );
+				cameras->Rotate( (float)e->GetRawDeltaX(), (float)e->GetRawDeltaY() );
 			}
 			else if( e->GetType() == Mouse::Event::Type::WHEELUP )
 			{
-				cameras.GetCamera().SpeedUp();
+				cameras->SpeedUp();
 			}
 			else if( e->GetType() == Mouse::Event::Type::WHEELDOWN )
 			{
-				cameras.GetCamera().SpeedDown();
+				cameras->SpeedDown();
 			}
 		}
 	}

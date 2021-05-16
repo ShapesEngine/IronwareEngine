@@ -39,6 +39,7 @@ public:
 
 	static std::shared_ptr<VertexBuffer> Resolve( Graphics& gfx, const std::wstring& tag, const VertexByteBuffer& vbuff, UINT offset = 0u );
 	std::wstring GetUID() const noexcept override { return GenerateUID( tag ); }
+	const VertexLayout& GetLayout() const noexcept { return layout; }
 
 	template<TPACK Ignore>
 	static std::wstring GenerateUID( const std::wstring& tag, Ignore&&... ignore ) { return GenerateUID_( tag ); }
@@ -47,6 +48,7 @@ private:
 	static std::wstring GenerateUID_( const std::wstring& tag ) noexcept { return GET_CLASS_WNAME( VertexBuffer ) + L"#" + tag; }
 
 private:
+	VertexLayout layout;
 	const std::wstring tag;
 	const UINT stride;
 	const UINT offset;

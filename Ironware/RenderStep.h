@@ -4,7 +4,7 @@
  * \author Yernar Aldabergenov
  * \date May 2021
  *
- * 
+ *
  */
 #pragma once
 
@@ -34,7 +34,7 @@ public:
 	void Bind( Graphics& gfx ) const IFNOEXCEPT;
 	void InitializeParentReferences( const class Drawable& parent ) noexcept;
 	void Accept( TechniqueProbe& probe );
-	void Link(RenderGraph& rg);
+	void Link( RenderGraph& rg );
 
 protected:
 	/**

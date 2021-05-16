@@ -211,12 +211,12 @@ void AppMess::SpawnBoxWindowManagerWindow()
 		{
 			for( int i = 0; i < boxes.size(); i++ )
 			{
-				const bool selected = *comboBoxIndex == i;
-				if( ImGui::Selectable( std::to_string( i ).c_str(), selected ) )
+				const bool controlled = *comboBoxIndex == i;
+				if( ImGui::Selectable( std::to_string( i ).c_str(), controlled ) )
 				{
 					comboBoxIndex = i;
 				}
-				if( selected )
+				if( controlled )
 				{
 					ImGui::SetItemDefaultFocus();
 				}

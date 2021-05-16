@@ -122,6 +122,7 @@
     <ClCompile Include="CameraContainer.cpp" />
     <ClCompile Include="CameraIndicator.cpp" />
     <ClCompile Include="DepthStencilView.cpp" />
+    <ClCompile Include="FrustumIndicator.cpp" />
     <ClCompile Include="FullScreenPass.cpp" />
     <ClCompile Include="GraphicsResource.cpp" />
     <ClCompile Include="BlendState.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="DepthStencilState.h" />
     <ClInclude Include="DepthStencilView.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
+    <ClInclude Include="FrustumIndicator.h" />
     <ClInclude Include="FullScreenPass.h" />
     <ClInclude Include="GraphicsResource.h" />
     <ClInclude Include="HorizontalBlurPass.h" />

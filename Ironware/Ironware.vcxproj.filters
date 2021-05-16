@@ -291,8 +291,11 @@
     <ClCompile Include="Projection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FrustumIndicator.cpp">
+      <Filter>Source Files\Drawable</Filter>
+    </ClCompile>
     <ClCompile Include="CameraIndicator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -843,6 +846,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CameraIndicator.h">
+      <Filter>Header Files\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="FrustumIndicator.h">
       <Filter>Header Files\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
