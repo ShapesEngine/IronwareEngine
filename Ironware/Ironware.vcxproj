@@ -305,7 +305,6 @@
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
     <ClInclude Include="Sheet.h" />
     <ClInclude Include="Sink.h" />
-    <ClInclude Include="SkinnedBox.h" />
     <ClCompile Include="ScaleOutlineRenderGraph.cpp" />
     <ClCompile Include="Sheet.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
