@@ -333,6 +333,7 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowsMessageMap.cpp" />
     <ClCompile Include="WinMain.cpp" />
+    <ClInclude Include="WireframePass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppMess.h" />

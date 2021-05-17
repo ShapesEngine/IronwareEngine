@@ -36,6 +36,38 @@ DepthStencilState::DepthStencilState( Graphics & gfx, StencilMode mode ) :
 		descDepthStencil.FrontFace.StencilFunc = D3D11_COMPARISON_NOT_EQUAL;
 		descDepthStencil.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	}
+	else if( mode == StencilMode::DepthOff )
+	{
+		descDepthStencil.DepthEnable = FALSE;
+	}
+	else if(mode == StencilMode::DepthReversed)
+	{
+		descDepthStencil.DepthFunc = D3D11_COMPARISON_GREATER;
+	}
 
 	GFX_CALL_THROW_INFO( GetDevice( gfx )->CreateDepthStencilState( &descDepthStencil, &pDSState ) );
+}
+
+std::wstring DepthStencilState::GenerateUID( StencilMode mode )
+{
+	std::wstring modeStr;
+	switch( mode )
+	{
+	case DepthStencilState::StencilMode::Off:
+		modeStr = L"OFF";
+		break;
+	case DepthStencilState::StencilMode::Write:
+		modeStr = L"WRT";
+		break;
+	case DepthStencilState::StencilMode::Mask:
+		modeStr = L"MSK";
+		break;
+	case DepthStencilState::StencilMode::DepthOff:
+		modeStr = L"DOF";
+		break;
+	case DepthStencilState::StencilMode::DepthReversed:
+		modeStr = L"DRV";
+		break;
+	};
+	return GET_CLASS_WNAME( DepthStencilState ) + L"#" + modeStr;
 }

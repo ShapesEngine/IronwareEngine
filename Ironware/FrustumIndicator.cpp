@@ -12,7 +12,7 @@
 #include "Sphere.h"
 #include "DepthStencilState.h"
 
-FrustumIndicator::FrustumIndicator( Graphics & gfx, float width, float height, float nearZ, float farZ )
+FrustumIndicator::FrustumIndicator( Graphics& gfx, float width, float height, float nearZ, float farZ )
 {
 	std::vector<uint16_t> indices;
 	{
@@ -48,26 +48,48 @@ FrustumIndicator::FrustumIndicator( Graphics & gfx, float width, float height, f
 
 	{
 		RenderTechnique line;
-		RenderStep only( "lambertian" );
-
-		auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
-		only.AddBindable( InputLayout::Resolve( gfx, pVertices->GetLayout(), *pvs ) );
-		only.AddBindable( std::move( pvs ) );
-
-		only.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
-
-		struct PSColorConstant
 		{
-			dx::XMFLOAT3 color = { 0.6f,0.2f,0.2f };
-			float padding;
-		} colorConst;
-		only.AddBindable( PixelConstantBuffer<PSColorConstant>::Resolve( gfx, colorConst, 1u ) );
+			RenderStep unoccluded( "lambertian" );
 
-		only.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+			auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
+			unoccluded.AddBindable( InputLayout::Resolve( gfx, pVertices->GetLayout(), *pvs ) );
+			unoccluded.AddBindable( std::move( pvs ) );
 
-		only.AddBindable( RasterizerState::Resolve( gfx, false ) );
+			unoccluded.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
 
-		line.AddStep( std::move( only ) );
+			struct PSColorConstant
+			{
+				dx::XMFLOAT3A color = { 0.6f,0.2f,0.2f };
+			} colorConst;
+			unoccluded.AddBindable( PixelConstantBuffer<PSColorConstant>::Resolve( gfx, colorConst, 1u ) );
+
+			unoccluded.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+
+			unoccluded.AddBindable( RasterizerState::Resolve( gfx, false ) );
+
+			line.AddStep( std::move( unoccluded ) );
+		}
+		{
+			RenderStep occluded( "wireframe" );
+
+			auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );
+			occluded.AddBindable( InputLayout::Resolve( gfx, pVertices->GetLayout(), *pvs ) );
+			occluded.AddBindable( std::move( pvs ) );
+
+			occluded.AddBindable( PixelShader::Resolve( gfx, L"Solid_PS.cso" ) );
+
+			struct PSColorConstant2
+			{
+				dx::XMFLOAT3A color = { 0.25f,0.08f,0.08f };
+			} colorConst;
+			occluded.AddBindable( PixelConstantBuffer<PSColorConstant2>::Resolve( gfx, colorConst, 1u ) );
+
+			occluded.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+
+			occluded.AddBindable( RasterizerState::Resolve( gfx, false ) );
+
+			line.AddStep( std::move( occluded ) );
+		}
 		AddTechnique( std::move( line ) );
 	}
 }
