@@ -127,6 +127,7 @@ public:
 		}
 		ImGui::End();
 	}
+
 protected:
 	bool PushNode( Node& node ) override
 	{
@@ -144,6 +145,28 @@ protected:
 		// processing for selecting node
 		if( ImGui::IsItemClicked() )
 		{
+			// used to change the highlighted node on selection change
+			struct Probe : public TechniqueProbe
+			{
+				void OnSetTechnique() override
+				{
+					if( pTech->GetName() == L"Outline" )
+					{
+						pTech->SetActive( highlighted );
+					}
+				}
+				bool highlighted = false;
+			} probe;
+
+			// remove highlight on prev-selected node
+			if( pSelectedNode != nullptr )
+			{
+				pSelectedNode->Accept( probe );
+			}
+			// add highlight to newly-selected node
+			probe.highlighted = true;
+			node.Accept( probe );
+
 			pSelectedNode = &node;
 		}
 		// signal if children should also be recursed
@@ -153,6 +176,7 @@ protected:
 	{
 		ImGui::TreePop();
 	}
+
 private:
 	Node* pSelectedNode = nullptr;
 	struct TransformParameters
