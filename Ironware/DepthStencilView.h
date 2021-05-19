@@ -26,7 +26,7 @@ public:
 
 public:
 	void BindAsBuffer( Graphics& gfx, BufferResource* renderTarget ) IFNOEXCEPT override;
-	SurfaceEx ToSurface( Graphics& gfx ) const;
+	SurfaceEx ToSurface( Graphics& gfx, bool linearize = true  ) const;
 
 	uint32_t GetWidth() const noexcept { return width; }
 	uint32_t GetHeight() const noexcept { return height; }

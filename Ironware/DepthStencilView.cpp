@@ -89,7 +89,7 @@ void DepthStencilView::BindAsBuffer( Graphics & gfx, BufferResource * renderTarg
 	BindAsBuffer( gfx, static_cast<RenderTarget*>( renderTarget ) );
 }
 
-SurfaceEx DepthStencilView::ToSurface( Graphics & gfx ) const
+SurfaceEx DepthStencilView::ToSurface( Graphics & gfx, bool toLinearize ) const
 {
 	INFOMAN( gfx );
 	namespace wrl = Microsoft::WRL;
@@ -131,14 +131,35 @@ SurfaceEx DepthStencilView::ToSurface( Graphics & gfx ) const
 			if( textureDesc.Format == DXGI_FORMAT::DXGI_FORMAT_R24G8_TYPELESS )
 			{
 				const auto raw = 0xFFFFFF & *reinterpret_cast<const uint32_t*>( pSrcRow + x );
-				const uint8_t channel = raw >> 16;
-				s.PutPixel( x, y, { channel,channel,channel } );
+				if( toLinearize )
+				{
+					const auto normalized = (float)raw / (float)0xFFFFFF;
+					const auto linearized = 0.01f / ( 1.01f - normalized );
+					const uint8_t channel = uint8_t( linearized * 255.0f );
+					s.PutPixel( x, y, { channel, channel, channel } );
+				}
+				else
+				{
+					const uint8_t channel = raw >> 16;
+					s.PutPixel( x, y, { channel, channel, channel } );
+				}
+
 			}
 			else if( textureDesc.Format == DXGI_FORMAT::DXGI_FORMAT_R32_TYPELESS )
 			{
 				const auto raw = *reinterpret_cast<const float*>( pSrcRow + x );
-				const auto channel = uint8_t( raw * 255.0f );
-				s.PutPixel( x, y, { channel,channel,channel } );
+				if( toLinearize )
+				{
+					const auto linearized = 0.01f / ( 1.01f - raw );
+					const auto channel = uint8_t( linearized * 255.0f );
+					s.PutPixel( x, y, { channel, channel, channel } );
+				}
+				else
+				{
+					const auto channel = uint8_t( raw * 255.0f );
+					s.PutPixel( x, y, { channel,channel,channel } );
+				}
+
 			}
 			else
 			{
