@@ -11,6 +11,7 @@
 #include "GraphicsExceptionMacros.h"
 #include "Vertex.h"
 #include "Sphere.h"
+#include "IronChannels.h"
 
 SolidSphere::SolidSphere( Graphics& gfx, float radius )
 {
@@ -37,7 +38,7 @@ SolidSphere::SolidSphere( Graphics& gfx, float radius )
 	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
 	{
-		RenderTechnique techq;
+		RenderTechnique techq{ IR_CH::main };
 		RenderStep only{ "lambertian" };
 
 		auto pVertexShader = VertexShader::Resolve( gfx, L"Solid_VS.cso" );

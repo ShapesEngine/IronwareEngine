@@ -9,9 +9,14 @@
 #include "RenderTechnique.h"
 #include "RenderGraph.h"
 
-RenderTechnique::RenderTechnique( std::wstring name, bool startActive ) noexcept :
+RenderTechnique::RenderTechnique( size_t channelFilter ) :
+	channels( channelFilter )
+{}
+
+RenderTechnique::RenderTechnique( std::wstring name, size_t channelFilter, bool startActive ) noexcept :
 	name( name ),
-	active( startActive )
+	active( startActive ),
+	channels( channelFilter )
 {}
 
 void RenderTechnique::InitializeParentReferences( const Drawable & parent ) noexcept
@@ -31,9 +36,9 @@ void RenderTechnique::Accept( TechniqueProbe & probe )
 	}
 }
 
-void RenderTechnique::Submit( const Drawable & drawable ) const noexcept
+void RenderTechnique::Submit( const Drawable & drawable, size_t channelFilter ) const noexcept
 {
-	if( active )
+	if( active && ( ( channels & channelFilter ) != 0ull ) )
 	{
 		for( const auto& step : steps )
 		{

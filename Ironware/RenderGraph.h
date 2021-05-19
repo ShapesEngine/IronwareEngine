@@ -30,6 +30,7 @@ protected:
 	void AddGlobalSink( std::unique_ptr<Sink> );
 	void Finalize();
 	void AppendPass( std::unique_ptr<Pass> pass );
+	Pass& FindPassByName( const std::string& name );
 
 private:
 	void LinkSinks( Pass& pass );

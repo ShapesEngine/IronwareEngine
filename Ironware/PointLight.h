@@ -26,7 +26,7 @@ class PointLight
 public:
 	PointLight( Graphics& gfx, DirectX::XMFLOAT3A homePos = { 0.f, 0.f, 0.f }, float radius = 0.5f );
 	void SpawnControlWindow() noexcept;
-	void Submit() const IFNOEXCEPT;
+	void Submit( size_t channelFilter ) const IFNOEXCEPT;
 	void Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept;
 	void LinkTechniques( RenderGraph& rg );
 	void Reset() noexcept;

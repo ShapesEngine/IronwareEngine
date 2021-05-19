@@ -11,6 +11,7 @@
 #include "Vertex.h"
 #include "Sphere.h"
 #include "DepthStencilState.h"
+#include "IronChannels.h"
 
 FrustumIndicator::FrustumIndicator( Graphics& gfx, float width, float height, float nearZ, float farZ )
 {
@@ -47,7 +48,7 @@ FrustumIndicator::FrustumIndicator( Graphics& gfx, float width, float height, fl
 	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
 
 	{
-		RenderTechnique line;
+		RenderTechnique line{ IR_CH::main };
 		{
 			RenderStep unoccluded( "lambertian" );
 
@@ -80,7 +81,7 @@ FrustumIndicator::FrustumIndicator( Graphics& gfx, float width, float height, fl
 
 			struct PSColorConstant2
 			{
-				dx::XMFLOAT3A color = { 0.25f,0.08f,0.08f };
+				dx::XMFLOAT3A color = { 0.25f, 0.08f, 0.08f };
 			} colorConst;
 			occluded.AddBindable( PixelConstantBuffer<PSColorConstant2>::Resolve( gfx, colorConst, 1u ) );
 

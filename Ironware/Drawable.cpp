@@ -34,11 +34,11 @@ void Drawable::AddTechnique( RenderTechnique tech_in ) noexcept
 	techniques.push_back( std::move( tech_in ) );
 }
 
-void Drawable::Submit() const noexcept
+void Drawable::Submit( size_t channelFilter ) const noexcept
 {
 	for( const auto& tech : techniques )
 	{
-		tech.Submit( *this );
+		tech.Submit( *this, channelFilter );
 	}
 }
 

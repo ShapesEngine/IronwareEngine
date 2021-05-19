@@ -18,6 +18,7 @@
 #include "WireframePass.h"
 #include "RenderTarget.h"
 #include "DynamicConstantBuffer.h"
+#include "ShadowMappingPass.h"
 #include "IronUtils.h"
 #include "IronMath.h"
 #include "imgui/imgui.h"
@@ -33,6 +34,10 @@ BlurOutlineRenderGraph::BlurOutlineRenderGraph( Graphics& gfx ) :
 	{
 		auto pass = std::make_unique<BufferClearPass>( "clearDS" );
 		pass->SetSinkLinkage( "buffer", "$.masterDepth" );
+		AppendPass( std::move( pass ) );
+	}
+	{
+		auto pass = std::make_unique<ShadowMappingPass>( gfx, "shadowMap" );
 		AppendPass( std::move( pass ) );
 	}
 	{
@@ -144,7 +149,7 @@ void BlurOutlineRenderGraph::RenderWidgets( Graphics& gfx )
 			static const char* curItem = items[0];
 			if( ImGui::BeginCombo( "Filter Type", curItem ) )
 			{
-				for(auto & item : items)
+				for( auto & item : items )
 				{
 					const bool isSelected = ( curItem == item );
 					if( ImGui::Selectable( item, isSelected ) )
@@ -184,4 +189,19 @@ void BlurOutlineRenderGraph::RenderWidgets( Graphics& gfx )
 		}
 	}
 	ImGui::End();
+}
+
+void BlurOutlineRenderGraph::DumpShadowMap( Graphics & gfx, const std::wstring & path )
+{
+	dynamic_cast<ShadowMappingPass&>( FindPassByName( "shadowMap" ) ).DumpShadowMap( gfx, path );
+}
+
+void BlurOutlineRenderGraph::BindMainCamera( Camera & cam )
+{
+	dynamic_cast<LambertianPass&>( FindPassByName( "lambertian" ) ).BindMainCamera( cam );
+}
+
+void BlurOutlineRenderGraph::BindShadowCamera( Camera & cam )
+{
+	dynamic_cast<ShadowMappingPass&>( FindPassByName( "shadowMap" ) ).BindShadowCamera( cam );
 }

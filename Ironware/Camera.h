@@ -41,7 +41,7 @@ public:
 	void Translate( DirectX::XMFLOAT3 translation ) noexcept;
 	void Reset( Graphics& gfx ) noexcept;
 	void LinkTechniques( RenderGraph& rg );
-	void Submit() const;
+	void Submit( size_t channel ) const;
 
 	void SpeedUp() noexcept { translationSpeed += translationSpeed <= MAX_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
 	void SpeedDown() noexcept { translationSpeed -= translationSpeed >= MIN_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }

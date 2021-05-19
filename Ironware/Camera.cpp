@@ -139,15 +139,15 @@ void Camera::LinkTechniques( RenderGraph & rg )
 	projection.LinkTechniques( rg );
 }
 
-void Camera::Submit() const
+void Camera::Submit( size_t channel ) const
 {
 	if( enableCameraIndicator )
 	{
-		indicator.Submit();
+		indicator.Submit( channel );
 	}
 	if( enableFrustumIndicator )
 	{
-		projection.Submit();
+		projection.Submit( channel );
 	}
 }
 

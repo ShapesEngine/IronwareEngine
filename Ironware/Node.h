@@ -19,7 +19,7 @@ class Node
 	friend class ModelWindow;
 public:
 	Node( std::vector<Mesh*> meshPtrs, const std::string& name, uint32_t index, const DirectX::XMMATRIX& transform_in ) IFNOEXCEPT;
-	void Submit( DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
+	void Submit( size_t channelFilter, DirectX::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT;
 	void Accept( class ModelProbe& probe );
 	void Accept( class TechniqueProbe& probe );
 

@@ -41,9 +41,9 @@ void Projection::RenderWidgets( Graphics& gfx )
 	}
 }
 
-void Projection::Submit() const
+void Projection::Submit( size_t channelFilter ) const
 {
-	indicator.Submit();
+	indicator.Submit( channelFilter );
 }
 
 void Projection::LinkTechniques( RenderGraph & rg )

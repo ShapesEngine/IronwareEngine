@@ -16,12 +16,16 @@
 class Graphics;
 class Bindable;
 class RenderTarget;
+class Camera;
 
 class BlurOutlineRenderGraph : public RenderGraph
 {
 public:
 	BlurOutlineRenderGraph( Graphics& gfx );
 	void RenderWidgets( Graphics& gfx );
+	void DumpShadowMap( Graphics& gfx, const std::wstring& path );
+	void BindMainCamera( Camera& cam );
+	void BindShadowCamera( Camera& cam );
 
 private:
 	void SetKernelGauss( int radius, float sigma ) IFNOEXCEPT;

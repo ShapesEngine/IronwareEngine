@@ -20,7 +20,7 @@ Node::Node( std::vector<Mesh*> meshPtrs, const std::string & name, uint32_t inde
 	dx::XMStoreFloat4x4( &appliedTransform, dx::XMMatrixIdentity() );
 }
 
-void Node::Submit( dx::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
+void Node::Submit( size_t channelFilter, dx::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
 {
 	const auto built =
 		dx::XMLoadFloat4x4( &appliedTransform ) *
@@ -28,12 +28,12 @@ void Node::Submit( dx::FXMMATRIX accumulatedTransform ) const IFNOEXCEPT
 		accumulatedTransform;
 	for( const auto pm : meshPtrs )
 	{
-		pm->Submit( built );
+		pm->Submit( channelFilter, built );
 	}
 
 	for( const auto& pc : childPtrs )
 	{
-		pc->Submit( built );
+		pc->Submit( channelFilter, built );
 	}
 }
 

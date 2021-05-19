@@ -60,7 +60,7 @@ void CameraContainer::Bind( Graphics & gfx )
 
 Camera * CameraContainer::operator->()
 {
-	return cameras[active].get();
+	return &GetActiveCamera();
 }
 
 void CameraContainer::LinkTechniques( RenderGraph& rg )
@@ -71,15 +71,20 @@ void CameraContainer::LinkTechniques( RenderGraph& rg )
 	}
 }
 
-void CameraContainer::Submit() const
+void CameraContainer::Submit( size_t channel ) const
 {
 	for( size_t i = 0; i < cameras.size(); i++ )
 	{
 		if( i != active )
 		{
-			cameras[i]->Submit();
+			cameras[i]->Submit( channel );
 		}
 	}
+}
+
+Camera & CameraContainer::GetActiveCamera()
+{
+	return *cameras[active];
 }
 
 Camera & CameraContainer::GetControlledCamera()

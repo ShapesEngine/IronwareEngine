@@ -274,6 +274,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraContainer.h" />
     <ClInclude Include="CameraIndicator.h" />
+    <ClInclude Include="IronChannels.h" />
     <ClInclude Include="CommonMacros.h" />
     <ClInclude Include="ConstantBuffersEx.h" />
     <ClInclude Include="DepthStencilState.h" />
@@ -297,6 +298,7 @@
     <ClInclude Include="OutlineDrawingPass.h" />
     <ClInclude Include="OutlineMaskGenerationPass.h" />
     <ClInclude Include="Projection.h" />
+    <ClInclude Include="ShadowMappingPass.h" />
     <ClInclude Include="Source.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RasterizerState.h" />

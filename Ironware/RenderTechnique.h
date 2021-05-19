@@ -22,13 +22,13 @@ class RenderGraph;
 class RenderTechnique
 {
 public:
-	RenderTechnique() = default;
-	RenderTechnique( std::wstring name, bool startActive = true ) noexcept;
+	RenderTechnique( size_t channelFilter );
+	RenderTechnique( std::wstring name, size_t channelFilter, bool startActive = true ) noexcept;
 	void InitializeParentReferences( const class Drawable& parent ) noexcept;
 	void Accept( TechniqueProbe& probe );
 	void Link( RenderGraph& rg );
 	void AddStep( RenderStep step ) noexcept { steps.push_back( std::move( step ) ); }
-	void Submit( const Drawable& drawable ) const noexcept;
+	void Submit( const Drawable& drawable, size_t channelFilter ) const noexcept;
 	bool IsActive() const noexcept { return active; }
 	void SetActive( bool active_val ) noexcept { active = active_val; }
 	const std::wstring& GetName() const noexcept { return name; }
@@ -37,4 +37,5 @@ private:
 	bool active = true;
 	std::vector<RenderStep> steps;
 	std::wstring name;
+	size_t channels;
 };

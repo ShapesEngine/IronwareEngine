@@ -11,6 +11,7 @@
 #include "Vertex.h"
 #include "Sphere.h"
 #include "DepthStencilState.h"
+#include "IronChannels.h"
 
 CameraIndicator::CameraIndicator( Graphics& gfx )
 {
@@ -64,7 +65,7 @@ CameraIndicator::CameraIndicator( Graphics& gfx )
 	pTopology = PrimitiveTopology::Resolve( gfx, D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
 
 	{
-		RenderTechnique line;
+		RenderTechnique line{ IR_CH::main };
 		RenderStep only( "lambertian" );
 
 		auto pvs = VertexShader::Resolve( gfx, L"Solid_VS.cso" );

@@ -22,7 +22,7 @@ public:
 	void RenderWidgets( Graphics& gfx );
 	void SetPos( DirectX::XMFLOAT3 pos_in ) { indicator.SetPos( pos_in ); }
 	void SetRotation( DirectX::XMFLOAT3 rot_in ) { indicator.SetRotation( rot_in ); }
-	void Submit() const;
+	void Submit( size_t channelFilter ) const;
 	void LinkTechniques( RenderGraph& rg );
 	void Reset( Graphics& gfx );
 

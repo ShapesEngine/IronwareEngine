@@ -53,12 +53,12 @@ void PointLight::SpawnControlWindow() noexcept
 	ImGui::End();
 }
 
-void PointLight::Submit() const IFNOEXCEPT
+void PointLight::Submit( size_t channelFilter ) const IFNOEXCEPT
 {
 	const DirectX::XMFLOAT3A color = { cbufData.diffuseColor.x, cbufData.diffuseColor.y, cbufData.diffuseColor.z };
 	//mesh.UpdateColor( gfx, color );
 	mesh.SetPosition( cbufData.pos );
-	mesh.Submit();
+	mesh.Submit( channelFilter );
 }
 
 void PointLight::Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept

@@ -66,10 +66,10 @@ Model::Model( Graphics& gfx, std::wstring path, float scale, DirectX::XMFLOAT3 s
 	pRoot->SetAppliedTransform( DirectX::XMMatrixTranslationFromVector( DirectX::XMLoadFloat3( &startingPos ) ) );
 }
 
-void Model::Submit() const IFNOEXCEPT
+void Model::Submit( size_t channelFilter ) const IFNOEXCEPT
 {
 	/*pModelWindow->ApplyParameters();*/
-	pRoot->Submit( dx::XMMatrixIdentity() );
+	pRoot->Submit( channelFilter, dx::XMMatrixIdentity() );
 }
 
 void Model::SetRootTransform( DirectX::FXMMATRIX tf ) noexcept

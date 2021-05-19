@@ -24,7 +24,8 @@ public:
 	void Bind( Graphics& gfx );
 	Camera* operator->();
 	void LinkTechniques( RenderGraph& rg );
-	void Submit() const;
+	void Submit( size_t channel ) const;
+	Camera& GetActiveCamera();
 
 private:
 	Camera& GetControlledCamera();

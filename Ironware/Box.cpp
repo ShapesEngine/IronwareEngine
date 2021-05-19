@@ -15,6 +15,7 @@
 #include "DynamicConstantBuffer.h"
 #include "RenderTechnique.h"
 #include "TechniqueProbe.h"
+#include "IronChannels.h"
 
 #include <imgui/imgui.h>
 
@@ -52,7 +53,7 @@ Box::Box( Graphics & gfx, float size )
 	auto tcb = std::make_shared<TransformCBuffer>( gfx );
 
 	{
-		RenderTechnique shade( L"Shade" );
+		RenderTechnique shade( L"Shade", IR_CH::main );
 		{
 			RenderStep only( "lambertian" );
 
@@ -86,9 +87,8 @@ Box::Box( Graphics & gfx, float size )
 		}
 		AddTechnique( std::move( shade ) );
 	}
-
 	{
-		RenderTechnique outline( L"Outline" );
+		RenderTechnique outline( L"Outline", IR_CH::main );
 		{
 			RenderStep mask( "outlineMask" );
 
@@ -120,6 +120,20 @@ Box::Box( Graphics & gfx, float size )
 			outline.AddStep( std::move( draw ) );
 		}
 		AddTechnique( std::move( outline ) );
+	}
+	// shadow map technique
+	{
+		RenderTechnique map{ L"ShadowMap", IR_CH::shadow, true };
+		{
+			RenderStep draw( "shadowMap" );
+
+			draw.AddBindable( InputLayout::Resolve( gfx, layout, *VertexShader::Resolve( gfx, L"Solid_VS.cso" ) ) );
+
+			draw.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+
+			map.AddStep( std::move( draw ) );
+		}
+		AddTechnique( std::move( map ) );
 	}
 }
 

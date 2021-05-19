@@ -51,7 +51,7 @@ public:
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void AddTechnique( RenderTechnique tech_in ) noexcept;
-	void Submit() const noexcept;
+	void Submit( size_t channelFilter ) const noexcept;
 	void Bind( Graphics& gfx ) const IFNOEXCEPT;
 	void Accept( class TechniqueProbe& probe );
 	UINT GetIndexCount() const IFNOEXCEPT;

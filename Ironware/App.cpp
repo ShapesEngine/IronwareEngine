@@ -15,14 +15,22 @@
 #include "Node.h"
 #include "TestModelProbe.h"
 #include "Camera.h"
+#include "IronChannels.h"
 
 #include <DirectXTex/DirectXTex.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+
 #include <string>
 
 App::App()
 {
+	nano.SetRootTransform(
+		DirectX::XMMatrixRotationY( PI / 2.f ) *
+		DirectX::XMMatrixTranslation( 40.f, 0.f, 2.f )
+	);
+	cube.SetPos( { 40.f, 0.f, 25.f } );
+
 	cameras.AddCamera( std::make_unique<Camera>( wnd.Gfx(), "1", DirectX::XMFLOAT3{ -60.f, 5.f, 2.f }, 0.f, PI / 2.f ) );
 	cameras.AddCamera( std::make_unique<Camera>( wnd.Gfx(), "2", DirectX::XMFLOAT3{ 60.f, 5.f, 2.f }, 0.f, -PI / 2.f ) );
 	cameras.AddCamera( pointLight.ShareCamera() );
@@ -35,11 +43,7 @@ App::App()
 	cube2.LinkTechniques( rg );
 	cameras.LinkTechniques( rg );
 
-	nano.SetRootTransform(
-		DirectX::XMMatrixRotationY( PI / 2.f ) *
-		DirectX::XMMatrixTranslation( 40.f, 0.f, 2.f )
-	);
-	cube.SetPos( { 40.f, 0.f, 25.f } );
+	rg.BindShadowCamera( *pointLight.ShareCamera() );
 
 	wnd.EnableMouseCursor();
 }
@@ -64,18 +68,31 @@ int App::BeginFrame()
 void App::ProcessFrame()
 {
 	wnd.Gfx().BeginFrame( 0.07f, 0.f, 0.12f );
-	cameras->BindToGraphics( wnd.Gfx() );
 	pointLight.Bind( wnd.Gfx(), cameras->GetMatrix() );
+	rg.BindMainCamera( cameras.GetActiveCamera() );
 
-	nano.Submit();
-	goblin.Submit();
-	pointLight.Submit();
-	sponza.Submit();
-	cube.Submit();
-	//cube2.Submit();
-	cameras.Submit();
+	nano.Submit( IR_CH::main );
+	goblin.Submit( IR_CH::main );
+	pointLight.Submit( IR_CH::main );
+	sponza.Submit( IR_CH::main );
+	cube.Submit( IR_CH::main );
+	cube2.Submit( IR_CH::main );
+	cameras.Submit( IR_CH::main );
+
+	sponza.Submit( IR_CH::shadow );
+	cube.Submit( IR_CH::shadow );
+	sponza.Submit( IR_CH::shadow );
+	cube2.Submit( IR_CH::shadow );
+	goblin.Submit( IR_CH::shadow );
+	nano.Submit( IR_CH::shadow );
 
 	rg.Execute( wnd.Gfx() );
+
+	if( isSavingDepthExeRunning )
+	{
+		rg.DumpShadowMap( wnd.Gfx(), L"shadow.png" );
+		isSavingDepthExeRunning = false;
+	}
 
 	// imgui windows
 	static MP sponzaProbe{ "Sponza" };
@@ -92,12 +109,6 @@ void App::ProcessFrame()
 	// present
 	wnd.Gfx().EndFrame();
 	rg.Reset();
-
-	if( isSavingDepthExeRunning )
-	{
-		rg.StoreDepth( wnd.Gfx(), L"depth.png" );
-		isSavingDepthExeRunning = false;
-	}
 }
 
 void App::HandleInput()

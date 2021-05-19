@@ -10,6 +10,7 @@
 #include "IronUtils.h"
 #include "TransformCBufferScaling.h"
 #include "DepthStencilState.h"
+#include "IronChannels.h"
 
 Material::Material( Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path ) IFNOEXCEPT :
 modelPath( path.wstring() )
@@ -22,7 +23,7 @@ modelPath( path.wstring() )
 	}
 	// phong technique
 	{
-		RenderTechnique phong{ L"Phong" };
+		RenderTechnique phong{ L"Phong", IR_CH::main };
 		RenderStep step( "lambertian" );
 		std::wstring shaderCode = L"Phong";
 		aiString texFileName;
@@ -130,11 +131,11 @@ modelPath( path.wstring() )
 	}
 	// outline technique
 	{
-		RenderTechnique outline( L"Outline", false );
+		RenderTechnique outline( L"Outline", IR_CH::main, false );
 		{
 			RenderStep mask( "outlineMask" );
 
-			mask.AddBindable( InputLayout::Resolve( gfx, vtxLayout, *VertexShader::Resolve(gfx, L"Solid_VS.cso") ) );
+			mask.AddBindable( InputLayout::Resolve( gfx, vtxLayout, *VertexShader::Resolve( gfx, L"Solid_VS.cso" ) ) );
 
 			mask.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
@@ -154,13 +155,27 @@ modelPath( path.wstring() )
 				draw.AddBindable( std::make_shared<CachingPixelConstantBufferEx>( gfx, buf, 1u ) );
 			}
 
-			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, *VertexShader::Resolve(gfx, L"Solid_VS.cso") ) );
+			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, *VertexShader::Resolve( gfx, L"Solid_VS.cso" ) ) );
 
 			draw.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
 
 			outline.AddStep( std::move( draw ) );
 		}
 		techniques.push_back( std::move( outline ) );
+	}
+	// shadow map technique
+	{
+		RenderTechnique map{ L"ShadowMap", IR_CH::shadow, true };
+		{
+			RenderStep draw( "shadowMap" );
+
+			draw.AddBindable( InputLayout::Resolve( gfx, vtxLayout, *VertexShader::Resolve( gfx, L"Solid_VS.cso" ) ) );
+
+			draw.AddBindable( std::make_shared<TransformCBuffer>( gfx ) );
+
+			map.AddStep( std::move( draw ) );
+		}
+		techniques.push_back( std::move( map ) );
 	}
 }
 
