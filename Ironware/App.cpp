@@ -77,7 +77,6 @@ void App::ProcessFrame()
 
 	rg.Execute( wnd.Gfx() );
 
-
 	// imgui windows
 	static MP sponzaProbe{ "Sponza" };
 	static MP goblinProbe{ "Goblin" };
@@ -93,6 +92,12 @@ void App::ProcessFrame()
 	// present
 	wnd.Gfx().EndFrame();
 	rg.Reset();
+
+	if( isSavingDepthExeRunning )
+	{
+		rg.StoreDepth( wnd.Gfx(), L"depth.png" );
+		isSavingDepthExeRunning = false;
+	}
 }
 
 void App::HandleInput()
@@ -106,11 +111,6 @@ void App::HandleInput()
 	else
 	{
 		wnd.EnableMouseCursor();
-	}
-
-	if( wnd.kbd.KeyIsPressed( VK_ESCAPE ) )
-	{
-		PostQuitMessage( 0 );
 	}
 
 	if( !wnd.IsCursorEnabled() )
@@ -154,6 +154,19 @@ void App::HandleInput()
 			{
 				cameras->SpeedDown();
 			}
+		}
+	}
+
+	while( const auto e = wnd.kbd.ReadKey() )
+	{
+		switch( e->GetCode() )
+		{
+		case VK_ESCAPE:
+			PostQuitMessage( 0 );
+			break;
+		case 'P':
+		case VK_RETURN:
+			isSavingDepthExeRunning = true;
 		}
 	}
 }

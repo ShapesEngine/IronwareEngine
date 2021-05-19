@@ -33,7 +33,7 @@ void SurfaceEx::PutPixel( uint32_t x, uint32_t y, Color c ) IFNOEXCEPT
 	assert( x < GetWidth() );
 	assert( y < GetHeight() );
 	auto& imgData = *scratchImg.GetImage( 0u, 0u, 0u );
-	reinterpret_cast<Color*>( imgData.pixels[imgData.rowPitch * y] )[x] = c;
+	reinterpret_cast<Color*>( &imgData.pixels[imgData.rowPitch * y] )[x] = c;
 }
 
 SurfaceEx::Color SurfaceEx::GetPixel( uint32_t x, uint32_t y ) const IFNOEXCEPT

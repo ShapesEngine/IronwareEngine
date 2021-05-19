@@ -15,6 +15,7 @@
 #include "RenderQueuePass.h"
 #include "Sink.h"
 #include "Source.h"
+#include "SurfaceEx.h"
 
 #include <sstream>
 
@@ -193,4 +194,9 @@ RenderQueuePass& RenderGraph::GetRenderQueue( const std::string& passName )
 		throw RGC_EXCEPTION( "In RenderGraph::GetRenderQueue, pass was not RenderQueuePass: " + passName );
 	}
 	throw RGC_EXCEPTION( "In RenderGraph::GetRenderQueue, pass not found: " + passName );
+}
+
+void RenderGraph::StoreDepth( Graphics & gfx, const std::wstring & path )
+{
+	masterDepth->ToSurface( gfx ).Save( path );
 }

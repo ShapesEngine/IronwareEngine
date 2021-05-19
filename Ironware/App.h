@@ -58,4 +58,5 @@ private:
 	Box cube{ wnd.Gfx(), 5.f };
 	Box cube2{ wnd.Gfx(), 5.f };
 	IronTimer timer;
+	bool isSavingDepthExeRunning = false;
 };
