@@ -48,7 +48,7 @@ void CameraContainer::SpawnWindow( Graphics& gfx )
 	ImGui::End();
 }
 
-void CameraContainer::AddCamera( std::unique_ptr<Camera> pCam )
+void CameraContainer::AddCamera( std::shared_ptr<Camera> pCam )
 {
 	cameras.push_back( std::move( pCam ) );
 }

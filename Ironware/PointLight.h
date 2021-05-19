@@ -19,16 +19,18 @@
 #include "CommonMacros.h"
 
 class RenderGraph;
+class Camera;
 
 class PointLight
 {
 public:
-	PointLight( Graphics& gfx, float radius = 0.5f );
+	PointLight( Graphics& gfx, DirectX::XMFLOAT3A homePos = { 0.f, 0.f, 0.f }, float radius = 0.5f );
 	void SpawnControlWindow() noexcept;
 	void Submit() const IFNOEXCEPT;
 	void Bind( Graphics& gfx, DirectX::FXMMATRIX view ) const noexcept;
 	void LinkTechniques( RenderGraph& rg );
 	void Reset() noexcept;
+	std::shared_ptr<Camera> ShareCamera() const noexcept;
 
 private:
 	struct PointLightCBuf
@@ -44,6 +46,8 @@ private:
 	};
 
 private:
+	DirectX::XMFLOAT3A homePos;
+	std::shared_ptr<Camera> pCamera;
 	PointLightCBuf cbufData;
 	mutable SolidSphere mesh;
 	mutable PixelConstantBuffer<PointLightCBuf> cbuffer;

@@ -7,12 +7,15 @@
  * \date November 2020
  */
 #include "PointLight.h"
+#include "Camera.h"
 
 #include <imgui/imgui.h>
 
-PointLight::PointLight( Graphics& gfx, float radius ) :
+PointLight::PointLight( Graphics& gfx, DirectX::XMFLOAT3A homePos, float radius ) :
+	homePos( homePos ),
 	mesh( gfx, radius ),
-	cbuffer( gfx )
+	cbuffer( gfx ),
+	pCamera( std::make_shared<Camera>( gfx, "Light", homePos, 0.f, 0.f, true ) )
 {
 	Reset();
 }
@@ -21,10 +24,16 @@ void PointLight::SpawnControlWindow() noexcept
 {
 	if( ImGui::Begin( "Light" ) )
 	{
+		bool dirtyPos = false;
+		const auto dcheck = [&dirtyPos]( bool dirty ) {dirtyPos = dirtyPos || dirty; };
 		ImGui::Text( "Position" );
-		ImGui::SliderFloat( "X", &cbufData.pos.x, -65.f, 65.f, "%.1f" );
-		ImGui::SliderFloat( "Y", &cbufData.pos.y, -65.f, 65.f, "%.1f" );
-		ImGui::SliderFloat( "Z", &cbufData.pos.z, -65.f, 65.f, "%.1f" );
+		dcheck( ImGui::SliderFloat( "X", &cbufData.pos.x, -65.f, 65.f, "%.1f" ) );
+		dcheck( ImGui::SliderFloat( "Y", &cbufData.pos.y, -65.f, 65.f, "%.1f" ) );
+		dcheck( ImGui::SliderFloat( "Z", &cbufData.pos.z, -65.f, 65.f, "%.1f" ) );
+		if( dirtyPos )
+		{
+			pCamera->SetPos( cbufData.pos );
+		}
 
 		ImGui::Text( "Intensity/Color" );
 		ImGui::SliderFloat( "Intensity", &cbufData.diffuseIntensity, 0.01f, 2.f, "%.2f", 2.f );
@@ -73,7 +82,7 @@ void PointLight::LinkTechniques( RenderGraph & rg )
 void PointLight::Reset() noexcept
 {
 	cbufData = {
-		{ 10.f,9.f,2.5f },
+		homePos,
 		{ 0.05f, 0.05f, 0.05f },
 		{ 1.f, 1.f, 1.f },
 		1.f,
@@ -81,4 +90,9 @@ void PointLight::Reset() noexcept
 		0.045f,
 		0.0075f,
 	};
+}
+
+std::shared_ptr<Camera> PointLight::ShareCamera() const noexcept
+{
+	return pCamera;
 }

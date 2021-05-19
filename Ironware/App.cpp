@@ -25,6 +25,7 @@ App::App()
 {
 	cameras.AddCamera( std::make_unique<Camera>( wnd.Gfx(), "1", DirectX::XMFLOAT3{ -60.f, 5.f, 2.f }, 0.f, PI / 2.f ) );
 	cameras.AddCamera( std::make_unique<Camera>( wnd.Gfx(), "2", DirectX::XMFLOAT3{ 60.f, 5.f, 2.f }, 0.f, -PI / 2.f ) );
+	cameras.AddCamera( pointLight.ShareCamera() );
 
 	pointLight.LinkTechniques( rg );
 	sponza.LinkTechniques( rg );
@@ -75,6 +76,7 @@ void App::ProcessFrame()
 	cameras.Submit();
 
 	rg.Execute( wnd.Gfx() );
+
 
 	// imgui windows
 	static MP sponzaProbe{ "Sponza" };

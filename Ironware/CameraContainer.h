@@ -20,7 +20,7 @@ class CameraContainer
 {
 public:
 	void SpawnWindow( Graphics& gfx );
-	void AddCamera( std::unique_ptr<Camera> pCam );
+	void AddCamera( std::shared_ptr<Camera> pCam );
 	void Bind( Graphics& gfx );
 	Camera* operator->();
 	void LinkTechniques( RenderGraph& rg );
@@ -30,7 +30,7 @@ private:
 	Camera& GetControlledCamera();
 
 private:
-	std::vector<std::unique_ptr<Camera>> cameras;
+	std::vector<std::shared_ptr<Camera>> cameras;
 	uint32_t active = 0u;
 	uint32_t controlled = 0u;
 };

@@ -33,7 +33,7 @@ class RnederGraph;
 class Camera
 {
 public:
-	Camera( Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos = { 0.f, 0.f, 0.f }, float homePitch = 0.f, float homeYaw = 0.f ) noexcept;
+	Camera( Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos = { 0.f, 0.f, 0.f }, float homePitch = 0.f, float homeYaw = 0.f, bool tethered = false ) noexcept;
 	void BindToGraphics( Graphics& gfx ) const;
 	DirectX::XMMATRIX GetMatrix() const noexcept;
 	void SpawnControlWidgets( Graphics& gfx ) noexcept;
@@ -45,10 +45,12 @@ public:
 
 	void SpeedUp() noexcept { translationSpeed += translationSpeed <= MAX_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
 	void SpeedDown() noexcept { translationSpeed -= translationSpeed >= MIN_SPEED_LIMIT ? SPEED_MOD_VALUE : 0.f; }
+	void SetPos( DirectX::XMFLOAT3 pos_in ) noexcept;
 	const DirectX::XMFLOAT3& GetPos() const noexcept { return pos; }
 	const std::string& GetName() const noexcept { return name; }
 
 private:
+	bool tethered;
 	std::string name;
 	DirectX::XMFLOAT3 homePos;
 	float homePitch;
