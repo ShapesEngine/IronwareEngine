@@ -161,7 +161,7 @@ struct aiRay {
 struct aiColor3D
 {
 #ifdef __cplusplus
-    aiColor3D () AI_NO_EXCEPT : r(0.0f), g(0.0f), b(0.0f) {}
+    aiColor3D () AI_NO_EXCEPT : r(0.f), g(0.f), b(0.f) {}
     aiColor3D (ai_real _r, ai_real _g, ai_real _b) : r(_r), g(_g), b(_b) {}
     explicit aiColor3D (ai_real _r) : r(_r), g(_r), b(_r) {}
     aiColor3D (const aiColor3D& o) : r(o.r), g(o.g), b(o.b) {}

@@ -354,7 +354,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // default value for AI_CONFIG_PP_LBW_MAX_WEIGHTS
 #if (!defined AI_DEBONE_THRESHOLD)
-#   define AI_DEBONE_THRESHOLD  1.0f
+#   define AI_DEBONE_THRESHOLD  1.f
 #endif // !! AI_DEBONE_THRESHOLD
 
 // ---------------------------------------------------------------------------
@@ -934,7 +934,7 @@ enum aiComponent
 
 // default value for AI_CONFIG_IMPORT_IFC_SMOOTHING_ANGLE
 #if (!defined AI_IMPORT_IFC_DEFAULT_SMOOTHING_ANGLE)
-#   define AI_IMPORT_IFC_DEFAULT_SMOOTHING_ANGLE 10.0f
+#   define AI_IMPORT_IFC_DEFAULT_SMOOTHING_ANGLE 10.f
 #endif
 
 // ---------------------------------------------------------------------------
@@ -996,7 +996,7 @@ enum aiComponent
 #define AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY "GLOBAL_SCALE_FACTOR"
 
 #if (!defined AI_CONFIG_GLOBAL_SCALE_FACTOR_DEFAULT)
-#   define AI_CONFIG_GLOBAL_SCALE_FACTOR_DEFAULT  1.0f
+#   define AI_CONFIG_GLOBAL_SCALE_FACTOR_DEFAULT  1.f
 #endif // !! AI_DEBONE_THRESHOLD
 
 #define AI_CONFIG_APP_SCALE_KEY "APP_SCALE_FACTOR"

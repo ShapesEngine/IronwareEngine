@@ -132,7 +132,7 @@ void BlurOutlineRenderGraph::SetKernelBox( int radius ) IFNOEXCEPT
 	auto k = blurKernel->GetBuffer();
 	const int nTaps = radius * 2 + 1;
 	k["nTaps"] = nTaps;
-	const float c = 1.0f / nTaps;
+	const float c = 1.f / nTaps;
 	for( int i = 0; i < nTaps; i++ )
 	{
 		k["coefficients"][i] = c;

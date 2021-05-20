@@ -20,19 +20,19 @@ CameraIndicator::CameraIndicator( Graphics& gfx )
 	layout.Append( VertexLayout::ElementType::Position3D );
 	VertexByteBuffer vertices{ std::move( layout ) };
 	{
-		const float x = 4.0f / 3.0f * 0.75f;
-		const float y = 1.0f * 0.75f;
-		const float z = -2.0f;
+		const float x = 4.f / 3.f * 0.75f;
+		const float y = 1.f * 0.75f;
+		const float z = -2.f;
 		const float thalf = x * 0.5f;
 		const float tspace = y * 0.2f;
-		vertices.EmplaceBack( dx::XMFLOAT3{ -x,y,0.0f } );
-		vertices.EmplaceBack( dx::XMFLOAT3{ x,y,0.0f } );
-		vertices.EmplaceBack( dx::XMFLOAT3{ x,-y,0.0f } );
-		vertices.EmplaceBack( dx::XMFLOAT3{ -x,-y,0.0f } );
-		vertices.EmplaceBack( dx::XMFLOAT3{ 0.0f,0.0f,z } );
-		vertices.EmplaceBack( dx::XMFLOAT3{ -thalf,y + tspace,0.0f } );
-		vertices.EmplaceBack( dx::XMFLOAT3{ thalf,y + tspace,0.0f } );
-		vertices.EmplaceBack( dx::XMFLOAT3{ 0.0f,y + tspace + thalf,0.0f } );
+		vertices.EmplaceBack( dx::XMFLOAT3{ -x,y,0.f } );
+		vertices.EmplaceBack( dx::XMFLOAT3{ x,y,0.f } );
+		vertices.EmplaceBack( dx::XMFLOAT3{ x,-y,0.f } );
+		vertices.EmplaceBack( dx::XMFLOAT3{ -x,-y,0.f } );
+		vertices.EmplaceBack( dx::XMFLOAT3{ 0.f,0.f,z } );
+		vertices.EmplaceBack( dx::XMFLOAT3{ -thalf,y + tspace,0.f } );
+		vertices.EmplaceBack( dx::XMFLOAT3{ thalf,y + tspace,0.f } );
+		vertices.EmplaceBack( dx::XMFLOAT3{ 0.f,y + tspace + thalf,0.f } );
 	}
 	std::vector<uint16_t> indices;
 	{

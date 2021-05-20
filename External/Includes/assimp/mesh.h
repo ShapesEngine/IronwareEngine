@@ -223,7 +223,7 @@ struct aiVertexWeight {
     //! Default constructor
     aiVertexWeight() AI_NO_EXCEPT
     : mVertexId(0)
-    , mWeight(0.0f) {
+    , mWeight(0.f) {
         // empty
     }
 
@@ -466,7 +466,7 @@ struct aiAnimMesh
         , mColors()
         , mTextureCoords()
         , mNumVertices( 0 )
-        , mWeight( 0.0f )
+        , mWeight( 0.f )
     {
         // fixme consider moving this to the ctor initializer list as well
         for( unsigned int a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++){
@@ -656,8 +656,8 @@ struct aiMesh
     /** Specifies the number of components for a given UV channel.
     * Up to three channels are supported (UVW, for accessing volume
     * or cube maps). If the value is 2 for a given channel n, the
-    * component p.z of mTextureCoords[n][p] is set to 0.0f.
-    * If the value is 1 for a given channel, p.y is set to 0.0f, too.
+    * component p.z of mTextureCoords[n][p] is set to 0.f.
+    * If the value is 1 for a given channel, p.y is set to 0.f, too.
     * @note 4D coords are not supported
     */
     unsigned int mNumUVComponents[AI_MAX_NUMBER_OF_TEXTURECOORDS];

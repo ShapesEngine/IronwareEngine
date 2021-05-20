@@ -70,7 +70,7 @@ public:
 
     HDRColorA operator / (float f) const noexcept
     {
-        float fInv = 1.0f / f;
+        float fInv = 1.f / f;
         return HDRColorA(r * fInv, g * fInv, b * fInv, a * fInv);
     }
 
@@ -109,7 +109,7 @@ public:
 
     HDRColorA& operator /= (float f) noexcept
     {
-        float fInv = 1.0f / f;
+        float fInv = 1.f / f;
         r *= fInv;
         g *= fInv;
         b *= fInv;
@@ -171,16 +171,16 @@ struct D3DX_BC3
 #pragma warning(disable : 4127)
 template <bool bRange> void OptimizeAlpha(float *pX, float *pY, const float *pPoints, uint32_t cSteps) noexcept
 {
-    static const float pC6[] = { 5.0f / 5.0f, 4.0f / 5.0f, 3.0f / 5.0f, 2.0f / 5.0f, 1.0f / 5.0f, 0.0f / 5.0f };
-    static const float pD6[] = { 0.0f / 5.0f, 1.0f / 5.0f, 2.0f / 5.0f, 3.0f / 5.0f, 4.0f / 5.0f, 5.0f / 5.0f };
-    static const float pC8[] = { 7.0f / 7.0f, 6.0f / 7.0f, 5.0f / 7.0f, 4.0f / 7.0f, 3.0f / 7.0f, 2.0f / 7.0f, 1.0f / 7.0f, 0.0f / 7.0f };
-    static const float pD8[] = { 0.0f / 7.0f, 1.0f / 7.0f, 2.0f / 7.0f, 3.0f / 7.0f, 4.0f / 7.0f, 5.0f / 7.0f, 6.0f / 7.0f, 7.0f / 7.0f };
+    static const float pC6[] = { 5.f / 5.f, 4.f / 5.f, 3.f / 5.f, 2.f / 5.f, 1.f / 5.f, 0.f / 5.f };
+    static const float pD6[] = { 0.f / 5.f, 1.f / 5.f, 2.f / 5.f, 3.f / 5.f, 4.f / 5.f, 5.f / 5.f };
+    static const float pC8[] = { 7.f / 7.f, 6.f / 7.f, 5.f / 7.f, 4.f / 7.f, 3.f / 7.f, 2.f / 7.f, 1.f / 7.f, 0.f / 7.f };
+    static const float pD8[] = { 0.f / 7.f, 1.f / 7.f, 2.f / 7.f, 3.f / 7.f, 4.f / 7.f, 5.f / 7.f, 6.f / 7.f, 7.f / 7.f };
 
     const float *pC = (6 == cSteps) ? pC6 : pC8;
     const float *pD = (6 == cSteps) ? pD6 : pD8;
 
-    const float MAX_VALUE = 1.0f;
-    const float MIN_VALUE = (bRange) ? -1.0f : 0.0f;
+    const float MAX_VALUE = 1.f;
+    const float MIN_VALUE = (bRange) ? -1.f : 0.f;
 
     // Find Min and Max points, as starting point
     float fX = MAX_VALUE;
@@ -219,7 +219,7 @@ template <bool bRange> void OptimizeAlpha(float *pX, float *pY, const float *pPo
 
     for (size_t iIteration = 0; iIteration < 8; iIteration++)
     {
-        if ((fY - fX) < (1.0f / 256.0f))
+        if ((fY - fX) < (1.f / 256.f))
             break;
 
         float fScale = fSteps / (fY - fX);
@@ -237,17 +237,17 @@ template <bool bRange> void OptimizeAlpha(float *pX, float *pY, const float *pPo
         }
 
         // Evaluate function, and derivatives
-        float dX = 0.0f;
-        float dY = 0.0f;
-        float d2X = 0.0f;
-        float d2Y = 0.0f;
+        float dX = 0.f;
+        float dY = 0.f;
+        float d2X = 0.f;
+        float d2Y = 0.f;
 
         for (size_t iPoint = 0; iPoint < NUM_PIXELS_PER_BLOCK; iPoint++)
         {
             float fDot = (pPoints[iPoint] - fX) * fScale;
 
             uint32_t iStep;
-            if (fDot <= 0.0f)
+            if (fDot <= 0.f)
             {
                 // D3DX10 / D3DX11 didn't take into account the proper minimum value for the bRange (BC4S/BC5S) case
                 iStep = ((6 == cSteps) && (pPoints[iPoint] <= (fX + MIN_VALUE) * 0.5f)) ? 6u : 0u;
@@ -276,10 +276,10 @@ template <bool bRange> void OptimizeAlpha(float *pX, float *pY, const float *pPo
         }
 
         // Move endpoints
-        if (d2X > 0.0f)
+        if (d2X > 0.f)
             fX -= dX / d2X;
 
-        if (d2Y > 0.0f)
+        if (d2Y > 0.f)
             fY -= dY / d2Y;
 
         if (fX > fY)
@@ -287,7 +287,7 @@ template <bool bRange> void OptimizeAlpha(float *pX, float *pY, const float *pPo
             float f = fX; fX = fY; fY = f;
         }
 
-        if ((dX * dX < (1.0f / 64.0f)) && (dY * dY < (1.0f / 64.0f)))
+        if ((dX * dX < (1.f / 64.f)) && (dY * dY < (1.f / 64.f)))
             break;
     }
 

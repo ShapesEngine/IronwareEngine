@@ -77,7 +77,7 @@ void Camera::SpawnControlWidgets( Graphics& gfx ) noexcept
 
 	if( rotDirty )
 	{
-		const dx::XMFLOAT3 angles = { pitch,yaw,0.0f };
+		const dx::XMFLOAT3 angles = { pitch,yaw,0.f };
 		indicator.SetRotation( angles );
 		projection.SetRotation( angles );
 	}

@@ -21,6 +21,6 @@ public:
 	void SetRotation( DirectX::XMFLOAT3 rot_in ) noexcept { rot = rot_in; }
 
 private:
-	DirectX::XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
-	DirectX::XMFLOAT3 rot = { 0.0f,0.0f,0.0f };
+	DirectX::XMFLOAT3 pos = { 0.f,0.f,0.f };
+	DirectX::XMFLOAT3 rot = { 0.f,0.f,0.f };
 };

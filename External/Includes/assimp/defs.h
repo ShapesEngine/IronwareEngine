@@ -264,7 +264,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* And this is to avoid endless casts to float */
 #define AI_MATH_PI_F        (3.1415926538f)
-#define AI_MATH_TWO_PI_F    (AI_MATH_PI_F * 2.0f)
+#define AI_MATH_TWO_PI_F    (AI_MATH_PI_F * 2.f)
 #define AI_MATH_HALF_PI_F   (AI_MATH_PI_F * 0.5f)
 
 /* Tiny macro to convert from radians to degrees and back */

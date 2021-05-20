@@ -164,7 +164,7 @@ modelPath( path.wstring() )
 		techniques.push_back( std::move( outline ) );
 	}
 	// shadow map technique
-	/*{
+	{
 		RenderTechnique map{ L"ShadowMap", IR_CH::shadow, true };
 		{
 			RenderStep draw( "shadowMap" );
@@ -176,7 +176,7 @@ modelPath( path.wstring() )
 			map.AddStep( std::move( draw ) );
 		}
 		techniques.push_back( std::move( map ) );
-	}*/
+	}
 }
 
 VertexByteBuffer Material::ExtractVertices( const aiMesh& mesh ) const noexcept

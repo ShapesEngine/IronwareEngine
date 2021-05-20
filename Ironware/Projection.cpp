@@ -30,10 +30,10 @@ void Projection::RenderWidgets( Graphics& gfx )
 	const auto dcheck = [&dirty]( bool d ) { dirty = dirty || d; };
 
 	ImGui::Text( "Projection" );
-	dcheck( ImGui::SliderFloat( "Width", &width, 0.01f, 4.0f, "%.2f", 1.5f ) );
-	dcheck( ImGui::SliderFloat( "Height", &height, 0.01f, 4.0f, "%.2f", 1.5f ) );
-	dcheck( ImGui::SliderFloat( "Near Z", &nearZ, 0.01f, farZ - FLT_EPSILON, "%.2f", 10.0f ) );
-	dcheck( ImGui::SliderFloat( "Far Z", &farZ, nearZ + FLT_EPSILON, 500.0f, "%.2f", 10.0f ) );
+	dcheck( ImGui::SliderFloat( "Width", &width, 0.01f, 4.f, "%.2f", 1.5f ) );
+	dcheck( ImGui::SliderFloat( "Height", &height, 0.01f, 4.f, "%.2f", 1.5f ) );
+	dcheck( ImGui::SliderFloat( "Near Z", &nearZ, 0.01f, farZ - FLT_EPSILON, "%.2f", 10.f ) );
+	dcheck( ImGui::SliderFloat( "Far Z", &farZ, nearZ + FLT_EPSILON, 500.f, "%.2f", 10.f ) );
 
 	if( dirty )
 	{

@@ -938,7 +938,7 @@
     <FxCompile Include="PhongDifMskSpcNrm_VS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="Offset_VS.hlsl">
+    <FxCompile Include="Offset_Vdd.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="Fullscreen_VS.hlsl">
@@ -1019,6 +1019,12 @@
     </None>
     <None Include="..\External\Includes\DirectXTex\DirectXTex.inl">
       <Filter>External\DirectXTex</Filter>
+    </None>
+    <None Include="CommonShadowOps_VO.hlsli">
+      <Filter>Shader Files\Ops</Filter>
+    </None>
+    <None Include="CommonShadowOps_PO.hlsli">
+      <Filter>Shader Files\Ops</Filter>
     </None>
   </ItemGroup>
 </Project>

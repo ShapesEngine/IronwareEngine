@@ -103,13 +103,13 @@ std::string to_string( T value ) {
 ///	@brief	The portable version of strtof.
 ///	@param	begin   The first character of the string.
 /// @param  end     The last character
-///	@return	The float value, 0.0f in cas of an error.
+///	@return	The float value, 0.f in cas of an error.
 AI_FORCE_INLINE
 float ai_strtof( const char *begin, const char *end ) {
     if ( nullptr == begin ) {
-        return 0.0f;
+        return 0.f;
     }
-    float val( 0.0f );
+    float val( 0.f );
     if ( nullptr == end ) {
         val = static_cast< float >( ::atof( begin ) );
     } else {

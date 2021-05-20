@@ -124,7 +124,7 @@ protected:
         : mIndex(0)
         , mPosition()
         , mSmoothGroups(0)
-        , mDistance(0.0f) {
+        , mDistance(0.f) {
             // empty
         }
 

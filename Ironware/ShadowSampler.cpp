@@ -15,7 +15,7 @@ ShadowSampler::ShadowSampler( Graphics & gfx )
 
 	D3D11_SAMPLER_DESC samplerDesc = CD3D11_SAMPLER_DESC{ CD3D11_DEFAULT{} };
 
-	samplerDesc.BorderColor[0] = 1.0f;
+	samplerDesc.BorderColor[0] = 1.f;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
 

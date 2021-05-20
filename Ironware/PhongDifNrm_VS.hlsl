@@ -1,4 +1,5 @@
 #include "CommonTransforms.hlsli"
+#include "CommonShadowOps_VO.hlsli"
 
 struct VSOut
 {
@@ -7,6 +8,7 @@ struct VSOut
     float2 tex : TexCoord;
     float3 viewTan : Tangent;
     float3 viewBitan : Bitangent;
+    float4 shadowHomoPos : ShadowPosition;
     float4 pos : SV_Position;
 };
 
@@ -21,6 +23,7 @@ VSOut main( float3 pos : Position, float3 n : Normal, float2 tex : TexCoord, flo
     vso.viewTan = mul( tan, (float3x3)modelView );
     vso.viewBitan = mul( bitan, (float3x3)modelView );
     vso.pos = mul( pos4, modelViewProjection );
+    vso.shadowHomoPos = to_shadow_homo_space( pos, model );
     
     return vso;
 }

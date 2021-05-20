@@ -71,8 +71,8 @@ struct CD3DX12_VIEWPORT : public D3D12_VIEWPORT
     explicit CD3DX12_VIEWPORT(
         _In_ ID3D12Resource* pResource,
         UINT mipSlice = 0,
-        FLOAT topLeftX = 0.0f,
-        FLOAT topLeftY = 0.0f,
+        FLOAT topLeftX = 0.f,
+        FLOAT topLeftY = 0.f,
         FLOAT minDepth = D3D12_MIN_DEPTH,
         FLOAT maxDepth = D3D12_MAX_DEPTH ) noexcept
     {
@@ -83,22 +83,22 @@ struct CD3DX12_VIEWPORT : public D3D12_VIEWPORT
         {
         case D3D12_RESOURCE_DIMENSION_BUFFER:
             TopLeftX = topLeftX;
-            TopLeftY = 0.0f;
+            TopLeftY = 0.f;
             Width = float(Desc.Width) - topLeftX;
-            Height = 1.0f;
+            Height = 1.f;
             break;
         case D3D12_RESOURCE_DIMENSION_TEXTURE1D:
             TopLeftX = topLeftX;
-            TopLeftY = 0.0f;
-            Width = (SubresourceWidth ? float(SubresourceWidth) : 1.0f) - topLeftX;
-            Height = 1.0f;
+            TopLeftY = 0.f;
+            Width = (SubresourceWidth ? float(SubresourceWidth) : 1.f) - topLeftX;
+            Height = 1.f;
             break;
         case D3D12_RESOURCE_DIMENSION_TEXTURE2D:
         case D3D12_RESOURCE_DIMENSION_TEXTURE3D:
             TopLeftX = topLeftX;
             TopLeftY = topLeftY;
-            Width = (SubresourceWidth ? float(SubresourceWidth) : 1.0f) - topLeftX;
-            Height = (SubresourceHeight ? float(SubresourceHeight) : 1.0f) - topLeftY;
+            Width = (SubresourceWidth ? float(SubresourceWidth) : 1.f) - topLeftX;
+            Height = (SubresourceHeight ? float(SubresourceHeight) : 1.f) - topLeftY;
             break;
         default: break;
         }

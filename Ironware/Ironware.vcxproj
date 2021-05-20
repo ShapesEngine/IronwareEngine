@@ -426,7 +426,7 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="Offset_VS.hlsl">
+    <FxCompile Include="Offset_Vdd.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
@@ -548,6 +548,8 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="CommonLightOps.hlsli" />
     <None Include="CommonOps.hlsli" />
+    <None Include="CommonShadowOps_PO.hlsli" />
+    <None Include="CommonShadowOps_VO.hlsli" />
     <None Include="CommonTransforms.hlsli" />
     <None Include="cpp.hint" />
     <None Include="GDIPlusStd.h" />

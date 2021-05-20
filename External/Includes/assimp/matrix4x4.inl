@@ -60,10 +60,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ----------------------------------------------------------------------------------------
 template <typename TReal>
 aiMatrix4x4t<TReal>::aiMatrix4x4t() AI_NO_EXCEPT :
-    a1(1.0f), a2(), a3(), a4(),
-    b1(), b2(1.0f), b3(), b4(),
-    c1(), c2(), c3(1.0f), c4(),
-    d1(), d2(), d3(), d4(1.0f)
+    a1(1.f), a2(), a3(), a4(),
+    b1(), b2(1.f), b3(), b4(),
+    c1(), c2(), c3(1.f), c4(),
+    d1(), d2(), d3(), d4(1.f)
 {
 
 }
@@ -483,7 +483,7 @@ aiQuaterniont<TReal> pRotation;
 	pRotation.Normalize();
 
 	TReal angle_cos = pRotation.w;
-	TReal angle_sin = std::sqrt(1.0f - angle_cos * angle_cos);
+	TReal angle_sin = std::sqrt(1.f - angle_cos * angle_cos);
 
 	pRotationAngle = std::acos(angle_cos) * 2;
 

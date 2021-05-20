@@ -135,7 +135,7 @@ SurfaceEx DepthStencilView::ToSurface( Graphics & gfx, bool toLinearize ) const
 				{
 					const auto normalized = (float)raw / (float)0xFFFFFF;
 					const auto linearized = 0.01f / ( 1.01f - normalized );
-					const uint8_t channel = uint8_t( linearized * 255.0f );
+					const uint8_t channel = uint8_t( linearized * 255.f );
 					s.PutPixel( x, y, { channel, channel, channel } );
 				}
 				else
@@ -151,12 +151,12 @@ SurfaceEx DepthStencilView::ToSurface( Graphics & gfx, bool toLinearize ) const
 				if( toLinearize )
 				{
 					const auto linearized = 0.01f / ( 1.01f - raw );
-					const auto channel = uint8_t( linearized * 255.0f );
+					const auto channel = uint8_t( linearized * 255.f );
 					s.PutPixel( x, y, { channel, channel, channel } );
 				}
 				else
 				{
-					const auto channel = uint8_t( raw * 255.0f );
+					const auto channel = uint8_t( raw * 255.f );
 					s.PutPixel( x, y, { channel,channel,channel } );
 				}
 

@@ -86,14 +86,14 @@ inline void _CreateLinearFilter(_In_ size_t source, _In_ size_t dest, _In_ bool 
             isrcB = (wrap) ? 0 : (ptrdiff_t(source) - 1);
         }
 
-        float weight = 1.0f + float(isrcB) - srcB;
+        float weight = 1.f + float(isrcB) - srcB;
 
         auto& entry = lf[u];
         entry.u0 = size_t(isrcA);
         entry.weight0 = weight;
 
         entry.u1 = size_t(isrcB);
-        entry.weight1 = 1.0f - weight;
+        entry.weight1 = 1.f - weight;
     }
 }
 

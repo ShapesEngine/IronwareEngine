@@ -102,8 +102,8 @@ void FrustumIndicator::SetVertices( Graphics & gfx, float width, float height, f
 	VertexByteBuffer vertices{ std::move( layout ) };
 	{
 		const float zRatio = farZ / nearZ;
-		const float nearX = width / 2.0f;
-		const float nearY = height / 2.0f;
+		const float nearX = width / 2.f;
+		const float nearY = height / 2.f;
 		const float farX = nearX * zRatio;
 		const float farY = nearY * zRatio;
 		vertices.EmplaceBack( dx::XMFLOAT3{ -nearX,nearY,nearZ } );
