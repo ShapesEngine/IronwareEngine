@@ -12,12 +12,20 @@
 #include <imgui/imgui.h>
 
 PointLight::PointLight( Graphics& gfx, DirectX::XMFLOAT3A homePos, float radius ) :
-	homePos( homePos ),
 	mesh( gfx, radius ),
-	cbuffer( gfx ),
-	pCamera( std::make_shared<Camera>( gfx, "Light", homePos, 0.f, 0.f, true ) )
+	cbuffer( gfx )
 {
+	homeLightCbuf = {
+		homePos,
+		{ 0.05f, 0.05f, 0.05f },
+		{ 1.f, 1.f, 1.f },
+		1.f,
+		1.f,
+		0.045f,
+		0.0075f,
+	};
 	Reset();
+	pCamera = std::make_shared<Camera>( gfx, "Light", homePos, 0.f, 0.f, true );
 }
 
 void PointLight::SpawnControlWindow() noexcept
@@ -81,15 +89,7 @@ void PointLight::LinkTechniques( RenderGraph & rg )
 
 void PointLight::Reset() noexcept
 {
-	cbufData = {
-		homePos,
-		{ 0.05f, 0.05f, 0.05f },
-		{ 1.f, 1.f, 1.f },
-		1.f,
-		1.f,
-		0.045f,
-		0.0075f,
-	};
+	cbufData = homeLightCbuf;
 }
 
 std::shared_ptr<Camera> PointLight::ShareCamera() const noexcept

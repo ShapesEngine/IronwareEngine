@@ -297,6 +297,12 @@
     <ClCompile Include="RenderTarget.cpp">
       <Filter>Source Files\Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowCameraCBuffer.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowSampler.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -860,6 +866,12 @@
     <ClInclude Include="ShadowMappingPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowCameraCBuffer.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowSampler.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ironware.rc">
@@ -942,6 +954,12 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="PhongDifMskSpc_PS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shadow_VS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shadow_PS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>

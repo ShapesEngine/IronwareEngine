@@ -158,6 +158,8 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Projection.cpp" />
+    <ClCompile Include="ShadowCameraCBuffer.cpp" />
+    <ClCompile Include="ShadowSampler.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -298,7 +300,9 @@
     <ClInclude Include="OutlineDrawingPass.h" />
     <ClInclude Include="OutlineMaskGenerationPass.h" />
     <ClInclude Include="Projection.h" />
+    <ClInclude Include="ShadowCameraCBuffer.h" />
     <ClInclude Include="ShadowMappingPass.h" />
+    <ClInclude Include="ShadowSampler.h" />
     <ClInclude Include="Source.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RasterizerState.h" />
@@ -485,6 +489,14 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shadow_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shadow_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Solid_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

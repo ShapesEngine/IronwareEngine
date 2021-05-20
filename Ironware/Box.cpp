@@ -60,13 +60,13 @@ Box::Box( Graphics & gfx, float size )
 			only.AddBindable( Texture::Resolve( gfx, L"Images\\brickwall.jpg" ) );
 			only.AddBindable( Sampler::Resolve( gfx ) );
 
-			auto pvs = VertexShader::Resolve( gfx, L"PhongDif_VS.cso" );
+			auto pvs = VertexShader::Resolve( gfx, L"Shadow_VS.cso" );
 
 			only.AddBindable( InputLayout::Resolve( gfx, layout, *pvs ) );
 
 			only.AddBindable( std::move( pvs ) );
 
-			only.AddBindable( PixelShader::Resolve( gfx, L"PhongDif_PS.cso" ) );
+			only.AddBindable( PixelShader::Resolve( gfx, L"Shadow_PS.cso" ) );
 
 			RawLayout lay;
 			lay.Add<Float3>( "specularColor" );

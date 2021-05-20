@@ -41,7 +41,7 @@ public:
 		AddBind( NullPixelShader::Resolve( gfx ) );
 		AddBind( DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Off ) );
 		AddBind( BlendState::Resolve( gfx, false ) );
-		RegisterSource( DirectBindableSource<DepthStencilView>::Make( "shadowMap", depthStencil ) );
+		RegisterSource( DirectBindableSource<DepthStencilView>::Make( "map", depthStencil ) );
 	}
 
 	void Execute( Graphics& gfx ) const IFNOEXCEPT override

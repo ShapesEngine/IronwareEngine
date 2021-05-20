@@ -46,7 +46,7 @@ private:
 	};
 
 private:
-	DirectX::XMFLOAT3A homePos;
+	PointLightCBuf homeLightCbuf;
 	std::shared_ptr<Camera> pCamera;
 	PointLightCBuf cbufData;
 	mutable SolidSphere mesh;

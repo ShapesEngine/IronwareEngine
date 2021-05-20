@@ -46,7 +46,7 @@ private:
 	ImguiManager imguim;
 	CameraContainer cameras;
 	Window wnd{ 1280, 720, L"Ironware Engine" };
-	PointLight pointLight{ wnd.Gfx(), { 10.f, 9.f, 2.5f } };
+	PointLight pointLight{ wnd.Gfx(), { 10.f, 5.f, 0.f } }; // { 10.f, 9.f, 2.5f }
 	BlurOutlineRenderGraph rg{ wnd.Gfx() };
 	//std::unique_ptr<class Mesh> pLoaded;
 	Model goblin{ wnd.Gfx(), L"Models\\goblin\\GoblinX.obj", 5.f, { -60.f, 10.f, 10.f } };

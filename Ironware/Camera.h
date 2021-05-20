@@ -36,6 +36,7 @@ public:
 	Camera( Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos = { 0.f, 0.f, 0.f }, float homePitch = 0.f, float homeYaw = 0.f, bool tethered = false ) noexcept;
 	void BindToGraphics( Graphics& gfx ) const;
 	DirectX::XMMATRIX GetMatrix() const noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
 	void SpawnControlWidgets( Graphics& gfx ) noexcept;
 	void Rotate( float dx, float dy ) noexcept;
 	void Translate( DirectX::XMFLOAT3 translation ) noexcept;

@@ -29,7 +29,8 @@ App::App()
 		DirectX::XMMatrixRotationY( PI / 2.f ) *
 		DirectX::XMMatrixTranslation( 40.f, 0.f, 2.f )
 	);
-	cube.SetPos( { 40.f, 0.f, 25.f } );
+	cube.SetPos( { 10.f, 5.f, 6.f } );
+	cube2.SetPos( { 10.f, 5.f, 14.f } );
 
 	cameras.AddCamera( std::make_unique<Camera>( wnd.Gfx(), "1", DirectX::XMFLOAT3{ -60.f, 5.f, 2.f }, 0.f, PI / 2.f ) );
 	cameras.AddCamera( std::make_unique<Camera>( wnd.Gfx(), "2", DirectX::XMFLOAT3{ 60.f, 5.f, 2.f }, 0.f, -PI / 2.f ) );
