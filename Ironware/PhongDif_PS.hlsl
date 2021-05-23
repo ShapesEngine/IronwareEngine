@@ -20,7 +20,8 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
 {
     float3 diffuse;
     float3 specular;
-    if( shadow_unoccluded( spos ) )
+    const float shadowLevel = shadow( spos );
+    if( shadowLevel != 0.0f )
     {
         viewN = normalize( viewN );
 	    // fragment to light vector data
@@ -31,6 +32,9 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
         diffuse = calc_diffuse( diffuseColor, diffuseIntensity, luminosity, lightVec.dirToL, viewN );
         // reflected light vector
         specular = calc_specular( diffuseColor * diffuseIntensity * specularColor, specularWeight, viewN, lightVec.vToL, viewPos, luminosity, specularGloss );
+        // scale by shadow level
+        diffuse *= shadowLevel;
+        specular *= shadowLevel;
     }
     else
     {

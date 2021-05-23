@@ -21,7 +21,8 @@ float4 main( float3 viewFragPos : Position, float3 viewNormal : Normal, float2 t
     float3 specular;
     
     // shadow map test
-    if( shadow_unoccluded( spos ) )
+    const float shadowLevel = shadow( spos );
+    if( shadowLevel != 0.0f )
     {
         // renormalize interpolated normal
         viewNormal = normalize( viewNormal );
@@ -33,6 +34,9 @@ float4 main( float3 viewFragPos : Position, float3 viewNormal : Normal, float2 t
         diffuse = calc_diffuse( diffuseColor, diffuseIntensity, att, lv.dirToL, viewNormal );
 	    // specular
         specular = calc_specular( diffuseColor * diffuseIntensity * specularColor, specularWeight, viewNormal, lv.vToL, viewFragPos, att, specularGloss );
+        // scale by shadow level
+        diffuse *= shadowLevel;
+        specular *= shadowLevel;
     }
     else
     {

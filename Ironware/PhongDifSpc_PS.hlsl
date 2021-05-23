@@ -21,7 +21,8 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
 {
     float3 specular;
     float3 diffuse;
-    if( shadow_unoccluded( spos ) )
+    const float shadowLevel = shadow(spos);
+    if (shadowLevel != 0.0f)
     {
         viewN = normalize( viewN );
         // fragment to light vector data
@@ -48,6 +49,9 @@ float4 main( float3 viewPos : Position, float3 viewN : Normal, float2 tc : TexCo
             specularPower = pow( 2.f, sampledSpec.a * 13.f );
         }
         specular = calc_specular( diffuseColor * specularColor, specWeight, viewN, lightVec.vToL, viewPos, luminosity, specularPower );
+        // scale by shadow level
+        diffuse *= shadowLevel;
+        specular *= shadowLevel;
     }
     else
     {

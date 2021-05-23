@@ -38,7 +38,7 @@ modelPath( path.wstring() )
 		// diffuse
 		{
 			bool hasAlpha = false;
-			if( material.GetTexture( aiTextureType_DIFFUSE, 0, &texFileName ) == aiReturn_SUCCESS )
+			if( material.GetTexture( aiTextureType_DIFFUSE, 0u, &texFileName ) == aiReturn_SUCCESS )
 			{
 				hasTexture = true;
 				shaderCode += L"Dif";
