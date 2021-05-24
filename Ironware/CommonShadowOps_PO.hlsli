@@ -1,29 +1,46 @@
 Texture2D smap : register( t3 );
 SamplerComparisonState ssam : register( s1 );
 
-#define PCF_RANGE 2
+cbuffer ShadowControl : register( b2 )
+{
+    int pcfLevel;
+    float depthBias;
+}
+
+float shadow_loop( const in float3 spos, uniform int range )
+{
+    float shadowLevel = 0.0f;
+    [unroll]
+    for( int x = -range; x <= range; x++ )
+    {
+        [unroll]
+        for( int y = -range; y <= range; y++ )
+        {
+            shadowLevel += smap.SampleCmpLevelZero( ssam, spos.xy, spos.b - depthBias, int2( x, y ) );
+        }
+    }
+    return shadowLevel / ( ( range * 2 + 1 ) * ( range * 2 + 1 ) );
+}
 
 bool shadow( const in float4 shadowHomoPos )
 {
-    float shadowLevel = 0.0f;
+    float shadowLevel = 0.f;
     const float3 spos = shadowHomoPos.xyz / shadowHomoPos.w;
     
-    if( spos.z > 1.0f || spos.z < 0.f )
+    if( spos.z > 1.f || spos.z < 0.f )
     {
-        shadowLevel = 1.0f;
+        shadowLevel = 1.f;
     }
     else
     {
         [unroll]
-        for( int x = -PCF_RANGE; x <= PCF_RANGE; x++ )
+        for( int level = 0; level <= 4; level++ )
         {
-            [unroll]
-            for( int y = -PCF_RANGE; y <= PCF_RANGE; y++ )
+            if( level == pcfLevel )
             {
-                shadowLevel += smap.SampleCmpLevelZero( ssam, spos.xy, spos.b - 0.0005f, int2( x, y ) );
+                shadowLevel = shadow_loop( spos, level );
             }
         }
-        shadowLevel /= ( ( PCF_RANGE * 2 + 1 ) * ( PCF_RANGE * 2 + 1 ) );
     }
     return shadowLevel;
 }

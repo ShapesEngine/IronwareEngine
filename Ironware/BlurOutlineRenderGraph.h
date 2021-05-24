@@ -22,10 +22,14 @@ class BlurOutlineRenderGraph : public RenderGraph
 {
 public:
 	BlurOutlineRenderGraph( Graphics& gfx );
-	void RenderWidgets( Graphics& gfx );
+	void RenderWindows( Graphics& gfx );
 	void DumpShadowMap( Graphics& gfx, const std::wstring& path );
 	void BindMainCamera( Camera& cam );
 	void BindShadowCamera( Camera& cam );
+
+private:
+	void RenderKernelWindow( Graphics& gfx );
+	void RenderShadowWindow( Graphics& gfx );
 
 private:
 	void SetKernelGauss( int radius, float sigma ) IFNOEXCEPT;
@@ -40,4 +44,5 @@ private:
 	float sigma = 2.f;
 	std::shared_ptr<CachingPixelConstantBufferEx> blurKernel;
 	std::shared_ptr<CachingPixelConstantBufferEx> blurDirection;
+	std::shared_ptr<CachingPixelConstantBufferEx> shadowControl;
 };

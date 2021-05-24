@@ -34,6 +34,7 @@ public:
 		RegisterSink( DirectBufferSink<RenderTarget>::Make( "renderTarget", renderTarget ) );
 		RegisterSink( DirectBufferSink<DepthStencilView>::Make( "depthStencil", depthStencil ) );
 		AddBindSink<Bindable>( "shadowMap" );
+		AddBindSink<Bindable>( "shadowControl" );
 		RegisterSource( DirectBufferSource<RenderTarget>::Make( "renderTarget", renderTarget ) );
 		RegisterSource( DirectBufferSource<DepthStencilView>::Make( "depthStencil", depthStencil ) );
 		AddBind( DepthStencilState::Resolve( gfx, DepthStencilState::StencilMode::Off ) );

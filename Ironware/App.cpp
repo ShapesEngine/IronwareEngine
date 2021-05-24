@@ -105,7 +105,7 @@ void App::ProcessFrame()
 	cameras.SpawnWindow( wnd.Gfx() );
 	pointLight.SpawnControlWindow();
 
-	rg.RenderWidgets( wnd.Gfx() );
+	rg.RenderWindows( wnd.Gfx() );
 
 	// present
 	wnd.Gfx().EndFrame();
